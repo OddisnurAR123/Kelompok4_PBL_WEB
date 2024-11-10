@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
-use App\Models\KegiatanModel; // Gantilah dengan model yang sesuai untuk Kegiatan
+use App\Models\KegiatanModel;
 use Illuminate\Support\Facades\Validator;
 
 class KegiatanController extends Controller
