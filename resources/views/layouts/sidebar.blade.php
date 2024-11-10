@@ -21,6 +21,7 @@
   <nav class="mt-2">
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" 
     role="menu" data-accordion="false">
+<<<<<<< HEAD
 
       <!-- Manajemen Jenis Kegiatan -->
       <li class="nav-item">
@@ -54,6 +55,15 @@
         </a>
       </li>
 
+=======
+    <!-- Dashboard -->
+    <li class="nav-item">
+      <a href="{{ url('/') }}" class="nav-link {{ ($activeMenu == 'dashboard') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-tachometer-alt"></i>
+        <p>Dashboard</p>
+      </a>
+    </li>
+>>>>>>> c50c24ef1a5ae0b23677c7c45ee50d9a0070d716
       <!-- Manajemen Kegiatan -->
       <li class="nav-item {{ ($activeMenu == 'manajemen-kegiatan') ? 'menu-open' : '' }}">
         <a href="#" class="nav-link {{ ($activeMenu == 'manajemen-kegiatan') ? 'active' : '' }}">
@@ -82,6 +92,12 @@
               <p>Kegiatan Eksternal</p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{ url('/kategori-kegiatan') }}" class="nav-link {{ ($activeMenu == 'kategori') ? 'active' : '' }}">
+                <i class="fas fa-layer-group nav-icon"></i>
+                <p>Kategori Kegiatan</p>
+            </a>
+        </li>
         </ul>
       </li>
 
