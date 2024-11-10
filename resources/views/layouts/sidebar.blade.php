@@ -32,7 +32,7 @@
 
       <!-- Manajemen Jenis Pengguna -->
       <li class="nav-item">
-        <a href="{{ url('/jenis-pengguna') }}" class="nav-link {{ ($activeMenu == 'jenis-pengguna') ? 'active' : '' }}">
+        <a href="{{ url('/jenis_pengguna') }}" class="nav-link {{ ($activeMenu == 'jenis_pengguna') ? 'active' : '' }}">
           <i class="nav-icon fas fa-users-cog"></i>
           <p>Manajemen Jenis Pengguna</p>
         </a>
