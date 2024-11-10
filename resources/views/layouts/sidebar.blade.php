@@ -19,74 +19,102 @@
   <nav class="mt-2">
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" 
     role="menu" data-accordion="false">
-      <li class="nav-item">
-        <a href="{{ url('/profile') }}" class="nav-link {{ ($activeMenu == 'profile') ? 'active' : '' }}">
-            <i class="nav-icon fas fa-user"></i>
-            <p>Profile</p>
-        </a>    
+
+      <!-- Manajemen Kegiatan -->
+      <li class="nav-item {{ ($activeMenu == 'manajemen-kegiatan') ? 'menu-open' : '' }}">
+        <a href="#" class="nav-link {{ ($activeMenu == 'manajemen-kegiatan') ? 'active' : '' }}">
+          <i class="nav-icon fas fa-tasks"></i>
+          <p>
+            Manajemen Kegiatan
+            <i class="right fas fa-angle-left"></i>
+          </p>
+        </a>
+        <ul class="nav nav-treeview">
+          <li class="nav-item">
+            <a href="{{ url('/agenda-kegiatan') }}" class="nav-link {{ ($activeMenu == 'agenda-kegiatan') ? 'active' : '' }}">
+              <i class="far fa-calendar-alt nav-icon"></i>
+              <p>Agenda Kegiatan</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url('/progres-kegiatan') }}" class="nav-link {{ ($activeMenu == 'progres-kegiatan') ? 'active' : '' }}">
+              <i class="far fa-chart-bar nav-icon"></i>
+              <p>Progres Kegiatan</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url('/kegiatan-eksternal') }}" class="nav-link {{ ($activeMenu == 'kegiatan-eksternal') ? 'active' : '' }}">
+              <i class="fas fa-external-link-alt nav-icon"></i>
+              <p>Kegiatan Eksternal</p>
+            </a>
+          </li>
+        </ul>
       </li>
+
+      <!-- Daftar Kegiatan -->
+      <li class="nav-item {{ ($activeMenu == 'daftar-kegiatan') ? 'menu-open' : '' }}">
+        <a href="#" class="nav-link {{ ($activeMenu == 'daftar-kegiatan') ? 'active' : '' }}">
+          <i class="nav-icon fas fa-list"></i>
+          <p>
+            Daftar Kegiatan
+            <i class="right fas fa-angle-left"></i>
+          </p>
+        </a>
+        <ul class="nav nav-treeview">
+          <li class="nav-item">
+            <a href="{{ url('/laporkan-progres-agenda') }}" class="nav-link {{ ($activeMenu == 'laporkan-progres-agenda') ? 'active' : '' }}">
+              <i class="fas fa-clipboard-check nav-icon"></i>
+              <p>Laporkan Progres Agenda</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url('/detail-kegiatan') }}" class="nav-link {{ ($activeMenu == 'detail-kegiatan') ? 'active' : '' }}">
+              <i class="fas fa-info-circle nav-icon"></i>
+              <p>Detail Kegiatan</p>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Statistik Kinerja -->
       <li class="nav-item">
-        <a href="{{ url('/') }}" class="nav-link {{ ($activeMenu == 'dashboard') ? 
-        'active' : '' }}">
-          <i class="nav-icon fas fa-tachometer-alt"></i>
-          <p>Dashboard</p>
+        <a href="{{ url('/statistik-kinerja') }}" class="nav-link {{ ($activeMenu == 'statistik-kinerja') ? 'active' : '' }}">
+          <i class="nav-icon fas fa-chart-line"></i>
+          <p>Statistik Kinerja</p>
         </a>
       </li>
-      <li class="nav-header">Data Pengguna</li>
+
+      <!-- Dokumen Draft Surat Tugas -->
       <li class="nav-item">
-        <a href="{{ url('/level') }}" class="nav-link {{ ($activeMenu == 'level') ? 
-        'active' : '' }}">
-          <i class="nav-icon fas fa-layer-group"></i>
-          <p>Level User</p>
+        <a href="{{ url('/dokumen-draft-surat-tugas') }}" class="nav-link {{ ($activeMenu == 'dokumen-draft-surat-tugas') ? 'active' : '' }}">
+          <i class="nav-icon fas fa-file-alt"></i>
+          <p>Dokumen Draft Surat Tugas</p>
         </a>
       </li>
+
+      <!-- Unggah Surat Tugas -->
       <li class="nav-item">
-        <a href="{{ url('/user') }}" class="nav-link {{ ($activeMenu == 'user') ? 'active' : '' }}">
-          <i class="nav-icon far fa-user"></i>
-          <p>Data User</p>
+        <a href="{{ url('/unggah-surat-tugas') }}" class="nav-link {{ ($activeMenu == 'unggah-surat-tugas') ? 'active' : '' }}">
+          <i class="nav-icon fas fa-upload"></i>
+          <p>Unggah Surat Tugas</p>
         </a>
       </li>
+
+      <!-- Pengaturan Profil -->
       <li class="nav-item">
-        <a href="{{ url('/supplier') }}" class="nav-link {{ ($activeMenu == 'supplier') ? 'active' : '' }}">
-            <i class="nav-icon fas fa-truck"></i>
-            <p>Data Supplier</p>
-        </a>
-    </li>    
-      <li class="nav-header">Data Barang</li>
-      <li class="nav-item">
-        <a href="{{ url('/kategori') }}" class="nav-link {{ ($activeMenu == 
-        'kategori') ? 'active' : '' }}">
-          <i class="nav-icon far fa-bookmark"></i>
-          <p>Kategori Barang</p>
+        <a href="{{ url('/pengaturan-profil') }}" class="nav-link {{ ($activeMenu == 'pengaturan-profil') ? 'active' : '' }}">
+          <i class="nav-icon fas fa-user-cog"></i>
+          <p>Pengaturan Profil</p>
         </a>
       </li>
+
+      <!-- Keluar -->
       <li class="nav-item">
-        <a href="{{ url('/barang') }}" class="nav-link {{ ($activeMenu == 
-        'barang') ? 'active' : '' }}">
-          <i class="nav-icon far fa-list-alt"></i>
-          <p>Data Barang</p>
+        <a href="{{ url('/logout') }}" class="nav-link">
+          <i class="nav-icon fas fa-sign-out-alt"></i>
+          <p>Keluar</p>
         </a>
       </li>
-      <li class="nav-header">Data Transaksi</li>
-      <li class="nav-item">
-        <a href="{{ url('/stok') }}" class="nav-link {{ ($activeMenu == 'stok') ? 
-        'active' : '' }}">
-          <i class="nav-icon fas fa-cubes"></i>
-          <p>Stok Barang</p>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="{{ url('/penjualan') }}" class="nav-link {{ ($activeMenu == 'penjualan') ? 'active' : '' }}">
-          <i class="nav-icon fas fa-cash-register"></i>
-          <p>Transaksi Penjualan</p>
-        </a>
-      </li>
-             
-      <li>
-        <a href="{{ url('logout') }}">
-            <i class="fas fa-sign-out-alt"></i> Logout
-        </a>
-    </li>    
     </ul>
   </nav>
 </div>
