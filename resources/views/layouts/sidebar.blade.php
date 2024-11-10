@@ -3,6 +3,7 @@
 @endphp
 
 <div class="sidebar">
+
   <!-- SidebarSearch Form -->
   <div class="form-inline mt-2">
     <div class="input-group" data-widget="sidebar-search">
@@ -15,10 +16,43 @@
       </div>
     </div>
   </div>
+
   <!-- Sidebar Menu -->
   <nav class="mt-2">
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" 
     role="menu" data-accordion="false">
+
+      <!-- Manajemen Jenis Kegiatan -->
+      <li class="nav-item">
+        <a href="{{ url('/jenis-kegiatan') }}" class="nav-link {{ ($activeMenu == 'jenis-kegiatan') ? 'active' : '' }}">
+          <i class="nav-icon fas fa-calendar-plus"></i>
+          <p>Manajemen Jenis Kegiatan</p>
+        </a>
+      </li>
+
+      <!-- Manajemen Jenis Pengguna -->
+      <li class="nav-item">
+        <a href="{{ url('/jenis-pengguna') }}" class="nav-link {{ ($activeMenu == 'jenis-pengguna') ? 'active' : '' }}">
+          <i class="nav-icon fas fa-users-cog"></i>
+          <p>Manajemen Jenis Pengguna</p>
+        </a>
+      </li>
+
+      <!-- Manajemen Jabatan Kegiatan -->
+      <li class="nav-item">
+        <a href="{{ url('/jabatan-kegiatan') }}" class="nav-link {{ ($activeMenu == 'jabatan-kegiatan') ? 'active' : '' }}">
+          <i class="nav-icon fas fa-briefcase"></i>
+          <p>Manajemen Jabatan Kegiatan</p>
+        </a>
+      </li>
+
+      <!-- Manajemen Data Pengguna -->
+      <li class="nav-item">
+        <a href="{{ url('/data-pengguna') }}" class="nav-link {{ ($activeMenu == 'data-pengguna') ? 'active' : '' }}">
+          <i class="nav-icon fas fa-user"></i>
+          <p>Manajemen Data Pengguna</p>
+        </a>
+      </li>
 
     <!-- Dashboard -->
     <li class="nav-item">
