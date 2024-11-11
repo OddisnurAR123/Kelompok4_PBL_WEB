@@ -26,9 +26,15 @@ class AgendaModel extends Model
         'updated_at',
     ];
 
-    // Relasi ke tabel DetailAgenda
-    public function detailAgenda()
+    // Relasi ke tabel JenisPengguna
+    public function jenisPengguna()
     {
-        return $this->hasMany(DetailAgenda::class, 'id_agenda');
+        return $this->belongsTo(JenisPenggunaModel::class, 'id_jenis_pengguna');
+    }
+
+    // Relasi ke tabel Kegiatan
+    public function kegiatan()
+    {
+        return $this->belongsTo(KegiatanModel::class, 'id_kegiatan');
     }
 }

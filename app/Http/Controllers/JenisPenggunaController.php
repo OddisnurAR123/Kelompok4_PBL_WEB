@@ -144,17 +144,13 @@ class JenisPenggunaController extends Controller
         return redirect('/');
     }
 
-    public function show(string $id)
+    public function show($id)
     {
-        $jenisPengguna = JenisPenggunaModel::find($id);
-
-        if (!$jenisPengguna) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Jenis Pengguna tidak ditemukan.'
-            ]);
-        }
-
-        return view('jenis_pengguna.show', ['jenisPengguna' => $jenisPengguna]);
+        // Mengambil data jenis pengguna berdasarkan ID
+        $jenispengguna = JenisPenggunaModel::find($id);
+    
+        // Mengirimkan data ke view
+        return view('show', compact('jenispengguna'));
     }
+    
 }
