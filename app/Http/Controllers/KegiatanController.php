@@ -46,16 +46,16 @@ class KegiatanController extends Controller
         return view('kegiatan.create_ajax');
     }
 
-    // Menyimpan data kegiatan baru via Ajax
-    public function store_ajax(Request $request) {
-        if ($request->ajax() || $request->wantsJson()) {
+    public function store_ajax(Request $request)
+    {
+        if ($request->ajax() || $request->wantsJson()) { 
             $validator = Validator::make($request->all(), [
-                'kode_kegiatan' => 'required|string|min:3|unique:m_kegiatan,kode_kegiatan',
+                'kode_kegiatan' => 'required|string|min:3|unique:t_kegiatan,kode_kegiatan',
                 'nama_kegiatan' => 'required|string|max:100',
                 'tanggal_mulai' => 'required|date',
                 'tanggal_selesai' => 'required|date',
             ]);
-
+    
             if ($validator->fails()) {
                 return response()->json([
                     'status' => false,
@@ -63,20 +63,21 @@ class KegiatanController extends Controller
                     'msgField' => $validator->errors(),
                 ]);
             }
-
+    
+            // Menyimpan data kegiatan ke database
             KegiatanModel::create($request->only('kode_kegiatan', 'nama_kegiatan', 'tanggal_mulai', 'tanggal_selesai'));
-
+    
             return response()->json([
                 'status' => true,
                 'message' => 'Data kegiatan berhasil disimpan',
             ]);
         }
-
+    
         return response()->json([
             'status' => false,
             'message' => 'Request bukan AJAX.',
         ]);
-    }
+    }    
 
     // Menampilkan form edit kegiatan via Ajax
     public function edit_ajax($id) {
