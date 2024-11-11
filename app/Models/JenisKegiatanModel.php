@@ -9,8 +9,8 @@ class JenisKegiatanModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'm_kategori_kegiatan';
-    protected $primaryKey = 'id_kategori_kegiatan';
+    protected $table = 'kategori_kegiatan'; 
+    protected $primaryKey = 'id_kategori_kegiatan'; 
     protected $fillable = ['kode_kategori_kegiatan', 'nama_kategori_kegiatan'];
-    public $timestamps = false;
+    public $timestamps = false; 
 }

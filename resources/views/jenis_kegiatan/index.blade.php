@@ -57,9 +57,9 @@
             }
         },
         columns: [
-            { data: "id_jenis_pengguna" },
-            { data: "kode_jenis_pengguna" },
-            { data: "nama_jenis_pengguna" },
+            { data: "id_kategori_kegiatan" },
+            { data: "kode_kategori_kegiatan" },
+            { data: "nama_kategori_kegiatan" },
             { data: "aksi", orderable: false, searchable: false }
         ]
     });

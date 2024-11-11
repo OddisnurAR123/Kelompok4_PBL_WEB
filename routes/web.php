@@ -41,7 +41,6 @@ Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
     // Route::get('/level/export_pdf', [LevelController::class, 'export_pdf']);
 // });
 
-<<<<<<< HEAD
     // Kegiatan Routes
     Route::get('/kegiatan', [KegiatanController::class, 'index'])->name('kegiatan.index');
     Route::get('/kegiatan/create', [KegiatanController::class, 'create_ajax'])->name('kegiatan.create');
@@ -51,7 +50,7 @@ Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
     Route::get('/kegiatan/{id}/delete', [KegiatanController::class, 'confirm_ajax'])->name('kegiatan.delete');
     Route::delete('/kegiatan/{id}', [KegiatanController::class, 'delete_ajax'])->name('kegiatan.destroy');
     Route::post('/kegiatan/import', [KegiatanController::class, 'import_ajax'])->name('kegiatan.import');
-=======
+
     Route::get('/jenis_kegiatan', [JenisKegiatanController::class, 'index']);
     Route::post('/jenis_kegiatan/list', [JenisKegiatanController::class, 'list']);
     Route::get('/jenis_kegiatan/create', [JenisKegiatanController::class, 'create']);
@@ -104,4 +103,4 @@ Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
 
     // Route for exporting agenda data to PDF
     Route::get('/agenda/export_pdf', [AgendaKegiatanController::class, 'export_pdf'])->name('agenda.export_pdf');
->>>>>>> f4090bcea693f0749cd256d20a7e548ff7232d1d
+

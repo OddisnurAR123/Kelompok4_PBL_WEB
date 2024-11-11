@@ -26,8 +26,8 @@ class JenisKegiatanController extends Controller
 
     public function list(Request $request) {
         $jenisPengguna = JenisKegiatanModel::select('id_kategori_kegiatan', 'kode_kategori_kegiatan', 'nama_kategori_kegiatan');
-
-        return JenisKegiatanModel::of($jenisPengguna)
+    
+        return DataTables::of($jenisPengguna)
             ->addIndexColumn()
             ->addColumn('aksi', function ($jenisPengguna) {
                 $btn = '<button onclick="modalAction(\''.url('/kategori_kegiatan/' . $jenisPengguna->id_kategori_kegiatan . '/show').'\')" class="btn btn-info btn-sm">Detail</button> ';
@@ -38,7 +38,7 @@ class JenisKegiatanController extends Controller
             ->rawColumns(['aksi'])
             ->make(true);
     }
-
+    
     public function create()
     {
         return view('kategori_kegiatan.create');
