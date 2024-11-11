@@ -21,6 +21,39 @@
   <nav class="mt-2">
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" 
     role="menu" data-accordion="false">
+      <!-- Manajemen Jenis Kegiatan -->
+      <li class="nav-item">
+        <a href="{{ url('/jenis-kegiatan') }}" class="nav-link {{ ($activeMenu == 'jenis-kegiatan') ? 'active' : '' }}">
+          <i class="nav-icon fas fa-calendar-plus"></i>
+          <p>Manajemen Jenis Kegiatan</p>
+        </a>
+      </li>
+
+      <!-- Manajemen Jenis Pengguna -->
+      <li class="nav-item">
+        <a href="{{ url('/jenis_pengguna') }}" class="nav-link {{ ($activeMenu == 'jenis_pengguna') ? 'active' : '' }}">
+          <i class="nav-icon fas fa-users-cog"></i>
+          <p>Manajemen Jenis Pengguna</p>
+        </a>
+      </li>
+
+      <!-- Manajemen Jabatan Kegiatan -->
+      <li class="nav-item">
+        <a href="{{ url('/jabatan-kegiatan') }}" class="nav-link {{ ($activeMenu == 'jabatan-kegiatan') ? 'active' : '' }}">
+          <i class="nav-icon fas fa-briefcase"></i>
+          <p>Manajemen Jabatan Kegiatan</p>
+        </a>
+      </li>
+
+      <!-- Manajemen Data Pengguna -->
+      <li class="nav-item">
+        <a href="{{ url('/data-pengguna') }}" class="nav-link {{ ($activeMenu == 'data-pengguna') ? 'active' : '' }}">
+          <i class="nav-icon fas fa-user"></i>
+          <p>Manajemen Data Pengguna</p>
+        </a>
+      </li>
+<<<<<<< HEAD
+
     <!-- Dashboard -->
     <li class="nav-item">
       <a href="{{ url('/') }}" class="nav-link {{ ($activeMenu == 'dashboard') ? 'active' : '' }}">
@@ -28,6 +61,8 @@
         <p>Dashboard</p>
       </a>
     </li>
+=======
+>>>>>>> 34c2324214453d35525c89763f4d58c3e27b6753
       <!-- Manajemen Kegiatan -->
       <li class="nav-item {{ ($activeMenu == 'manajemen-kegiatan') ? 'menu-open' : '' }}">
         <a href="#" class="nav-link {{ ($activeMenu == 'manajemen-kegiatan') ? 'active' : '' }}">
@@ -38,6 +73,12 @@
           </p>
         </a>
         <ul class="nav nav-treeview">
+          <li class="nav-item">
+            <a href="{{ url('/kegiatan') }}" class="nav-link {{ ($activeMenu == 'kegiatan') ? 'active' : '' }}">
+              <i class="far fa-calendar-alt nav-icon"></i>
+              <p>Input Kegiatan</p>
+            </a>
+          </li>
           <li class="nav-item">
             <a href="{{ url('/agenda-kegiatan') }}" class="nav-link {{ ($activeMenu == 'agenda-kegiatan') ? 'active' : '' }}">
               <i class="far fa-calendar-alt nav-icon"></i>
