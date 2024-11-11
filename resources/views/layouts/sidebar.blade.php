@@ -50,10 +50,6 @@
           <p>Manajemen Data Pengguna</p>
         </a>
       </li>
-<<<<<<< HEAD
-=======
-
->>>>>>> f4090bcea693f0749cd256d20a7e548ff7232d1d
       <!-- Manajemen Kegiatan -->
       <li class="nav-item {{ ($activeMenu == 'manajemen-kegiatan') ? 'menu-open' : '' }}">
         <a href="#" class="nav-link {{ ($activeMenu == 'manajemen-kegiatan') ? 'active' : '' }}">
