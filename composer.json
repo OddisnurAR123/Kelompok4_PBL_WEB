@@ -10,11 +10,8 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
-<<<<<<< HEAD
-        "yajra/laravel-datatables": "^10.1"
-=======
+        "yajra/laravel-datatables": "^10.1",
         "yajra/laravel-datatables-oracle": "^10.11"
->>>>>>> f4090bcea693f0749cd256d20a7e548ff7232d1d
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
