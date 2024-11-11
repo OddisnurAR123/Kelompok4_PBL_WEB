@@ -24,6 +24,7 @@ Route::get('/', [WelcomeController::class, 'index']);
 
 // Route::middleware(['authorize:ADM,MNG'])->group(function () {
     Route::get('/jenis_pengguna', [JenisPenggunaController::class, 'index'])->name('jenis_pengguna.index');  
+    Route::post('/jenis_pengguna/list', [JenisPenggunaController::class, 'list']);
     // Route::get('/level/create_ajax', [LevelController::class, 'create_ajax']);
     // Route::post('/level/store_ajax', [LevelController::class, 'store_ajax']);
     Route::get('/jenis_pengguna/{id}/show', [JenisPenggunaModel::class, 'show']);

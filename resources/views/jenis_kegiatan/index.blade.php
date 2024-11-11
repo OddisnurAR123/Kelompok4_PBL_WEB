@@ -45,42 +45,24 @@
     }
 
     var dataJenisPengguna;
-
     $(document).ready(function() {
-        dataJenisPengguna = $('#table_kategori_pengguna').DataTable({
-            serverSide: true,
-            ajax: {
-                "url": "{{ url('jenis_pengguna/list') }}",
-                "dataType": "json",
-                "type": "POST",
-            },
-            columns: [
-                {
-                    data: "id_kategori_pengguna",
-                    className: "",
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: "kode_kategori_pengguna",
-                    className: "",
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: "nama_kategori_pengguna",
-                    className: "",
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: "aksi",
-                    className: "",
-                    orderable: false,
-                    searchable: false
-                }
-            ]
-        });
+    dataJenisPengguna = $('#table_jenis_pengguna').DataTable({
+        serverSide: true,
+        processing: true,
+        ajax: {
+            url: "{{ url('jenis_pengguna/list') }}",
+            type: "POST",
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        },
+        columns: [
+            { data: "id_jenis_pengguna" },
+            { data: "kode_jenis_pengguna" },
+            { data: "nama_jenis_pengguna" },
+            { data: "aksi", orderable: false, searchable: false }
+        ]
     });
+});
 </script>
 @endpush
