@@ -59,7 +59,6 @@
         </a>
         <ul class="nav nav-treeview">
           <li class="nav-item">
-<<<<<<< HEAD
             <a href="{{ url('/kegiatan') }}" class="nav-link {{ ($activeMenu == 'kegiatan') ? 'active' : '' }}">
               <i class="far fa-calendar-alt nav-icon"></i>
               <p>Input Kegiatan</p>
@@ -67,9 +66,7 @@
           </li>
           <li class="nav-item">
             <a href="{{ url('/agenda') }}" class="nav-link {{ ($activeMenu == 'agenda-kegiatan') ? 'active' : '' }}">
-=======
             <a href="{{ url('/agenda-kegiatan') }}" class="nav-link {{ ($activeMenu == 'agenda-kegiatan') ? 'active' : '' }}">
->>>>>>> 5e01e390ee3762ab93b32465318cd6838d0e5545
               <i class="far fa-calendar-alt nav-icon"></i>
               <p>Agenda Kegiatan</p>
             </a>

@@ -2,13 +2,10 @@
 
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
-<<<<<<< HEAD
-=======
 use App\Http\Controllers\JenisPenggunaController;
 use App\Models\JenisPenggunaModel;
 use App\Http\Controllers\JenisKegiatanController;
 use App\Http\Controllers\KegiatanController;
->>>>>>> 5e01e390ee3762ab93b32465318cd6838d0e5545
 use App\Http\Controllers\KategoriKegiatanController;
 use App\Http\Controllers\AgendaKegiatanController;
 
@@ -26,10 +23,8 @@ use App\Http\Controllers\AgendaKegiatanController;
 
 Route::get('/', [WelcomeController::class, 'index']);
 
-<<<<<<< HEAD
 // Daftar route agenda
 Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
-=======
 
 // Route::middleware(['authorize:ADM,MNG'])->group(function () {
     Route::get('/jenis_pengguna', [JenisPenggunaController::class, 'index'])->name('jenis_pengguna.index');  
@@ -65,7 +60,6 @@ Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
     Route::post('/jenis_kegiatan/import_ajax', [JenisKegiatanController::class, 'import_ajax']);
     Route::get('/jenis_kegiatan/export_excel', [JenisKegiatanController::class, 'export_excel']);
     Route::get('/jenis_kegiatan/export_pdf', [JenisKegiatanController::class, 'export_pdf']);
->>>>>>> 5e01e390ee3762ab93b32465318cd6838d0e5545
 
     // Route to fetch the list of agendas (with filtering support)
     Route::post('/agenda/list', [AgendaKegiatanController::class, 'list']);
