@@ -57,38 +57,14 @@ Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
     Route::delete('/kegiatan/{id}', [KegiatanController::class, 'delete_ajax'])->name('kegiatan.destroy');
     Route::post('/kegiatan/import', [KegiatanController::class, 'import_ajax'])->name('kegiatan.import');
 
-    // Route to fetch the list of agendas (with filtering support)
+    Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
     Route::post('/agenda/list', [AgendaKegiatanController::class, 'list']);
-
-    // Route to view the create agenda form (ajax)
     Route::get('/agenda/create', [AgendaKegiatanController::class, 'create'])->name('agenda.create');
-
-    // Route to store a new agenda via ajax
     Route::post('/agenda/store', [AgendaKegiatanController::class, 'store']);
-
-    // Route to view a single agenda details
     Route::get('/agenda/{id}/show', [AgendaKegiatanController::class, 'show'])->name('agenda.show');
-
-    // Route to show the edit form for a specific agenda
     Route::get('/agenda/{id}/edit', [AgendaKegiatanController::class, 'edit'])->name('agenda.edit');
-
-    // Route to update a specific agenda
     Route::put('/agenda/{id}/update', [AgendaKegiatanController::class, 'update']);
-
-    // Route to confirm the deletion of an agenda
     Route::get('/agenda/{id}/delete', [AgendaKegiatanController::class, 'confirm_delete'])->name('agenda.delete');
-
-    // Route to delete a specific agenda
     Route::delete('/agenda/{id}/delete', [AgendaKegiatanController::class, 'destroy']);
-
-    // Route for importing agendas via ajax
     Route::post('/agenda/import', [AgendaKegiatanController::class, 'import'])->name('agenda.import');
-
-    // Route for exporting agenda data to Excel
     Route::get('/agenda/export_excel', [AgendaKegiatanController::class, 'export_excel'])->name('agenda.export_excel');
-
-
-    // Route for exporting agenda data to PDF
-
-    // Route for exporting agenda data to PDF
-    Route::get('/agenda/export_pdf', [AgendaKegiatanController::class, 'export_pdf'])->name('agenda.export_pdf');

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Agenda; // Model untuk tabel t_agenda
 use App\Models\AgendaModel;
 use App\Models\DetailAgenda; // Model untuk tabel t_detail_agenda
 use Illuminate\Support\Facades\Validator;
