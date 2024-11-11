@@ -21,7 +21,7 @@ class JenisKegiatanController extends Controller
 
         $activeMenu = 'kategori_kegiatan';
 
-        return view('kategori_kegiatan.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu]);
+        return view('jenis_kegiatan.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu]);
     }
 
     public function list(Request $request) {

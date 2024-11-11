@@ -4,7 +4,7 @@ use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JenisPenggunaController;
 use App\Models\JenisPenggunaModel;
-use App\Http\Controllers\KategoriKegiatanController;
+use App\Http\Controllers\JenisKegiatanController;
 use App\Http\Controllers\KegiatanController;
 
 /*
@@ -33,25 +33,26 @@ Route::get('/', [WelcomeController::class, 'index']);
     // Route::get('/level/export_excel', [LevelController::class, 'export_excel']);
     // Route::get('/level/export_pdf', [LevelController::class, 'export_pdf']);
 // });
-    Route::get('/kategori-kegiatan', [KategoriKegiatanController::class, 'index']);
-    Route::post('/kategori-kegiatan/list', [KategoriKegiatanController::class, 'list']);
-    Route::get('/kategori-kegiatan/create', [KategoriKegiatanController::class, 'create']);
-    Route::post('/kategori-kegiatan', [KategoriKegiatanController::class, 'store']);
-    Route::get('/kategori-kegiatan/create_ajax', [KategoriKegiatanController::class, 'create_ajax']);
-    Route::post('/kategori-kegiatan/store_ajax', [KategoriKegiatanController::class, 'store_ajax']);
-    Route::get('/kategori-kegiatan/{id}', [KategoriKegiatanController::class, 'show']);
-    Route::get('/kategori-kegiatan/{id}/show_ajax', [KategoriKegiatanController::class, 'show_ajax']);
-    Route::get('/kategori-kegiatan/{id}/edit', [KategoriKegiatanController::class, 'edit']);
-    Route::put('/kategori-kegiatan/{id}', [KategoriKegiatanController::class, 'update']);
-    Route::get('/kategori-kegiatan/{id}/edit_ajax', [KategoriKegiatanController::class, 'edit_ajax']);
-    Route::put('/kategori-kegiatan/{id}/update_ajax', [KategoriKegiatanController::class, 'update_ajax']);
-    Route::get('/kategori-kegiatan/{id}/delete_ajax', [KategoriKegiatanController::class, 'confirm_ajax']);
-    Route::delete('/kategori-kegiatan/{id}/delete_ajax', [KategoriKegiatanController::class, 'delete_ajax']);
-    Route::delete('/kategori-kegiatan/{id}', [KategoriKegiatanController::class, 'destroy']);
-    Route::get('/kategori-kegiatan/import', [KategoriKegiatanController::class, 'import']);
-    Route::post('/kategori-kegiatan/import_ajax', [KategoriKegiatanController::class, 'import_ajax']);
-    Route::get('/kategori-kegiatan/export_excel', [KategoriKegiatanController::class, 'export_excel']);
-    Route::get('/kategori-kegiatan/export_pdf', [KategoriKegiatanController::class, 'export_pdf']);
+
+    Route::get('/jenis_kegiatan', [JenisKegiatanController::class, 'index']);
+    Route::post('/jenis_kegiatan/list', [JenisKegiatanController::class, 'list']);
+    Route::get('/jenis_kegiatan/create', [JenisKegiatanController::class, 'create']);
+    Route::post('/jenis_kegiatan', [JenisKegiatanController::class, 'store']);
+    Route::get('/jenis_kegiatan/create_ajax', [JenisKegiatanController::class, 'create_ajax']);
+    Route::post('/jenis_kegiatan/store_ajax', [JenisKegiatanController::class, 'store_ajax']);
+    Route::get('/jenis_kegiatan/{id}', [JenisKegiatanController::class, 'show']);
+    Route::get('/jenis_kegiatan/{id}/show_ajax', [JenisKegiatanController::class, 'show_ajax']);
+    Route::get('/jenis_kegiatan/{id}/edit', [JenisKegiatanController::class, 'edit']);
+    Route::put('/jenis_kegiatan/{id}', [JenisKegiatanController::class, 'update']);
+    Route::get('/jenis_kegiatan/{id}/edit_ajax', [JenisKegiatanController::class, 'edit_ajax']);
+    Route::put('/jenis_kegiatan/{id}/update_ajax', [JenisKegiatanController::class, 'update_ajax']);
+    Route::get('/jenis_kegiatan/{id}/delete_ajax', [JenisKegiatanController::class, 'confirm_ajax']);
+    Route::delete('/jenis_kegiatan/{id}/delete_ajax', [JenisKegiatanController::class, 'delete_ajax']);
+    Route::delete('/jenis_kegiatan/{id}', [JenisKegiatanController::class, 'destroy']);
+    Route::get('/jenis_kegiatan/import', [JenisKegiatanController::class, 'import']);
+    Route::post('/jenis_kegiatan/import_ajax', [JenisKegiatanController::class, 'import_ajax']);
+    Route::get('/jenis_kegiatan/export_excel', [JenisKegiatanController::class, 'export_excel']);
+    Route::get('/jenis_kegiatan/export_pdf', [JenisKegiatanController::class, 'export_pdf']);
 
     // Kegiatan Routes
     Route::prefix('kegiatan')->group(function () {
