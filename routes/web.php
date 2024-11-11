@@ -3,6 +3,8 @@
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KategoriKegiatanController;
+use App\Http\Controllers\AgendaController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,26 +17,40 @@ use App\Http\Controllers\KategoriKegiatanController;
 |
 */
 
-Route::get('/', [WelcomeController::class, 'index']);
-
-    Route::get('/kategori-kegiatan', [KategoriKegiatanController::class, 'index']);
-    Route::post('/kategori-kegiatan/list', [KategoriKegiatanController::class, 'list']);
-    Route::get('/kategori-kegiatan/create', [KategoriKegiatanController::class, 'create']);
-    Route::post('/kategori-kegiatan', [KategoriKegiatanController::class, 'store']);
-    Route::get('/kategori-kegiatan/create_ajax', [KategoriKegiatanController::class, 'create_ajax']);
-    Route::post('/kategori-kegiatan/store_ajax', [KategoriKegiatanController::class, 'store_ajax']);
-    Route::get('/kategori-kegiatan/{id}', [KategoriKegiatanController::class, 'show']);
-    Route::get('/kategori-kegiatan/{id}/show_ajax', [KategoriKegiatanController::class, 'show_ajax']);
-    Route::get('/kategori-kegiatan/{id}/edit', [KategoriKegiatanController::class, 'edit']);
-    Route::put('/kategori-kegiatan/{id}', [KategoriKegiatanController::class, 'update']);
-    Route::get('/kategori-kegiatan/{id}/edit_ajax', [KategoriKegiatanController::class, 'edit_ajax']);
-    Route::put('/kategori-kegiatan/{id}/update_ajax', [KategoriKegiatanController::class, 'update_ajax']);
-    Route::get('/kategori-kegiatan/{id}/delete_ajax', [KategoriKegiatanController::class, 'confirm_ajax']);
-    Route::delete('/kategori-kegiatan/{id}/delete_ajax', [KategoriKegiatanController::class, 'delete_ajax']);
-    Route::delete('/kategori-kegiatan/{id}', [KategoriKegiatanController::class, 'destroy']);
-    Route::get('/kategori-kegiatan/import', [KategoriKegiatanController::class, 'import']);
-    Route::post('/kategori-kegiatan/import_ajax', [KategoriKegiatanController::class, 'import_ajax']);
-    Route::get('/kategori-kegiatan/export_excel', [KategoriKegiatanController::class, 'export_excel']);
-    Route::get('/kategori-kegiatan/export_pdf', [KategoriKegiatanController::class, 'export_pdf']);
-
-
+    // Daftar route agenda
+    Route::prefix('agenda')->group(function() {
+    
+        // Menampilkan halaman utama agenda
+        Route::get('/', [AgendaController::class, 'index'])->name('agenda.index');
+        
+        // Menyimpan agenda baru
+        Route::post('store', [AgendaController::class, 'store'])->name('agenda.store');
+    
+        // Menampilkan form untuk mengedit agenda
+        Route::get('edit/{id}', [AgendaController::class, 'edit'])->name('agenda.edit');
+        
+        // Mengupdate agenda
+        Route::post('update/{id}', [AgendaController::class, 'update'])->name('agenda.update');
+        
+        // Menghapus agenda
+        Route::delete('destroy/{id}', [AgendaController::class, 'destroy'])->name('agenda.destroy');
+    
+        // Menampilkan detail agenda berdasarkan id
+        Route::get('show/{id}', [AgendaController::class, 'show'])->name('agenda.show');
+    
+        // Menyediakan file untuk export agenda dalam format Excel
+        Route::get('export_excel', [AgendaController::class, 'exportExcel'])->name('agenda.export_excel');
+        
+        // Menyediakan file untuk export agenda dalam format PDF
+        Route::get('export_pdf', [AgendaController::class, 'exportPDF'])->name('agenda.export_pdf');
+        
+        // Menampilkan form import agenda
+        Route::get('import', [AgendaController::class, 'showImportForm'])->name('agenda.import');
+        
+        // Proses import agenda dari file
+        Route::post('import', [AgendaController::class, 'import'])->name('agenda.import.store');
+        
+        // AJAX untuk menampilkan data agenda dalam DataTable
+        Route::post('list', [AgendaController::class, 'list'])->name('agenda.list');
+    });
+    
