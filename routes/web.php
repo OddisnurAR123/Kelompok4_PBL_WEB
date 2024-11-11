@@ -5,10 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JenisPenggunaController;
 use App\Models\JenisPenggunaModel;
 use App\Http\Controllers\KategoriKegiatanController;
-<<<<<<< HEAD
-=======
 use App\Http\Controllers\KegiatanController;
->>>>>>> 34c2324214453d35525c89763f4d58c3e27b6753
 
 /*
 |--------------------------------------------------------------------------
@@ -22,10 +19,7 @@ use App\Http\Controllers\KegiatanController;
 */
 
 Route::get('/', [WelcomeController::class, 'index']);
-<<<<<<< HEAD
 
-=======
->>>>>>> 34c2324214453d35525c89763f4d58c3e27b6753
 // Route::middleware(['authorize:ADM,MNG'])->group(function () {
     Route::get('/jenis_pengguna', [JenisPenggunaController::class, 'index'])->name('jenis_pengguna.index');  
     // Route::get('/level/create_ajax', [LevelController::class, 'create_ajax']);
@@ -74,22 +68,3 @@ Route::get('/', [WelcomeController::class, 'index']);
         Route::post('import', [KegiatanController::class, 'importStore']); // Menyimpan data kegiatan yang diimpor
     });
 
-    Route::get('/kategori-kegiatan', [KategoriKegiatanController::class, 'index']);
-    // Route::post('/kategori-kegiatan/list', [KategoriKegiatanController::class, 'list']);
-    // Route::get('/kategori-kegiatan/create', [KategoriKegiatanController::class, 'create']);
-    // Route::post('/kategori-kegiatan', [KategoriKegiatanController::class, 'store']);
-    // Route::get('/kategori-kegiatan/create_ajax', [KategoriKegiatanController::class, 'create_ajax']);
-    // Route::post('/kategori-kegiatan/store_ajax', [KategoriKegiatanController::class, 'store_ajax']);
-    // Route::get('/kategori-kegiatan/{id}', [KategoriKegiatanController::class, 'show']);
-    // Route::get('/kategori-kegiatan/{id}/show_ajax', [KategoriKegiatanController::class, 'show_ajax']);
-    // Route::get('/kategori-kegiatan/{id}/edit', [KategoriKegiatanController::class, 'edit']);
-    // Route::put('/kategori-kegiatan/{id}', [KategoriKegiatanController::class, 'update']);
-    // Route::get('/kategori-kegiatan/{id}/edit_ajax', [KategoriKegiatanController::class, 'edit_ajax']);
-    // Route::put('/kategori-kegiatan/{id}/update_ajax', [KategoriKegiatanController::class, 'update_ajax']);
-    // Route::get('/kategori-kegiatan/{id}/delete_ajax', [KategoriKegiatanController::class, 'confirm_ajax']);
-    // Route::delete('/kategori-kegiatan/{id}/delete_ajax', [KategoriKegiatanController::class, 'delete_ajax']);
-    // Route::delete('/kategori-kegiatan/{id}', [KategoriKegiatanController::class, 'destroy']);
-    // Route::get('/kategori-kegiatan/import', [KategoriKegiatanController::class, 'import']);
-    // Route::post('/kategori-kegiatan/import_ajax', [KategoriKegiatanController::class, 'import_ajax']);
-    // Route::get('/kategori-kegiatan/export_excel', [KategoriKegiatanController::class, 'export_excel']);
-    // Route::get('/kategori-kegiatan/export_pdf', [KategoriKegiatanController::class, 'export_pdf']);
