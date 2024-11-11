@@ -68,13 +68,3 @@ Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
     Route::delete('/agenda/{id}/delete', [AgendaKegiatanController::class, 'destroy']);
     Route::post('/agenda/import', [AgendaKegiatanController::class, 'import'])->name('agenda.import');
     Route::get('/agenda/export_excel', [AgendaKegiatanController::class, 'export_excel'])->name('agenda.export_excel');
-<<<<<<< HEAD
-    Route::get('/agenda/export_pdf', [AgendaKegiatanController::class, 'export_pdf'])->name('agenda.export_pdf');
-=======
-
-
-    // Route for exporting agenda data to PDF
-
-    // Route for exporting agenda data to PDF
-    Route::get('/agenda/export_pdf', [AgendaKegiatanController::class, 'export_pdf'])->name('agenda.export_pdf');
->>>>>>> 1b23091027c79646353e55f71dcd41af5b3a1be9
