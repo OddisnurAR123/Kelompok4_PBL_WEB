@@ -4,102 +4,84 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AgendaModel;
-use App\Models\DetailAgenda; // Model untuk tabel t_detail_agenda
-use Illuminate\Support\Facades\Validator;
+use App\Models\JabatanKegiatanModel;
+use App\Models\JenisPenggunaModel;
+use App\Models\KegiatanModel;
 
 class AgendaKegiatanController extends Controller
 {
-    // Menampilkan semua agenda
+    // Menampilkan semua agenda kegiatan
     public function index()
     {
-        $agendas = AgendaModel::with('detailAgenda')->get();
-        return response()->json($agendas);
+        $agendas = AgendaModel::all(); // Ambil semua agenda dari database
+        return view('agenda.index', compact('agendas')); // Kirim data agenda ke view
     }
 
-    // Menyimpan agenda baru
+    // Menampilkan form untuk membuat agenda baru
+    public function create()
+    {
+        $kegiatans = KegiatanModel::all(); // Ambil data kegiatan
+        $jenisPenggunas = JenisPenggunaModel::all(); // Ambil data jenis pengguna
+        $jabatanKegiatans = JabatanKegiatanModel::all(); // Ambil data jabatan kegiatan
+
+        return view('agenda.create', compact('kegiatans', 'jenisPenggunas', 'jabatanKegiatans')); // Kirim data ke form
+    }
+
+    // Menyimpan agenda yang baru dibuat
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'kode_agenda' => 'required|string|max:50',
-            'nama_agenda' => 'required|string|max:100',
-            'id_kegiatan' => 'required|integer',
-            'tempat_agenda' => 'nullable|string|max:255',
-            'id_jenis_pengguna' => 'required|integer',
-            'id_jabatan_kegiatan' => 'required|integer',
-            'bobot_anggota' => 'nullable|numeric',
+        $validated = $request->validate([
+            'kode_agenda' => 'required|string|max:255',
+            'nama_agenda' => 'required|string|max:255',
+            'id_kegiatan' => 'required|integer|exists:kegiatans,id_kegiatan',
+            'tempat_agenda' => 'required|string|max:255',
+            'id_jenis_pengguna' => 'required|integer|exists:jenis_penggunas,id_jenis_pengguna',
+            'id_jabatan_kegiatan' => 'required|integer|exists:jabatan_kegiatans,id_jabatan_kegiatan',
+            'bobot_anggota' => 'nullable|integer',
             'deskripsi' => 'nullable|string',
             'tanggal_agenda' => 'required|date',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $agenda = AgendaModel::create($request->all());
-        return response()->json($agenda, 201);
+        AgendaModel::create($validated); // Simpan agenda baru ke database
+        return redirect()->route('agenda.index')->with('success', 'Agenda berhasil dibuat!');
     }
 
-    // Menampilkan detail agenda berdasarkan id
-    public function show($id)
+    // Menampilkan form untuk mengedit agenda
+    public function edit($id)
     {
-        $agenda = AgendaModel::with('detailAgenda')->find($id);
-        if (!$agenda) {
-            return response()->json(['message' => 'Agenda not found'], 404);
-        }
-        return response()->json($agenda);
+        $agenda = AgendaModel::findOrFail($id); // Cari agenda berdasarkan ID
+        $kegiatans = KegiatanModel::all(); // Ambil data kegiatan
+        $jenisPenggunas = JenisPenggunaModel::all(); // Ambil data jenis pengguna
+        $jabatanKegiatans = JabatanKegiatanModel::all(); // Ambil data jabatan kegiatan
+
+        return view('agenda.edit', compact('agenda', 'kegiatans', 'jenisPenggunas', 'jabatanKegiatans')); // Kirim data ke form
     }
 
-    // Mengupdate agenda berdasarkan id
+    // Memperbarui agenda
     public function update(Request $request, $id)
     {
-        $agenda = AgendaModel::find($id);
-        if (!$agenda) {
-            return response()->json(['message' => 'Agenda not found'], 404);
-        }
-
-        $agenda->update($request->all());
-        return response()->json($agenda);
-    }
-
-    // Menghapus agenda berdasarkan id
-    public function destroy($id)
-    {
-        $agenda = AgendaModel::find($id);
-        if (!$agenda) {
-            return response()->json(['message' => 'Agenda not found'], 404);
-        }
-
-        $agenda->delete();
-        return response()->json(['message' => 'Agenda deleted successfully']);
-    }
-
-    // Menyimpan detail agenda baru
-    public function storeDetailAgenda(Request $request, $id_agenda)
-    {
-        $validator = Validator::make($request->all(), [
-            'dokumen' => 'nullable|string',
-            'progres_agenda' => 'required|numeric|min:0|max:100',
-            'keterangan' => 'nullable|string',
-            'berkas' => 'nullable|file',
+        $validated = $request->validate([
+            'kode_agenda' => 'required|string|max:255',
+            'nama_agenda' => 'required|string|max:255',
+            'id_kegiatan' => 'required|integer|exists:kegiatans,id_kegiatan',
+            'tempat_agenda' => 'required|string|max:255',
+            'id_jenis_pengguna' => 'required|integer|exists:jenis_penggunas,id_jenis_pengguna',
+            'id_jabatan_kegiatan' => 'required|integer|exists:jabatan_kegiatans,id_jabatan_kegiatan',
+            'bobot_anggota' => 'nullable|integer',
+            'deskripsi' => 'nullable|string',
+            'tanggal_agenda' => 'required|date',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
+        $agenda = AgendaModel::findOrFail($id); // Cari agenda berdasarkan ID
+        $agenda->update($validated); // Perbarui agenda
+        return redirect()->route('agenda.index')->with('success', 'Agenda berhasil diperbarui!');
+    }
 
-        $detailAgenda = new DetailAgenda();
-        $detailAgenda->id_agenda = $id_agenda;
-        $detailAgenda->dokumen = $request->dokumen;
-        $detailAgenda->progres_agenda = $request->progres_agenda;
-        $detailAgenda->keterangan = $request->keterangan;
-
-        if ($request->hasFile('berkas')) {
-            $file = $request->file('berkas');
-            $path = $file->store('uploads/berkas', 'public');
-            $detailAgenda->berkas = $path;
-        }
-
-        $detailAgenda->save();
-        return response()->json($detailAgenda, 201);
+    // Menghapus agenda
+    public function destroy($id)
+    {
+        $agenda = AgendaModel::findOrFail($id); // Cari agenda berdasarkan ID
+        $agenda->delete(); // Hapus agenda
+        return redirect()->route('agenda.index')->with('success', 'Agenda berhasil dihapus!');
     }
 }
