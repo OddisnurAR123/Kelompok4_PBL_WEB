@@ -22,7 +22,10 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Kode Kegiatan</th>
                     <th>Nama Kegiatan</th>
+                    <th>Tanggal Mulai</th>
+                    <th>Tanggal Selesai</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -61,7 +64,25 @@
                     searchable: true
                 },
                 {
+                data: "kode_kegiatan",
+                className: "",
+                orderable: true,
+                searchable: true
+                },
+                {
                     data: "nama_kegiatan",
+                    className: "",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "tanggal_mulai",
+                    className: "",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "tanggal_selesai",
                     className: "",
                     orderable: true,
                     searchable: true

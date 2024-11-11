@@ -54,17 +54,11 @@ Route::get('/', [WelcomeController::class, 'index']);
     Route::get('/kategori-kegiatan/export_pdf', [KategoriKegiatanController::class, 'export_pdf']);
 
     // Kegiatan Routes
-    Route::prefix('kegiatan')->group(function () {
-        Route::get('/', [KegiatanController::class, 'index']); // Menampilkan halaman daftar kegiatan
-        Route::post('list', [KegiatanController::class, 'getList']); // Menampilkan data kegiatan dalam bentuk JSON (untuk DataTable)
-        Route::get('create', [KegiatanController::class, 'create']); // Menampilkan form untuk tambah kegiatan
-        Route::post('store', [KegiatanController::class, 'store']); // Menyimpan kegiatan baru
-        Route::get('edit/{id}', [KegiatanController::class, 'edit']); // Menampilkan form untuk edit kegiatan
-        Route::post('update/{id}', [KegiatanController::class, 'update']); // Mengupdate kegiatan
-        Route::delete('delete/{id}', [KegiatanController::class, 'destroy']); // Menghapus kegiatan
-        Route::get('export_excel', [KegiatanController::class, 'exportExcel']); // Mengekspor data kegiatan ke format XLSX
-        Route::get('export_pdf', [KegiatanController::class, 'exportPdf']); // Mengekspor data kegiatan ke format PDF
-        Route::get('import', [KegiatanController::class, 'import']); // Menampilkan form untuk impor kegiatan
-        Route::post('import', [KegiatanController::class, 'importStore']); // Menyimpan data kegiatan yang diimpor
-    });
-
+    Route::get('/kegiatan', [KegiatanController::class, 'index'])->name('kegiatan.index');
+    Route::get('/kegiatan/create', [KegiatanController::class, 'create_ajax'])->name('kegiatan.create');
+    Route::post('/kegiatan/ajax', [KegiatanController::class, 'store_ajax'])->name('kegiatan.store');
+    Route::get('/kegiatan/{id}/edit', [KegiatanController::class, 'edit_ajax'])->name('kegiatan.edit');
+    Route::put('/kegiatan/{id}/update', [KegiatanController::class, 'update_ajax'])->name('kegiatan.update');
+    Route::get('/kegiatan/{id}/delete', [KegiatanController::class, 'confirm_ajax'])->name('kegiatan.delete');
+    Route::delete('/kegiatan/{id}', [KegiatanController::class, 'delete_ajax'])->name('kegiatan.destroy');
+    Route::post('/kegiatan/import', [KegiatanController::class, 'import_ajax'])->name('kegiatan.import');

@@ -52,17 +52,6 @@
           <p>Manajemen Data Pengguna</p>
         </a>
       </li>
-<<<<<<< HEAD
-
-    <!-- Dashboard -->
-    <li class="nav-item">
-      <a href="{{ url('/') }}" class="nav-link {{ ($activeMenu == 'dashboard') ? 'active' : '' }}">
-        <i class="nav-icon fas fa-tachometer-alt"></i>
-        <p>Dashboard</p>
-      </a>
-    </li>
-=======
->>>>>>> 34c2324214453d35525c89763f4d58c3e27b6753
       <!-- Manajemen Kegiatan -->
       <li class="nav-item {{ ($activeMenu == 'manajemen-kegiatan') ? 'menu-open' : '' }}">
         <a href="#" class="nav-link {{ ($activeMenu == 'manajemen-kegiatan') ? 'active' : '' }}">
