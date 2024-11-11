@@ -66,7 +66,6 @@
           </li>
           <li class="nav-item">
             <a href="{{ url('/agenda') }}" class="nav-link {{ ($activeMenu == 'agenda-kegiatan') ? 'active' : '' }}">
-            <a href="{{ url('/agenda-kegiatan') }}" class="nav-link {{ ($activeMenu == 'agenda-kegiatan') ? 'active' : '' }}">
               <i class="far fa-calendar-alt nav-icon"></i>
               <p>Agenda Kegiatan</p>
             </a>
