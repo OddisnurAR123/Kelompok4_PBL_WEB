@@ -6,7 +6,7 @@ use App\Http\Controllers\JenisPenggunaController;
 use App\Models\JenisPenggunaModel;
 use App\Http\Controllers\JenisKegiatanController;
 use App\Http\Controllers\KegiatanController;
-use App\Http\Controllers\KategoriKegiatanController;
+use App\Http\Controllers\JabatanKegiatanController;
 use App\Http\Controllers\AgendaKegiatanController;
 
 
@@ -43,6 +43,9 @@ Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
 
     Route::get('/jenis_kegiatan', [JenisKegiatanController::class, 'index'])->name('jenis_kegiatan.index');  
     Route::post('/jenis_kegiatan/list', [JenisKegiatanController::class, 'list']);
+
+    Route::resource('jabatan_kegiatan', JabatanKegiatanController::class);
+
 
     // Kegiatan Routes
     Route::get('/kegiatan', [KegiatanController::class, 'index'])->name('kegiatan.index');
