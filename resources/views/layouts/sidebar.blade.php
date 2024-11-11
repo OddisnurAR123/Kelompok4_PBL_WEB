@@ -52,6 +52,7 @@
           <p>Manajemen Data Pengguna</p>
         </a>
       </li>
+<<<<<<< HEAD
 
     <!-- Dashboard -->
     <li class="nav-item">
@@ -60,6 +61,8 @@
         <p>Dashboard</p>
       </a>
     </li>
+=======
+>>>>>>> 34c2324214453d35525c89763f4d58c3e27b6753
       <!-- Manajemen Kegiatan -->
       <li class="nav-item {{ ($activeMenu == 'manajemen-kegiatan') ? 'menu-open' : '' }}">
         <a href="#" class="nav-link {{ ($activeMenu == 'manajemen-kegiatan') ? 'active' : '' }}">
@@ -70,6 +73,12 @@
           </p>
         </a>
         <ul class="nav nav-treeview">
+          <li class="nav-item">
+            <a href="{{ url('/kegiatan') }}" class="nav-link {{ ($activeMenu == 'kegiatan') ? 'active' : '' }}">
+              <i class="far fa-calendar-alt nav-icon"></i>
+              <p>Input Kegiatan</p>
+            </a>
+          </li>
           <li class="nav-item">
             <a href="{{ url('/agenda-kegiatan') }}" class="nav-link {{ ($activeMenu == 'agenda-kegiatan') ? 'active' : '' }}">
               <i class="far fa-calendar-alt nav-icon"></i>
