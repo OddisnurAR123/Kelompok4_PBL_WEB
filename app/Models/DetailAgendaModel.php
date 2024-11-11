@@ -25,6 +25,6 @@ class DetailAgenda extends Model
     // Relasi ke tabel Agenda
     public function agenda()
     {
-        return $this->belongsTo(Agenda::class, 'id_agenda');
+        return $this->belongsTo(AgendaModel::class, 'id_agenda');
     }
 }

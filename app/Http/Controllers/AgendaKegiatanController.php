@@ -4,15 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Agenda; // Model untuk tabel t_agenda
+use App\Models\AgendaModel;
 use App\Models\DetailAgenda; // Model untuk tabel t_detail_agenda
 use Illuminate\Support\Facades\Validator;
 
-class AgendaController extends Controller
+class AgendaKegiatanController extends Controller
 {
     // Menampilkan semua agenda
     public function index()
     {
-        $agendas = Agenda::with('detailAgenda')->get();
+        $agendas = AgendaModel::with('detailAgenda')->get();
         return response()->json($agendas);
     }
 
@@ -35,14 +36,14 @@ class AgendaController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $agenda = Agenda::create($request->all());
+        $agenda = AgendaModel::create($request->all());
         return response()->json($agenda, 201);
     }
 
     // Menampilkan detail agenda berdasarkan id
     public function show($id)
     {
-        $agenda = Agenda::with('detailAgenda')->find($id);
+        $agenda = AgendaModel::with('detailAgenda')->find($id);
         if (!$agenda) {
             return response()->json(['message' => 'Agenda not found'], 404);
         }
@@ -52,7 +53,7 @@ class AgendaController extends Controller
     // Mengupdate agenda berdasarkan id
     public function update(Request $request, $id)
     {
-        $agenda = Agenda::find($id);
+        $agenda = AgendaModel::find($id);
         if (!$agenda) {
             return response()->json(['message' => 'Agenda not found'], 404);
         }
@@ -64,7 +65,7 @@ class AgendaController extends Controller
     // Menghapus agenda berdasarkan id
     public function destroy($id)
     {
-        $agenda = Agenda::find($id);
+        $agenda = AgendaModel::find($id);
         if (!$agenda) {
             return response()->json(['message' => 'Agenda not found'], 404);
         }
