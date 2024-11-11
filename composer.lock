@@ -6625,8 +6625,6 @@
             "time": "2023-12-15T04:41:00+00:00"
         },
         {
-=======
->>>>>>> f4090bcea693f0749cd256d20a7e548ff7232d1d
             "name": "yajra/laravel-datatables-oracle",
             "version": "v10.11.4",
             "source": {
