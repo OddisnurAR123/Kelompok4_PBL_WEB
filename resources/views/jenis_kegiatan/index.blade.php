@@ -4,10 +4,10 @@
     <div class="card-header">
         <h3 class="card-title">Daftar Jenis Kegiatan</h3>
         <div class="card-tools">
-          <button onclick="modalAction('{{ url('/jenis_pengguna/import') }}')" class="btn btn-info"><i class="fa fa-file-import"></i> Import Jenis Pengguna</button>
-          <a href="{{ url('/jenis_pengguna/export_excel') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i> Export Jenis Pengguna XLSX</a>
-          <a href="{{ url('/jenis_pengguna/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Export Jenis Pengguna PDF</a>
-          <button onclick="modalAction('{{ url('/jenis_pengguna/create') }}')" class="btn btn-success"><i class="fa fa-plus"></i> Tambah Data</button>
+          <button onclick="modalAction('{{ url('/jenis_kegiatan/import') }}')" class="btn btn-info"><i class="fa fa-file-import"></i> Import Jenis Kegiatan</button>
+          <a href="{{ url('/jenis_kegiatan/export_excel') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i> Export Jenis Kegiatan XLSX</a>
+          <a href="{{ url('/jenis_kegiatan/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Export Jenis Kegiatan PDF</a>
+          <button onclick="modalAction('{{ url('/jenis_kegiatan/create') }}')" class="btn btn-success"><i class="fa fa-plus"></i> Tambah Data</button>
         </div>
     </div>
     <div class="card-body">
@@ -18,12 +18,12 @@
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
             
-        <table class="table table-bordered table-striped table-hover table-sm" id="table_kategori_pengguna">
+        <table class="table table-bordered table-striped table-hover table-sm" id="table_jenis_kegiatan">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Kode Jenis Pengguna</th>
-                    <th>Nama Jenis Pengguna</th>
+                    <th>Kode Jenis Kegiatan</th>
+                    <th>Nama Jenis Kegiatan</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -44,13 +44,13 @@
         });
     }
 
-    var dataJenisPengguna;
+    var dataJenisKegiatan;
     $(document).ready(function() {
-    dataJenisPengguna = $('#table_jenis_pengguna').DataTable({
+    dataJenisKegiatan = $('#table_jenis_kegiatan').DataTable({
         serverSide: true,
         processing: true,
         ajax: {
-            url: "{{ url('jenis_pengguna/list') }}",
+            url: "{{ url('jenis_kegiatan/list') }}",
             type: "POST",
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
