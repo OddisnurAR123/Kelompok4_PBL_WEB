@@ -49,6 +49,8 @@ Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
 
     // Kegiatan Routes
     Route::get('/kegiatan', [KegiatanController::class, 'index'])->name('kegiatan.index');
+    Route::post('/kegiatan/list', [KegiatanController::class, 'list']);
+    Route::get('kegiatan/{id_kegiatan}', [KegiatanController::class, 'show'])->name('kegiatan.show');
     Route::get('/kegiatan/create_ajax', [KegiatanController::class, 'create_ajax'])->name('kegiatan.create_ajax');
     Route::post('/kegiatan/ajax', [KegiatanController::class, 'store_ajax'])->name('kegiatan.store');
     Route::get('/kegiatan/{id}/edit', [KegiatanController::class, 'edit_ajax'])->name('kegiatan.edit');

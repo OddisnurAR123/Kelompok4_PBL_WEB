@@ -27,7 +27,7 @@ class KegiatanController extends Controller
 
     // Menampilkan data kegiatan dalam bentuk json untuk datatables
     public function list(Request $request) {
-        $kegiatan = KegiatanModel::select('id_kegiatan', 'kode_kegiatan', 'nama_kegiatan');
+        $kegiatan = KegiatanModel::select('id_kegiatan', 'kode_kegiatan', 'nama_kegiatan', 'tanggal_mulai', 'tanggal_selesai');
 
         return DataTables::of($kegiatan)
             ->addIndexColumn()
@@ -78,6 +78,20 @@ class KegiatanController extends Controller
             'message' => 'Request bukan AJAX.',
         ]);
     }    
+
+    public function show(string $id)
+    {
+        $kegiatan = KegiatanModel::find($id);
+
+        if (!$kegiatan) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Kegiatan tidak ditemukan.'
+            ]);
+        }
+
+        return view('kegiatan.show', ['kegiatan' => $kegiatan]);
+    }
 
     // Menampilkan form edit kegiatan via Ajax
     public function edit_ajax($id) {
