@@ -24,14 +24,12 @@ class JabatanKegiatanController extends Controller
         return view('jabatan_kegiatan.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu]);
     }
 
-    public function list(Request $request) {
-        // Mengambil data dari model JabatanKegiatanModel
+    public function list(Request $request)
+    {
         $jabatanKegiatan = JabatanKegiatanModel::select('id_jabatan_kegiatan', 'kode_jabatan_kegiatan', 'nama_jabatan_kegiatan');
-    
+        
         return DataTables::of($jabatanKegiatan)
-            ->addIndexColumn()
             ->addColumn('aksi', function ($jabatanKegiatan) {
-                // Update URL dan action button sesuai dengan route yang diinginkan
                 $btn = '<button onclick="modalAction(\''.url('/jabatan_kegiatan/' . $jabatanKegiatan->id_jabatan_kegiatan . '/show').'\')" class="btn btn-info btn-sm">Detail</button> ';
                 $btn .= '<button onclick="modalAction(\''.url('/jabatan_kegiatan/' . $jabatanKegiatan->id_jabatan_kegiatan . '/edit').'\')" class="btn btn-warning btn-sm">Edit</button> ';
                 $btn .= '<button onclick="modalAction(\''.url('/jabatan_kegiatan/' . $jabatanKegiatan->id_jabatan_kegiatan . '/delete').'\')" class="btn btn-danger btn-sm">Hapus</button>';
@@ -39,7 +37,7 @@ class JabatanKegiatanController extends Controller
             })
             ->rawColumns(['aksi'])
             ->make(true);
-    }
+    }        
     
     public function create()
     {

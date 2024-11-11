@@ -44,8 +44,8 @@ Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
     Route::get('/jenis_kegiatan', [JenisKegiatanController::class, 'index'])->name('jenis_kegiatan.index');  
     Route::post('/jenis_kegiatan/list', [JenisKegiatanController::class, 'list']);
 
-    Route::resource('jabatan_kegiatan', JabatanKegiatanController::class);
-
+    Route::get('/jabatan_kegiatan', [JabatanKegiatanController::class, 'index'])->name('jabatan_kegiatan.index');  
+    Route::post('/jabatan_kegiatan/list', [JabatanKegiatanController::class, 'list']);
 
     // Kegiatan Routes
     Route::get('/kegiatan', [KegiatanController::class, 'index'])->name('kegiatan.index');
