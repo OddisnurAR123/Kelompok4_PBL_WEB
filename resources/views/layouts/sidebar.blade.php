@@ -21,8 +21,6 @@
   <nav class="mt-2">
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" 
     role="menu" data-accordion="false">
-<<<<<<< HEAD
-
       <!-- Manajemen Jenis Kegiatan -->
       <li class="nav-item">
         <a href="{{ url('/jenis-kegiatan') }}" class="nav-link {{ ($activeMenu == 'jenis-kegiatan') ? 'active' : '' }}">
@@ -55,7 +53,6 @@
         </a>
       </li>
 
-=======
     <!-- Dashboard -->
     <li class="nav-item">
       <a href="{{ url('/') }}" class="nav-link {{ ($activeMenu == 'dashboard') ? 'active' : '' }}">
@@ -63,7 +60,6 @@
         <p>Dashboard</p>
       </a>
     </li>
->>>>>>> c50c24ef1a5ae0b23677c7c45ee50d9a0070d716
       <!-- Manajemen Kegiatan -->
       <li class="nav-item {{ ($activeMenu == 'manajemen-kegiatan') ? 'menu-open' : '' }}">
         <a href="#" class="nav-link {{ ($activeMenu == 'manajemen-kegiatan') ? 'active' : '' }}">

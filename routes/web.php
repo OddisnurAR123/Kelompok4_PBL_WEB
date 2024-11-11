@@ -2,12 +2,9 @@
 
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
-<<<<<<< HEAD
 use App\Http\Controllers\JenisPenggunaController;
 use App\Models\JenisPenggunaModel;
-=======
 use App\Http\Controllers\KategoriKegiatanController;
->>>>>>> c50c24ef1a5ae0b23677c7c45ee50d9a0070d716
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +19,6 @@ use App\Http\Controllers\KategoriKegiatanController;
 
 Route::get('/', [WelcomeController::class, 'index']);
 
-<<<<<<< HEAD
 // Route::middleware(['authorize:ADM,MNG'])->group(function () {
     Route::get('/jenis_pengguna', [JenisPenggunaController::class, 'index'])->name('jenis_pengguna.index');  
     // Route::get('/level/create_ajax', [LevelController::class, 'create_ajax']);
@@ -36,7 +32,6 @@ Route::get('/', [WelcomeController::class, 'index']);
     // Route::get('/level/export_excel', [LevelController::class, 'export_excel']);
     // Route::get('/level/export_pdf', [LevelController::class, 'export_pdf']);
 // });
-=======
     Route::get('/kategori-kegiatan', [KategoriKegiatanController::class, 'index']);
     Route::post('/kategori-kegiatan/list', [KategoriKegiatanController::class, 'list']);
     Route::get('/kategori-kegiatan/create', [KategoriKegiatanController::class, 'create']);
@@ -58,4 +53,3 @@ Route::get('/', [WelcomeController::class, 'index']);
     Route::get('/kategori-kegiatan/export_pdf', [KategoriKegiatanController::class, 'export_pdf']);
 
 
->>>>>>> c50c24ef1a5ae0b23677c7c45ee50d9a0070d716
