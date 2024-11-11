@@ -37,7 +37,7 @@
 
       <!-- Manajemen Jabatan Kegiatan -->
       <li class="nav-item">
-        <a href="{{ url('/manajemen-jabatan-kegiatan') }}" class="nav-link {{ ($activeMenu == 'manajemen-jabatan-kegiatan') ? 'active' : '' }}">
+        <a href="{{ url('/jabatan_kegiatan') }}" class="nav-link {{ ($activeMenu == 'manajemen-jabatan-kegiatan') ? 'active' : '' }}">
           <i class="nav-icon fas fa-user-shield"></i>
           <p>Manajemen Jabatan Kegiatan</p>
         </a>
