@@ -13,8 +13,12 @@ class AgendaKegiatanController extends Controller
     // Menampilkan semua agenda kegiatan
     public function index()
     {
+        // Ambil data agenda dan jenis pengguna dari model
         $agendas = AgendaModel::all(); // Ambil semua agenda dari database
-        return view('agenda.index', compact('agendas')); // Kirim data agenda ke view
+        $jenisPenggunas = JenisPenggunaModel::all(); // Ambil data jenis pengguna
+
+        // Kirim data ke view
+        return view('agenda.index', compact('agendas', 'jenisPenggunas')); 
     }
 
     // Menampilkan form untuk membuat agenda baru
@@ -24,12 +28,13 @@ class AgendaKegiatanController extends Controller
         $jenisPenggunas = JenisPenggunaModel::all(); // Ambil data jenis pengguna
         $jabatanKegiatans = JabatanKegiatanModel::all(); // Ambil data jabatan kegiatan
 
-        return view('agenda.create', compact('kegiatans', 'jenisPenggunas', 'jabatanKegiatans')); // Kirim data ke form
+        return view('agenda.create', compact('kegiatans', 'jenisPenggunas', 'jabatanKegiatans')); 
     }
 
     // Menyimpan agenda yang baru dibuat
     public function store(Request $request)
     {
+        // Validasi data dari form
         $validated = $request->validate([
             'kode_agenda' => 'required|string|max:255',
             'nama_agenda' => 'required|string|max:255',
@@ -42,7 +47,8 @@ class AgendaKegiatanController extends Controller
             'tanggal_agenda' => 'required|date',
         ]);
 
-        AgendaModel::create($validated); // Simpan agenda baru ke database
+        // Simpan agenda baru ke database
+        AgendaModel::create($validated); 
         return redirect()->route('agenda.index')->with('success', 'Agenda berhasil dibuat!');
     }
 
@@ -54,7 +60,7 @@ class AgendaKegiatanController extends Controller
         $jenisPenggunas = JenisPenggunaModel::all(); // Ambil data jenis pengguna
         $jabatanKegiatans = JabatanKegiatanModel::all(); // Ambil data jabatan kegiatan
 
-        return view('agenda.edit', compact('agenda', 'kegiatans', 'jenisPenggunas', 'jabatanKegiatans')); // Kirim data ke form
+        return view('agenda.edit', compact('agenda', 'kegiatans', 'jenisPenggunas', 'jabatanKegiatans')); 
     }
 
     // Memperbarui agenda
