@@ -6,7 +6,7 @@ use App\Http\Controllers\JenisPenggunaController;
 use App\Models\JenisPenggunaModel;
 use App\Http\Controllers\JenisKegiatanController;
 use App\Http\Controllers\KegiatanController;
-use App\Http\Controllers\KategoriKegiatanController;
+use App\Http\Controllers\JabatanKegiatanController;
 use App\Http\Controllers\AgendaKegiatanController;
 
 
@@ -41,25 +41,21 @@ Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
     // Route::get('/level/export_pdf', [LevelController::class, 'export_pdf']);
 // });
 
-    Route::get('/jenis_kegiatan', [JenisKegiatanController::class, 'index']);
+    Route::get('/jenis_kegiatan', [JenisKegiatanController::class, 'index'])->name('jenis_kegiatan.index');  
     Route::post('/jenis_kegiatan/list', [JenisKegiatanController::class, 'list']);
-    Route::get('/jenis_kegiatan/create', [JenisKegiatanController::class, 'create']);
-    Route::post('/jenis_kegiatan', [JenisKegiatanController::class, 'store']);
-    Route::get('/jenis_kegiatan/create_ajax', [JenisKegiatanController::class, 'create_ajax']);
-    Route::post('/jenis_kegiatan/store_ajax', [JenisKegiatanController::class, 'store_ajax']);
-    Route::get('/jenis_kegiatan/{id}', [JenisKegiatanController::class, 'show']);
-    Route::get('/jenis_kegiatan/{id}/show_ajax', [JenisKegiatanController::class, 'show_ajax']);
-    Route::get('/jenis_kegiatan/{id}/edit', [JenisKegiatanController::class, 'edit']);
-    Route::put('/jenis_kegiatan/{id}', [JenisKegiatanController::class, 'update']);
-    Route::get('/jenis_kegiatan/{id}/edit_ajax', [JenisKegiatanController::class, 'edit_ajax']);
-    Route::put('/jenis_kegiatan/{id}/update_ajax', [JenisKegiatanController::class, 'update_ajax']);
-    Route::get('/jenis_kegiatan/{id}/delete_ajax', [JenisKegiatanController::class, 'confirm_ajax']);
-    Route::delete('/jenis_kegiatan/{id}/delete_ajax', [JenisKegiatanController::class, 'delete_ajax']);
-    Route::delete('/jenis_kegiatan/{id}', [JenisKegiatanController::class, 'destroy']);
-    Route::get('/jenis_kegiatan/import', [JenisKegiatanController::class, 'import']);
-    Route::post('/jenis_kegiatan/import_ajax', [JenisKegiatanController::class, 'import_ajax']);
-    Route::get('/jenis_kegiatan/export_excel', [JenisKegiatanController::class, 'export_excel']);
-    Route::get('/jenis_kegiatan/export_pdf', [JenisKegiatanController::class, 'export_pdf']);
+
+    Route::get('/jabatan_kegiatan', [JabatanKegiatanController::class, 'index'])->name('jabatan_kegiatan.index');  
+    Route::post('/jabatan_kegiatan/list', [JabatanKegiatanController::class, 'list']);
+
+    // Kegiatan Routes
+    Route::get('/kegiatan', [KegiatanController::class, 'index'])->name('kegiatan.index');
+    Route::get('/kegiatan/create_ajax', [KegiatanController::class, 'create_ajax'])->name('kegiatan.create_ajax');
+    Route::post('/kegiatan/ajax', [KegiatanController::class, 'store_ajax'])->name('kegiatan.store');
+    Route::get('/kegiatan/{id}/edit', [KegiatanController::class, 'edit_ajax'])->name('kegiatan.edit');
+    Route::put('/kegiatan/{id}/update', [KegiatanController::class, 'update_ajax'])->name('kegiatan.update');
+    Route::get('/kegiatan/{id}/delete', [KegiatanController::class, 'confirm_ajax'])->name('kegiatan.delete');
+    Route::delete('/kegiatan/{id}', [KegiatanController::class, 'delete_ajax'])->name('kegiatan.destroy');
+    Route::post('/kegiatan/import', [KegiatanController::class, 'import_ajax'])->name('kegiatan.import');
 
     Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
     Route::post('/agenda/list', [AgendaKegiatanController::class, 'list']);
@@ -72,4 +68,13 @@ Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
     Route::delete('/agenda/{id}/delete', [AgendaKegiatanController::class, 'destroy']);
     Route::post('/agenda/import', [AgendaKegiatanController::class, 'import'])->name('agenda.import');
     Route::get('/agenda/export_excel', [AgendaKegiatanController::class, 'export_excel'])->name('agenda.export_excel');
+<<<<<<< HEAD
     Route::get('/agenda/export_pdf', [AgendaKegiatanController::class, 'export_pdf'])->name('agenda.export_pdf');
+=======
+
+
+    // Route for exporting agenda data to PDF
+
+    // Route for exporting agenda data to PDF
+    Route::get('/agenda/export_pdf', [AgendaKegiatanController::class, 'export_pdf'])->name('agenda.export_pdf');
+>>>>>>> 1b23091027c79646353e55f71dcd41af5b3a1be9
