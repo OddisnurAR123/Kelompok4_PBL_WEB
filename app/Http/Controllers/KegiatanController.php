@@ -43,7 +43,7 @@ class KegiatanController extends Controller
 
     // Menampilkan form tambah kegiatan via Ajax
     public function create_ajax() {
-        return view('kegiatan.create');
+        return view('kegiatan.create_ajax');
     }
 
     // Menyimpan data kegiatan baru via Ajax
