@@ -23,7 +23,7 @@
       <li class="nav-item">
         <a href="{{ url('/jenis_kegiatan') }}" class="nav-link {{ ($activeMenu == 'manajemen-jenis-kegiatan') ? 'active' : '' }}">
           <i class="nav-icon fas fa-tasks"></i>
-          <p>Manajemen Jenis Kegiatan</p>
+          <p>Jenis Kegiatan</p>
         </a>
       </li>
 
@@ -31,7 +31,7 @@
       <li class="nav-item">
         <a href="{{ url('/jenis_pengguna') }}" class="nav-link {{ ($activeMenu == 'manajemen-jenis-pengguna') ? 'active' : '' }}">
           <i class="nav-icon fas fa-user-tag"></i>
-          <p>Manajemen Jenis Pengguna</p>
+          <p>Jenis Pengguna</p>
         </a>
       </li>
 
@@ -39,7 +39,7 @@
       <li class="nav-item">
         <a href="{{ url('/jabatan_kegiatan') }}" class="nav-link {{ ($activeMenu == 'manajemen-jabatan-kegiatan') ? 'active' : '' }}">
           <i class="nav-icon fas fa-user-shield"></i>
-          <p>Manajemen Jabatan Kegiatan</p>
+          <p>Jabatan Kegiatan</p>
         </a>
       </li>
 
@@ -47,14 +47,14 @@
       <li class="nav-item">
         <a href="{{ url('/manajemen-data-pengguna') }}" class="nav-link {{ ($activeMenu == 'manajemen-data-pengguna') ? 'active' : '' }}">
           <i class="nav-icon fas fa-users"></i>
-          <p>Manajemen Data Pengguna</p>
+          <p>Data Pengguna</p>
         </a>
       </li>
       <!-- Manajemen Kegiatan -->
       <li class="nav-item {{ ($activeMenu == 'manajemen-kegiatan') ? 'menu-open' : '' }}">
         <a href="#" class="nav-link {{ ($activeMenu == 'manajemen-kegiatan') ? 'active' : '' }}">
           <i class="nav-icon fas fa-tasks"></i>
-          <p>Manajemen Kegiatan<i class="right fas fa-angle-left"></i></p>
+          <p>Kegiatan<i class="right fas fa-angle-left"></i></p>
         </a>
         <ul class="nav nav-treeview">
           <li class="nav-item">

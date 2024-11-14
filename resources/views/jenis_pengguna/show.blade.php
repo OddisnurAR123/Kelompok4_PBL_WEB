@@ -1,4 +1,4 @@
-@empty($jenispengguna)
+@empty($jenisPengguna)
 <div id="modal-master" class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -29,15 +29,15 @@
             <table class="table table-sm table-bordered table-striped">
                 <tr>
                     <th class="text-right col-3">ID Jenis Pengguna:</th>
-                    <td class="col-9">{{ $jenispengguna->id_jenis_pengguna }}</td>
+                    <td class="col-9">{{ $jenisPengguna->id_jenis_pengguna }}</td>
                 </tr>
                 <tr>
                     <th class="text-right col-3">Kode Jenis Pengguna:</th>
-                    <td class="col-9">{{ $jenispengguna->kode_jenis_pengguna }}</td>
+                    <td class="col-9">{{ $jenisPengguna->kode_jenis_pengguna }}</td>
                 </tr>
                 <tr>
                     <th class="text-right col-3">Nama Jenis Pengguna:</th>
-                    <td class="col-9">{{ $jenispengguna->nama_jenis_pengguna }}</td>
+                    <td class="col-9">{{ $jenisPengguna->nama_jenis_pengguna }}</td>
                 </tr>
             </table>
         </div>
