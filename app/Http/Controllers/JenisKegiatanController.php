@@ -9,10 +9,11 @@ use Illuminate\Support\Facades\Validator;
 
 class JenisKegiatanController extends Controller
 {
+    // Tampilkan halaman index
     public function index() {
         $breadcrumb = (object) [
             'title' => 'Daftar Jenis Kegiatan',
-            'list' => ['Home', 'Jenis    Kegiatan']
+            'list' => ['Home', 'Jenis Kegiatan']
         ];
 
         $page = (object) [
@@ -21,140 +22,115 @@ class JenisKegiatanController extends Controller
 
         $activeMenu = 'kategori_kegiatan';
 
-        return view('jenis_kegiatan.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu]);
+        return view('jenis_kegiatan.index', compact('breadcrumb', 'page', 'activeMenu'));
     }
 
-    public function list(Request $request) {
-        $jenisPengguna = JenisKegiatanModel::select('id_kategori_kegiatan', 'kode_kategori_kegiatan', 'nama_kategori_kegiatan');
+    // List data untuk DataTables
+    // public function list(Request $request)
+    // {
+    //     $jenisKegiatan = JenisKegiatanModel::select('id_kategori_kegiatan', 'kode_kategori_kegiatan', 'nama_kategori_kegiatan');
     
-        return DataTables::of($jenisPengguna)
+    //     return DataTables::of($jenisKegiatan)
+    //         ->addIndexColumn()
+    //         ->addColumn('aksi', function($row) {
+    //             return '
+    //                 <button onclick="modalAction(\''.url('jenis_kegiatan/', $row->id_kategori_kegiatan, '/show').'\')" class="btn btn-info btn-sm" title="Detail"><i class="fas fa-eye"></i></button>
+    //                 <button onclick="modalAction(\''.url('jenis_kegiatan.edit', $row->id_kategori_kegiatan).'\')" class="btn btn-warning btn-sm" title="Edit"><i class="fas fa-edit"></i></button>
+    //                 <button onclick="deleteData(\''.url('jenis_kegiatan.delete', $row->id_kategori_kegiatan).'\')" class="btn btn-danger btn-sm" title="Delete"><i class="fas fa-trash-alt"></i></button>
+    //             ';
+    //         })
+    //         ->rawColumns(['aksi'])
+    //         ->make(true);
+    // }
+
+    public function list(Request $request) {
+        $jenisKegiatan = JenisKegiatanModel::select('id_kategori_kegiatan', 'kode_kategori_kegiatan', 'nama_kategori_kegiatan');
+    
+        return DataTables::of($jenisKegiatan)
             ->addIndexColumn()
-            ->addColumn('aksi', function ($jenisPengguna) {
-                $btn = '<button onclick="modalAction(\''.url('/kategori_kegiatan/' . $jenisPengguna->id_kategori_kegiatan . '/show').'\')" class="btn btn-info btn-sm">Detail</button> ';
-                $btn .= '<button onclick="modalAction(\''.url('/kategori_kegiatan/' . $jenisPengguna->id_kategori_kegiatan . '/edit').'\')" class="btn btn-warning btn-sm">Edit</button> ';
-                $btn .= '<button onclick="modalAction(\''.url('/kategori_kegiatan/' . $jenisPengguna->id_kategori_kegiatan . '/delete').'\')" class="btn btn-danger btn-sm">Hapus</button>';
+            ->addColumn('aksi', function ($jenisKegiatan) {
+                $btn = '<button onclick="modalAction(\''.url('/jenis_kegiatan/' . $jenisKegiatan->id_kategori_kegiatan . '/show').'\')" class="btn btn-info btn-sm">Detail</button> ';
+                $btn .= '<button onclick="modalAction(\''.url('/jenis_kegiatan/' . $jenisKegiatan->id_kategori_kegiatan . '/edit').'\')" class="btn btn-warning btn-sm">Edit</button> ';
+                $btn .= '<button onclick="modalAction(\''.url('/jenis_kegiatan/' . $jenisKegiatan->id_kategori_kegiatan . '/delete').'\')" class="btn btn-danger btn-sm">Hapus</button>';
                 return $btn;
             })
             ->rawColumns(['aksi'])
             ->make(true);
     }
-    
-    public function create()
-    {
-        return view('kategori_kegiatan.create');
+
+    // Tampilkan halaman create
+    public function create() {
+        return view('jenis_kegiatan.create');
     }
 
+    // Simpan data baru
     public function store(Request $request) {
-        if ($request->ajax() || $request->wantsJson()) {
-            $rules = [
-                'kode_kategori_kegiatan' => 'required|string|min:3|unique:m_kategori_kegiatan,kode_kategori_kegiatan',
-                'nama_kategori_kegiatan' => 'required|string|max:100',
-            ];
+        $validator = Validator::make($request->all(), [
+            'kode_kategori_kegiatan' => 'required|string|min:3|unique:jenis_kegiatan,kode_kategori_kegiatan',
+            'nama_kategori_kegiatan' => 'required|string|max:100',
+        ]);
 
-            $validator = Validator::make($request->all(), $rules);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Validasi Gagal',
-                    'msgField' => $validator->errors(),
-                ]);
-            }
-
-            JenisKegiatanModel::create([
-                'kode_kategori_kegiatan' => $request->kode_kategori_kegiatan,
-                'nama_kategori_kegiatan' => $request->nama_kategori_kegiatan,
-            ]);
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Data jenis pengguna berhasil disimpan',
-            ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'errors' => $validator->errors()]);
         }
 
-        return redirect('/');
+        JenisKegiatanModel::create($request->only(['kode_kategori_kegiatan', 'nama_kategori_kegiatan']));
+
+        return response()->json(['status' => true, 'message' => 'Data berhasil disimpan.']);
     }
 
-    public function edit(string $id)
-    {
-        $jenisPengguna = JenisKegiatanModel::find($id);
+    // Tampilkan halaman edit
+    public function edit($id_kategori_kegiatan) {
+        $jenisKegiatan = JenisKegiatanModel::find($id_kategori_kegiatan);
 
-        if (!$jenisPengguna) {
-            return response()->json(['status' => false, 'message' => 'Data jenis pengguna tidak ditemukan']);
+        if (!$jenisKegiatan) {
+            return response()->json(['status' => false, 'message' => 'Data tidak ditemukan']);
         }
 
-        return view('kategori_kegiatan.edit', ['jenisPengguna' => $jenisPengguna]);
+        return view('jenis_kegiatan.edit', compact('jenisKegiatan'));
     }
 
-    public function update(Request $request, $id) {
-        if ($request->ajax() || $request->wantsJson()) {
-            $rules = [
-                'kode_kategori_kegiatan' => 'required|string|max:20|unique:m_kategori_kegiatan,kode_kategori_kegiatan,' . $id . ',id_kategori_kegiatan',
-                'nama_kategori_kegiatan' => 'required|string|max:100',
-            ];
+    // Update data
+    public function update(Request $request, $id_kategori_kegiatan) {
+        $jenisKegiatan = JenisKegiatanModel::find($id_kategori_kegiatan);
 
-            $validator = Validator::make($request->all(), $rules);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Validasi gagal.',
-                    'msgField' => $validator->errors(),
-                ]);
-            }
-
-            $jenisPengguna = JenisKegiatanModel::find($id);
-
-            if ($jenisPengguna) {
-                $jenisPengguna->update($request->all());
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Data berhasil diupdate',
-                ]);
-            } else {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Data tidak ditemukan',
-                ]);
-            }
+        if (!$jenisKegiatan) {
+            return response()->json(['status' => false, 'message' => 'Data tidak ditemukan']);
         }
 
-        return redirect('/');
-    }
+        $validator = Validator::make($request->all(), [
+            'kode_kategori_kegiatan' => 'required|string|max:20|unique:jenis_kegiatan,kode_kategori_kegiatan,' . $id_kategori_kegiatan,
+            'nama_kategori_kegiatan' => 'required|string|max:100',
+        ]);
 
-    public function delete(Request $request, $id)
-    {
-        if ($request->ajax() || $request->wantsJson()) {
-            $jenisPengguna = JenisKegiatanModel::find($id);
-
-            if ($jenisPengguna) {
-                $jenisPengguna->delete();
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Data berhasil dihapus',
-                ]);
-            } else {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Data tidak ditemukan',
-                ]);
-            }
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'errors' => $validator->errors()]);
         }
 
-        return redirect('/');
+        $jenisKegiatan->update($request->only(['kode_kategori_kegiatan', 'nama_kategori_kegiatan']));
+
+        return response()->json(['status' => true, 'message' => 'Data berhasil diperbarui.']);
     }
 
+    // Hapus data
+    public function delete($id_kategori_kegiatan) {
+        $jenisKegiatan = JenisKegiatanModel::find($id_kategori_kegiatan);
+
+        if (!$jenisKegiatan) {
+            return response()->json(['status' => false, 'message' => 'Data tidak ditemukan']);
+        }
+
+        $jenisKegiatan->delete();
+
+        return response()->json(['status' => true, 'message' => 'Data berhasil dihapus.']);
+    }
+
+    // Detail data
     public function show(string $id)
     {
-        $jenisPengguna = JenisKegiatanModel::find($id);
-
-        if (!$jenisPengguna) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Jenis Pengguna tidak ditemukan.'
-            ]);
-        }
-
-        return view('kategori_kegiatan.show', ['jenisPengguna' => $jenisPengguna]);
+        // Ambil barang berdasarkan ID dan sertakan relasi dengan KategoriModel (atau model lain jika ada)
+        $jenisKegiatan = JenisKegiatanModel::find($id);
+        // Kirimkan data barang ke view
+        return view('jenis_kegiatan.show', ['jenis_kegiatan' => $jenisKegiatan]);
     }
 }

@@ -3,12 +3,6 @@
 <div class="card card-outline card-primary">
     <div class="card-header">
         <h3 class="card-title">Daftar Jenis Pengguna</h3>
-        <div class="card-tools">
-          <button onclick="modalAction('{{ url('/jenis_pengguna/import') }}')" class="btn btn-info"><i class="fa fa-file-import"></i> Import Jenis Pengguna</button>
-          <a href="{{ url('/jenis_pengguna/export_excel') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i> Export Jenis Pengguna XLSX</a>
-          <a href="{{ url('/jenis_pengguna/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Export Jenis Pengguna PDF</a>
-          <button onclick="modalAction('{{ url('/jenis_pengguna/create') }}')" class="btn btn-success"><i class="fa fa-plus"></i> Tambah Data</button>
-        </div>
     </div>
     <div class="card-body">
         @if(session('success'))

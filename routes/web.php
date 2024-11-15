@@ -24,7 +24,7 @@ use App\Http\Controllers\AgendaKegiatanController;
 Route::get('/', [WelcomeController::class, 'index']);
 
 // Daftar route agenda
-Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
+    Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
 
 // Route::middleware(['authorize:ADM,MNG'])->group(function () {
     Route::get('/jenis_pengguna', [JenisPenggunaController::class, 'index'])->name('jenis_pengguna.index');  
@@ -32,8 +32,12 @@ Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
     Route::get('/jenis_pengguna/{id}', [JenisPenggunaController::class, 'show'])->name('jenis_pengguna.show');
 // });
 
-    Route::get('/jenis_kegiatan', [JenisKegiatanController::class, 'index'])->name('jenis_kegiatan.index');  
+    Route::get('/jenis_kegiatan', [JenisKegiatanController::class, 'index'])->name('jenis_kegiatan.index');
     Route::post('/jenis_kegiatan/list', [JenisKegiatanController::class, 'list']);
+    Route::get('jenis_kegiatan/{id}/show', [JenisKegiatanController::class, 'show'])->name('jenis_kegiatan.show');
+    Route::get('/jenis_kegiatan/create', [JenisKegiatanController::class, 'create'])->name('jenis_kegiatan.create');
+    Route::get('/jenis_kegiatan/{id_kategori_kegiatan}/edit', [JenisKegiatanController::class, 'edit'])->name('jenis_kegiatan.edit');
+    Route::delete('/jenis_kegiatan/{id_kategori_kegiatan}', [JenisKegiatanController::class, 'delete'])->name('jenis_kegiatan.delete');
 
     Route::get('/jabatan_kegiatan', [JabatanKegiatanController::class, 'index'])->name('jabatan_kegiatan.index');  
     Route::post('/jabatan_kegiatan/list', [JabatanKegiatanController::class, 'list']);
