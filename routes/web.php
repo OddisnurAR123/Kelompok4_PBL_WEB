@@ -6,6 +6,7 @@ use App\Http\Controllers\JenisPenggunaController;
 use App\Models\JenisPenggunaModel;
 use App\Http\Controllers\JenisKegiatanController;
 use App\Http\Controllers\KegiatanController;
+use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\JabatanKegiatanController;
 use App\Http\Controllers\AgendaKegiatanController;
 
@@ -21,7 +22,9 @@ use App\Http\Controllers\AgendaKegiatanController;
 |
 */
 
-Route::get('/', [WelcomeController::class, 'index']);
+Route::get('/', [WelcomeController::class, 'index'])->name('dashboard');
+
+Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
 
 // Daftar route agenda
     Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
