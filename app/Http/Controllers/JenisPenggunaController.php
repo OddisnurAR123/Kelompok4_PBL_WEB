@@ -12,11 +12,11 @@ class JenisPenggunaController extends Controller
     public function index() {
         $breadcrumb = (object) [
             'title' => 'Daftar Jenis Pengguna',
-            'list' => ['Home', 'Jenis    Pengguna']
+            'list' => ['Home', 'Jenis Pengguna']
         ];
 
         $page = (object) [
-            'title' => 'Daftar jenis pengguna yang ada'
+            'title' => 'Daftar semua jenis pengguna'
         ];
 
         $activeMenu = 'jenis_pengguna';
@@ -26,7 +26,7 @@ class JenisPenggunaController extends Controller
 
     public function list(Request $request) {
         $jenisPengguna = JenisPenggunaModel::select('id_jenis_pengguna', 'kode_jenis_pengguna', 'nama_jenis_pengguna');
-    
+
         return DataTables::of($jenisPengguna)
             ->addIndexColumn()
             ->addColumn('aksi', function ($jenisPengguna) {
@@ -38,16 +38,15 @@ class JenisPenggunaController extends Controller
             ->rawColumns(['aksi'])
             ->make(true);
     }
-    
-    public function create()
-    {
+
+    public function create() {
         return view('jenis_pengguna.create');
     }
 
     public function store(Request $request) {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'kode_jenis_pengguna' => 'required|string|min:3|unique:m_jenis_pengguna,kode_jenis_pengguna',
+                'kode_jenis_pengguna' => 'required|string|unique:m_jenis_pengguna,kode_jenis_pengguna',
                 'nama_jenis_pengguna' => 'required|string|max:100',
             ];
 
@@ -75,21 +74,36 @@ class JenisPenggunaController extends Controller
         return redirect('/');
     }
 
-    public function edit(string $id)
-    {
+    public function show(string $id) {
         $jenisPengguna = JenisPenggunaModel::find($id);
 
         if (!$jenisPengguna) {
-            return response()->json(['status' => false, 'message' => 'Data jenis pengguna tidak ditemukan']);
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak ditemukan.'
+            ]);
+        }
+
+        return view('jenis_pengguna.show', ['jenisPengguna' => $jenisPengguna]);
+    }
+
+    public function edit(string $id) {
+        $jenisPengguna = JenisPenggunaModel::find($id);
+
+        if (!$jenisPengguna) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak ditemukan.'
+            ]);
         }
 
         return view('jenis_pengguna.edit', ['jenisPengguna' => $jenisPengguna]);
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, string $id) {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'kode_jenis_pengguna' => 'required|string|max:20|unique:m_jenis_pengguna,kode_jenis_pengguna,' . $id . ',id_jenis_pengguna',
+                'kode_jenis_pengguna' => 'required|string|unique:m_jenis_pengguna,kode_jenis_pengguna,' . $id . ',id_jenis_pengguna',
                 'nama_jenis_pengguna' => 'required|string|max:100',
             ];
 
@@ -98,7 +112,7 @@ class JenisPenggunaController extends Controller
             if ($validator->fails()) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Validasi gagal.',
+                    'message' => 'Validasi gagal',
                     'msgField' => $validator->errors(),
                 ]);
             }
@@ -109,22 +123,21 @@ class JenisPenggunaController extends Controller
                 $jenisPengguna->update($request->all());
                 return response()->json([
                     'status' => true,
-                    'message' => 'Data berhasil diupdate',
-                ]);
-            } else {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Data tidak ditemukan',
+                    'message' => 'Data berhasil diperbarui',
                 ]);
             }
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak ditemukan',
+            ]);
         }
 
         return redirect('/');
     }
 
-    public function delete(Request $request, $id)
-    {
-        if ($request->ajax() || $request->wantsJson()) {
+    public function delete(string $id) {
+        if (request()->ajax() || request()->wantsJson()) {
             $jenisPengguna = JenisPenggunaModel::find($id);
 
             if ($jenisPengguna) {
@@ -133,32 +146,14 @@ class JenisPenggunaController extends Controller
                     'status' => true,
                     'message' => 'Data berhasil dihapus',
                 ]);
-            } else {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Data tidak ditemukan',
-                ]);
             }
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak ditemukan',
+            ]);
         }
 
         return redirect('/');
     }
-
-    public function show(string $id)
-    {
-        // Ambil data jenis pengguna berdasarkan ID
-        $jenisPengguna = JenisPenggunaModel::find($id);
-        
-        // Jika data jenis pengguna tidak ditemukan, kembalikan response JSON error
-        if (!$jenisPengguna) {
-            return response()->json(['status' => false, 'message' => 'Jenis pengguna tidak ditemukan']);
-        }
-        
-        // Kembalikan data jenis pengguna dalam view untuk modal
-        return response()->json([
-            'status' => true,
-            'view' => view('jenis_pengguna.show', compact('jenisPengguna'))->render()
-        ]);
-    }          
-    
 }
