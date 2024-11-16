@@ -53,8 +53,12 @@ Route::get('/', [WelcomeController::class, 'index']);
     Route::get('/jenis_kegiatan/{id_kategori_kegiatan}/edit', [JenisKegiatanController::class, 'edit'])->name('jenis_kegiatan.edit');
     Route::delete('/jenis_kegiatan/{id_kategori_kegiatan}', [JenisKegiatanController::class, 'delete'])->name('jenis_kegiatan.delete');
 
-    Route::get('/jabatan_kegiatan', [JabatanKegiatanController::class, 'index'])->name('jabatan_kegiatan.index');  
+    Route::get('/jabatan_kegiatan', [JabatanKegiatanController::class, 'index']);
     Route::post('/jabatan_kegiatan/list', [JabatanKegiatanController::class, 'list']);
+    Route::get('/jabatan_kegiatan/create', [JabatanKegiatanController::class, 'create']);
+    Route::post('/jabatan_kegiatan', [JabatanKegiatanController::class, 'store']);
+    Route::post('/jabatan_kegiatan/store', [JabatanKegiatanController::class, 'store']);
+    Route::get('/jabatan_kegiatan/{id}/show', [JabatanKegiatanController::class, 'show'])->name('jabatan_kegiatan.show');
 
     // Kegiatan Routes
     Route::get('/kegiatan', [KegiatanController::class, 'index'])->name('kegiatan.index');
