@@ -10,7 +10,8 @@ use App\Http\Controllers\KegiatanEksternalController;
 use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\JabatanKegiatanController;
 use App\Http\Controllers\AgendaKegiatanController;
-
+use App\Http\Controllers\DetailKegiatanController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,3 +93,12 @@ Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
     Route::delete('/agenda/{id}/delete', [AgendaKegiatanController::class, 'destroy']);
     Route::post('/agenda/import', [AgendaKegiatanController::class, 'import'])->name('agenda.import');
     Route::get('/agenda/export_excel', [AgendaKegiatanController::class, 'export_excel'])->name('agenda.export_excel');
+
+
+    // Route Detail Kegiatan
+    Route::get('/detail-kegiatan', [DetailKegiatanController::class, 'index'])->name('detail_kegiatan.index');
+    Route::post('detail-kegiatan/list', [DetailKegiatanController::class, 'list'])->name('detail-kegiatan.list');
+
+//Route Pengaturan Profile
+Route::get('/pengaturan-profil', [ProfileController::class, 'index'])->name('profile.index');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
