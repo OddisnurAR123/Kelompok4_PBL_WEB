@@ -1,3 +1,5 @@
+@extends('layouts.app')
+@section('content')
 <!-- resources/views/kegiatan/create_ajax.blade.php -->
 <form action="{{ url('/kegiatan/ajax') }}" method="POST" id="form-tambah-kegiatan">
     @csrf
@@ -30,6 +32,21 @@
                     <input type="datetime-local" name="tanggal_selesai" id="tanggal_selesai" class="form-control" required>
                     <small id="error-tanggal_selesai" class="error-text form-text text-danger"></small>
                 </div>
+                <div class="form-group">
+                    <label>PIC</label>
+                    <select name="pic" id="pic" class="form-control" required>
+                        <option value="">Pilih PIC</option>
+                        <!-- Data PIC akan dimuat lewat AJAX -->
+                    </select>
+                    <small id="error-pic" class="error-text form-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label>Anggota</label>
+                    <select name="anggota[]" id="anggota" class="form-control" multiple required>
+                        <!-- Data Anggota akan dimuat lewat AJAX -->
+                    </select>
+                    <small id="error-anggota" class="error-text form-text text-danger"></small>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-warning" data-dismiss="modal">Batal</button>
@@ -41,6 +58,30 @@
 
 <script>
     $(document).ready(function() {
+        $.ajax({
+        url: '/pic',
+        type: 'GET',
+        success: function(response) {
+            if (response.status) {
+                // Mengisi dropdown PIC
+                response.data.forEach(function(pic) {
+                    $('#pic').append('<option value="' + pic.id + '">' + pic.nama_pengguna + '</option>');
+                });
+            }
+        }
+    });
+    $.ajax({
+        url: '/anggota',
+        type: 'GET',
+        success: function(response) {
+            if (response.status) {
+                // Mengisi dropdown Anggota
+                response.data.forEach(function(anggota) {
+                    $('#anggota').append('<option value="' + anggota.id + '">' + anggota.nama_pengguna + '</option>');
+                });
+            }
+        }
+    });
         $("#form-tambah-kegiatan").validate({
             rules: {
                 kode_kegiatan: {
@@ -56,7 +97,13 @@
                 },
                 tanggal_selesai: {
                     required: true
-                }
+                },
+                pic: {
+                    required: true
+                },
+                anggota: {
+                    required: true,
+                    minlength: 1
             },
             submitHandler: function(form) {
                 $.ajax({
@@ -108,3 +155,4 @@
         });
     });
 </script>
+@endpush

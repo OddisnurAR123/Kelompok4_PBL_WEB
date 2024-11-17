@@ -23,7 +23,7 @@
       <li class="nav-item">
         <a href="{{ url('/jenis_kegiatan') }}" class="nav-link {{ ($activeMenu == 'manajemen-jenis-kegiatan') ? 'active' : '' }}">
           <i class="nav-icon fas fa-tasks"></i>
-          <p>Manajemen Jenis Kegiatan</p>
+          <p>Jenis Kegiatan</p>
         </a>
       </li>
 
@@ -31,7 +31,7 @@
       <li class="nav-item">
         <a href="{{ url('/jenis_pengguna') }}" class="nav-link {{ ($activeMenu == 'manajemen-jenis-pengguna') ? 'active' : '' }}">
           <i class="nav-icon fas fa-user-tag"></i>
-          <p>Manajemen Jenis Pengguna</p>
+          <p>Jenis Pengguna</p>
         </a>
       </li>
 
@@ -39,7 +39,7 @@
       <li class="nav-item">
         <a href="{{ url('/jabatan_kegiatan') }}" class="nav-link {{ ($activeMenu == 'manajemen-jabatan-kegiatan') ? 'active' : '' }}">
           <i class="nav-icon fas fa-user-shield"></i>
-          <p>Manajemen Jabatan Kegiatan</p>
+          <p>Jabatan Kegiatan</p>
         </a>
       </li>
 
@@ -47,20 +47,20 @@
       <li class="nav-item">
         <a href="{{ url('/manajemen-data-pengguna') }}" class="nav-link {{ ($activeMenu == 'manajemen-data-pengguna') ? 'active' : '' }}">
           <i class="nav-icon fas fa-users"></i>
-          <p>Manajemen Data Pengguna</p>
+          <p>Data Pengguna</p>
         </a>
       </li>
       <!-- Manajemen Kegiatan -->
       <li class="nav-item {{ ($activeMenu == 'manajemen-kegiatan') ? 'menu-open' : '' }}">
         <a href="#" class="nav-link {{ ($activeMenu == 'manajemen-kegiatan') ? 'active' : '' }}">
           <i class="nav-icon fas fa-tasks"></i>
-          <p>Manajemen Kegiatan<i class="right fas fa-angle-left"></i></p>
+          <p>Kegiatan<i class="right fas fa-angle-left"></i></p>
         </a>
         <ul class="nav nav-treeview">
           <li class="nav-item">
             <a href="{{ url('/kegiatan') }}" class="nav-link {{ ($activeMenu == 'kegiatan') ? 'active' : '' }}">
               <i class="far fa-calendar-alt nav-icon"></i>
-              <p>Input Kegiatan</p>
+              <p>Tambah Kegiatan</p>
             </a>
           </li>
           <li class="nav-item">
@@ -72,11 +72,11 @@
           <li class="nav-item">
             <a href="{{ url('/progres-kegiatan') }}" class="nav-link {{ ($activeMenu == 'progres-kegiatan') ? 'active' : '' }}">
               <i class="far fa-chart-bar nav-icon"></i>
-              <p>Progres Kegiatan</p>
+              <p>Laporan Progres Kegiatan</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ url('/kegiatan-eksternal') }}" class="nav-link {{ ($activeMenu == 'kegiatan-eksternal') ? 'active' : '' }}">
+            <a href="{{ url('/kegiatan_eksternal') }}" class="nav-link {{ ($activeMenu == 'kegiatan_eksternal') ? 'active' : '' }}">
               <i class="fas fa-external-link-alt nav-icon"></i>
               <p>Kegiatan Eksternal</p>
             </a>
@@ -94,7 +94,7 @@
           <li class="nav-item">
             <a href="{{ url('/laporkan-progres-agenda') }}" class="nav-link {{ ($activeMenu == 'laporkan-progres-agenda') ? 'active' : '' }}">
               <i class="fas fa-clipboard-check nav-icon"></i>
-              <p>Laporkan Progres Agenda</p>
+              <p>Laporan Progres Agenda</p>
             </a>
           </li>
           <li class="nav-item">
@@ -104,6 +104,14 @@
             </a>
           </li>
         </ul>
+      </li>
+
+      <!-- Kegiatan Eksternal Non-JTI -->
+      <li class="nav-item">
+        <a href="{{ url('/kegiatan_eksternal') }}" class="nav-link {{ ($activeMenu == 'kegiatan_eksternal') ? 'active' : '' }}">
+          <i class="fas fa-external-link-alt nav-icon"></i>
+          <p>Kegiatan Non-JTI</p>
+        </a>
       </li>
 
       <!-- Statistik Kinerja -->
@@ -118,7 +126,7 @@
       <li class="nav-item">
         <a href="{{ url('/dokumen-draft-surat-tugas') }}" class="nav-link {{ ($activeMenu == 'dokumen-draft-surat-tugas') ? 'active' : '' }}">
           <i class="nav-icon fas fa-file-alt"></i>
-          <p>Dokumen Draft Surat Tugas</p>
+          <p>Draft Surat Tugas</p>
         </a>
       </li>
 

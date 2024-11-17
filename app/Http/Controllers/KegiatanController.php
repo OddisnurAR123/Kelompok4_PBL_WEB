@@ -27,7 +27,7 @@ class KegiatanController extends Controller
 
     // Menampilkan data kegiatan dalam bentuk json untuk datatables
     public function list(Request $request) {
-        $kegiatan = KegiatanModel::select('id_kegiatan', 'kode_kegiatan', 'nama_kegiatan', 'tanggal_mulai', 'tanggal_selesai');
+        $kegiatan = KegiatanModel::select('id_kegiatan', 'kode_kegiatan', 'nama_kegiatan', 'tanggal_mulai', 'tanggal_selesai', 'pic', 'anggota');
 
         return DataTables::of($kegiatan)
             ->addIndexColumn()
@@ -54,6 +54,8 @@ class KegiatanController extends Controller
                 'nama_kegiatan' => 'required|string|max:100',
                 'tanggal_mulai' => 'required|date',
                 'tanggal_selesai' => 'required|date',
+                'pic' => 'required|string|max:100',
+                'anggota' => 'required|string|max:255',
             ]);
     
             if ($validator->fails()) {
@@ -65,7 +67,7 @@ class KegiatanController extends Controller
             }
     
             // Menyimpan data kegiatan ke database
-            KegiatanModel::create($request->only('kode_kegiatan', 'nama_kegiatan', 'tanggal_mulai', 'tanggal_selesai'));
+            KegiatanModel::create($request->only('kode_kegiatan', 'nama_kegiatan', 'tanggal_mulai', 'tanggal_selesai', 'pic', 'anggota'));
     
             return response()->json([
                 'status' => true,
@@ -103,8 +105,12 @@ class KegiatanController extends Controller
     public function update_ajax(Request $request, $id) {
         if ($request->ajax() || $request->wantsJson()) {
             $validator = Validator::make($request->all(), [
-                'kode_kegiatan' => 'required|string|max:20|unique:m_kegiatan,kode_kegiatan,' . $id . ',id_kegiatan',
+                'kode_kegiatan' => 'required|string|min:3|unique:t_kegiatan,kode_kegiatan',
                 'nama_kegiatan' => 'required|string|max:100',
+                'tanggal_mulai' => 'required|date',
+                'tanggal_selesai' => 'required|date',
+                'pic' => 'required|string|max:100',
+                'anggota' => 'required|string|max:255',
             ]);
 
             if ($validator->fails()) {
