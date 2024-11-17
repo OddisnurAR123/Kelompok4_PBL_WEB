@@ -76,7 +76,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ url('/kegiatan-eksternal') }}" class="nav-link {{ ($activeMenu == 'kegiatan-eksternal') ? 'active' : '' }}">
+            <a href="{{ url('/kegiatan_eksternal') }}" class="nav-link {{ ($activeMenu == 'kegiatan_eksternal') ? 'active' : '' }}">
               <i class="fas fa-external-link-alt nav-icon"></i>
               <p>Kegiatan Eksternal</p>
             </a>
@@ -106,6 +106,14 @@
         </ul>
       </li>
 
+      <!-- Kegiatan Eksternal Non-JTI -->
+      <li class="nav-item">
+        <a href="{{ url('/kegiatan_eksternal') }}" class="nav-link {{ ($activeMenu == 'kegiatan_eksternal') ? 'active' : '' }}">
+          <i class="fas fa-external-link-alt nav-icon"></i>
+          <p>Kegiatan Non-JTI</p>
+        </a>
+      </li>
+
       <!-- Statistik Kinerja -->
       <li class="nav-item">
         <a href="{{ url('/statistik-kinerja') }}" class="nav-link {{ ($activeMenu == 'statistik-kinerja') ? 'active' : '' }}">
@@ -118,7 +126,7 @@
       <li class="nav-item">
         <a href="{{ url('/dokumen-draft-surat-tugas') }}" class="nav-link {{ ($activeMenu == 'dokumen-draft-surat-tugas') ? 'active' : '' }}">
           <i class="nav-icon fas fa-file-alt"></i>
-          <p>Dokumen Draft Surat Tugas</p>
+          <p>Draft Surat Tugas</p>
         </a>
       </li>
 

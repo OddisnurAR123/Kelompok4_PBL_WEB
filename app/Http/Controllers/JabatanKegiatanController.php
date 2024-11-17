@@ -41,12 +41,11 @@ class JabatanKegiatanController extends Controller
     
     public function create()
     {
-        return view('jabatan_kegiatan.create');  // Update sesuai dengan tampilan yang sesuai
+        return view('jabatan_kegiatan.create');  
     }
 
     public function store(Request $request) {
         if ($request->ajax() || $request->wantsJson()) {
-            // Sesuaikan dengan kolom yang ada
             $rules = [
                 'kode_jabatan_kegiatan' => 'required|string|min:3|unique:m_jabatan_kegiatan,kode_jabatan_kegiatan',
                 'nama_jabatan_kegiatan' => 'required|string|max:100',
@@ -62,7 +61,6 @@ class JabatanKegiatanController extends Controller
                 ]);
             }
 
-            // Menyimpan data ke model JabatanKegiatanModel
             JabatanKegiatanModel::create([
                 'kode_jabatan_kegiatan' => $request->kode_jabatan_kegiatan,
                 'nama_jabatan_kegiatan' => $request->nama_jabatan_kegiatan,
@@ -75,6 +73,19 @@ class JabatanKegiatanController extends Controller
         }
 
         return redirect('/');
+    }
+  
+    public function show(string $id) {
+        $jabatanKegiatan = JabatanKegiatanModel::find($id);
+
+        if (!$jabatanKegiatan) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak ditemukan.'
+            ]);
+        }
+
+        return view('jabatan_kegiatan.show', ['jabatanKegiatan' => $jabatanKegiatan]);
     }
 
     public function edit(string $id)
@@ -147,17 +158,4 @@ class JabatanKegiatanController extends Controller
         return redirect('/');
     }
 
-    public function show(string $id)
-    {
-        $jabatanKegiatan = JabatanKegiatanModel::find($id);
-
-        if (!$jabatanKegiatan) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Jabatan kegiatan tidak ditemukan.'
-            ]);
-        }
-
-        return view('jabatan_kegiatan.show', ['jabatanKegiatan' => $jabatanKegiatan]);
-    }
 }

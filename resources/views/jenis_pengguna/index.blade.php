@@ -2,14 +2,11 @@
 @section('content')
 <div class="card card-outline card-primary">
     <div class="card-header">
-        <h3 class="card-title">Daftar Jenis Pengguna</h3>
+        <h3 class="card-title">Daftar Level</h3>
         <div class="card-tools">
-          <button onclick="modalAction('{{ url('/jenis_pengguna/import') }}')" class="btn btn-info"><i class="fa fa-file-import"></i> Import Jenis Pengguna</button>
-          <a href="{{ url('/jenis_pengguna/export_excel') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i> Export Jenis Pengguna XLSX</a>
-          <a href="{{ url('/jenis_pengguna/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Export Jenis Pengguna PDF</a>
           <button onclick="modalAction('{{ url('/jenis_pengguna/create') }}')" class="btn btn-success"><i class="fa fa-plus"></i> Tambah Data</button>
         </div>
-    </div>
+      </div>
     <div class="card-body">
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -34,53 +31,51 @@
 @endsection
 
 @push('css')
+<style>
+    #table_jenis_pengguna th, #table_jenis_pengguna td {
+        text-align: center; 
+        vertical-align: middle; 
+    }
+</style>
 @endpush
+
 
 @push('js')
 <script>
-    function modalAction(url = '') {
-        $('#myModal').load(url, function() {
-            $('#myModal').modal('show');
+    function modalAction(url) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function(response) {
+                $('#modal-master').html(response); 
+                $('#modal-master').modal('show'); 
+            },
+            error: function(xhr) {
+                console.error('Error:', xhr.responseText);
+                Swal.fire('Kesalahan', 'Data tidak ditemukan atau terjadi kesalahan server.', 'error');
+            }
         });
     }
 
     var dataJenisPengguna;
-
     $(document).ready(function() {
-        dataJenisPengguna = $('#table_jenis_pengguna').DataTable({
-            serverSide: true,
-            ajax: {
-                "url": "{{ url('jenis_pengguna/list') }}",
-                "dataType": "json",
-                "type": "POST",
-            },
-            columns: [
-                {
-                    data: "id_jenis_pengguna",
-                    className: "",
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: "kode_jenis_pengguna",
-                    className: "",
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: "nama_jenis_pengguna",
-                    className: "",
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: "aksi",
-                    className: "",
-                    orderable: false,
-                    searchable: false
-                }
-            ]
-        });
+    dataJenisPengguna = $('#table_jenis_pengguna').DataTable({
+        serverSide: true,
+        processing: true,
+        ajax: {
+            url: "{{ url('jenis_pengguna/list') }}",
+            type: "POST",
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        },
+        columns: [
+            { data: "id_jenis_pengguna" },
+            { data: "kode_jenis_pengguna" },
+            { data: "nama_jenis_pengguna" },
+            { data: "aksi", orderable: false, searchable: false }
+        ]
     });
+});
 </script>
 @endpush

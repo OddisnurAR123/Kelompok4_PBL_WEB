@@ -6,6 +6,8 @@ use App\Http\Controllers\JenisPenggunaController;
 use App\Models\JenisPenggunaModel;
 use App\Http\Controllers\JenisKegiatanController;
 use App\Http\Controllers\KegiatanController;
+use App\Http\Controllers\KegiatanEksternalController;
+use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\JabatanKegiatanController;
 use App\Http\Controllers\AgendaKegiatanController;
 
@@ -21,22 +23,46 @@ use App\Http\Controllers\AgendaKegiatanController;
 |
 */
 
-Route::get('/', [WelcomeController::class, 'index']);
+Route::get('/', [WelcomeController::class, 'index'])->name('dashboard');
+
+Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
 
 // Daftar route agenda
-Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
+    Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
 
-// Route::middleware(['authorize:ADM,MNG'])->group(function () {
-    Route::get('/jenis_pengguna', [JenisPenggunaController::class, 'index'])->name('jenis_pengguna.index');  
-    Route::post('/jenis_pengguna/list', [JenisPenggunaController::class, 'list']);
-    Route::get('/jenis_pengguna/{id}', [JenisPenggunaController::class, 'show'])->name('jenis_pengguna.show');
+// Route::middleware(['authorize:ADM,MNG'])->group(function () {        
+        Route::get('/jenis_pengguna', [JenisPenggunaController::class, 'index']);
+        Route::post('/jenis_pengguna/list', [JenisPenggunaController::class, 'list']);
+        Route::get('/jenis_pengguna/create', [JenisPenggunaController::class, 'create']);
+        Route::post('/jenis_pengguna', [JenisPenggunaController::class, 'store']);
+        Route::post('/jenis_pengguna/store', [JenisPenggunaController::class, 'store']);
+        Route::get('/jenis_pengguna/{id}/show', [JenisPenggunaController::class, 'show'])->name('jenis_pengguna.show');
+        // Route::get('/user/{id}/edit', [UserController::class, 'edit']);
+        // Route::put('/user/{id}', [UserController::class, 'update']);
+        // Route::get('/user/{id}/edit_ajax', [UserController::class, 'edit_ajax']);
+        // Route::put('/user/{id}/update_ajax', [UserController::class, 'update_ajax']);
+        // Route::get('/user/{id}/delete_ajax', [UserController::class, 'confirm_ajax']);
+        // Route::delete('/user/{id}/delete_ajax', [UserController::class, 'delete_ajax']);
+        // Route::delete('/user/{id}', [UserController::class, 'destroy']);
+        // Route::get('/user/import', [UserController::class, 'import']);
+        // Route::post('/user/import_ajax', [UserController::class, 'import_ajax']);
+        // Route::get('/user/export_excel', [UserController::class, 'export_excel']);
+        // Route::get('/user/export_pdf', [UserController::class, 'export_pdf']);
 // });
 
-    Route::get('/jenis_kegiatan', [JenisKegiatanController::class, 'index'])->name('jenis_kegiatan.index');  
+    Route::get('/jenis_kegiatan', [JenisKegiatanController::class, 'index'])->name('jenis_kegiatan.index');
     Route::post('/jenis_kegiatan/list', [JenisKegiatanController::class, 'list']);
+    Route::get('jenis_kegiatan/{id}/show', [JenisKegiatanController::class, 'show'])->name('jenis_kegiatan.show');
+    Route::get('/jenis_kegiatan/create', [JenisKegiatanController::class, 'create'])->name('jenis_kegiatan.create');
+    Route::get('/jenis_kegiatan/{id_kategori_kegiatan}/edit', [JenisKegiatanController::class, 'edit'])->name('jenis_kegiatan.edit');
+    Route::delete('/jenis_kegiatan/{id_kategori_kegiatan}', [JenisKegiatanController::class, 'delete'])->name('jenis_kegiatan.delete');
 
-    Route::get('/jabatan_kegiatan', [JabatanKegiatanController::class, 'index'])->name('jabatan_kegiatan.index');  
+    Route::get('/jabatan_kegiatan', [JabatanKegiatanController::class, 'index']);
     Route::post('/jabatan_kegiatan/list', [JabatanKegiatanController::class, 'list']);
+    Route::get('/jabatan_kegiatan/create', [JabatanKegiatanController::class, 'create']);
+    Route::post('/jabatan_kegiatan', [JabatanKegiatanController::class, 'store']);
+    Route::post('/jabatan_kegiatan/store', [JabatanKegiatanController::class, 'store']);
+    Route::get('/jabatan_kegiatan/{id}/show', [JabatanKegiatanController::class, 'show'])->name('jabatan_kegiatan.show');
 
     // Kegiatan Routes
     Route::get('/kegiatan', [KegiatanController::class, 'index'])->name('kegiatan.index');
@@ -50,6 +76,9 @@ Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
     Route::delete('/kegiatan/{id}', [KegiatanController::class, 'delete_ajax'])->name('kegiatan.destroy');
     Route::post('/kegiatan/import', [KegiatanController::class, 'import_ajax'])->name('kegiatan.import');
 
+    Route::get('/kegiatan_eksternal', [KegiatanEksternalController::class, 'create'])->name('kegiatan_eksternal.create'); 
+    Route::post('/kegiatan_eksternal', [KegiatanEksternalController::class, 'store'])->name('kegiatan_eksternal.store'); 
+    
     Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
     Route::post('/agenda/list', [AgendaKegiatanController::class, 'list']);
     Route::get('/agenda/create', [AgendaKegiatanController::class, 'create'])->name('agenda.create');

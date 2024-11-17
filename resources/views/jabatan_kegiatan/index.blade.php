@@ -5,13 +5,13 @@
         <h3 class="card-title">Daftar Jabatan Kegiatan</h3>
         <div class="card-tools">
             <button onclick="modalAction('{{ url('/jabatan_kegiatan/import') }}')" class="btn btn-info">
-                <i class="fa fa-file-import"></i> Import Jabatan Kegiatan
+                <i class="fa fa-file-import"></i> Impor Jabatan Kegiatan
             </button>
             <a href="{{ url('/jabatan_kegiatan/export_excel') }}" class="btn btn-primary">
-                <i class="fa fa-file-excel"></i> Export Jabatan Kegiatan XLSX
+                <i class="fa fa-file-excel"></i> Ekspor Jabatan Kegiatan
             </a>
             <a href="{{ url('/jabatan_kegiatan/export_pdf') }}" class="btn btn-warning">
-                <i class="fa fa-file-pdf"></i> Export Jabatan Kegiatan PDF
+                <i class="fa fa-file-pdf"></i> Ekspor Jabatan Kegiatan PDF
             </a>
             <button onclick="modalAction('{{ url('/jabatan_kegiatan/create') }}')" class="btn btn-success">
                 <i class="fa fa-plus"></i> Tambah Data
