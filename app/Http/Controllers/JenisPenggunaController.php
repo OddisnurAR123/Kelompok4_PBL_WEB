@@ -156,4 +156,23 @@ class JenisPenggunaController extends Controller
 
         return redirect('/');
     }
+    // Mengambil data PIC (id_jenis_pengguna = 3)
+    public function getPic()
+    {
+        $pic = JenisPenggunaModel::where('id_jenis_pengguna', 3)->get(['id', 'nama_pengguna']);
+        return response()->json([
+            'status' => true,
+            'data' => $pic
+        ]);
+    }
+
+    // Mengambil data Anggota (id_jenis_pengguna != 3)
+    public function getAnggota()
+    {
+        $anggota = JenisPenggunaModel::where('id_jenis_pengguna', '!=', 3)->get(['id', 'nama_pengguna']);
+        return response()->json([
+            'status' => true,
+            'data' => $anggota
+        ]);
+    }
 }

@@ -21,6 +21,8 @@ class KegiatanModel extends Model
         'nama_kegiatan',
         'tanggal_mulai',
         'tanggal_selesai',
+        'pic',
+        'anggota',
     ];    
 
     

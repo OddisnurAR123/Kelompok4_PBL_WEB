@@ -37,6 +37,8 @@ Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
         Route::post('/jenis_pengguna', [JenisPenggunaController::class, 'store']);
         Route::post('/jenis_pengguna/store', [JenisPenggunaController::class, 'store']);
         Route::get('/jenis_pengguna/{id}/show', [JenisPenggunaController::class, 'show'])->name('jenis_pengguna.show');
+        Route::get('/pic', [JenisPenggunaController::class, 'getPic']);
+        Route::get('/anggota', [JenisPenggunaController::class, 'getAnggota']);
         // Route::get('/user/{id}/edit', [UserController::class, 'edit']);
         // Route::put('/user/{id}', [UserController::class, 'update']);
         // Route::get('/user/{id}/edit_ajax', [UserController::class, 'edit_ajax']);
