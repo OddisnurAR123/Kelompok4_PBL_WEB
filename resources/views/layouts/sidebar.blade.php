@@ -60,7 +60,7 @@
           <li class="nav-item">
             <a href="{{ url('/kegiatan') }}" class="nav-link {{ ($activeMenu == 'kegiatan') ? 'active' : '' }}">
               <i class="far fa-calendar-alt nav-icon"></i>
-              <p>Input Kegiatan</p>
+              <p>Tambah Kegiatan</p>
             </a>
           </li>
           <li class="nav-item">
@@ -72,7 +72,7 @@
           <li class="nav-item">
             <a href="{{ url('/progres-kegiatan') }}" class="nav-link {{ ($activeMenu == 'progres-kegiatan') ? 'active' : '' }}">
               <i class="far fa-chart-bar nav-icon"></i>
-              <p>Progres Kegiatan</p>
+              <p>Laporan Progres Kegiatan</p>
             </a>
           </li>
           <li class="nav-item">
@@ -94,7 +94,7 @@
           <li class="nav-item">
             <a href="{{ url('/laporkan-progres-agenda') }}" class="nav-link {{ ($activeMenu == 'laporkan-progres-agenda') ? 'active' : '' }}">
               <i class="fas fa-clipboard-check nav-icon"></i>
-              <p>Laporkan Progres Agenda</p>
+              <p>Laporan Progres Agenda</p>
             </a>
           </li>
           <li class="nav-item">
