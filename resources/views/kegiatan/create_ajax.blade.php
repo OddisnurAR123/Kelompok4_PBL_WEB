@@ -1,5 +1,4 @@
-@extends('layouts.master')
-
+@extends('layouts.app')
 @section('content')
 <!-- resources/views/kegiatan/create_ajax.blade.php -->
 <form action="{{ url('/kegiatan/ajax') }}" method="POST" id="form-tambah-kegiatan">
@@ -156,4 +155,4 @@
         });
     });
 </script>
-@endsection
+@endpush

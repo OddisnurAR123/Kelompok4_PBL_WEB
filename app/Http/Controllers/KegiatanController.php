@@ -105,8 +105,12 @@ class KegiatanController extends Controller
     public function update_ajax(Request $request, $id) {
         if ($request->ajax() || $request->wantsJson()) {
             $validator = Validator::make($request->all(), [
-                'kode_kegiatan' => 'required|string|max:20|unique:m_kegiatan,kode_kegiatan,' . $id . ',id_kegiatan',
+                'kode_kegiatan' => 'required|string|min:3|unique:t_kegiatan,kode_kegiatan',
                 'nama_kegiatan' => 'required|string|max:100',
+                'tanggal_mulai' => 'required|date',
+                'tanggal_selesai' => 'required|date',
+                'pic' => 'required|string|max:100',
+                'anggota' => 'required|string|max:255',
             ]);
 
             if ($validator->fails()) {
