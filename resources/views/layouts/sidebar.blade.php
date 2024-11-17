@@ -76,7 +76,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ url('/kegiatan-eksternal') }}" class="nav-link {{ ($activeMenu == 'kegiatan-eksternal') ? 'active' : '' }}">
+            <a href="{{ url('/kegiatan_eksternal') }}" class="nav-link {{ ($activeMenu == 'kegiatan_eksternal') ? 'active' : '' }}">
               <i class="fas fa-external-link-alt nav-icon"></i>
               <p>Kegiatan Eksternal</p>
             </a>
@@ -108,7 +108,7 @@
 
       <!-- Kegiatan Eksternal Non-JTI -->
       <li class="nav-item">
-        <a href="{{ url('/kegiatan-eksternal-non-jti') }}" class="nav-link {{ ($activeMenu == 'kegiatan-eksternal-non-jti') ? 'active' : '' }}">
+        <a href="{{ url('/kegiatan_eksternal') }}" class="nav-link {{ ($activeMenu == 'kegiatan_eksternal') ? 'active' : '' }}">
           <i class="fas fa-external-link-alt nav-icon"></i>
           <p>Kegiatan Non-JTI</p>
         </a>

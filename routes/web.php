@@ -6,6 +6,7 @@ use App\Http\Controllers\JenisPenggunaController;
 use App\Models\JenisPenggunaModel;
 use App\Http\Controllers\JenisKegiatanController;
 use App\Http\Controllers\KegiatanController;
+use App\Http\Controllers\KegiatanEksternalController;
 use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\JabatanKegiatanController;
 use App\Http\Controllers\AgendaKegiatanController;
@@ -75,6 +76,9 @@ Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
     Route::delete('/kegiatan/{id}', [KegiatanController::class, 'delete_ajax'])->name('kegiatan.destroy');
     Route::post('/kegiatan/import', [KegiatanController::class, 'import_ajax'])->name('kegiatan.import');
 
+    Route::get('/kegiatan_eksternal', [KegiatanEksternalController::class, 'create'])->name('kegiatan_eksternal.create'); 
+    Route::post('/kegiatan_eksternal', [KegiatanEksternalController::class, 'store'])->name('kegiatan_eksternal.store'); 
+    
     Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
     Route::post('/agenda/list', [AgendaKegiatanController::class, 'list']);
     Route::get('/agenda/create', [AgendaKegiatanController::class, 'create'])->name('agenda.create');
