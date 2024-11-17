@@ -13,13 +13,24 @@ class AgendaKegiatanController extends Controller
     // Menampilkan semua agenda kegiatan
     public function index()
     {
-        // Ambil data agenda dan jenis pengguna dari model
-        $agendas = AgendaModel::all(); // Ambil semua agenda dari database
-        $jenisPenggunas = JenisPenggunaModel::all(); // Ambil data jenis pengguna
-
+        // Data agenda dan jenis pengguna
+        $agendas = AgendaModel::all(); 
+        $jenisPenggunas = JenisPenggunaModel::all();
+    
+        // Tambahkan breadcrumb
+        $breadcrumb = (object) [
+            'title' => 'Daftar Agenda',
+            'list' => [
+                (object) ['label' => 'Dashboard', 'url' => url('/')],
+                (object) ['label' => 'Agenda', 'url' => url('/agenda')],
+                'Daftar Agenda'
+            ]
+        ];
+    
         // Kirim data ke view
-        return view('agenda.index', compact('agendas', 'jenisPenggunas')); 
+        return view('agenda.index', compact('agendas', 'jenisPenggunas', 'breadcrumb')); 
     }
+    
 
     // Menampilkan form untuk membuat agenda baru
     public function create()
