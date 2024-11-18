@@ -128,9 +128,17 @@ class JenisKegiatanController extends Controller
     // Detail data
     public function show(string $id)
     {
-        // Ambil barang berdasarkan ID dan sertakan relasi dengan KategoriModel (atau model lain jika ada)
         $jenisKegiatan = JenisKegiatanModel::find($id);
-        // Kirimkan data barang ke view
-        return view('jenis_kegiatan.show', ['jenis_kegiatan' => $jenisKegiatan]);
+    
+        // Jika data tidak ditemukan, kembalikan respons error
+        if (!$jenisKegiatan) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak ditemukan.'
+            ]);
+        }
+    
+        // Jika data ditemukan, tampilkan view
+        return view('jenis_kegiatan.show', ['jenisKegiatan' => $jenisKegiatan]);
     }
 }
