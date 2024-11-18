@@ -74,16 +74,33 @@ class JenisPenggunaController extends Controller
         return redirect('/');
     }
 
-    public function show(string $id) {
+    // public function show(string $id) {
+    //     $jenisPengguna = JenisPenggunaModel::find($id);
+
+    //     if (!$jenisPengguna) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => 'Data tidak ditemukan.'
+    //         ]);
+    //     }
+
+    //     return view('jenis_pengguna.show', ['jenisPengguna' => $jenisPengguna]);
+    // }
+
+    public function show(string $id)
+    {
+        // Ambil kategori berdasarkan ID
         $jenisPengguna = JenisPenggunaModel::find($id);
 
+        // Jika data kategori tidak ditemukan, kembalikan respon dengan status false
         if (!$jenisPengguna) {
             return response()->json([
                 'status' => false,
-                'message' => 'Data tidak ditemukan.'
+                'message' => 'Data kategori tidak ditemukan.'
             ]);
         }
 
+        // Kirim data kategori ke view confirm_ajax
         return view('jenis_pengguna.show', ['jenisPengguna' => $jenisPengguna]);
     }
 
