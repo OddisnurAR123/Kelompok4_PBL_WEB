@@ -10,7 +10,7 @@ use App\Http\Controllers\KegiatanEksternalController;
 use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\JabatanKegiatanController;
 use App\Http\Controllers\AgendaKegiatanController;
-use App\Http\Controllers\DetailKegiatanController;
+use App\Http\Controllers\TampilKegiatanController;
 use App\Http\Controllers\ProfileController;
 
 /*
@@ -96,8 +96,8 @@ Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
 
 
     // Route Detail Kegiatan
-    Route::get('/detail-kegiatan', [DetailKegiatanController::class, 'index'])->name('detail_kegiatan.index');
-    Route::post('detail-kegiatan/list', [DetailKegiatanController::class, 'list'])->name('detail-kegiatan.list');
+    Route::get('/detail-kegiatan', [TampilKegiatanController::class, 'index'])->name('detail_kegiatan.index');
+    Route::post('detail-kegiatan/list', [TampilKegiatanController::class, 'list'])->name('detail-kegiatan.list');
 
 //Route Pengaturan Profile
     Route::get('/pengaturan-profil', [ProfileController::class, 'index'])->name('profile.index');

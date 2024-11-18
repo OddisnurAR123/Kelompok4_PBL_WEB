@@ -6,7 +6,7 @@ use App\Models\KegiatanModel;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
-class DetailKegiatanController extends Controller
+class TampilKegiatanController extends Controller
 {
     public function index()
     {
