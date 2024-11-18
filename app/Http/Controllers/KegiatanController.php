@@ -92,7 +92,13 @@ class KegiatanController extends Controller
             ]);
         }
 
-        return view('kegiatan.show', ['kegiatan' => $kegiatan]);
+        $breadcrumb = (object) [
+            'title' => 'Input Kegiatan',
+            'list' => ['Home', 'Kegiatan']
+        ];
+
+        // dd($kegiatan);
+        return view('kegiatan.show', ['kegiatan' => $kegiatan, 'breadcrumb' => $breadcrumb]);
     }
 
     // Menampilkan form edit kegiatan via Ajax
