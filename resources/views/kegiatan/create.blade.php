@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.template')
 @section('content')
 <!-- resources/views/kegiatan/create.blade.php -->
 <form action="{{ url('/kegiatan/store') }}" method="POST" id="form-tambah-kegiatan">
