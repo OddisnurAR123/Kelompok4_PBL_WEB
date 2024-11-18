@@ -3,9 +3,6 @@
 <div class="card card-outline card-primary">
     <div class="card-header">
         <h3 class="card-title">Daftar Jenis Pengguna</h3>
-        <div class="card-tools">
-          <button onclick="modalAction('{{ url('/jenis_pengguna/create') }}')" class="btn btn-success"><i class="fa fa-plus"></i> Tambah Data</button>
-        </div>
       </div>
     <div class="card-body">
         @if(session('success'))

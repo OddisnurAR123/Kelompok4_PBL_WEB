@@ -7,9 +7,6 @@
             <button onclick="modalAction('{{ url('/jabatan_kegiatan/import') }}')" class="btn btn-info">
                 <i class="fa fa-file-import"></i> Impor Jabatan Kegiatan
             </button>
-            <a href="{{ url('/jabatan_kegiatan/export_excel') }}" class="btn btn-primary">
-                <i class="fa fa-file-excel"></i> Ekspor Jabatan Kegiatan
-            </a>
             <a href="{{ url('/jabatan_kegiatan/export_pdf') }}" class="btn btn-warning">
                 <i class="fa fa-file-pdf"></i> Ekspor Jabatan Kegiatan PDF
             </a>
