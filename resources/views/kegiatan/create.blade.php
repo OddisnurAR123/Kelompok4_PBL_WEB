@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
-<!-- resources/views/kegiatan/create_ajax.blade.php -->
-<form action="{{ url('/kegiatan/ajax') }}" method="POST" id="form-tambah-kegiatan">
+<!-- resources/views/kegiatan/create.blade.php -->
+<form action="{{ url('/kegiatan/store') }}" method="POST" id="form-tambah-kegiatan">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
