@@ -3,7 +3,7 @@
 @section('content')
 <div class="card card-outline card-primary">
     <div class="card-header">
-        <h3 class="card-title">Pengaturan Profil</h3>
+        <h3 class="card-title">Pengaturan Profile</h3>
     </div>
     <div class="card-body">
         @if(session('success'))
