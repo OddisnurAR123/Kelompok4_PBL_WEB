@@ -1,4 +1,5 @@
-{{-- @extends('layouts.template')
+@extends('layouts.template')
+
 @section('content')
 <div class="card card-outline card-primary">
     <div class="card-header">
@@ -13,7 +14,7 @@
             @csrf
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" name="username" id="username" class="form-control" value="{{ old('username', $user->username) }}" required>
+                <input type="text" name="username" id="username" class="form-control" required>
                 @error('username')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -21,7 +22,7 @@
 
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" name="email" id="email" class="form-control" value="{{ old('email', $user->email) }}" required>
+                <input type="email" name="email" id="email" class="form-control" required>
                 @error('email')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -29,7 +30,7 @@
 
             <div class="form-group">
                 <label for="nama_pengguna">Nama Pengguna</label>
-                <input type="text" name="nama_pengguna" id="nama_pengguna" class="form-control" value="{{ old('nama_pengguna', $user->nama_pengguna) }}" required>
+                <input type="text" name="nama_pengguna" id="nama_pengguna" class="form-control"required>
                 @error('nama_pengguna')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -60,4 +61,4 @@
         </form>
     </div>
 </div>
-@endsection --}}
+@endsection

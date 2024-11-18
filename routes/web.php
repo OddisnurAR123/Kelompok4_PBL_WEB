@@ -100,5 +100,5 @@ Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
     Route::post('detail-kegiatan/list', [DetailKegiatanController::class, 'list'])->name('detail-kegiatan.list');
 
 //Route Pengaturan Profile
-Route::get('/pengaturan-profil', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/pengaturan-profil', [ProfileController::class, 'index'])->name('profile.index');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
