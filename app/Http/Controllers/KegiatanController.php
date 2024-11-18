@@ -43,7 +43,12 @@ class KegiatanController extends Controller
 
     // Menampilkan form tambah kegiatan via Ajax
     public function create() {
-        return view('kegiatan.create');
+        $breadcrumb = (object) [
+            'title' => 'Tambah Kegiatan',
+            'list' => ['Home', 'Kegiatan', 'Tambah Kegiatan']
+        ];
+    
+        return view('kegiatan.create', ['breadcrumb' => $breadcrumb]);
     }
 
     public function store(Request $request)
