@@ -97,7 +97,6 @@ class KegiatanController extends Controller
             'list' => ['Home', 'Kegiatan']
         ];
 
-        // dd($kegiatan);
         return view('kegiatan.show', ['kegiatan' => $kegiatan, 'breadcrumb' => $breadcrumb]);
     }
 
