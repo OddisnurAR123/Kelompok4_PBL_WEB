@@ -70,7 +70,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ url('/progres-kegiatan') }}" class="nav-link {{ ($activeMenu == 'progres-kegiatan') ? 'active' : '' }}">
+            <a href="{{ url('/detail_kegiatan') }}" class="nav-link {{ ($activeMenu == 'progres-kegiatan') ? 'active' : '' }}">
               <i class="far fa-chart-bar nav-icon"></i>
               <p>Laporan Progres Kegiatan</p>
             </a>

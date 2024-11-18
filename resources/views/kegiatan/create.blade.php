@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
-<!-- resources/views/kegiatan/create_ajax.blade.php -->
-<form action="{{ url('/kegiatan/ajax') }}" method="POST" id="form-tambah-kegiatan">
+<!-- resources/views/kegiatan/create.blade.php -->
+<form action="{{ url('/kegiatan/store') }}" method="POST" id="form-tambah-kegiatan">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -56,32 +56,33 @@
     </div>
 </form>
 
+@push('scripts')
 <script>
     $(document).ready(function() {
         $.ajax({
-        url: '/pic',
-        type: 'GET',
-        success: function(response) {
-            if (response.status) {
-                // Mengisi dropdown PIC
-                response.data.forEach(function(pic) {
-                    $('#pic').append('<option value="' + pic.id + '">' + pic.nama_pengguna + '</option>');
-                });
+            url: '/pic',
+            type: 'GET',
+            success: function(response) {
+                if (response.status) {
+                    // Mengisi dropdown PIC
+                    response.data.forEach(function(pic) {
+                        $('#pic').append('<option value="' + pic.id + '">' + pic.nama_pengguna + '</option>');
+                    });
+                }
             }
-        }
-    });
-    $.ajax({
-        url: '/anggota',
-        type: 'GET',
-        success: function(response) {
-            if (response.status) {
-                // Mengisi dropdown Anggota
-                response.data.forEach(function(anggota) {
-                    $('#anggota').append('<option value="' + anggota.id + '">' + anggota.nama_pengguna + '</option>');
-                });
+        });
+        $.ajax({
+            url: '/anggota',
+            type: 'GET',
+            success: function(response) {
+                if (response.status) {
+                    // Mengisi dropdown Anggota
+                    response.data.forEach(function(anggota) {
+                        $('#anggota').append('<option value="' + anggota.id + '">' + anggota.nama_pengguna + '</option>');
+                    });
+                }
             }
-        }
-    });
+        });
         $("#form-tambah-kegiatan").validate({
             rules: {
                 kode_kegiatan: {
@@ -104,6 +105,7 @@
                 anggota: {
                     required: true,
                     minlength: 1
+                }
             },
             submitHandler: function(form) {
                 $.ajax({
@@ -156,3 +158,4 @@
     });
 </script>
 @endpush
+@endsection
