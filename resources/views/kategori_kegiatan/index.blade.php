@@ -2,9 +2,9 @@
 @section('content')
 <div class="card card-outline card-primary">
     <div class="card-header">
-        <h3 class="card-title">Daftar Jenis Kegiatan</h3>
+        <h3 class="card-title">Daftar Kategori Kegiatan</h3>
         <div class="card-tools">
-          <button onclick="modalAction('{{ url('/jenis_kegiatan/create') }}')" class="btn btn-success"><i class="fa fa-plus"></i> Tambah Data</button>
+          <button onclick="modalAction('{{ url('/kategori_kegiatan/create') }}')" class="btn btn-success"><i class="fa fa-plus"></i> Tambah Data</button>
         </div>
       </div>
     <div class="card-body">
@@ -15,12 +15,12 @@
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
             
-        <table class="table table-bordered table-striped table-hover table-sm" id="table_jenis_kegiatan">
+        <table class="table table-bordered table-striped table-hover table-sm" id="table_kategori_kegiatan">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Kode Jenis Kegiatan</th>
-                    <th>Nama Jenis Kegiatan</th>
+                    <th>Kode Kategori Kegiatan</th>
+                    <th>Nama Kategori Kegiatan</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -32,7 +32,7 @@
 
 @push('css')
 <style>
-    #table_jenis_kegiatan th, #table_jenis_kegiatan td {
+    #table_kategori_kegiatan th, #table_kategori_kegiatan td {
         text-align: center; 
         vertical-align: middle; 
     }
@@ -48,14 +48,14 @@
         });
     }
 
-    var dataJenisKegiatan;
+    var datakategoriKegiatan;
 
     $(document).ready(function() {
-        dataJenisKegiatan = $('#table_jenis_kegiatan').DataTable({
+        datakategoriKegiatan = $('#table_kategori_kegiatan').DataTable({
             // serverSide: true, jika ingin menggunakan server side processing
             serverSide: true,
             ajax: {
-                "url": "{{ url('jenis_kegiatan/list') }}",
+                "url": "{{ url('kategori_kegiatan/list') }}",
                 "dataType": "json",
                 "type": "POST",
 

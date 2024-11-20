@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use App\Models\KategoriKegiatanModel;
 
 class KegiatanModel extends Model
 {
@@ -21,11 +22,14 @@ class KegiatanModel extends Model
         'nama_kegiatan',
         'tanggal_mulai',
         'tanggal_selesai',
-        'pic',
-        'anggota',
+        'id_kategori_kegiatan',
     ];    
 
-    
+    public function kategoriKegiatan()
+    {
+        return $this->belongsTo(KategoriKegiatanModel::class, 'id_kategori_kegiatan');
+    }
+
     // Scope untuk mengambil kegiatan baru
     public function scopeBaru($query)
     {

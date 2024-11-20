@@ -4,7 +4,7 @@ use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JenisPenggunaController;
 use App\Models\JenisPenggunaModel;
-use App\Http\Controllers\JenisKegiatanController;
+use App\Http\Controllers\KategoriKegiatanController;
 use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\KegiatanEksternalController;
 use App\Http\Controllers\NotifikasiController;
@@ -44,12 +44,12 @@ Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
     Route::get('/anggota', [JenisPenggunaController::class, 'getAnggota']);    
 
 
-    Route::get('/jenis_kegiatan', [JenisKegiatanController::class, 'index'])->name('jenis_kegiatan.index');
-    Route::post('/jenis_kegiatan/list', [JenisKegiatanController::class, 'list']);
-    Route::get('jenis_kegiatan/{id}/show', [JenisKegiatanController::class, 'show'])->name('jenis_kegiatan.show');
-    Route::get('/jenis_kegiatan/create', [JenisKegiatanController::class, 'create'])->name('jenis_kegiatan.create');
-    Route::get('/jenis_kegiatan/{id_kategori_kegiatan}/edit', [JenisKegiatanController::class, 'edit'])->name('jenis_kegiatan.edit');
-    Route::delete('/jenis_kegiatan/{id_kategori_kegiatan}', [JenisKegiatanController::class, 'delete'])->name('jenis_kegiatan.delete');
+    Route::get('/kategori_kegiatan', [KategoriKegiatanController::class, 'index'])->name('kategori_kegiatan.index');
+    Route::post('/kategori_kegiatan/list', [KategoriKegiatanController::class, 'list']);
+    Route::get('kategori_kegiatan/{id}/show', [KategoriKegiatanController::class, 'show'])->name('kategori_kegiatan.show');
+    Route::get('/kategori_kegiatan/create', [KategoriKegiatanController::class, 'create'])->name('kategori_kegiatan.create');
+    Route::get('/kategori_kegiatan/{id_kategori_kegiatan}/edit', [KategoriKegiatanController::class, 'edit'])->name('kategori_kegiatan.edit');
+    Route::delete('/kategori_kegiatan/{id_kategori_kegiatan}', [KategoriKegiatanController::class, 'delete'])->name('kategori_kegiatan.delete');
 
     Route::get('/jabatan_kegiatan', [JabatanKegiatanController::class, 'index']);
     Route::post('/jabatan_kegiatan/list', [JabatanKegiatanController::class, 'list']);

@@ -19,11 +19,11 @@
   <!-- Sidebar Menu -->
   <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
-      <!-- Manajemen Jenis Kegiatan -->
+      <!-- Manajemen Kategori Kegiatan -->
       <li class="nav-item">
-        <a href="{{ url('/jenis_kegiatan') }}" class="nav-link {{ ($activeMenu == 'manajemen-jenis-kegiatan') ? 'active' : '' }}">
+        <a href="{{ url('/kategori_kegiatan') }}" class="nav-link {{ ($activeMenu == 'manajemen-kategori-kegiatan') ? 'active' : '' }}">
           <i class="nav-icon fas fa-tasks"></i>
-          <p>Jenis Kegiatan</p>
+          <p>Kategori Kegiatan</p>
         </a>
       </li>
 

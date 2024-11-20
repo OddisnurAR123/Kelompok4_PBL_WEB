@@ -1,4 +1,4 @@
-@if(!$jenisKegiatan)
+@if(!$kategoriKegiatan)
 <div id="modal-master" class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -20,7 +20,7 @@
 <div id="modal-master" class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Detail Data Jenis Kegiatan</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Detail Data Kategori Kegiatan</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -28,16 +28,16 @@
         <div class="modal-body">
             <table class="table table-sm table-bordered table-striped">
                 <tr>
-                    <th class="text-right col-3">ID Jenis Kegiatan:</th>
-                    <td class="col-9">{{ $jenisKegiatan->id_kategori_kegiatan }}</td>
+                    <th class="text-right col-3">ID Kategori Kegiatan:</th>
+                    <td class="col-9">{{ $kategoriKegiatan->id_kategori_kegiatan }}</td>
                 </tr>
                 <tr>
-                    <th class="text-right col-3">Kode Jenis Kegiatan:</th>
-                    <td class="col-9">{{ $jenisKegiatan->kode_kategori_kegiatan }}</td>
+                    <th class="text-right col-3">Kode Kategori Kegiatan:</th>
+                    <td class="col-9">{{ $kategoriKegiatan->kode_kategori_kegiatan }}</td>
                 </tr>
                 <tr>
-                    <th class="text-right col-3">Nama Jenis Kegiatan:</th>
-                    <td class="col-9">{{ $jenisKegiatan->nama_kategori_kegiatan }}</td>
+                    <th class="text-right col-3">Nama Kategori Kegiatan:</th>
+                    <td class="col-9">{{ $kategoriKegiatan->nama_kategori_kegiatan }}</td>
                 </tr>
             </table>
         </div>

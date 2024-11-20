@@ -27,7 +27,7 @@ class KegiatanController extends Controller
 
     // Menampilkan data kegiatan dalam bentuk json untuk datatables
     public function list(Request $request) {
-        $kegiatan = KegiatanModel::select('id_kegiatan', 'kode_kegiatan', 'nama_kegiatan', 'tanggal_mulai', 'tanggal_selesai', 'pic', 'anggota');
+        $kegiatan = KegiatanModel::select('id_kegiatan', 'kode_kegiatan', 'nama_kegiatan', 'tanggal_mulai', 'tanggal_selesai', 'id_ketegori_kegiatan', 'anggota');
 
         return DataTables::of($kegiatan)
             ->addIndexColumn()

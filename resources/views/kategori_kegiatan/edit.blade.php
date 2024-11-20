@@ -1,4 +1,4 @@
-@empty($jenisKegiatan)
+@empty($kategoriKegiatan)
 <div id="modal-master" class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -16,7 +16,7 @@
     </div>
 </div>
 @else
-<form action="{{ url('/jeniskegiatan/' . $jenisKegiatan->id_kategori_kegiatan . '/update') }}" method="POST" id="form-edit">
+<form action="{{ url('/kategorikegiatan/' . $kategoriKegiatan->id_kategori_kegiatan . '/update') }}" method="POST" id="form-edit">
     @csrf
     @method('PUT')
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
@@ -29,8 +29,8 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Kode Jenis Kegiatan</label>
-                    <input value="{{ $jenisKegiatan->kode_jenis_kegiatan }}" type="text" name="kode_jenis_kegiatan" id="level_kode" class="form-control" required>
+                    <label>Kode Kategori Kegiatan</label>
+                    <input value="{{ $kategoriKegiatan->kode_kategori_kegiatan }}" type="text" name="kode_kategori_kegiatan" id="level_kode" class="form-control" required>
                     <small id="error-level_kode" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
