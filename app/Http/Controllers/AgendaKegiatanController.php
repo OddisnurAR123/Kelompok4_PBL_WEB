@@ -31,16 +31,6 @@ class AgendaKegiatanController extends Controller
         return view('agenda.index', compact('agendas', 'jenisPenggunas', 'breadcrumb')); 
     }    
 
-    // Menampilkan form untuk membuat agenda baru
-    public function create()
-    {
-        $kegiatans = KegiatanModel::all(); // Ambil data kegiatan
-        $jenisPenggunas = JenisPenggunaModel::all(); // Ambil data jenis pengguna
-        $jabatanKegiatans = JabatanKegiatanModel::all(); // Ambil data jabatan kegiatan
-
-        return view('agenda.create', compact('kegiatans', 'jenisPenggunas', 'jabatanKegiatans')); 
-    }
-
     // Menyimpan agenda yang baru dibuat
     public function store(Request $request)
     {
@@ -101,25 +91,15 @@ class AgendaKegiatanController extends Controller
         return redirect()->route('agenda.index')->with('success', 'Agenda berhasil dihapus!');
     }
     public function create_ajax()
-{
-    // Ambil data yang diperlukan untuk form
-    $kegiatans = KegiatanModel::select('id_kegiatan', 'nama_kegiatan')->get(); 
-    $jenisPenggunas = JenisPenggunaModel::select('id_jenis_pengguna', 'nama_jenis_pengguna')->get();
-    $jabatanKegiatans = JabatanKegiatanModel::select('id', 'nama_jabatan')->get();
+    {
+        // Ambil data yang diperlukan untuk form
+        $kegiatans = KegiatanModel::select('id_kegiatan', 'nama_kegiatan')->get(); 
+        $jenisPenggunas = JenisPenggunaModel::select('id_jenis_pengguna', 'nama_jenis_pengguna')->get();
+        $jabatanKegiatans = JabatanKegiatanModel::select('id', 'nama_jabatan')->get();
     
-    // Menambahkan breadcrumb
-    $breadcrumb = (object) [
-        'title' => 'Tambah Agenda Kegiatan (AJAX)',
-        'list' => ['Dashboard', 'Agenda', 'Tambah']
-    ];
-
-    // Mengirimkan response dalam bentuk HTML untuk modal form
-    $html = view('agenda.create_ajax', compact('kegiatans', 'jenisPenggunas', 'jabatanKegiatans', 'breadcrumb'))->render();
-
-    return response()->json([
-        'status' => true,
-        'html' => $html
-    ]);
-}
+        // Mengirimkan response dalam bentuk HTML untuk modal form
+        return view('agenda.create_ajax', compact('kegiatans', 'jenisPenggunas', 'jabatanKegiatans'));
+    }
+    
 
 }

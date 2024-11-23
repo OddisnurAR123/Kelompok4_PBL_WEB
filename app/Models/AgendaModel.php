@@ -22,36 +22,23 @@ class AgendaModel extends Model
         'bobot_anggota',
         'deskripsi',
         'tanggal_agenda',
-        'created_at',
-        'updated_at',
     ];
 
     // Relasi ke tabel JenisPengguna
     public function jenisPengguna()
     {
-        return $this->belongsTo(JenisPenggunaModel::class, 'id_jenis_pengguna');
+        return $this->belongsTo(JenisPenggunaModel::class, 'id_jenis_pengguna', 'id_jenis_pengguna');
     }
 
     // Relasi ke tabel Kegiatan
     public function kegiatan()
     {
-        return $this->belongsTo(KegiatanModel::class, 'id_kegiatan');
+        return $this->belongsTo(KegiatanModel::class, 'id_kegiatan', 'id_kegiatan');
     }
-    public function create_ajax()
-{
-    // Ambil data yang diperlukan untuk form
-    $kegiatans = KegiatanModel::select('id_kegiatan', 'nama_kegiatan')->get(); 
-    $jenisPenggunas = JenisPenggunaModel::select('id_jenis_pengguna', 'nama_jenis_pengguna')->get();
-    $jabatanKegiatans = JabatanKegiatanModel::select('id', 'nama_jabatan')->get();
-    
-    // Menambahkan breadcrumb
-    $breadcrumb = (object) [
-        'title' => 'Tambah Agenda Kegiatan (AJAX)',
-        'list' => ['Dashboard', 'Agenda', 'Tambah']
-    ];
 
-    // Kembalikan view dengan data yang dibutuhkan
-    return view('agenda.create_ajax', compact('kegiatans', 'jenisPenggunas', 'jabatanKegiatans', 'breadcrumb'));
-}
-
+    // Relasi ke tabel JabatanKegiatan
+    public function jabatanKegiatan()
+    {
+        return $this->belongsTo(JabatanKegiatanModel::class, 'id_jabatan_kegiatan', 'id');
+    }
 }
