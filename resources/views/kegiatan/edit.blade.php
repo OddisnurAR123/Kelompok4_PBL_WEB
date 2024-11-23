@@ -1,5 +1,5 @@
 <!-- resources/views/kegiatan/edit.blade.php -->
-@extends('layouts.app')
+@extends('layouts.template')
 
 @section('content')
 <div class="container">

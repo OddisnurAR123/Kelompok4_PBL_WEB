@@ -2,7 +2,10 @@
 @section('content')
 <div class="card card-outline card-primary">
     <div class="card-header">
-        <h3 class="card-title">Daftar Jenis Pengguna</h3>
+        <h3 class="card-title">Daftar Kategori Kegiatan</h3>
+        <div class="card-tools">
+          <button onclick="modalAction('{{ url('/kategori_kegiatan/create') }}')" class="btn btn-success"><i class="fa fa-plus"></i> Tambah Data</button>
+        </div>
       </div>
     <div class="card-body">
         @if(session('success'))
@@ -12,12 +15,12 @@
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
             
-        <table class="table table-bordered table-striped table-hover table-sm" id="table_jenis_pengguna">
+        <table class="table table-bordered table-striped table-hover table-sm" id="table_kategori_kegiatan">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Kode Jenis Pengguna</th>
-                    <th>Nama Jenis Pengguna</th>
+                    <th>Kode Kategori Kegiatan</th>
+                    <th>Nama Kategori Kegiatan</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -29,7 +32,7 @@
 
 @push('css')
 <style>
-    #table_jenis_pengguna th, #table_jenis_pengguna td {
+    #table_kategori_kegiatan th, #table_kategori_kegiatan td {
         text-align: center; 
         vertical-align: middle; 
     }
@@ -45,33 +48,33 @@
         });
     }
 
-    var dataJenisPengguna;
+    var datakategoriKegiatan;
 
     $(document).ready(function() {
-        dataJenisPengguna = $('#table_jenis_pengguna').DataTable({
+        datakategoriKegiatan = $('#table_kategori_kegiatan').DataTable({
             // serverSide: true, jika ingin menggunakan server side processing
             serverSide: true,
             ajax: {
-                "url": "{{ url('jenis_pengguna/list') }}",
+                "url": "{{ url('kategori_kegiatan/list') }}",
                 "dataType": "json",
                 "type": "POST",
 
             },
             columns: [
                 {
-                    data: "id_jenis_pengguna",
+                    data: "id_kategori_kegiatan",
                     className: "",
                     orderable: true,
                     searchable: true
                 },
                 {
-                    data: "kode_jenis_pengguna",
+                    data: "kode_kategori_kegiatan",
                     className: "",
                     orderable: true,
                     searchable: true
                 },
                 {
-                    data: "nama_jenis_pengguna",
+                    data: "nama_kategori_kegiatan",
                     className: "",
                     orderable: true,
                     searchable: true

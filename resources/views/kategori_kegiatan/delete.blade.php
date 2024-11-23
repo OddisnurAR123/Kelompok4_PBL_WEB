@@ -1,4 +1,4 @@
-@empty($jenisKegiatan)
+@empty($kategoriKegiatan)
 <div id="modal-master" class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -16,13 +16,13 @@
     </div>
 </div>
 @else
-<form action="{{ url('/jenis_kegiatan/' . $jenisKegiatan->id_kategori_kegiatan . '/delete') }}" method="POST" id="form-delete">
+<form action="{{ url('/kategori_kegiatan/' . $kategoriKegiatan->id_kategori_kegiatan . '/delete') }}" method="POST" id="form-delete">
     @csrf
     @method('DELETE')
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Hapus Data Jenis Kegiatan</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Hapus Data kategori Kegiatan</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -30,16 +30,16 @@
             <div class="modal-body">
                 <div class="alert alert-warning">
                     <h5><i class="icon fas fa-ban"></i> Konfirmasi !!!</h5>
-                    Apakah Anda yakin ingin menghapus data jenis kegiatan ini?
+                    Apakah Anda yakin ingin menghapus data kategori kegiatan ini?
                 </div>
                 <table class="table table-sm table-bordered table-striped">
                     <tr>
-                        <th class="text-right col-3">Kode Jenis Kegiatan:</th>
-                        <td class="col-9">{{ $jenisKegiatan->kode_kategori_kegiatan }}</td>
+                        <th class="text-right col-3">Kode kategori Kegiatan:</th>
+                        <td class="col-9">{{ $kategoriKegiatan->kode_kategori_kegiatan }}</td>
                     </tr>
                     <tr>
-                        <th class="text-right col-3">Nama Jenis Kegiatan:</th>
-                        <td class="col-9">{{ $jenisKegiatan->nama_kategori_kegiatan }}</td>
+                        <th class="text-right col-3">Nama kategori Kegiatan:</th>
+                        <td class="col-9">{{ $kategoriKegiatan->nama_kategori_kegiatan }}</td>
                     </tr>
                     <tr>
                 </table>
@@ -69,7 +69,7 @@ $(document).ready(function() {
                             title: 'Berhasil',
                             text: response.message
                         });
-                        $('#table_jenis_kegiatan').DataTable().ajax.reload(); // Reload tabel data barang
+                        $('#table_kategori_kegiatan').DataTable().ajax.reload(); // Reload tabel data barang
                     } else {
                         Swal.fire({
                             icon: 'error',

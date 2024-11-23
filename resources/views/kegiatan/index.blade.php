@@ -7,7 +7,7 @@
           <button onclick="modalAction('{{ url('/kegiatan/import') }}')" class="btn btn-info"><i class="fa fa-file-import"></i> Import Kegiatan</button>
           <a href="{{ url('/kegiatan/export_excel') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i> Export Kegiatan XLSX</a>
           <a href="{{ url('/kegiatan/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Export Kegiatan PDF</a>
-          <button onclick="modalAction('{{ url('/kegiatan/create_ajax') }}')" class="btn btn-success"><i class="fa fa-plus"></i> Tambah Kegiatan</button>
+          <button onclick="modalAction('{{ url('/kegiatan/create') }}')" class="btn btn-success"><i class="fa fa-plus"></i> Tambah Kegiatan</button>
         </div>
     </div>
     <div class="card-body">

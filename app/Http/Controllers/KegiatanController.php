@@ -27,7 +27,7 @@ class KegiatanController extends Controller
 
     // Menampilkan data kegiatan dalam bentuk json untuk datatables
     public function list(Request $request) {
-        $kegiatan = KegiatanModel::select('id_kegiatan', 'kode_kegiatan', 'nama_kegiatan', 'tanggal_mulai', 'tanggal_selesai', 'pic', 'anggota');
+        $kegiatan = KegiatanModel::select('id_kegiatan', 'kode_kegiatan', 'nama_kegiatan', 'tanggal_mulai', 'tanggal_selesai', 'id_ketegori_kegiatan', 'anggota');
 
         return DataTables::of($kegiatan)
             ->addIndexColumn()
@@ -42,11 +42,16 @@ class KegiatanController extends Controller
     }
 
     // Menampilkan form tambah kegiatan via Ajax
-    public function create_ajax() {
-        return view('kegiatan.create_ajax');
+    public function create() {
+        $breadcrumb = (object) [
+            'title' => 'Tambah Kegiatan',
+            'list' => ['Home', 'Kegiatan', 'Tambah Kegiatan']
+        ];
+    
+        return view('kegiatan.create', ['breadcrumb' => $breadcrumb]);
     }
 
-    public function store_ajax(Request $request)
+    public function store(Request $request)
     {
         if ($request->ajax() || $request->wantsJson()) { 
             $validator = Validator::make($request->all(), [
@@ -92,17 +97,22 @@ class KegiatanController extends Controller
             ]);
         }
 
-        return view('kegiatan.show', ['kegiatan' => $kegiatan]);
+        $breadcrumb = (object) [
+            'title' => 'Input Kegiatan',
+            'list' => ['Home', 'Kegiatan']
+        ];
+
+        return view('kegiatan.show', ['kegiatan' => $kegiatan, 'breadcrumb' => $breadcrumb]);
     }
 
     // Menampilkan form edit kegiatan via Ajax
-    public function edit_ajax($id) {
+    public function edit($id) {
         $kegiatan = KegiatanModel::findOrFail($id);
         return view('kegiatan.edit', ['kegiatan' => $kegiatan]);
     }
 
     // Menyimpan perubahan data kegiatan via Ajax
-    public function update_ajax(Request $request, $id) {
+    public function update(Request $request, $id) {
         if ($request->ajax() || $request->wantsJson()) {
             $validator = Validator::make($request->all(), [
                 'kode_kegiatan' => 'required|string|min:3|unique:t_kegiatan,kode_kegiatan',
@@ -137,7 +147,7 @@ class KegiatanController extends Controller
     }
 
     // Menampilkan konfirmasi hapus kegiatan via Ajax
-    public function confirm_ajax($id) {
+    public function confirm($id) {
         $kegiatan = KegiatanModel::findOrFail($id);
         return response()->json([
             'status' => true,
@@ -147,7 +157,7 @@ class KegiatanController extends Controller
     }
 
     // Menghapus data kegiatan via Ajax
-    public function delete_ajax(Request $request, $id) {
+    public function delete(Request $request, $id) {
         if ($request->ajax() || $request->wantsJson()) {
             $kegiatan = KegiatanModel::findOrFail($id);
             $kegiatan->delete();
@@ -165,7 +175,7 @@ class KegiatanController extends Controller
     }
 
     // Proses import excel kegiatan dengan AJAX
-    public function import_ajax(Request $request) {
+    public function import(Request $request) {
         // Implementasi import excel dengan AJAX
     }
 }
