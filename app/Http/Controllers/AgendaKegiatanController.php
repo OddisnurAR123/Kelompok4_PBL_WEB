@@ -7,7 +7,6 @@ use App\Models\AgendaModel;
 use App\Models\JabatanKegiatanModel;
 use App\Models\JenisPenggunaModel;
 use App\Models\KegiatanModel;
-use Illuminate\Support\Facades\Validator;
 
 class AgendaKegiatanController extends Controller
 {
@@ -30,44 +29,18 @@ class AgendaKegiatanController extends Controller
     
         // Kirim data ke view
         return view('agenda.index', compact('agendas', 'jenisPenggunas', 'breadcrumb')); 
-    }
-    
+    }    
 
     // Menampilkan form untuk membuat agenda baru
-    public function create_ajax(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'kode_agenda' => 'required|string|max:255',
-        'nama_agenda' => 'required|string|max:255',
-        'id_kegiatan' => 'required|integer|exists:m_kegiatan,id_kegiatan',
-        'tempat_agenda' => 'required|string|max:255',
-        'id_jenis_pengguna' => 'required|integer|exists:m_jenis_pengguna,id_jenis_pengguna',
-        'id_jabatan_kegiatan' => 'required|integer|exists:m_jabatan_kegiatan,id',
-        'bobot_anggota' => 'nullable|integer',
-        'deskripsi' => 'nullable|string',
-        'tanggal_agenda' => 'required|date',
-    ]);
+    public function create()
+    {
+        $kegiatans = KegiatanModel::all(); // Ambil data kegiatan
+        $jenisPenggunas = JenisPenggunaModel::all(); // Ambil data jenis pengguna
+        $jabatanKegiatans = JabatanKegiatanModel::all(); // Ambil data jabatan kegiatan
 
-    if ($validator->fails()) {
-        return response()->json([
-            'status' => false,
-            'errors' => $validator->errors(),
-        ], 422);
+        return view('agenda.create', compact('kegiatans', 'jenisPenggunas', 'jabatanKegiatans')); 
     }
 
-    try {
-        AgendaModel::create($request->all());
-        return response()->json([
-            'status' => true,
-            'message' => 'Agenda berhasil ditambahkan!',
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'status' => false,
-            'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
-        ], 500);
-    }
-}
     // Menyimpan agenda yang baru dibuat
     public function store(Request $request)
     {
@@ -127,4 +100,26 @@ class AgendaKegiatanController extends Controller
         $agenda->delete(); // Hapus agenda
         return redirect()->route('agenda.index')->with('success', 'Agenda berhasil dihapus!');
     }
+    public function create_ajax()
+{
+    // Ambil data yang diperlukan untuk form
+    $kegiatans = KegiatanModel::select('id_kegiatan', 'nama_kegiatan')->get(); 
+    $jenisPenggunas = JenisPenggunaModel::select('id_jenis_pengguna', 'nama_jenis_pengguna')->get();
+    $jabatanKegiatans = JabatanKegiatanModel::select('id', 'nama_jabatan')->get();
+    
+    // Menambahkan breadcrumb
+    $breadcrumb = (object) [
+        'title' => 'Tambah Agenda Kegiatan (AJAX)',
+        'list' => ['Dashboard', 'Agenda', 'Tambah']
+    ];
+
+    // Mengirimkan response dalam bentuk HTML untuk modal form
+    $html = view('agenda.create_ajax', compact('kegiatans', 'jenisPenggunas', 'jabatanKegiatans', 'breadcrumb'))->render();
+
+    return response()->json([
+        'status' => true,
+        'html' => $html
+    ]);
+}
+
 }

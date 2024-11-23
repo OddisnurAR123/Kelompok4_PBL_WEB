@@ -37,4 +37,21 @@ class AgendaModel extends Model
     {
         return $this->belongsTo(KegiatanModel::class, 'id_kegiatan');
     }
+    public function create_ajax()
+{
+    // Ambil data yang diperlukan untuk form
+    $kegiatans = KegiatanModel::select('id_kegiatan', 'nama_kegiatan')->get(); 
+    $jenisPenggunas = JenisPenggunaModel::select('id_jenis_pengguna', 'nama_jenis_pengguna')->get();
+    $jabatanKegiatans = JabatanKegiatanModel::select('id', 'nama_jabatan')->get();
+    
+    // Menambahkan breadcrumb
+    $breadcrumb = (object) [
+        'title' => 'Tambah Agenda Kegiatan (AJAX)',
+        'list' => ['Dashboard', 'Agenda', 'Tambah']
+    ];
+
+    // Kembalikan view dengan data yang dibutuhkan
+    return view('agenda.create_ajax', compact('kegiatans', 'jenisPenggunas', 'jabatanKegiatans', 'breadcrumb'));
+}
+
 }

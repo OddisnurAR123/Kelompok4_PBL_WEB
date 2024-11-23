@@ -1,4 +1,4 @@
-<form action="{{ url('/agenda/create_ajax') }}" method="POST" id="form-tambah">
+<form action="{{ url('agenda/create_ajax') }}" method="POST" id="form-tambah">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -78,46 +78,50 @@
     </div>
 </form>
 <script>
-    $(document).ready(function() {
-        $("#form-tambah").on("submit", function(e) {
-            e.preventDefault();
-            let form = $(this);
-            let url = form.attr("action");
-
-            $.ajax({
-                url: url,
-                method: "POST",
-                data: form.serialize(),
-                success: function(response) {
-                    if (response.status) {
-                        $('#myModal').modal('hide');
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil',
-                            text: response.message
-                        });
-                        // Reload data table or refresh page
-                        dataAgenda.ajax.reload();
-                    } else {
-                        $('.error-text').text('');
-                        $.each(response.errors, function(key, val) {
-                            $('#error-' + key).text(val[0]);
-                        });
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Terjadi Kesalahan',
-                            text: response.message
-                        });
-                    }
-                },
-                error: function(xhr) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Terjadi kesalahan server.'
-                    });
+   $(document).ready(function() {
+    // Load form tambah agenda secara AJAX
+    $('#btn-create-agenda').on('click', function() {
+        $.ajax({
+            url: "{{ route('create_ajax') }}",
+            type: 'GET',
+            success: function(response) {
+                if (response.status) {
+                    $('#modal-body').html(response.html); // Isi modal dengan form
+                    $('#modal-master').modal('show'); // Tampilkan modal
+                } else {
+                    Swal.fire('Error', response.message, 'error');
                 }
-            });
+            },
+            error: function(xhr) {
+                Swal.fire('Error', 'Gagal memuat form tambah agenda.', 'error');
+            }
         });
     });
-</script>
+
+    // Proses simpan data agenda
+    $(document).on('submit', '#form-create-agenda', function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                if (response.status) {
+                    $('#modal-master').modal('hide'); // Tutup modal
+                    Swal.fire('Berhasil', response.message, 'success');
+                    // Reload data tabel jika ada
+                    if (typeof dataAgenda !== 'undefined') {
+                        dataAgenda.ajax.reload();
+                    }
+                } else {
+                    Swal.fire('Error', response.message, 'error');
+                }
+            },
+            error: function(xhr) {
+                Swal.fire('Error', 'Terjadi kesalahan saat menyimpan data.', 'error');
+            }
+        });
+    });
+});
+`

@@ -81,7 +81,7 @@ Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
     Route::get('/kegiatan_eksternal', [KegiatanEksternalController::class, 'create'])->name('kegiatan_eksternal.create'); 
     Route::post('/kegiatan_eksternal', [KegiatanEksternalController::class, 'store'])->name('kegiatan_eksternal.store'); 
     
-    Route::get('/', [AgendaKegiatanController::class, 'index'])->name('index'); // Menampilkan daftar agenda
+    Route::get('/agenda', [AgendaKegiatanController::class, 'index'])->name('index'); // Menampilkan daftar agenda
     Route::get('agenda/create_ajax', [AgendaKegiatanController::class, 'create_ajx'])->name('create_ajax'); // Form tambah agenda
     Route::post('/store', [AgendaKegiatanController::class, 'store'])->name('store'); // Proses simpan agenda
     Route::get('/{id}/show', [AgendaKegiatanController::class, 'show'])->name('show'); // Tampilkan detail agenda
