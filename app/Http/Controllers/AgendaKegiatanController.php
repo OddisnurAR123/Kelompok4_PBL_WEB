@@ -95,10 +95,10 @@ class AgendaKegiatanController extends Controller
         // Ambil data yang diperlukan untuk form
         $kegiatans = KegiatanModel::select('id_kegiatan', 'nama_kegiatan')->get(); 
         $jenisPenggunas = JenisPenggunaModel::select('id_jenis_pengguna', 'nama_jenis_pengguna')->get();
-        $jabatanKegiatans = JabatanKegiatanModel::select('id', 'nama_jabatan')->get();
+        $jabatanKegiatans = JabatanKegiatanModel::select('id_jabatan_kegiatan', 'nama_jabatan_kegiatan')->get();
     
         // Mengirimkan response dalam bentuk HTML untuk modal form
-        return view('agenda.create_ajax', compact('kegiatans', 'jenisPenggunas', 'jabatanKegiatans'));
+        return view('agenda.create_ajax', compact('kegiatan', 'jenisPengguna', 'jabatanKegiatan'));
     }
     
 
