@@ -11,6 +11,7 @@ use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\JabatanKegiatanController;
 use App\Http\Controllers\AgendaKegiatanController;
 use App\Http\Controllers\DetailKegiatanController;
+use App\Http\Controllers\AuthController;
 
 
 /*
@@ -27,6 +28,16 @@ use App\Http\Controllers\DetailKegiatanController;
 Route::get('/', [WelcomeController::class, 'index'])->name('dashboard');
 
 Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
+
+// Pattern untuk parameter ID harus berupa angka
+Route::pattern('id', '[0-9]+');
+
+// Routes untuk autentikasi login
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('login', [AuthController::class, 'postlogin']);
+Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
+Route::get('register', [AuthController::class, 'registerForm'])->name('register');
+Route::post('register', [AuthController::class, 'register'])->name('register');
 
 // Daftar route agenda
     Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
