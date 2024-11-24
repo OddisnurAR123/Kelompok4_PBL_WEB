@@ -12,7 +12,7 @@ use App\Http\Controllers\JabatanKegiatanController;
 use App\Http\Controllers\AgendaKegiatanController;
 use App\Http\Controllers\DetailKegiatanController;
 use App\Http\Controllers\AuthController;
-
+use App\Models\KategoriKegiatanModel;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,8 +59,11 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::post('/kategori_kegiatan/list', [KategoriKegiatanController::class, 'list']);
     Route::get('kategori_kegiatan/{id}/show', [KategoriKegiatanController::class, 'show'])->name('kategori_kegiatan.show');
     Route::get('/kategori_kegiatan/create', [KategoriKegiatanController::class, 'create'])->name('kategori_kegiatan.create');
+    Route::post('kategori_kegiatan/store', [KategoriKegiatanModel::class, 'store']);
     Route::get('/kategori_kegiatan/{id_kategori_kegiatan}/edit', [KategoriKegiatanController::class, 'edit'])->name('kategori_kegiatan.edit');
-    Route::delete('/kategori_kegiatan/{id_kategori_kegiatan}', [KategoriKegiatanController::class, 'delete'])->name('kategori_kegiatan.delete');
+    Route::put('/kategori_kegiatan/{id}', [KategoriKegiatanModel::class, 'edit']);
+    Route::delete('/kategori_kegiatan/{id}', [KategoriKegiatanController::class, 'delete'])->name('kategori_kegiatan.delete');
+    Route::delete('/kategori_kegiatan/{id}', [KategoriKegiatanModel::class, 'destroy']);
 
     Route::get('/jabatan_kegiatan', [JabatanKegiatanController::class, 'index']);
     Route::post('/jabatan_kegiatan/list', [JabatanKegiatanController::class, 'list']);
