@@ -90,7 +90,7 @@
                     searchable: true
                 },
                 {
-                    data: "id_jabatan_kegiatan", 
+                    data: "jabatan_kegiatan.id_jabatan_kegiatan", 
                     className: "",
                     orderable: false,
                     searchable: true
