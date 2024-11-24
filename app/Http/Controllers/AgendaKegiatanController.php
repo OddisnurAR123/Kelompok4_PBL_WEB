@@ -4,127 +4,102 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AgendaModel;
-use App\Models\JabatanKegiatanModel;
 use App\Models\JenisPenggunaModel;
 use App\Models\KegiatanModel;
+use App\Models\JabatanKegiatanModel;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
 class AgendaKegiatanController extends Controller
 {
-    // Menampilkan semua agenda kegiatan
     public function index()
     {
-        // Data agenda dan jenis pengguna
-        $agendas = AgendaModel::all(); 
-        $jenisPenggunas = JenisPenggunaModel::all();
-    
-        // Tambahkan breadcrumb
         $breadcrumb = (object) [
             'title' => 'Daftar Agenda',
-            'list' => [
-                (object) ['label' => 'Dashboard', 'url' => url('/')],
-                (object) ['label' => 'Agenda', 'url' => url('/agenda')],
-                'Daftar Agenda'
-            ]
+            'list' => ['Home', 'Agenda']
         ];
-    
-        // Kirim data ke view
-        return view('agenda.index', compact('agendas', 'jenisPenggunas', 'breadcrumb')); 
-    }
-    
 
-    // Menampilkan form untuk membuat agenda baru
-    public function create_ajax(Request $request)
+        $page = (object) [
+            'title' => 'Daftar agenda yang ada'
+        ];
+
+        $activeMenu = 'agenda';
+
+        return view('agenda.index', compact('breadcrumb', 'page', 'activeMenu'));
+    }
+
+    public function list(Request $request)
 {
-    $validator = Validator::make($request->all(), [
-        'kode_agenda' => 'required|string|max:255',
-        'nama_agenda' => 'required|string|max:255',
-        'id_kegiatan' => 'required|integer|exists:m_kegiatan,id_kegiatan',
-        'tempat_agenda' => 'required|string|max:255',
-        'id_jenis_pengguna' => 'required|integer|exists:m_jenis_pengguna,id_jenis_pengguna',
-        'id_jabatan_kegiatan' => 'required|integer|exists:m_jabatan_kegiatan,id',
-        'bobot_anggota' => 'nullable|integer',
-        'deskripsi' => 'nullable|string',
-        'tanggal_agenda' => 'required|date',
-    ]);
+    $agenda = AgendaModel::with(['kegiatan', 'jenisPengguna', 'jabatanKegiatan'])
+        ->select(
+            'id_agenda',
+            'kode_agenda',
+            'nama_agenda',
+            'id_kegiatan',
+            'tempat_agenda',
+            'id_jenis_pengguna',
+            'id_jabatan_kegiatan',
+            'bobot_anggota',
+            'deskripsi',
+            'tanggal_agenda'
+        );
 
-    if ($validator->fails()) {
-        return response()->json([
-            'status' => false,
-            'errors' => $validator->errors(),
-        ], 422);
-    }
-
-    try {
-        AgendaModel::create($request->all());
-        return response()->json([
-            'status' => true,
-            'message' => 'Agenda berhasil ditambahkan!',
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'status' => false,
-            'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
-        ], 500);
-    }
+    return DataTables::of($agenda)
+        ->addIndexColumn()
+        ->addColumn('aksi', function ($agenda) {
+            $btn = '<button onclick="modalAction(\''.url('/agenda/' . $agenda->id_agenda . '/show').'\')" class="btn btn-info btn-sm">Detail</button> ';
+            $btn .= '<button onclick="modalAction(\''.url('/agenda/' . $agenda->id_agenda . '/edit').'\')" class="btn btn-warning btn-sm">Edit</button> ';
+            $btn .= '<button onclick="modalAction(\''.url('/agenda/' . $agenda->id_agenda . '/delete').'\')" class="btn btn-danger btn-sm">Hapus</button>';
+            return $btn;
+        })
+        ->rawColumns(['aksi'])
+        ->make(true);
 }
-    // Menyimpan agenda yang baru dibuat
+    public function create()
+    {
+        $jenisPengguna = JenisPenggunaModel::all(); // Ambil data jenis pengguna
+        $kegiatan = KegiatanModel::all(); // Ambil data kegiatan
+        $jabatanKegiatan = JabatanKegiatanModel::all(); // Ambil data jabatan kegiatan
+
+        return view('agenda.create', compact('jenisPengguna', 'kegiatan', 'jabatanKegiatan'));
+    }
+
+    // Simpan data baru
     public function store(Request $request)
     {
-        // Validasi data dari form
-        $validated = $request->validate([
-            'kode_agenda' => 'required|string|max:255',
-            'nama_agenda' => 'required|string|max:255',
-            'id_kegiatan' => 'required|integer|exists:kegiatans,id_kegiatan',
-            'tempat_agenda' => 'required|string|max:255',
-            'id_jenis_pengguna' => 'required|integer|exists:jenis_penggunas,id_jenis_pengguna',
-            'id_jabatan_kegiatan' => 'required|integer|exists:jabatan_kegiatans,id_jabatan_kegiatan',
-            'bobot_anggota' => 'nullable|integer',
-            'deskripsi' => 'nullable|string',
-            'tanggal_agenda' => 'required|date',
-        ]);
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'kode_agenda' => 'required|unique:t_agenda',
+                'nama_agenda' => 'required',
+                'id_kegiatan' => 'required|exists:m_kegiatan,id_kegiatan',
+                'tempat_agenda' => 'required',
+                'id_jenis_pengguna' => 'required|exists:m_jenis_pengguna,id_jenis_pengguna',
+                'id_jabatan_kegiatan' => 'required|exists:m_jabatan_kegiatan,id',
+                'bobot_anggota' => 'required|numeric',
+                'tanggal_agenda' => 'required|date',
+                'deskripsi' => 'nullable|string',
+            ];
 
-        // Simpan agenda baru ke database
-        AgendaModel::create($validated); 
-        return redirect()->route('agenda.index')->with('success', 'Agenda berhasil dibuat!');
-    }
+            // Validasi input
+            $validator = Validator::make($request->all(), $rules);
 
-    // Menampilkan form untuk mengedit agenda
-    public function edit($id)
-    {
-        $agenda = AgendaModel::findOrFail($id); // Cari agenda berdasarkan ID
-        $kegiatans = KegiatanModel::all(); // Ambil data kegiatan
-        $jenisPenggunas = JenisPenggunaModel::all(); // Ambil data jenis pengguna
-        $jabatanKegiatans = JabatanKegiatanModel::all(); // Ambil data jabatan kegiatan
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors(),
+                ]);
+            }
 
-        return view('agenda.edit', compact('agenda', 'kegiatans', 'jenisPenggunas', 'jabatanKegiatans')); 
-    }
+            // Simpan data agenda
+            AgendaModel::create($request->all());
 
-    // Memperbarui agenda
-    public function update(Request $request, $id)
-    {
-        $validated = $request->validate([
-            'kode_agenda' => 'required|string|max:255',
-            'nama_agenda' => 'required|string|max:255',
-            'id_kegiatan' => 'required|integer|exists:kegiatans,id_kegiatan',
-            'tempat_agenda' => 'required|string|max:255',
-            'id_jenis_pengguna' => 'required|integer|exists:jenis_penggunas,id_jenis_pengguna',
-            'id_jabatan_kegiatan' => 'required|integer|exists:jabatan_kegiatans,id_jabatan_kegiatan',
-            'bobot_anggota' => 'nullable|integer',
-            'deskripsi' => 'nullable|string',
-            'tanggal_agenda' => 'required|date',
-        ]);
+            return response()->json([
+                'status' => true,
+                'message' => 'Data agenda berhasil disimpan',
+            ]);
+        }
 
-        $agenda = AgendaModel::findOrFail($id); // Cari agenda berdasarkan ID
-        $agenda->update($validated); // Perbarui agenda
-        return redirect()->route('agenda.index')->with('success', 'Agenda berhasil diperbarui!');
-    }
-
-    // Menghapus agenda
-    public function destroy($id)
-    {
-        $agenda = AgendaModel::findOrFail($id); // Cari agenda berdasarkan ID
-        $agenda->delete(); // Hapus agenda
-        return redirect()->route('agenda.index')->with('success', 'Agenda berhasil dihapus!');
+        return redirect('/');
     }
 }

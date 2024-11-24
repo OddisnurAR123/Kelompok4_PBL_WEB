@@ -65,19 +65,39 @@ class KategoriKegiatanController extends Controller
 
     // Simpan data baru
     public function store(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'kode_kategori_kegiatan' => 'required|string|min:3|unique:kategori_kegiatan,kode_kategori_kegiatan',
-            'nama_kategori_kegiatan' => 'required|string|max:100',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['status' => false, 'errors' => $validator->errors()]);
+        if ($request->ajax() || $request->wantsJson()) {
+            // Aturan validasi untuk input 
+            $rules = [
+                'kode_kategori_kegiatan' => 'required|unique:m_kategori_kegiatan',
+                'nama_kategori_kegiatan' => 'required',
+            ];
+    
+            // Melakukan validasi
+            $validator = Validator::make($request->all(), $rules);
+    
+            if ($validator->fails()) {
+                // Mengembalikan respon jika validasi gagal
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors(),
+                ]);
+            }
+                        // Menyimpan data 
+                        KategoriKegiatanModel::create([
+                            'kode_kategori_kegiatan' => $request->kode_kategori_kegiatan,
+                            'nama_kategori_kegiatan' => $request->nama_kategori_kegiatan,
+                        ]);
+                
+                        // Mengembalikan respon sukses
+                        return response()->json([
+                            'status' => true,
+                            'message' => 'Data kategori kegiatan berhasil disimpan',
+                        ]);
+                    }
+                
+                    return redirect('/');
         }
-
-        KategoriKegiatanModel::create($request->only(['kode_kategori_kegiatan', 'nama_kategori_kegiatan']));
-
-        return response()->json(['status' => true, 'message' => 'Data berhasil disimpan.']);
-    }
 
     // Tampilkan halaman edit
     public function edit($id_kategori_kegiatan) {
@@ -92,37 +112,64 @@ class KategoriKegiatanController extends Controller
 
     // Update data
     public function update(Request $request, $id_kategori_kegiatan) {
-        $kategoriKegiatan = KategoriKegiatanModel::find($id_kategori_kegiatan);
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'kode_kategori_kegiatan' => 'required|string|max:20|unique:m_kategori_kegiatan,kode_kategori_kegiatan,' . $id_kategori_kegiatan . ',id_kategori_kegiatan',
+                'nama_kategori_kegiatan' => 'required|string|max:100',
+            ];
 
-        if (!$kategoriKegiatan) {
-            return response()->json(['status' => false, 'message' => 'Data tidak ditemukan']);
+            // Validasi input
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi gagal.',
+                    'msgField' => $validator->errors(),
+                ]);
+            }
+
+            $kategoriKegiatan = KategoriKegiatanModel::find($id_kategori_kegiatan);
+
+            if ($kategoriKegiatan) {
+                $kategoriKegiatan->update($request->all());
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil diupdate',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan',
+                ]);
+            }
         }
 
-        $validator = Validator::make($request->all(), [
-            'kode_kategori_kegiatan' => 'required|string|max:20|unique:kategori_kegiatan,kode_kategori_kegiatan,' . $id_kategori_kegiatan,
-            'nama_kategori_kegiatan' => 'required|string|max:100',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['status' => false, 'errors' => $validator->errors()]);
-        }
-
-        $kategoriKegiatan->update($request->only(['kode_kategori_kegiatan', 'nama_kategori_kegiatan']));
-
-        return response()->json(['status' => true, 'message' => 'Data berhasil diperbarui.']);
+        return redirect('/');
     }
 
     // Hapus data
-    public function delete($id_kategori_kegiatan) {
-        $kategoriKegiatan = KategoriKegiatanModel::find($id_kategori_kegiatan);
-
-        if (!$kategoriKegiatan) {
-            return response()->json(['status' => false, 'message' => 'Data tidak ditemukan']);
+    public function delete(Request $request, $id_kategori_kegiatan) {
+        {
+            if ($request->ajax() || $request->wantsJson()) {
+                $kategoriKegiatan = KategoriKegiatanModel::find($id_kategori_kegiatan);
+    
+                if ($kategoriKegiatan) {
+                    $kategoriKegiatan->delete();
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'Data berhasil dihapus',
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Data tidak ditemukan',
+                    ]);
+                }
+            }
+    
+            return redirect('/');
         }
-
-        $kategoriKegiatan->delete();
-
-        return response()->json(['status' => true, 'message' => 'Data berhasil dihapus.']);
     }
 
     // Detail data

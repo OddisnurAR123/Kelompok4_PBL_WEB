@@ -55,7 +55,7 @@
             </div>
 
             <div class="d-flex justify-content-center mt-4">
-                <a href="{{ url('/kegiatan') }}" class="btn btn-primary mx-2 nav-link ">Lihat Semua Kegiatan</a>
+                <a href="{{ url('/detail_kegiatan') }}" class="btn btn-primary mx-2 nav-link ">Lihat Semua Kegiatan</a>
                 <a href="{{ url('/agenda') }}" class="btn btn-success mx-2 nav-link ">Lihat Semua Agenda</a>
             </div>            
         </div>

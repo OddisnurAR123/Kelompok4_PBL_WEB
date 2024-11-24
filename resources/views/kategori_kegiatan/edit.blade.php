@@ -16,13 +16,13 @@
     </div>
 </div>
 @else
-<form action="{{ url('/kategorikegiatan/' . $kategoriKegiatan->id_kategori_kegiatan . '/update') }}" method="POST" id="form-edit">
+<form action="{{ url('/kategori_kegiatan/' . $kategori_kegiatan->id_kategori_kegiatan . '/update_ajax') }}" method="POST" id="form-edit">
     @csrf
     @method('PUT')
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Data Level</h5>
+                <h5 class="modal-title">Edit Data Kategori Kegiatan</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -30,13 +30,13 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Kode Kategori Kegiatan</label>
-                    <input value="{{ $kategoriKegiatan->kode_kategori_kegiatan }}" type="text" name="kode_kategori_kegiatan" id="level_kode" class="form-control" required>
-                    <small id="error-level_kode" class="error-text form-text text-danger"></small>
+                    <input value="{{ $kategori_kegiatan->kode_kategori_kegiatan }}" type="text" name="kode_kategori_kegiatan" id="kode_kategori_kegiatan" class="form-control" required>
+                    <small id="error-kode_kategori_kegiatan" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
-                    <label>Nama Level</label>
-                    <input value="{{ $level->level_nama }}" type="text" name="level_nama" id="level_nama" class="form-control" required>
-                    <small id="error-level_nama" class="error-text form-text text-danger"></small>
+                    <label>Nama kategori Kegiatan</label>
+                    <input value="{{ $kategori_kegiatan->nama_kategori_kegiatan }}" type="text" name="nama_kategori_kegiatan" id="nama_kategori_kegiatan" class="form-control" required>
+                    <small id="error-nama_kategori_kegiatan" class="error-text form-text text-danger"></small>
                 </div>
             </div>
             <div class="modal-footer">
@@ -51,8 +51,8 @@
 $(document).ready(function() {
     $("#form-edit").validate({
         rules: {
-            level_kode: { required: true, minlength: 3, maxlength: 20 },
-            level_nama: { required: true, minlength: 3, maxlength: 100 },
+            kode_kategori_kegiatan: { required: true, minlength: 3, maxlength: 20 },
+            nama_kategori_kegiatan: { required: true, minlength: 3, maxlength: 100 },
         },
         submitHandler: function(form) {
             $.ajax({
@@ -67,7 +67,7 @@ $(document).ready(function() {
                             title: 'Berhasil',
                             text: response.message
                         });
-                        dataLevel.ajax.reload();
+                        dataKategoriKegiatan.ajax.reload();
                     } else {
                         $('.error-text').text('');
                         $.each(response.msgField, function(prefix, val) {
