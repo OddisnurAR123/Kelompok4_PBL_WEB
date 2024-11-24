@@ -7,7 +7,7 @@
             <button onclick="modalAction('{{ url('/agenda/import') }}')" class="btn btn-info">Import Agenda</button>
             <a href="{{ url('/agenda/export_excel') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i> Export Excel</a>
             <a href="{{ url('/agenda/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Export PDF</a>
-            <button onclick="modalAction('{{ url('agenda/create_ajax') }}')" class="btn btn-success"><i class="fa fa-plus"></i> Tambah Agenda</button>
+            <button onclick="modalAction('{{ url('agenda/create') }}')" class="btn btn-success"><i class="fa fa-plus"></i> Tambah Agenda</button>
         </div>
     </div>
     <div class="card-body">
@@ -84,13 +84,13 @@
                     searchable: true
                 },
                 {
-                    data: "kegiatan.nama_jenis_kegiatan", // Assuming 'kegiatan' relation
+                    data: "kegiatan.nama_kegiatan", // Assuming 'kegiatan' relation
                     className: "",
                     orderable: true,
                     searchable: true
                 },
                 {
-                    data: "jabatan_kegiatan", 
+                    data: "jabatan_kegiatan.id_jabatan_kegiatan", 
                     className: "",
                     orderable: false,
                     searchable: true

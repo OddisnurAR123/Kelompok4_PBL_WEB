@@ -39,6 +39,6 @@ class AgendaModel extends Model
     // Relasi ke tabel JabatanKegiatan
     public function jabatanKegiatan()
     {
-        return $this->belongsTo(JabatanKegiatanModel::class, 'id_jabatan_kegiatan', 'id');
+        return $this->belongsTo(JabatanKegiatanModel::class, 'id_jabatan_kegiatan', 'id_jabatan_kegiatan');
     }
 }
