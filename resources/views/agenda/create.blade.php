@@ -1,4 +1,4 @@
-<form action="{{ url('/agenda/store') }}" method="POST" id="form-tambah-agenda">
+<form action="{{ url('/agenda/create') }}" method="POST" id="form-tambah-agenda">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">

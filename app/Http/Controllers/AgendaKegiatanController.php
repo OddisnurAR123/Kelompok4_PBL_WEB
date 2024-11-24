@@ -29,21 +29,32 @@ class AgendaKegiatanController extends Controller
     }
 
     public function list(Request $request)
-    {
-        $agenda = AgendaModel::select('id_agenda', 'kode_agenda', 'nama_agenda', 'tanggal_agenda');
+{
+    $agenda = AgendaModel::with(['kegiatan', 'jenisPengguna', 'jabatanKegiatan'])
+        ->select(
+            'id_agenda',
+            'kode_agenda',
+            'nama_agenda',
+            'id_kegiatan',
+            'tempat_agenda',
+            'id_jenis_pengguna',
+            'id_jabatan_kegiatan',
+            'bobot_anggota',
+            'deskripsi',
+            'tanggal_agenda'
+        );
 
-        return DataTables::of($agenda)
-            ->addIndexColumn()
-            ->addColumn('aksi', function ($agenda) {
-                $btn = '<button onclick="modalAction(\''.url('/agenda/' . $agenda->id_agenda . '/show').'\')" class="btn btn-info btn-sm">Detail</button> ';
-                $btn .= '<button onclick="modalAction(\''.url('/agenda/' . $agenda->id_agenda . '/edit').'\')" class="btn btn-warning btn-sm">Edit</button> ';
-                $btn .= '<button onclick="modalAction(\''.url('/agenda/' . $agenda->id_agenda . '/delete').'\')" class="btn btn-danger btn-sm">Hapus</button>';
-                return $btn;
-            })
-            ->rawColumns(['aksi'])
-            ->make(true);
-    }
-
+    return DataTables::of($agenda)
+        ->addIndexColumn()
+        ->addColumn('aksi', function ($agenda) {
+            $btn = '<button onclick="modalAction(\''.url('/agenda/' . $agenda->id_agenda . '/show').'\')" class="btn btn-info btn-sm">Detail</button> ';
+            $btn .= '<button onclick="modalAction(\''.url('/agenda/' . $agenda->id_agenda . '/edit').'\')" class="btn btn-warning btn-sm">Edit</button> ';
+            $btn .= '<button onclick="modalAction(\''.url('/agenda/' . $agenda->id_agenda . '/delete').'\')" class="btn btn-danger btn-sm">Hapus</button>';
+            return $btn;
+        })
+        ->rawColumns(['aksi'])
+        ->make(true);
+}
     public function create()
     {
         $jenisPengguna = JenisPenggunaModel::all(); // Ambil data jenis pengguna

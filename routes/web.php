@@ -95,14 +95,13 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::get('/kegiatan_eksternal', [KegiatanEksternalController::class, 'create'])->name('kegiatan_eksternal.create'); 
     Route::post('/kegiatan_eksternal', [KegiatanEksternalController::class, 'store'])->name('kegiatan_eksternal.store'); 
 
-    Route::get('/agenda', [AgendaKegiatanController::class, 'index'])->name('index'); // Menampilkan daftar agenda
-    Route::get('agenda/create', [AgendaKegiatanController::class, 'create']);
-    Route::post('agenda/store', [AgendaKegiatanController::class, 'store'])->name('store'); // Proses simpan agenda
-    Route::get('/{id}/show', [AgendaKegiatanController::class, 'show'])->name('show'); // Tampilkan detail agenda
-    Route::get('/{id}/edit', [AgendaKegiatanController::class, 'edit'])->name('edit'); // Form edit agenda
-    Route::put('/{id}/update', [AgendaKegiatanController::class, 'update'])->name('update'); // Proses update agenda
-    Route::delete('/{id}/delete', [AgendaKegiatanController::class, 'destroy'])->name('destroy'); // Proses hapus agenda
-    Route::get('agenda/export_excel', [AgendaKegiatanController::class, 'export_excel'])->name('export_excel'); // Ekspor agenda
-    Route::post('agenda/import', [AgendaKegiatanController::class, 'import'])->name('import'); // Impor agenda
-    Route::post('agenda/list', [AgendaKegiatanController::class, 'list'])->name('list'); // Mengambil daftar agenda (AJAX misalnya)
-
+    Route::get('/agenda', [AgendaKegiatanController::class, 'index'])->name('agenda_kegiatan.index'); // Menampilkan daftar agenda
+    Route::get('/agenda/create', [AgendaKegiatanController::class, 'create'])->name('create'); // Form tambah agenda
+    Route::post('/agenda/store', [AgendaKegiatanController::class, 'store'])->name('store'); // Proses simpan agenda
+    Route::get('/agenda/{id}/show', [AgendaKegiatanController::class, 'show'])->name('show'); // Tampilkan detail agenda
+    Route::get('/agenda/{id}/edit', [AgendaKegiatanController::class, 'edit'])->name('edit'); // Form edit agenda
+    Route::put('/agenda/{id}/update', [AgendaKegiatanController::class, 'update'])->name('update'); // Proses update agenda
+    Route::delete('/agenda/{id}/delete', [AgendaKegiatanController::class, 'destroy'])->name('destroy'); // Proses hapus agenda
+    Route::get('/agenda/export_excel', [AgendaKegiatanController::class, 'export_excel'])->name('export_excel'); // Ekspor agenda ke Excel
+    Route::post('/agenda/import', [AgendaKegiatanController::class, 'import'])->name('import'); // Impor agenda dari file
+    Route::post('/agenda/list', [AgendaKegiatanController::class, 'list'])->name('list'); // Mengambil daftar agenda (AJAX)
