@@ -96,8 +96,8 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::post('/kegiatan_eksternal', [KegiatanEksternalController::class, 'store'])->name('kegiatan_eksternal.store'); 
 
     Route::get('/agenda', [AgendaKegiatanController::class, 'index'])->name('index'); // Menampilkan daftar agenda
-    Route::get('agenda/create_ajax', [AgendaKegiatanController::class, 'create_ajax']);
-    Route::post('/store', [AgendaKegiatanController::class, 'store'])->name('store'); // Proses simpan agenda
+    Route::get('agenda/create', [AgendaKegiatanController::class, 'create']);
+    Route::post('agenda/store', [AgendaKegiatanController::class, 'store'])->name('store'); // Proses simpan agenda
     Route::get('/{id}/show', [AgendaKegiatanController::class, 'show'])->name('show'); // Tampilkan detail agenda
     Route::get('/{id}/edit', [AgendaKegiatanController::class, 'edit'])->name('edit'); // Form edit agenda
     Route::put('/{id}/update', [AgendaKegiatanController::class, 'update'])->name('update'); // Proses update agenda
