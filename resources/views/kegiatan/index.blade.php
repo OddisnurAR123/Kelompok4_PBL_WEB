@@ -26,8 +26,7 @@
                     <th>Nama Kegiatan</th>
                     <th>Tanggal Mulai</th>
                     <th>Tanggal Selesai</th>
-                    <th>PIC</th>
-                    <th>Anggota</th>
+                    <th>Kategori Kegiatan</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -90,13 +89,7 @@
                     searchable: true
                 },
                 {
-                    data: "pic",
-                    className: "",
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: "anggota",
+                    data: "kategori_kegiatan",
                     className: "",
                     orderable: true,
                     searchable: true

@@ -22,7 +22,7 @@ class KegiatanModel extends Model
         'nama_kegiatan',
         'tanggal_mulai',
         'tanggal_selesai',
-        'id_kategori_kegiatan',
+        'nama_kategori_kegiatan',
     ];    
 
     public function kategoriKegiatan()

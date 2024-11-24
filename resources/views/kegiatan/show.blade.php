@@ -35,13 +35,10 @@
                         <td>{{ \Carbon\Carbon::parse($kegiatan->tanggal_selesai)->format('d-m-Y H:i') }}</td>
                     </tr>
                     <tr>
-                        <th>PIC (Penanggung Jawab)</th>
-                        <td>{{ $kegiatan->pic }}</td>
+                        <th>Kategori Kegiatan</th>
+                        <td>{{ $kegiatan->kategoriKegiatan->nama_kategori_kegiatan ?? 'Tidak ada kategori' }}</td>
                     </tr>
-                    <tr>
-                        <th>Anggota</th>
-                        <td>{{ $kegiatan->anggota }}</td>
-                    </tr>
+                    
                 </table>
             @endempty
             <a href="{{ url('kegiatan') }}" class="btn btn-sm btn-default mt-2">Kembali</a>

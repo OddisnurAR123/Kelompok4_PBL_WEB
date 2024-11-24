@@ -1,9 +1,6 @@
-@extends('layouts.template')
-@section('content')
-<!-- resources/views/kegiatan/create.blade.php -->
 <form action="{{ url('/kegiatan/store') }}" method="POST" id="form-tambah-kegiatan">
     @csrf
-    <div id="modal-master" class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Tambah Kegiatan</h5>
@@ -33,19 +30,14 @@
                     <small id="error-tanggal_selesai" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
-                    <label>PIC</label>
-                    <select name="pic" id="pic" class="form-control" required>
-                        <option value="">Pilih PIC</option>
-                        <!-- Data PIC akan dimuat lewat AJAX -->
+                    <label>Kategori Kegiatan</label>
+                    <select name="kategori_kegiatan" id="kategori_kegiatan" class="form-control" required>
+                        <option value="">Pilih Kategori Kegiatan</option>
+                        @foreach($kategoriKegiatan as $kategori)
+                            <option value="{{ $kategori->id_kategori_kegiatan }}">{{ $kategori->nama_kategori_kegiatan }}</option>
+                        @endforeach
                     </select>
-                    <small id="error-pic" class="error-text form-text text-danger"></small>
-                </div>
-                <div class="form-group">
-                    <label>Anggota</label>
-                    <select name="anggota[]" id="anggota" class="form-control" multiple required>
-                        <!-- Data Anggota akan dimuat lewat AJAX -->
-                    </select>
-                    <small id="error-anggota" class="error-text form-text text-danger"></small>
+                    <small id="error-kategori_kegiatan" class="error-text form-text text-danger"></small>
                 </div>
             </div>
             <div class="modal-footer">
@@ -56,33 +48,8 @@
     </div>
 </form>
 
-@push('scripts')
 <script>
     $(document).ready(function() {
-        $.ajax({
-            url: '/pic',
-            type: 'GET',
-            success: function(response) {
-                if (response.status) {
-                    // Mengisi dropdown PIC
-                    response.data.forEach(function(pic) {
-                        $('#pic').append('<option value="' + pic.id + '">' + pic.nama_pengguna + '</option>');
-                    });
-                }
-            }
-        });
-        $.ajax({
-            url: '/anggota',
-            type: 'GET',
-            success: function(response) {
-                if (response.status) {
-                    // Mengisi dropdown Anggota
-                    response.data.forEach(function(anggota) {
-                        $('#anggota').append('<option value="' + anggota.id + '">' + anggota.nama_pengguna + '</option>');
-                    });
-                }
-            }
-        });
         $("#form-tambah-kegiatan").validate({
             rules: {
                 kode_kegiatan: {
@@ -99,12 +66,8 @@
                 tanggal_selesai: {
                     required: true
                 },
-                pic: {
+                kategori_kegiatan: {
                     required: true
-                },
-                anggota: {
-                    required: true,
-                    minlength: 1
                 }
             },
             submitHandler: function(form) {
@@ -114,13 +77,11 @@
                     data: $(form).serialize(),
                     success: function(response) {
                         if (response.status) {
-                            $('#modal-master').modal('hide'); // Menutup modal
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Berhasil',
                                 text: response.message
                             });
-                            tableDetail.ajax.reload(); // Memuat ulang tabel data kegiatan
                         } else {
                             $('.error-text').text(''); // Menghapus pesan error sebelumnya
                             $.each(response.msgField, function(prefix, val) {
@@ -149,13 +110,11 @@
                 element.closest('.form-group').append(error);
             },
             highlight: function(element, errorClass, validClass) {
-                $(element).addClass('is-invalid'); // Menambahkan kelas invalid-feedback pada elemen yang error
+                $(element).addClass('is-invalid');
             },
             unhighlight: function(element, errorClass, validClass) {
-                $(element).removeClass('is-invalid'); // Menghapus kelas invalid-feedback jika valid
+                $(element).removeClass('is-invalid');
             }
         });
     });
 </script>
-@endpush
-@endsection

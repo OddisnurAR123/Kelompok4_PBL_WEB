@@ -68,7 +68,10 @@ Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
     Route::put('/kegiatan/{id}/update', [KegiatanController::class, 'update'])->name('kegiatan.update');
     Route::get('/kegiatan/{id}/delete', [KegiatanController::class, 'confirm'])->name('kegiatan.delete');
     Route::delete('/kegiatan/{id}', [KegiatanController::class, 'delete'])->name('kegiatan.destroy');
-    Route::post('/kegiatan/import', [KegiatanController::class, 'import'])->name('kegiatan.import');
+    Route::get('/kegiatan/import', [KegiatanController::class, 'import'])->name('import');
+    Route::post('/kegiatan/import_ajax', [KegiatanController::class, 'import_ajax'])->name('kegiatan.import.ajax');
+    Route::get('/kegiatan/export_excel', [KegiatanController::class, 'export_excel'])->name('kegiatan.export.excel');
+    Route::get('/kegiatan/export_pdf', [KegiatanController::class, 'export_pdf'])->name('kegiatan.export.pdf');
 
     // Detail Kegiatan Routes
     Route::get('/detail_kegiatan', [DetailKegiatanController::class, 'index'])->name('detail_kegiatan.index');
