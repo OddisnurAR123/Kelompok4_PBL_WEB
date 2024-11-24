@@ -58,7 +58,7 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::get('/kategori_kegiatan', [KategoriKegiatanController::class, 'index'])->name('kategori_kegiatan.index');
     Route::post('/kategori_kegiatan/list', [KategoriKegiatanController::class, 'list']);
     Route::get('kategori_kegiatan/{id}/show', [KategoriKegiatanController::class, 'show'])->name('kategori_kegiatan.show');
-    Route::get('/kategori_kegiatan/create', [KategoriKegiatanController::class, 'create'])->name('kategori_kegiatan.create');
+    Route::get('/kategori_kegiatan/create', [KategoriKegiatanController::class, 'create']);
     Route::post('kategori_kegiatan/store', [KategoriKegiatanModel::class, 'store']);
     Route::get('/kategori_kegiatan/{id_kategori_kegiatan}/edit', [KategoriKegiatanController::class, 'edit'])->name('kategori_kegiatan.edit');
     Route::put('/kategori_kegiatan/{id}', [KategoriKegiatanModel::class, 'edit']);
