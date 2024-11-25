@@ -10,6 +10,7 @@ use App\Models\JabatanKegiatanModel;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
+
 class AgendaKegiatanController extends Controller
 {
     public function index()
@@ -67,22 +68,19 @@ class AgendaKegiatanController extends Controller
     // Simpan data baru
     public function store(Request $request)
     {
-        if ($request->ajax() || $request->wantsJson()) {
-            $rules = [
-                'kode_agenda' => 'required|unique:t_agenda',
-                'nama_agenda' => 'required',
+        $validator = Validator::make($request->all(), [
+                'kode_agenda' => 'required|unique:t_agenda,kode_agenda',
+                'nama_agenda' => 'required|string',
                 'id_kegiatan' => 'required|exists:m_kegiatan,id_kegiatan',
-                'tempat_agenda' => 'required',
+                'tempat_agenda' => 'required|string',
                 'id_jenis_pengguna' => 'required|exists:m_jenis_pengguna,id_jenis_pengguna',
-                'id_jabatan_kegiatan' => 'required|exists:m_jabatan_kegiatan,id',
+                'id_jabatan_kegiatan' => 'required|exists:m_jabatan_kegiatan,id_jabatan_kegiatan',
                 'bobot_anggota' => 'required|numeric',
                 'tanggal_agenda' => 'required|date',
                 'deskripsi' => 'nullable|string',
-            ];
-
+            ]);
+            
             // Validasi input
-            $validator = Validator::make($request->all(), $rules);
-
             if ($validator->fails()) {
                 return response()->json([
                     'status' => false,
@@ -92,14 +90,22 @@ class AgendaKegiatanController extends Controller
             }
 
             // Simpan data agenda
-            AgendaModel::create($request->all());
+            $agenda = AgendaModel::create([
+                'kode_agenda' => $request->kode_agenda,
+                'nama_agenda' => $request->nama_agenda,
+                'id_kegiatan' => $request->id_kegiatan,
+                'tempat_agenda' => $request->tempat_agenda,
+                'id_jenis_pengguna' => $request->id_jenis_pengguna,
+                'id_jabatan_kegiatan' => $request->id_jabatan_kegiatan,
+                'bobot_anggota' => $request->bobot_anggota,
+                'tanggal_agenda' => $request->tanggal_agenda,
+                'deskripsi' => $request->deskripsi
+            ]);
 
             return response()->json([
                 'status' => true,
                 'message' => 'Data agenda berhasil disimpan',
             ]);
-        }
-
         return redirect('/');
     }
 }
