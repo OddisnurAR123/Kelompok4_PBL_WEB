@@ -1,4 +1,4 @@
-<form action="{{ url('/kategori_kegiatan/store') }}" method="POST" id="form-tambah-kategoriKegiatan">
+<form action="{{ url('/kategori_kegiatan') }}" method="POST" id="form-tambah-kategoriKegiatan">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">

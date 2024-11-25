@@ -19,16 +19,16 @@ class JabatanKegiatanController extends Controller
             'title' => 'Daftar jabatan kegiatan yang ada'
         ];
 
-        $activeMenu = 'jabatan_kegiatan';  // Ubah menjadi jabatan_kegiatan
+        $activeMenu = 'jabatan_kegiatan';
 
-        return view('jabatan_kegiatan.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu]);
+        return view('jabatan_kegiatan.index', compact('breadcrumb', 'page', 'activeMenu'));
     }
 
-    public function list(Request $request)
-    {
+    public function list(Request $request) {
         $jabatanKegiatan = JabatanKegiatanModel::select('id_jabatan_kegiatan', 'kode_jabatan_kegiatan', 'nama_jabatan_kegiatan');
-        
+    
         return DataTables::of($jabatanKegiatan)
+            ->addIndexColumn()
             ->addColumn('aksi', function ($jabatanKegiatan) {
                 $btn = '<button onclick="modalAction(\''.url('/jabatan_kegiatan/' . $jabatanKegiatan->id_jabatan_kegiatan . '/show').'\')" class="btn btn-info btn-sm">Detail</button> ';
                 $btn .= '<button onclick="modalAction(\''.url('/jabatan_kegiatan/' . $jabatanKegiatan->id_jabatan_kegiatan . '/edit').'\')" class="btn btn-warning btn-sm">Edit</button> ';
@@ -37,7 +37,7 @@ class JabatanKegiatanController extends Controller
             })
             ->rawColumns(['aksi'])
             ->make(true);
-    }        
+    }     
     
     public function create()
     {

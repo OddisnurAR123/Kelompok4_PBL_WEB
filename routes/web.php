@@ -58,17 +58,17 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::get('/kategori_kegiatan', [KategoriKegiatanController::class, 'index'])->name('kategori_kegiatan.index');
     Route::post('/kategori_kegiatan/list', [KategoriKegiatanController::class, 'list']);
     Route::get('kategori_kegiatan/{id}/show', [KategoriKegiatanController::class, 'show'])->name('kategori_kegiatan.show');
-    Route::get('/kategori_kegiatan/create', [KategoriKegiatanController::class, 'create']);
-    Route::post('kategori_kegiatan/store', [KategoriKegiatanModel::class, 'store']);
+    Route::get('/kategori_kegiatan/create', [KategoriKegiatanController::class, 'create']); 
+    Route::post('/kategori_kegiatan', [KategoriKegiatanController::class, 'store'])->name('kategori_kegiatan.store');
     Route::get('/kategori_kegiatan/{id_kategori_kegiatan}/edit', [KategoriKegiatanController::class, 'edit'])->name('kategori_kegiatan.edit');
-    Route::put('/kategori_kegiatan/{id}', [KategoriKegiatanModel::class, 'edit']);
+    Route::put('/kategori_kegiatan/{id}', [KategoriKegiatanController::class, 'edit']);
     Route::delete('/kategori_kegiatan/{id}', [KategoriKegiatanController::class, 'delete'])->name('kategori_kegiatan.delete');
-    Route::delete('/kategori_kegiatan/{id}', [KategoriKegiatanModel::class, 'destroy']);
+    Route::delete('/kategori_kegiatan/{id}', [KategoriKegiatanController::class, 'destroy']);
 
     Route::get('/jabatan_kegiatan', [JabatanKegiatanController::class, 'index']);
     Route::post('/jabatan_kegiatan/list', [JabatanKegiatanController::class, 'list']);
-    Route::get('/jabatan_kegiatan/create', [JabatanKegiatanController::class, 'create']);
-    Route::post('/jabatan_kegiatan', [JabatanKegiatanController::class, 'store']);
+    Route::get('/jabatan_kegiatan/create', [JabatanKegiatanController::class, 'create']); 
+    Route::post('/jabatan_kegiatan', [JabatanKegiatanController::class, 'store'])->name('jabatan_kegiatan.store');
     Route::post('/jabatan_kegiatan/store', [JabatanKegiatanController::class, 'store']);
     Route::get('/jabatan_kegiatan/{id}/show', [JabatanKegiatanController::class, 'show'])->name('jabatan_kegiatan.show');
 
