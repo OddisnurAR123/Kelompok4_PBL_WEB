@@ -1,6 +1,5 @@
-<form action="{{ url('/agenda/create') }}" method="POST" id="form-tambah-agenda">
+<form action="{{ url('/agenda') }}" method="POST" id="form-tambah-agenda">
     @csrf
-</form>
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -23,9 +22,9 @@
                 <div class="form-group">
                     <label>Kegiatan</label>
                     <select name="id_kegiatan" id="id_kegiatan" class="form-control" required>
-                        <option value="">-- Pilih Kegiatan --</option>
-                        @foreach($kegiatan as $k)
-                            <option value="{{ $k->id_kegiatan }}">{{ $k->nama_kegiatan }}</option>
+                        <option value="">Pilih Kegiatan</option>
+                        @foreach($kegiatan as $item)
+                            <option value="{{ $item->id_kegiatan }}">{{ $item->nama_kegiatan }}</option>
                         @endforeach
                     </select>
                     <small id="error-id_kegiatan" class="error-text form-text text-danger"></small>
@@ -38,9 +37,9 @@
                 <div class="form-group">
                     <label>Jenis Pengguna</label>
                     <select name="id_jenis_pengguna" id="id_jenis_pengguna" class="form-control" required>
-                        <option value="">-- Pilih Jenis Pengguna --</option>
-                        @foreach($jenisPengguna as $jp)
-                            <option value="{{ $jp->id_jenis_pengguna }}">{{ $jp->nama_jenis_pengguna }}</option>
+                        <option value="">Pilih Jenis Pengguna</option>
+                        @foreach($jenisPengguna as $item)
+                            <option value="{{ $item->id_jenis_pengguna }}">{{ $item->nama_jenis_pengguna }}</option>
                         @endforeach
                     </select>
                     <small id="error-id_jenis_pengguna" class="error-text form-text text-danger"></small>
@@ -48,9 +47,9 @@
                 <div class="form-group">
                     <label>Jabatan Kegiatan</label>
                     <select name="id_jabatan_kegiatan" id="id_jabatan_kegiatan" class="form-control" required>
-                        <option value="">-- Pilih Jabatan Kegiatan --</option>
-                        @foreach($jabatanKegiatan as $jk)
-                            <option value="{{ $jk->id_jabatan_kegiatan }}">{{ $jk->nama_jabatan_kegiatan }}</option>
+                        <option value="">Pilih Jabatan Kegiatan</option>
+                        @foreach($jabatanKegiatan as $item)
+                            <option value="{{ $item->id_jabatan_kegiatan }}">{{ $item->nama_jabatan_kegiatan }}</option>
                         @endforeach
                     </select>
                     <small id="error-id_jabatan_kegiatan" class="error-text form-text text-danger"></small>
@@ -67,7 +66,7 @@
                 </div>
                 <div class="form-group">
                     <label>Deskripsi</label>
-                    <textarea name="deskripsi" id="deskripsi" class="form-control" rows="3"></textarea>
+                    <textarea name="deskripsi" id="deskripsi" class="form-control"></textarea>
                     <small id="error-deskripsi" class="error-text form-text text-danger"></small>
                 </div>
             </div>
@@ -80,57 +79,57 @@
 </form>
 
 <script>
-    $(document).ready(function() {
-        $("#form-tambah-agenda").validate({
-    rules: {
-        kode_agenda: { required: true, minlength: 3 },
-        nama_agenda: { required: true, minlength: 3 },
-        id_kegiatan: { required: true },
-        tempat_agenda: { required: true },
-        id_jenis_pengguna: { required: true },
-        id_jabatan_kegiatan: { required: true },
-        bobot_anggota: { required: true, number: true },
-        tanggal_agenda: { required: true, date: true }
-    },
-    submitHandler: function(form) {
-        // Debug log sebelum kirim data
-        $.ajax({
-            url: form.action,
-            type: form.method,
-            data: $(form).serialize(),
-            success: function(response) {
-                console.log(response); // Debug response
-                if (response.status) {
-                    $('#myModal').modal('hide');
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil',
-                        text: response.message
-                    });
-                    dataAgenda.ajax.reload();
-                } else {
-                    $('.error-text').text('');
-                    $.each(response.msgField, function(prefix, val) {
-                        $('#error-' + prefix).text(val[0]);
-                    });
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Terjadi Kesalahan',
-                        text: response.message
-                    });
+   $(document).ready(function() {
+    $("#form-tambah-agenda").validate({
+        rules: {
+            kode_agenda: { required: true, minlength: 3 },
+            nama_agenda: { required: true, minlength: 3 },
+            id_kegiatan: { required: true },
+            tempat_agenda: { required: true, minlength: 3 },
+            id_jenis_pengguna: { required: true },
+            id_jabatan_kegiatan: { required: false }, // Ubah menjadi tidak required
+            bobot_anggota: { required: true, number: true },
+            tanggal_agenda: { required: true, date: true }
+        },
+        submitHandler: function(form) {
+            $.ajax({
+                url: form.action,
+                type: form.method,
+                data: $(form).serialize(),
+                success: function(response) {
+                    if (response.status) {
+                        $('#myModal').modal('hide');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.message
+                        });
+                        dataAgenda.ajax.reload();
+                    } else {
+                        $('.error-text').text('');
+                        $.each(response.msgField, function(prefix, val) {
+                            $('#error-' + prefix).text(val[0]);
+                        });
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Terjadi Kesalahan',
+                            text: response.message
+                        });
+                    }
                 }
-            },
-            error: function(xhr) {
-                console.error(xhr.responseText); // Debug jika gagal
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Terjadi Kesalahan',
-                    text: 'Ada masalah pada server'
-                });
-            }
-        });
-        return false;
-    }
-})
+            });
+            return false;
+        },
+        errorElement: 'span',
+        errorPlacement: function(error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function(element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
 });
-</script>
