@@ -1,43 +1,38 @@
-<form action="{{ url('/kegiatan/store') }}" method="POST" id="form-tambah-kegiatan">
+<form action="{{ url('/detail_kegiatan/store') }}" method="POST" id="form-tambah-detail_kegiatan">
     @csrf
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Kegiatan</h5>
+                <h5 class="modal-title">Tambah Detail Kegiatan</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Kode Kegiatan</label>
-                    <input type="text" name="kode_kegiatan" id="kode_kegiatan" class="form-control" maxlength="10" required>
-                    <small id="error-kode_kegiatan" class="error-text form-text text-danger"></small>
-                </div>
-                <div class="form-group">
-                    <label>Nama Kegiatan</label>
-                    <input type="text" name="nama_kegiatan" id="nama_kegiatan" class="form-control" maxlength="100" required>
-                    <small id="error-nama_kegiatan" class="error-text form-text text-danger"></small>
-                </div>
-                <div class="form-group">
-                    <label>Tanggal Mulai</label>
-                    <input type="datetime-local" name="tanggal_mulai" id="tanggal_mulai" class="form-control" required>
-                    <small id="error-tanggal_mulai" class="error-text form-text text-danger"></small>
-                </div>
-                <div class="form-group">
-                    <label>Tanggal Selesai</label>
-                    <input type="datetime-local" name="tanggal_selesai" id="tanggal_selesai" class="form-control" required>
-                    <small id="error-tanggal_selesai" class="error-text form-text text-danger"></small>
-                </div>
-                <div class="form-group">
-                    <label>Kategori Kegiatan</label>
-                    <select name="kategori_kegiatan" id="kategori_kegiatan" class="form-control" required>
-                        <option value="">Pilih Kategori Kegiatan</option>
-                        @foreach($kategoriKegiatan as $kategori)
-                            <option value="{{ $kategori->id_kategori_kegiatan }}">{{ $kategori->nama_kategori_kegiatan }}</option>
+                    <label>Kegiatan</label>
+                    <select name="id_kegiatan" id="id_kegiatan" class="form-control" required>
+                        <option value="">Pilih Kegiatan</option>
+                        @foreach($kegiatan as $item)
+                            <option value="{{ $item->id_kegiatan }}">{{ $item->nama_kegiatan }}</option>
                         @endforeach
                     </select>
-                    <small id="error-kategori_kegiatan" class="error-text form-text text-danger"></small>
+                    <small id="error-id_kegiatan" class="error-text form-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label>Keterangan</label>
+                    <input type="text" name="keterangan" id="keterangan" class="form-control" maxlength="100" required>
+                    <small id="error-keterangan" class="error-text form-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label>Progres Kegiatan</label>
+                    <input type="number" name="progres_kegiatan" id="progres_kegiatan" class="form-control" step="0.01" min="0" max="100" required>
+                    <small id="error-progres_kegiatan" class="error-text form-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label>Beban Kerja</label>
+                    <input type="text" name="beban_kerja" id="beban_kerja" class="form-control" maxlength="50" required>
+                    <small id="error-beban_kerja" class="error-text form-text text-danger"></small>
                 </div>
             </div>
             <div class="modal-footer">
@@ -50,24 +45,24 @@
 
 <script>
     $(document).ready(function() {
-        $("#form-tambah-kegiatan").validate({
+        $("#form-tambah-detail-kegiatan").validate({
             rules: {
-                kode_kegiatan: {
+                id_kegiatan: {
+                    required: true
+                },
+                keterangan: {
                     required: true,
                     minlength: 3
                 },
-                nama_kegiatan: {
+                progres_kegiatan: {
+                    required: true,
+                    number: true,
+                    min: 0,
+                    max: 100
+                },
+                beban_kerja: {
                     required: true,
                     minlength: 3
-                },
-                tanggal_mulai: {
-                    required: true
-                },
-                tanggal_selesai: {
-                    required: true
-                },
-                id_kategori_kegiatan: {
-                    required: true
                 }
             },
             submitHandler: function(form) {
@@ -81,11 +76,13 @@
                                 icon: 'success',
                                 title: 'Berhasil',
                                 text: response.message
+                            }).then(() => {
+                                location.reload(); // Reload halaman untuk melihat data terbaru
                             });
                         } else {
-                            $('.error-text').text(''); // Menghapus pesan error sebelumnya
+                            $('.error-text').text('');
                             $.each(response.msgField, function(prefix, val) {
-                                $('#error-' + prefix).text(val[0]); // Menampilkan pesan error untuk masing-masing field
+                                $('#error-' + prefix).text(val[0]);
                             });
                             Swal.fire({
                                 icon: 'error',
@@ -98,7 +95,7 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'Terjadi Kesalahan',
-                            text: 'Tidak dapat menyimpan data kegiatan. Coba lagi.'
+                            text: 'Tidak dapat menyimpan data detail kegiatan. Coba lagi.'
                         });
                     }
                 });

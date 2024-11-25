@@ -1,44 +1,46 @@
-<form action="{{ url('/kegiatan/update/'.$kegiatan->id_kegiatan) }}" method="POST" id="form-edit-kegiatan">
+<form action="{{ url('/detail_kegiatan/update/'.$detailKegiatan->id_detail_kegiatan) }}" method="POST" id="form-edit-detail-kegiatan">
     @csrf
     @method('PUT') <!-- Untuk mengubah data dengan method PUT -->
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Kegiatan</h5>
+                <h5 class="modal-title">Edit Detail Kegiatan</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Kode Kegiatan</label>
-                    <input type="text" name="kode_kegiatan" id="kode_kegiatan" class="form-control" maxlength="10" value="{{ old('kode_kegiatan', $kegiatan->kode_kegiatan) }}" required>
-                    <small id="error-kode_kegiatan" class="error-text form-text text-danger"></small>
-                </div>
-                <div class="form-group">
-                    <label>Nama Kegiatan</label>
-                    <input type="text" name="nama_kegiatan" id="nama_kegiatan" class="form-control" maxlength="100" value="{{ old('nama_kegiatan', $kegiatan->nama_kegiatan) }}" required>
-                    <small id="error-nama_kegiatan" class="error-text form-text text-danger"></small>
-                </div>
-                <div class="form-group">
-                    <label>Tanggal Mulai</label>
-                    <input type="datetime-local" name="tanggal_mulai" id="tanggal_mulai" class="form-control" value="{{ old('tanggal_mulai', \Carbon\Carbon::parse($kegiatan->tanggal_mulai)->format('Y-m-d\TH:i')) }}" required>
-                    <small id="error-tanggal_mulai" class="error-text form-text text-danger"></small>
-                </div>
-                <div class="form-group">
-                    <label>Tanggal Selesai</label>
-                    <input type="datetime-local" name="tanggal_selesai" id="tanggal_selesai" class="form-control" value="{{ old('tanggal_selesai', \Carbon\Carbon::parse($kegiatan->tanggal_selesai)->format('Y-m-d\TH:i')) }}" required>
-                    <small id="error-tanggal_selesai" class="error-text form-text text-danger"></small>
-                </div>
-                <div class="form-group">
-                    <label>Kategori Kegiatan</label>
-                    <select name="id_kategori_kegiatan" id="id_kategori_kegiatan" class="form-control" required>
-                        <option value="">Pilih Kategori Kegiatan</option>
-                        @foreach($kategoriKegiatan as $kategori)
-                            <option value="{{ $kategori->id_kategori_kegiatan }}" {{ $kegiatan->kategori_kegiatan_id == $kategori->id_kategori_kegiatan ? 'selected' : '' }}>{{ $kategori->nama_kategori_kegiatan }}</option>
+                    <label>Kegiatan</label>
+                    <select name="id_kegiatan" id="id_kegiatan" class="form-control" required>
+                        <option value="">Pilih Kegiatan</option>
+                        @foreach($kegiatanList as $kegiatan)
+                            <option value="{{ $kegiatan->id_kegiatan }}" {{ $detailKegiatan->id_kegiatan == $kegiatan->id_kegiatan ? 'selected' : '' }}>
+                                {{ $kegiatan->nama_kegiatan }}
+                            </option>
                         @endforeach
                     </select>
-                    <small id="error-kategori_kegiatan" class="error-text form-text text-danger"></small>
+                    <small id="error-id_kegiatan" class="error-text form-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label>Keterangan</label>
+                    <input type="text" name="keterangan" id="keterangan" class="form-control" maxlength="100" value="{{ old('keterangan', $detailKegiatan->keterangan) }}" required>
+                    <small id="error-keterangan" class="error-text form-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label>Progres Kegiatan (%)</label>
+                    <input type="number" name="progres_kegiatan" id="progres_kegiatan" class="form-control" step="0.01" max="100" value="{{ old('progres_kegiatan', $detailKegiatan->progres_kegiatan) }}" required>
+                    <small id="error-progres_kegiatan" class="error-text form-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label>Beban Kerja</label>
+                    <select name="beban_kerja" id="beban_kerja" class="form-control" required>
+                        <option value="">Pilih Beban Kerja</option>
+                        <option value="Ringan" {{ $detailKegiatan->beban_kerja == 'Ringan' ? 'selected' : '' }}>Ringan</option>
+                        <option value="Sedang" {{ $detailKegiatan->beban_kerja == 'Sedang' ? 'selected' : '' }}>Sedang</option>
+                        <option value="Berat" {{ $detailKegiatan->beban_kerja == 'Berat' ? 'selected' : '' }}>Berat</option>
+                    </select>
+                    <small id="error-beban_kerja" class="error-text form-text text-danger"></small>
                 </div>
             </div>
             <div class="modal-footer">
@@ -51,23 +53,21 @@
 
 <script>
     $(document).ready(function() {
-        $("#form-edit-kegiatan").validate({
+        $("#form-edit-detail-kegiatan").validate({
             rules: {
-                kode_kegiatan: {
+                id_kegiatan: {
+                    required: true
+                },
+                keterangan: {
                     required: true,
                     minlength: 3
                 },
-                nama_kegiatan: {
+                progres_kegiatan: {
                     required: true,
-                    minlength: 3
+                    min: 0,
+                    max: 100
                 },
-                tanggal_mulai: {
-                    required: true
-                },
-                tanggal_selesai: {
-                    required: true
-                },
-                id_kategori_kegiatan: {
+                beban_kerja: {
                     required: true
                 }
             },
@@ -84,9 +84,9 @@
                                 text: response.message
                             });
                         } else {
-                            $('.error-text').text(''); // Menghapus pesan error sebelumnya
+                            $('.error-text').text('');
                             $.each(response.msgField, function(prefix, val) {
-                                $('#error-' + prefix).text(val[0]); // Menampilkan pesan error untuk masing-masing field
+                                $('#error-' + prefix).text(val[0]);
                             });
                             Swal.fire({
                                 icon: 'error',
@@ -99,7 +99,7 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'Terjadi Kesalahan',
-                            text: 'Tidak dapat memperbarui data kegiatan. Coba lagi.'
+                            text: 'Tidak dapat memperbarui detail kegiatan. Coba lagi.'
                         });
                     }
                 });

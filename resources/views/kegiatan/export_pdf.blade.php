@@ -109,7 +109,7 @@
                     <td class="font-10">{{ $k->nama_kegiatan }}</td>
                     <td class="text-center font-10">{{ \Carbon\Carbon::parse($k->tanggal_mulai)->format('d/m/Y') }}</td>
                     <td class="text-center font-10">{{ \Carbon\Carbon::parse($k->tanggal_selesai)->format('d/m/Y') }}</td>
-                    <td class="font-10">{{ $k->kategori->kategori_id }}</td>
+                    <td class="font-10">{{ $k->kategoriKegiatan->nama_kategori_kegiatan }}</td>
                 </tr>
             @endforeach
         </tbody>

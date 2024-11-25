@@ -9,66 +9,65 @@ use Illuminate\Support\Facades\Validator;
 
 class DetailKegiatanController extends Controller
 {
-    // Menampilkan halaman daftar kegiatan
+    // Menampilkan halaman daftar detail kegiatan
     public function index() {
         $breadcrumb = (object) [
-            'title' => 'Input Kegiatan',
-            'list' => ['Home', 'Kegiatan']
+            'title' => 'Detail Kegiatan',
+            'list' => ['Home', 'detail_kegiatan']
         ];
 
         $page = (object) [
-            'title' => 'Daftar kegiatan yang ada'
+            'title' => 'Daftar Progres kegiatan yang ada'
         ];
 
-        $activeMenu = 'kegiatan';
+        $activeMenu = 'detail_kegiatan';
 
-        return view('kegiatan.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu]);
+        return view('detail_kegiatan.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu]);
     }
 
-    // Menampilkan data kegiatan dalam bentuk json untuk DataTables
+    // Menampilkan data detail kegiatan dalam bentuk json untuk DataTables
     public function list(Request $request) {
-        $kegiatan = DetailKegiatanModel::select('id', 'id_kegiatan', 'kategori_kegiatan', 'keterangan', 'progres_kegiatan', 'beban_kerja')
+        $detail_kegiatan = DetailKegiatanModel::select('id_detail_kegiatan', 'id_kegiatan', 'keterangan', 'progress_kegiatan', 'beban_kerja')
             ->get();
 
-        return DataTables::of($kegiatan)
+        return DataTables::of($detail_kegiatan)
             ->addIndexColumn()
-            ->addColumn('aksi', function ($kegiatan) {
-                $btn = '<button onclick="modalAction(\''.route('detail_kegiatan.show', $kegiatan->id).'\')" class="btn btn-info btn-sm">Detail</button> ';
-                $btn .= '<button onclick="modalAction(\''.route('detail_kegiatan.edit', $kegiatan->id).'\')" class="btn btn-warning btn-sm">Edit</button> ';
+            ->addColumn('aksi', function ($detail_kegiatan) {
+                $btn = '<button onclick="modalAction(\''.route('detail_kegiatan.show', $detail_kegiatan->id).'\')" class="btn btn-info btn-sm">Detail</button> ';
+                $btn .= '<button onclick="modalAction(\''.route('detail_kegiatan.edit', $detail_kegiatan->id).'\')" class="btn btn-warning btn-sm">Edit</button> ';
                 return $btn;
             })
             ->rawColumns(['aksi'])
             ->make(true);
     }
 
-    // Menampilkan detail kegiatan
+    // Menampilkan detail detail kegiatan
     public function show(string $id) {
-        $kegiatan = DetailKegiatanModel::find($id);
+        $detail_kegiatan = DetailKegiatanModel::find($id);
 
-        if (!$kegiatan) {
+        if (!$detail_kegiatan) {
             return response()->json([
                 'status' => false,
                 'message' => 'Kegiatan tidak ditemukan.'
             ]);
         }
 
-        return view('kegiatan.show', ['kegiatan' => $kegiatan]);
+        return view('kegiatan.show', ['kegiatan' => $detail_kegiatan]);
     }
 
-    // Menampilkan form edit kegiatan via Ajax
+    // Menampilkan form edit detail kegiatan via Ajax
     public function edit_ajax($id) {
-        $kegiatan = DetailKegiatanModel::findOrFail($id);
-        return view('kegiatan.edit', ['kegiatan' => $kegiatan]);
+        $detail_kegiatan = DetailKegiatanModel::findOrFail($id);
+        return view('kegiatan.edit', ['kegiatan' => $detail_kegiatan]);
     }
 
-    // Menyimpan perubahan data kegiatan via Ajax
+    // Menyimpan perubahan data detail kegiatan via Ajax
     public function update_ajax(Request $request, $id) {
         if ($request->ajax() || $request->wantsJson()) {
             $validator = Validator::make($request->all(), [
                 'id_kegiatan' => 'required|integer|exists:t_kegiatan,id_kegiatan',
-                'kategori_kegiatan' => 'required|string|max:100',
                 'keterangan' => 'nullable|string|max:255',
-                'progres_kegiatan' => 'required|numeric|min:0|max:100',
+                'progress_kegiatan' => 'required|numeric|min:0|max:100',
                 'beban_kerja' => 'required|numeric|min:0',
             ]);
 
@@ -80,8 +79,8 @@ class DetailKegiatanController extends Controller
                 ]);
             }
 
-            $kegiatan = DetailKegiatanModel::findOrFail($id);
-            $kegiatan->update($request->only('id_kegiatan', 'kategori_kegiatan', 'keterangan', 'progres_kegiatan', 'beban_kerja'));
+            $detail_kegiatan = DetailKegiatanModel::findOrFail($id);
+            $detail_kegiatan->update($request->only('id_kegiatan', 'kategori_kegiatan', 'keterangan', 'progres_kegiatan', 'beban_kerja'));
 
             return response()->json([
                 'status' => true,
@@ -95,17 +94,17 @@ class DetailKegiatanController extends Controller
         ]);
     }
 
-    // Menampilkan konfirmasi hapus kegiatan via Ajax
+    // Menampilkan konfirmasi hapus detail kegiatan via Ajax
     public function confirm_ajax($id) {
-        $kegiatan = DetailKegiatanModel::findOrFail($id);
+        $detail_kegiatan = DetailKegiatanModel::findOrFail($id);
         return response()->json([
             'status' => true,
             'message' => 'Apakah Anda yakin ingin menghapus kegiatan ini?',
-            'data' => $kegiatan,
+            'data' => $detail_kegiatan,
         ]);
     }
 
-    // Proses import excel kegiatan dengan AJAX
+    // Proses import excel detail  kegiatan dengan AJAX
     public function import_ajax(Request $request) {
         // Placeholder untuk implementasi import file Excel
         return response()->json([

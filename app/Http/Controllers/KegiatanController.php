@@ -71,11 +71,11 @@ class KegiatanController extends Controller
     {
         if ($request->ajax() || $request->wantsJson()) { 
             $validator = Validator::make($request->all(), [
-                'kode_kegiatan' => 'required|string|min:3|unique:t_kegiatan,kode_kegiatan',
+                'kode_kegiatan' => 'required|string|max:10|unique:t_kegiatan,kode_kegiatan',
                 'nama_kegiatan' => 'required|string|max:100',
                 'tanggal_mulai' => 'required|date',
                 'tanggal_selesai' => 'required|date',
-                'id_kategori_kegiatan' => 'required|exists:t_kategori_kegiatan,id_kategori',
+                'id_kategori_kegiatan' => 'required|exists:m_kategori_kegiatan,id_kategori_kegiatan',
             ]);
     
             if ($validator->fails()) {
@@ -131,11 +131,11 @@ class KegiatanController extends Controller
     public function update(Request $request, $id) {
         if ($request->ajax() || $request->wantsJson()) {
             $validator = Validator::make($request->all(), [
-                'kode_kegiatan' => 'required|string|min:3|unique:t_kegiatan,kode_kegiatan',
+                'kode_kegiatan' => 'required|string|max:10|unique:t_kegiatan,kode_kegiatan',
                 'nama_kegiatan' => 'required|string|max:100',
                 'tanggal_mulai' => 'required|date',
                 'tanggal_selesai' => 'required|date',
-                'id_kategori_kegiatan' => 'required|exists:t_kategori_kegiatan,id_kategori',
+                'id_kategori_kegiatan' => 'required|exists:t_kategori_kegiatan,id_kategori_kegiatan',
             ]);
 
             if ($validator->fails()) {
@@ -324,16 +324,23 @@ class KegiatanController extends Controller
 
 
     public function export_pdf()
-    {
-        $kegiatan = KegiatanModel::select('kode_kegiatan', 'nama_kegiatan', 'tanggal_mulai', 'tanggal_selesai')
-            ->orderBy('kategori_id')
-            ->orderBy('kode_kegiatan')
-            ->with('kategori')
-            ->get();
-        // use Barryvdh\DomPDF\Facade\Pdf;
-        $pdf = Pdf::loadView('kegiatan.export_pdf', ['kegiatan' => $kegiatan]);
-        $pdf->setPaper('a4', 'portrait'); // set ukuran kertas dan orientasi
-        $pdf->setOption("isRemoteEnabled", true); // set true jika ada gambar dari url $pdf->render();
-        return $pdf->stream('Data Kegiatan' . date('Y-m-d H:i:s') . '.pdf');
-    }
+{
+    // Mengambil data kegiatan beserta kategori_kegiatan
+    $kegiatan = KegiatanModel::select('kode_kegiatan', 'nama_kegiatan', 'tanggal_mulai', 'tanggal_selesai', 'id_kategori_kegiatan')
+        ->with('kategoriKegiatan')
+        ->orderBy('id_kategori_kegiatan')
+        ->orderBy('kode_kegiatan')
+        ->get();
+
+    // Load view untuk PDF
+    $pdf = Pdf::loadView('kegiatan.export_pdf', ['kegiatan' => $kegiatan]);
+
+    // Set ukuran kertas dan orientasi
+    $pdf->setPaper('a4', 'portrait');
+    $pdf->setOption("isRemoteEnabled", true); // Jika ada gambar yang diambil dari URL
+
+    // Stream untuk mendownload file PDF
+    return $pdf->stream('Data Kegiatan ' . date('Y-m-d H:i:s') . '.pdf');
+}
+
 }
