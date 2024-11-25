@@ -15,10 +15,15 @@ class DetailKegiatanModel extends Model
 
     protected $fillable = [
         'id_kegiatan',
-        'kategori_kegiatan',
         'keterangan',
         'progres_kegiatan',
         'beban_kerja',
     ];
     public $timestamps = false;
+
+    // Relasi ke tabel t_kegiatan
+    public function kegiatan()
+    {
+        return $this->belongsTo(KegiatanModel::class, 'id_kegiatan', 'id_kegiatan');
+    }
 }

@@ -69,6 +69,7 @@ class KegiatanController extends Controller
 
     public function store(Request $request)
     {
+        dd($request->all());
         if ($request->ajax() || $request->wantsJson()) { 
             $validator = Validator::make($request->all(), [
                 'kode_kegiatan' => 'required|string|max:10|unique:t_kegiatan,kode_kegiatan',
@@ -135,7 +136,7 @@ class KegiatanController extends Controller
                 'nama_kegiatan' => 'required|string|max:100',
                 'tanggal_mulai' => 'required|date',
                 'tanggal_selesai' => 'required|date',
-                'id_kategori_kegiatan' => 'required|exists:t_kategori_kegiatan,id_kategori_kegiatan',
+                'id_kategori_kegiatan' => 'required|exists:m_kategori_kegiatan,id_kategori_kegiatan',
             ]);
 
             if ($validator->fails()) {

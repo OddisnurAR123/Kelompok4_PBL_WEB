@@ -31,7 +31,7 @@
                 </div>
                 <div class="form-group">
                     <label>Kategori Kegiatan</label>
-                    <select name="kategori_kegiatan" id="kategori_kegiatan" class="form-control" required>
+                    <select name="id_kategori_kegiatan" id="id_kategori_kegiatan" class="form-control" required>
                         <option value="">Pilih Kategori Kegiatan</option>
                         @foreach($kategoriKegiatan as $kategori)
                             <option value="{{ $kategori->id_kategori_kegiatan }}">{{ $kategori->nama_kategori_kegiatan }}</option>
