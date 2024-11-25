@@ -1,6 +1,6 @@
 <form action="{{ url('/kegiatan/update/'.$kegiatan->id_kegiatan) }}" method="POST" id="form-edit-kegiatan">
     @csrf
-    @method('PUT') <!-- Untuk mengubah data dengan method PUT -->
+    @method('PUT')
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -12,7 +12,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Kode Kegiatan</label>
-                    <input type="text" name="kode_kegiatan" id="kode_kegiatan" class="form-control" maxlength="10" value="{{ old('kode_kegiatan', $kegiatan->kode_kegiatan) }}" required>
+                    <input type="text" name="kode_kegiatan" id="kode_kegiatan" class="form-control" maxlength="10" value="{{ old('kode_kegiatan', $kegiatan->kode_kegiatan) }}">
                     <small id="error-kode_kegiatan" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
@@ -27,12 +27,12 @@
                 </div>
                 <div class="form-group">
                     <label>Tanggal Selesai</label>
-                    <input type="datetime-local" name="tanggal_selesai" id="tanggal_selesai" class="form-control" value="{{ old('tanggal_selesai', \Carbon\Carbon::parse($kegiatan->tanggal_selesai)->format('Y-m-d\TH:i')) }}" required>
+                    <input type="datetime-local" name="tanggal_selesai" id="tanggal_selesai" class="form-control" value="{{ old('tanggal_selesai', \Carbon\Carbon::parse($kegiatan->tanggal_selesai)->format('Y-m-d\TH:i')) }}">
                     <small id="error-tanggal_selesai" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Kategori Kegiatan</label>
-                    <select name="id_kategori_kegiatan" id="id_kategori_kegiatan" class="form-control" required>
+                    <select name="id_kategori_kegiatan" id="id_kategori_kegiatan" class="form-control">
                         <option value="">Pilih Kategori Kegiatan</option>
                         @foreach($kategoriKegiatan as $kategori)
                             <option value="{{ $kategori->id_kategori_kegiatan }}" {{ $kegiatan->kategori_kegiatan_id == $kategori->id_kategori_kegiatan ? 'selected' : '' }}>{{ $kategori->nama_kategori_kegiatan }}</option>
