@@ -67,7 +67,7 @@ $(document).ready(function() {
                             title: 'Berhasil',
                             text: response.message
                         });
-                        dataKategoriKegiatan.ajax.reload();
+                        datakategoriKegiatan.ajax.reload();
                     } else {
                         $('.error-text').text('');
                         $.each(response.msgField, function(prefix, val) {
