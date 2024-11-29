@@ -60,7 +60,7 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::get('/kategori_kegiatan/create', [KategoriKegiatanController::class, 'create']); 
     Route::post('/kategori_kegiatan', [KategoriKegiatanController::class, 'store'])->name('kategori_kegiatan.store');
     Route::get('/kategori_kegiatan/{id_kategori_kegiatan}/edit', [KategoriKegiatanController::class, 'edit'])->name('kategori_kegiatan.edit');
-    Route::put('/kategori_kegiatan/{id}', [KategoriKegiatanController::class, 'edit']);
+    Route::put('/kategori_kegiatan/{id}/update', [KategoriKegiatanController::class, 'update']);
     Route::delete('/kategori_kegiatan/{id}', [KategoriKegiatanController::class, 'delete'])->name('kategori_kegiatan.delete');
     Route::delete('/kategori_kegiatan/{id}', [KategoriKegiatanController::class, 'destroy']);
 
@@ -69,6 +69,8 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::get('/jabatan_kegiatan/create', [JabatanKegiatanController::class, 'create']); 
     Route::post('/jabatan_kegiatan', [JabatanKegiatanController::class, 'store'])->name('jabatan_kegiatan.store');
     Route::post('/jabatan_kegiatan/store', [JabatanKegiatanController::class, 'store']);
+    Route::get('/jabatan_kegiatan/{id}/edit', [JabatanKegiatanController::class, 'edit']);
+    Route::put('/jabatan_kegiatan/{id}/update', [JabatanKegiatanController::class, 'update']);
     Route::get('/jabatan_kegiatan/{id}/show', [JabatanKegiatanController::class, 'show'])->name('jabatan_kegiatan.show');
 
     // Kegiatan Routes
