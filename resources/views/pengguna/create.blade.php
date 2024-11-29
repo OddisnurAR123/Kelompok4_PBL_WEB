@@ -1,9 +1,9 @@
-<div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-        <form action="{{ url('/pengguna/create') }}" method="POST" id="form-create-pengguna">
-            @csrf
+<form action="{{ url('/pengguna/store') }}" method="POST" id="form-create-pengguna">
+    @csrf
+    <div id="modal-master" class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Data Pengguna</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Tambah Data Pengguna</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -83,7 +83,17 @@ $(document).ready(function() {
                 }
             });
             return false;
+        },
+        errorElement: 'span',
+        errorPlacement: function(error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function(element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
         }
     });
 });
-</script>
