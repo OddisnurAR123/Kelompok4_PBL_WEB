@@ -148,30 +148,6 @@ class KategoriKegiatanController extends Controller
         return redirect('/');
     }
 
-    // Hapus data
-    public function delete(Request $request, $id_kategori_kegiatan) {
-        {
-            if ($request->ajax() || $request->wantsJson()) {
-                $kategoriKegiatan = KategoriKegiatanModel::find($id_kategori_kegiatan);
-    
-                if ($kategoriKegiatan) {
-                    $kategoriKegiatan->delete();
-                    return response()->json([
-                        'status' => true,
-                        'message' => 'Data berhasil dihapus',
-                    ]);
-                } else {
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'Data tidak ditemukan',
-                    ]);
-                }
-            }
-    
-            return redirect('/');
-        }
-    }
-
     // Detail data
     public function show(string $id)
     {
@@ -187,5 +163,43 @@ class KategoriKegiatanController extends Controller
     
         // Jika data ditemukan, tampilkan view
         return view('kategori_kegiatan.show', ['kategoriKegiatan' => $kategoriKegiatan]);
+    }
+
+    public function delete(Request $request, $id)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $kategoriKegiatan = KategoriKegiatanModel::find($id);
+
+            if ($kategoriKegiatan) {
+                $kategoriKegiatan->delete();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil dihapus',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan',
+                ]);
+            }
+        }
+
+        return redirect('/');
+    }
+
+    public function confirm(string $id)
+    {
+        $kategoriKegiatan = KategoriKegiatanModel::find($id);
+    
+        // Jika data level tidak ditemukan, kirimkan respon error
+        if (!$kategoriKegiatan) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Kategori Kegiatan tidak ditemukan.'
+            ]);
+        }
+    
+        // Kembalikan view konfirmasi penghapusan level
+        return view('kategori_kegiatan.confirm', ['kategoriKegiatan' => $kategoriKegiatan]);
     }
 }
