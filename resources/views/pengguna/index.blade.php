@@ -4,7 +4,7 @@
     <div class="card-header">
         <h3 class="card-title">Daftar Pengguna</h3>
         <div class="card-tools">
-            <button onclick="modalAction('{{ url('/pengguna/create') }}')" class="btn btn-success"><i class="fa fa-plus"></i> Tambah Pengguna</button>
+            <button onclick="modalAction('{{ route('pengguna.create') }}')" class="btn btn-success"><i class="fa fa-plus"></i> Tambah Pengguna</button>
         </div>
     </div>
     <div class="card-body">

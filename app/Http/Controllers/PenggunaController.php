@@ -40,8 +40,8 @@ class PenggunaController extends Controller
 
         return DataTables::of($pengguna)
             ->addIndexColumn()
-            ->addColumn('jenis_pengguna', function ($pengguna) {
-                return $pengguna->jenisPengguna->nama_jenis_pengguna ?? '-';
+            ->addColumn('id_jenis_pengguna', function ($pengguna) {
+                return $pengguna->id_jenis_pengguna->nama_jenis_pengguna ?? '-';
             })
             ->addColumn('foto', function ($pengguna) {
                 return '<img src="' . $pengguna->foto_profil . '" class="img-fluid img-thumbnail" width="50">';
