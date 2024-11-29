@@ -45,7 +45,7 @@
 
       <!-- Manajemen Data Pengguna -->
       <li class="nav-item">
-        <a href="{{ url('/manajemen-data-pengguna') }}" class="nav-link {{ ($activeMenu == 'manajemen-data-pengguna') ? 'active' : '' }}">
+        <a href="{{ url('/pengguna') }}" class="nav-link {{ ($activeMenu == 'pengguna') ? 'active' : '' }}">
           <i class="nav-icon fas fa-users"></i>
           <p>Data Pengguna</p>
         </a>
