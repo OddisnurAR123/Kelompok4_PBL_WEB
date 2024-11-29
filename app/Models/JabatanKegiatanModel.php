@@ -13,4 +13,9 @@ class JabatanKegiatanModel extends Model
     protected $primaryKey = 'id_jabatan_kegiatan'; 
     protected $fillable = ['kode_jabatan_kegiatan', 'nama_jabatan_kegiatan'];
     public $timestamps = false; 
+
+    public function kegiatan()
+    {
+        return $this->belongsToMany(KegiatanModel::class, 't_kegiatan_user', 'id_jabatan_kegiatan', 'id_jabatan_kegiatan');
+    }
 }
