@@ -12,6 +12,7 @@ use App\Http\Controllers\JabatanKegiatanController;
 use App\Http\Controllers\AgendaKegiatanController;
 use App\Http\Controllers\DetailKegiatanController;
 use App\Http\Controllers\AuthController;
+use App\Models\JabatanKegiatanModel;
 use App\Models\KategoriKegiatanModel;
 
 /*
@@ -72,6 +73,9 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::post('/jabatan_kegiatan/store', [JabatanKegiatanController::class, 'store']);
     Route::get('/jabatan_kegiatan/{id}/edit', [JabatanKegiatanController::class, 'edit']);
     Route::put('/jabatan_kegiatan/{id}/update', [JabatanKegiatanController::class, 'update']);
+    Route::put('/jabatan_kegiatan/{id}/update', [JabatanKegiatanController::class, 'update']);
+    Route::get('/jabatan_kegiatan/{id}/delete', [JabatanKegiatanController::class, 'confirm']);
+    Route::delete('/jabatan_kegiatan/{id}/delete', [JabatanKegiatanController::class, 'delete']);
     Route::get('/jabatan_kegiatan/{id}/show', [JabatanKegiatanController::class, 'show'])->name('jabatan_kegiatan.show');
 
     // Kegiatan Routes
