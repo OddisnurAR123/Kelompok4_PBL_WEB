@@ -79,7 +79,7 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::post('/kegiatan/store', [KegiatanController::class, 'store'])->name('kegiatan.store');
     Route::get('/kegiatan/{id}', [KegiatanController::class, 'show'])->name('kegiatan.show');
     Route::get('/kegiatan/{id}/edit', [KegiatanController::class, 'edit'])->name('kegiatan.edit');
-    Route::put('/kegiatan/{id}/update', [KegiatanController::class, 'update'])->name('kegiatan.update');
+    Route::put('/kegiatan/update/{id_kegiatan}', [KegiatanController::class, 'update'])->name('kegiatan.update');
     Route::get('/kegiatan/{id}/delete', [KegiatanController::class, 'confirm'])->name('kegiatan.delete');
     Route::delete('/kegiatan/{id}', [KegiatanController::class, 'delete'])->name('kegiatan.destroy');
     Route::get('/kegiatan/import', [KegiatanController::class, 'import'])->name('kegiatan.import');
@@ -100,7 +100,7 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
 
     Route::get('/agenda', [AgendaKegiatanController::class, 'index'])->name('agenda_kegiatan.index'); // Menampilkan daftar agenda
     Route::get('/agenda/create', [AgendaKegiatanController::class, 'create'])->name('create'); // Form tambah agenda
-    Route::post('/agenda/store', [AgendaKegiatanController::class, 'store'])->name('store'); // Proses simpan agenda
+    Route::post('/agenda', [AgendaKegiatanController::class, 'store'])->name('agenda.store');
     Route::get('/agenda/{id}/show', [AgendaKegiatanController::class, 'show'])->name('show'); // Tampilkan detail agenda
     Route::get('/agenda/{id}/edit', [AgendaKegiatanController::class, 'edit'])->name('edit'); // Form edit agenda
     Route::put('/agenda/{id}/update', [AgendaKegiatanController::class, 'update'])->name('update'); // Proses update agenda

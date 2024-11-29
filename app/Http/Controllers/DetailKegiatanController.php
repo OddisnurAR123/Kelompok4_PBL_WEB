@@ -27,8 +27,9 @@ class DetailKegiatanController extends Controller
 
     // Menampilkan data detail kegiatan dalam bentuk json untuk DataTables
     public function list(Request $request) {
-        $detail_kegiatan = DetailKegiatanModel::select('id_detail_kegiatan', 'id_kegiatan', 'keterangan', 'progress_kegiatan', 'beban_kerja')
-            ->get();
+        $detail_kegiatan = DetailKegiatanModel::with('kegiatan:id_kegiatan,nama_kegiatan')
+        ->select('id_detail_kegiatan', 'id_kegiatan', 'keterangan', 'progres_kegiatan', 'beban_kerja')
+        ->get();    
 
         return DataTables::of($detail_kegiatan)
             ->addIndexColumn()

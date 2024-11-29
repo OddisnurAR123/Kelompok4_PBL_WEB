@@ -127,39 +127,42 @@ class KegiatanController extends Controller
         return view('kegiatan.edit', ['kegiatan' => $kegiatan, 'kategoriKegiatan' => $kategoriKegiatan]);
     }
 
-    // Menyimpan perubahan data kegiatan via Ajax
-    public function update(Request $request, $id) {
-        if ($request->ajax() || $request->wantsJson()) {
-            $validator = Validator::make($request->all(), [
-                'kode_kegiatan' => 'required|string|max:10|unique:t_kegiatan,kode_kegiatan',
-                'nama_kegiatan' => 'required|string|max:100',
-                'tanggal_mulai' => 'required|date',
-                'tanggal_selesai' => 'required|date',
-                'id_kategori_kegiatan' => 'required|exists:t_kategori_kegiatan,id_kategori_kegiatan',
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Validasi gagal.',
-                    'msgField' => $validator->errors(),
-                ]);
-            }
-
-            $kegiatan = KegiatanModel::findOrFail($id);
-            $kegiatan->update($request->only('kode_kegiatan', 'nama_kegiatan','tanggal_mulai','tanggal_selesai','id_kategori_kegiatan'));
-
+    public function update(Request $request, $id)
+    {
+        // Validasi inputan
+        $validator = Validator::make($request->all(), [
+            'kode_kegiatan' => 'nullable|string|max:10|unique:t_kegiatan,kode_kegiatan,' . $id . ',id_kegiatan',
+            'nama_kegiatan' => 'nullable|string|max:100',
+            'tanggal_mulai' => 'nullable|date',
+            'tanggal_selesai' => 'nullable|date',
+            'id_kategori_kegiatan' => 'nullable|exists:m_kategori_kegiatan,id_kategori_kegiatan',
+        ]);
+    
+        if ($validator->fails()) {
             return response()->json([
-                'status' => true,
-                'message' => 'Data berhasil diupdate',
+                'status' => false,
+                'message' => 'Validasi gagal.',
+                'msgField' => $validator->errors(),
             ]);
         }
-
+    
+        // Temukan kegiatan berdasarkan ID
+        $kegiatan = KegiatanModel::findOrFail($id);
+    
+        $kegiatan->kode_kegiatan = $request->kode_kegiatan ?? $kegiatan->kode_kegiatan;
+        $kegiatan->nama_kegiatan = $request->nama_kegiatan ?? $kegiatan->nama_kegiatan;
+        $kegiatan->tanggal_mulai = $request->tanggal_mulai ?? $kegiatan->tanggal_mulai;
+        $kegiatan->tanggal_selesai = $request->tanggal_selesai ?? $kegiatan->tanggal_selesai;
+        $kegiatan->id_kategori_kegiatan = $request->id_kategori_kegiatan ?? $kegiatan->id_kategori_kegiatan;
+    
+        // Simpan perubahan
+        $kegiatan->save();
+    
         return response()->json([
-            'status' => false,
-            'message' => 'Request bukan AJAX.',
+            'status' => true,
+            'message' => 'Data berhasil diupdate',
         ]);
-    }
+    }    
 
     // Menampilkan konfirmasi hapus kegiatan via Ajax
     public function confirm($id) {
@@ -328,7 +331,6 @@ class KegiatanController extends Controller
     // Mengambil data kegiatan beserta kategori_kegiatan
     $kegiatan = KegiatanModel::select('kode_kegiatan', 'nama_kegiatan', 'tanggal_mulai', 'tanggal_selesai', 'id_kategori_kegiatan')
         ->with('kategoriKegiatan')
-        ->orderBy('id_kategori_kegiatan')
         ->orderBy('kode_kegiatan')
         ->get();
 

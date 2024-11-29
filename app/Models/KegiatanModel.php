@@ -22,7 +22,7 @@ class KegiatanModel extends Model
         'nama_kegiatan',
         'tanggal_mulai',
         'tanggal_selesai',
-        'nama_kategori_kegiatan',
+        'id_kategori_kegiatan',
     ];    
 
     public function kategoriKegiatan()
@@ -36,5 +36,11 @@ class KegiatanModel extends Model
         $today = Carbon::now();
         return $query->where('tanggal_mulai', '>=', $today->subDays(7))
                      ->orderBy('tanggal_mulai', 'desc');
+    }
+
+    // Relasi ke tabel detail_kegiatan
+    public function detailKegiatan()
+    {
+        return $this->hasMany(DetailKegiatanModel::class, 'id_kegiatan', 'id_kegiatan');
     }
 }
