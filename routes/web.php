@@ -70,6 +70,8 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::get('/jabatan_kegiatan/create', [JabatanKegiatanController::class, 'create']); 
     Route::post('/jabatan_kegiatan', [JabatanKegiatanController::class, 'store'])->name('jabatan_kegiatan.store');
     Route::post('/jabatan_kegiatan/store', [JabatanKegiatanController::class, 'store']);
+    Route::get('/jabatan_kegiatan/{id}/edit', [JabatanKegiatanController::class, 'edit']);
+    Route::put('/jabatan_kegiatan/{id}/update', [JabatanKegiatanController::class, 'update']);
     Route::get('/jabatan_kegiatan/{id}/show', [JabatanKegiatanController::class, 'show'])->name('jabatan_kegiatan.show');
 
     // Kegiatan Routes

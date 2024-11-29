@@ -19,6 +19,20 @@
                     <input value="" type="text" name="nama_jabatan_kegiatan" id="nama_jabatan_kegiatan" class="form-control" required>
                     <small id="error-nama_jabatan_kegiatan" class="error-text form-text text-danger"></small>
                 </div>
+                <div class="form-group">
+                    <label>Is PIC</label>
+                    <select name="is_pic" id="is_pic" class="form-control" required>
+                        <option value="">-- Pilih --</option>
+                        <option value="1">1 -Ya-</option>
+                        <option value="0">0 -Tidak-</option>
+                    </select>
+                    <small id="error-is_pic" class="error-text form-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label>Urutan</label>
+                    <input value="" type="number" name="urutan" id="urutan" class="form-control" required>
+                    <small id="error-urutan" class="error-text form-text text-danger"></small>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
@@ -28,53 +42,58 @@
     </div>
 </form>
 
+
 <script>
-    $(document).ready(function() {
-        $("#form-tambah-jabatanKegiatan").validate({
-            rules: {
-                kode_jabatan_kegiatan: { required: true, minlength: 3 },
-                nama_jabatan_kegiatan: { required: true, minlength: 3 }
-            },
-            submitHandler: function(form) {
-                $.ajax({
-                    url: form.action,
-                    type: form.method,
-                    data: $(form).serialize(),
-                    success: function(response) {
-                        if (response.status) {
-                            $('#myModal').modal('hide');
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Berhasil',
-                                text: response.message
-                            });
-                            datajabatanKegiatan.ajax.reload();
-                        } else {
-                            $('.error-text').text('');
-                            $.each(response.msgField, function(prefix, val) {
-                                $('#error-' + prefix).text(val[0]);
-                            });
+$(document).ready(function() {
+    $("#form-tambah-jabatanKegiatan").validate({
+        rules: {
+            kode_jabatan_kegiatan: { required: true, minlength: 3 },
+            nama_jabatan_kegiatan: { required: true, minlength: 3 },
+            is_pic: { required: true },
+            urutan: { required: true, digits: true, min: 1 }
+        },
+        submitHandler: function(form) {
+            $.ajax({
+                url: form.action,
+                type: form.method,
+                data: $(form).serialize(),
+                success: function(response) {
+                    if (response.status) {
+                        $('#myModal').modal('hide'); // Tutup modal
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.message
+                        });
+                        datajabatanKegiatan.ajax.reload(); // Reload data table
+                    } else {
+                        // Menangani pesan error terkait urutan
+                        if(response.message === 'Urutan sudah digunakan, silakan pilih urutan lain.') {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Terjadi Kesalahan',
-                                text: response.message
+                                title: 'Urutan sudah digunakan, silakan pilih urutan lain.',
+                                text: response.message // Menampilkan pesan jika urutan sudah ada
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal Menyimpan Data',
+                                text: response.message // Pesan umum jika error lainnya
                             });
                         }
                     }
-                });
-                return false;
-            },
-            errorElement: 'span',
-            errorPlacement: function(error, element) {
-                error.addClass('invalid-feedback');
-                element.closest('.form-group').append(error);
-            },
-            highlight: function(element, errorClass, validClass) {
-                $(element).addClass('is-invalid');
-            },
-            unhighlight: function(element, errorClass, validClass) {
-                $(element).removeClass('is-invalid');
-            }
-        });
+                },
+                error: function(xhr) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Terjadi Kesalahan',
+                        text: 'Ada masalah pada server, silakan coba lagi nanti.'
+                    });
+                }
+            });
+            return false;
+        }
     });
+});
+
 </script>
