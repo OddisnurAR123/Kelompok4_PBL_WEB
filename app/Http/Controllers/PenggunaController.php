@@ -58,9 +58,9 @@ class PenggunaController extends Controller
 
     public function create()
     {
-        $jenisPengguna = JenisPenggunaModel::all();
+        $jenisPengguna = JenisPenggunaModel::all(); // Ambil data jenis pengguna dari database
         return view('pengguna.create', compact('jenisPengguna'));
-    }
+    }    
 
     public function store(Request $request)
     {

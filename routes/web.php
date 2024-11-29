@@ -110,11 +110,11 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::post('/agenda/import', [AgendaKegiatanController::class, 'import'])->name('import'); // Impor agenda dari file
     Route::post('/agenda/list', [AgendaKegiatanController::class, 'list'])->name('list'); // Mengambil daftar agenda (AJAX)
 
-    Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index'); // Halaman index
-    Route::post('/pengguna/list', [PenggunaController::class, 'list'])->name('pengguna.list'); // DataTables source
-    Route::get('/pengguna/create', [PenggunaController::class, 'create'])->name('pengguna.create'); // Form tambah pengguna
-    Route::post('/pengguna/store', [PenggunaController::class, 'store'])->name('pengguna.store'); // Simpan data pengguna
-    Route::get('/pengguna/{id}/edit', [PenggunaController::class, 'edit'])->name('pengguna.edit'); // Form edit pengguna
-    Route::put('/pengguna/{id}', [PenggunaController::class, 'update'])->name('pengguna.update'); // Update data pengguna
-    Route::delete('/pengguna/{id}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy'); // Hapus pengguna
-
+    Route::get('/pengguna', [PenggunaController::class, 'index']);
+    Route::post('/pengguna/list', [PenggunaController::class, 'list']);
+    Route::get('/pengguna/{id}/show', [PenggunaController::class, 'show']);
+    Route::get('/pengguna/create', [PenggunaController::class, 'create']);
+    Route::post('/pengguna/store', [PenggunaController::class, 'store']);
+    Route::get('/pengguna/{id}/edit', [PenggunaController::class, 'edit']);
+    Route::post('/pengguna/{id}/update', [PenggunaController::class, 'update']);
+    Route::get('/pengguna/{id}/delete', [PenggunaController::class, 'delete']);
