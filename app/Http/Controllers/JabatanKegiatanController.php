@@ -211,4 +211,20 @@ class JabatanKegiatanController extends Controller
         return redirect('/');
     }
 
+    public function confirm(string $id)
+    {
+        $jabatanKegiatan = JabatanKegiatanModel::find($id);
+    
+        // Jika data level tidak ditemukan, kirimkan respon error
+        if (!$jabatanKegiatan) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Jabatan Kegiatan tidak ditemukan.'
+            ]);
+        }
+    
+        // Kembalikan view konfirmasi penghapusan level
+        return view('jabatan_kegiatan.confirm', ['jabatanKegiatan' => $jabatanKegiatan]);
+    }
+
 }
