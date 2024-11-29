@@ -25,7 +25,7 @@ class JabatanKegiatanController extends Controller
     }
 
     public function list(Request $request) {
-        $jabatanKegiatan = JabatanKegiatanModel::select('id_jabatan_kegiatan', 'kode_jabatan_kegiatan', 'nama_jabatan_kegiatan');
+        $jabatanKegiatan = JabatanKegiatanModel::select('id_jabatan_kegiatan', 'kode_jabatan_kegiatan', 'nama_jabatan_kegiatan', 'is_pic', 'urutan');
     
         return DataTables::of($jabatanKegiatan)
             ->addIndexColumn()
@@ -44,36 +44,65 @@ class JabatanKegiatanController extends Controller
         return view('jabatan_kegiatan.create');  
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         if ($request->ajax() || $request->wantsJson()) {
+            // Validasi umum
             $rules = [
                 'kode_jabatan_kegiatan' => 'required|string|min:3|unique:m_jabatan_kegiatan,kode_jabatan_kegiatan',
                 'nama_jabatan_kegiatan' => 'required|string|max:100',
+                'is_pic' => 'required|in:0,1',
+                'urutan' => 'required|integer',
             ];
-
+    
             $validator = Validator::make($request->all(), $rules);
-
+    
+            // Cek validasi awal
             if ($validator->fails()) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Validasi Gagal',
+                    'message' => 'Validasi gagal.',
                     'msgField' => $validator->errors(),
                 ]);
             }
-
+    
+            // Validasi tambahan untuk is_pic
+            if ($request->is_pic == 1) {
+                $existingPic = JabatanKegiatanModel::where('is_pic', 1)->first();
+                if ($existingPic) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Sudah ada data dengan is_pic bernilai 1.',
+                    ]);
+                }
+            }
+    
+            // Validasi tambahan untuk urutan
+            $existingOrder = JabatanKegiatanModel::where('urutan', $request->urutan)->first();
+            if ($existingOrder) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data dengan urutan ini sudah ada.',
+                ]);
+            }
+    
+            // Simpan data jika semua validasi terpenuhi
             JabatanKegiatanModel::create([
                 'kode_jabatan_kegiatan' => $request->kode_jabatan_kegiatan,
                 'nama_jabatan_kegiatan' => $request->nama_jabatan_kegiatan,
+                'is_pic' => $request->is_pic,
+                'urutan' => $request->urutan,
             ]);
-
+    
             return response()->json([
                 'status' => true,
-                'message' => 'Data jabatan kegiatan berhasil disimpan',
+                'message' => 'Data jabatan kegiatan berhasil disimpan.',
             ]);
         }
-
+    
         return redirect('/');
     }
+    
   
     public function show(string $id) {
         $jabatanKegiatan = JabatanKegiatanModel::find($id);
@@ -105,10 +134,12 @@ class JabatanKegiatanController extends Controller
             $rules = [
                 'kode_jabatan_kegiatan' => 'required|string|max:20|unique:m_jabatan_kegiatan,kode_jabatan_kegiatan,' . $id . ',id_jabatan_kegiatan',
                 'nama_jabatan_kegiatan' => 'required|string|max:100',
+                'urutan' => 'required|integer',
+                'is_pic' => 'required|boolean',
             ];
-
+    
             $validator = Validator::make($request->all(), $rules);
-
+    
             if ($validator->fails()) {
                 return response()->json([
                     'status' => false,
@@ -116,10 +147,31 @@ class JabatanKegiatanController extends Controller
                     'msgField' => $validator->errors(),
                 ]);
             }
-
+    
             $jabatanKegiatan = JabatanKegiatanModel::find($id);
-
+    
             if ($jabatanKegiatan) {
+                // Validasi tambahan untuk is_pic
+                if ($request->is_pic == 1) {
+                    $existingPic = JabatanKegiatanModel::where('is_pic', 1)->where('id_jabatan_kegiatan', '!=', $id)->first();
+                    if ($existingPic) {
+                        return response()->json([
+                            'status' => false,
+                            'message' => 'Sudah ada data dengan is_pic bernilai 1.',
+                        ]);
+                    }
+                }
+    
+                // Validasi tambahan untuk urutan
+                $existingOrder = JabatanKegiatanModel::where('urutan', $request->urutan)->where('id_jabatan_kegiatan', '!=', $id)->first();
+                if ($existingOrder) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Data dengan urutan ini sudah ada.',
+                    ]);
+                }
+    
+                // Update data
                 $jabatanKegiatan->update($request->all());
                 return response()->json([
                     'status' => true,
@@ -132,9 +184,10 @@ class JabatanKegiatanController extends Controller
                 ]);
             }
         }
-
+    
         return redirect('/');
     }
+    
 
     public function delete(Request $request, $id)
     {
@@ -156,6 +209,22 @@ class JabatanKegiatanController extends Controller
         }
 
         return redirect('/');
+    }
+
+    public function confirm(string $id)
+    {
+        $jabatanKegiatan = JabatanKegiatanModel::find($id);
+    
+        // Jika data level tidak ditemukan, kirimkan respon error
+        if (!$jabatanKegiatan) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Jabatan Kegiatan tidak ditemukan.'
+            ]);
+        }
+    
+        // Kembalikan view konfirmasi penghapusan level
+        return view('jabatan_kegiatan.confirm', ['jabatanKegiatan' => $jabatanKegiatan]);
     }
 
 }

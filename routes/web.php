@@ -12,7 +12,10 @@ use App\Http\Controllers\JabatanKegiatanController;
 use App\Http\Controllers\AgendaKegiatanController;
 use App\Http\Controllers\DetailKegiatanController;
 use App\Http\Controllers\AuthController;
+use App\Models\JabatanKegiatanModel;
 use App\Models\KategoriKegiatanModel;
+use App\Http\Controllers\PenggunaController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -39,10 +42,7 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 Route::get('register', [AuthController::class, 'registerForm'])->name('register');
 Route::post('register', [AuthController::class, 'register'])->name('register');
 
-// Daftar route agenda
-    Route::get('/agenda', [AgendaKegiatanController::class, 'index']);
 
-       
     Route::get('/jenis_pengguna', [JenisPenggunaController::class, 'index']);
     Route::post('/jenis_pengguna/list', [JenisPenggunaController::class, 'list']);
     Route::get('/jenis_pengguna/{id}/show', [JenisPenggunaController::class, 'show']);
@@ -60,17 +60,22 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::get('kategori_kegiatan/{id}/show', [KategoriKegiatanController::class, 'show'])->name('kategori_kegiatan.show');
     Route::get('/kategori_kegiatan/create', [KategoriKegiatanController::class, 'create']); 
     Route::post('/kategori_kegiatan', [KategoriKegiatanController::class, 'store'])->name('kategori_kegiatan.store');
-    Route::get('/kategori_kegiatan/{id_kategori_kegiatan}/edit', [KategoriKegiatanController::class, 'edit'])->name('kategori_kegiatan.edit');
+    Route::get('/kategori_kegiatan/{id}/edit', [KategoriKegiatanController::class, 'edit'])->name('kategori_kegiatan.edit');
     Route::put('/kategori_kegiatan/{id}/update', [KategoriKegiatanController::class, 'update']);
-    Route::delete('/kategori_kegiatan/{id}', [KategoriKegiatanController::class, 'delete'])->name('kategori_kegiatan.delete');
-    Route::delete('/kategori_kegiatan/{id}', [KategoriKegiatanController::class, 'destroy']);
+    Route::get('/kategori_kegiatan/{id}/delete', [KategoriKegiatanController::class, 'confirm']);
+    Route::delete('/kategori_kegiatan/{id}/delete', [KategoriKegiatanController::class, 'delete']);
 
     Route::get('/jabatan_kegiatan', [JabatanKegiatanController::class, 'index']);
     Route::post('/jabatan_kegiatan/list', [JabatanKegiatanController::class, 'list']);
+    Route::get('/jabatan_kegiatan/{id}/show', [JabatanKegiatanController::class, 'show'])->name('jabatan_kegiatan.show');
     Route::get('/jabatan_kegiatan/create', [JabatanKegiatanController::class, 'create']); 
     Route::post('/jabatan_kegiatan', [JabatanKegiatanController::class, 'store'])->name('jabatan_kegiatan.store');
     Route::post('/jabatan_kegiatan/store', [JabatanKegiatanController::class, 'store']);
-    Route::get('/jabatan_kegiatan/{id}/show', [JabatanKegiatanController::class, 'show'])->name('jabatan_kegiatan.show');
+    Route::get('/jabatan_kegiatan/{id}/edit', [JabatanKegiatanController::class, 'edit']);
+    Route::put('/jabatan_kegiatan/{id}/update', [JabatanKegiatanController::class, 'update']);
+    Route::get('/jabatan_kegiatan/{id}/delete', [JabatanKegiatanController::class, 'confirm']);
+    Route::delete('/jabatan_kegiatan/{id}/delete', [JabatanKegiatanController::class, 'delete']);
+    
 
     // Kegiatan Routes
     Route::get('/kegiatan', [KegiatanController::class, 'index'])->name('kegiatan.index');
@@ -100,7 +105,7 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
 
     Route::get('/agenda', [AgendaKegiatanController::class, 'index'])->name('agenda_kegiatan.index'); // Menampilkan daftar agenda
     Route::get('/agenda/create', [AgendaKegiatanController::class, 'create'])->name('create'); // Form tambah agenda
-    Route::post('/agenda', [AgendaKegiatanController::class, 'store'])->name('agenda.store');
+    Route::post('/agenda/store', [AgendaKegiatanController::class, 'store'])->name('agenda.store');
     Route::get('/agenda/{id}/show', [AgendaKegiatanController::class, 'show'])->name('show'); // Tampilkan detail agenda
     Route::get('/agenda/{id}/edit', [AgendaKegiatanController::class, 'edit'])->name('edit'); // Form edit agenda
     Route::put('/agenda/{id}/update', [AgendaKegiatanController::class, 'update'])->name('update'); // Proses update agenda
@@ -108,3 +113,12 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::get('/agenda/export_excel', [AgendaKegiatanController::class, 'export_excel'])->name('export_excel'); // Ekspor agenda ke Excel
     Route::post('/agenda/import', [AgendaKegiatanController::class, 'import'])->name('import'); // Impor agenda dari file
     Route::post('/agenda/list', [AgendaKegiatanController::class, 'list'])->name('list'); // Mengambil daftar agenda (AJAX)
+
+    Route::get('/pengguna', [PenggunaController::class, 'index']);
+    Route::post('/pengguna/list', [PenggunaController::class, 'list']);
+    Route::get('/pengguna/{id}/show', [PenggunaController::class, 'show']);
+    Route::get('/pengguna/create', [PenggunaController::class, 'create']);
+    Route::post('/pengguna/store', [PenggunaController::class, 'store']);
+    Route::get('/pengguna/{id}/edit', [PenggunaController::class, 'edit']);
+    Route::post('/pengguna/{id}/update', [PenggunaController::class, 'update']);
+    Route::get('/pengguna/{id}/delete', [PenggunaController::class, 'delete']);

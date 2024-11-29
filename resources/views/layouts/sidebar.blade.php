@@ -19,7 +19,15 @@
   <!-- Sidebar Menu -->
   <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
-      <!-- Manajemen Kategori Kegiatan -->
+        <!-- Dashboard -->
+        <li class="nav-item">
+          <a href="{{ url('/') }}" class="nav-link {{ ($activeMenu == 'dashboard') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>Dashboard</p>
+          </a>
+      </li>  
+    
+    <!-- Manajemen Kategori Kegiatan -->
       <li class="nav-item">
         <a href="{{ url('/kategori_kegiatan') }}" class="nav-link {{ ($activeMenu == 'manajemen-kategori-kegiatan') ? 'active' : '' }}">
           <i class="nav-icon fas fa-tasks"></i>
@@ -45,7 +53,7 @@
 
       <!-- Manajemen Data Pengguna -->
       <li class="nav-item">
-        <a href="{{ url('/manajemen-data-pengguna') }}" class="nav-link {{ ($activeMenu == 'manajemen-data-pengguna') ? 'active' : '' }}">
+        <a href="{{ url('/pengguna') }}" class="nav-link {{ ($activeMenu == 'pengguna') ? 'active' : '' }}">
           <i class="nav-icon fas fa-users"></i>
           <p>Data Pengguna</p>
         </a>

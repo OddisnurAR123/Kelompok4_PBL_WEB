@@ -1,8 +1,8 @@
-@empty($kategoriKegiatan)
+@empty($jabatanKegiatan)
 <div id="modal-master" class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Kesalahan</h5>
+            <h5 class="modal-title">Kesalahan</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -16,32 +16,43 @@
     </div>
 </div>
 @else
-<form action="{{ url('/kategori_kegiatan/' . $kategoriKegiatan->id_kategori_kegiatan . '/delete') }}" method="POST" id="form-delete">
+<form action="{{ url('/jabatan_kegiatan/' . $jabatanKegiatan->id_jabatan_kegiatan . '/delete') }}" method="POST" id="form-delete">
     @csrf
     @method('DELETE')
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Hapus Data kategori Kegiatan</h5>
+                <h5 class="modal-title">Hapus Data Jabatan Kegiatan</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="alert alert-warning">
-                    <h5><i class="icon fas fa-ban"></i> Konfirmasi !!!</h5>
-                    Apakah Anda yakin ingin menghapus data kategori kegiatan ini?
+                    <h5><i class="icon fas fa-ban"></i> Konfirmasi!!!</h5>
+                    Apakah Anda yakin ingin menghapus data jabatan kegiatan ini?
                 </div>
                 <table class="table table-sm table-bordered table-striped">
                     <tr>
-                        <th class="text-right col-3">Kode kategori Kegiatan:</th>
-                        <td class="col-9">{{ $kategoriKegiatan->kode_kategori_kegiatan }}</td>
+                        <th class="text-right col-3">ID Jabatan Kegiatan:</th>
+                        <td class="col-9">{{ $jabatanKegiatan->id_jabatan_kegiatan }}</td>
                     </tr>
                     <tr>
-                        <th class="text-right col-3">Nama kategori Kegiatan:</th>
-                        <td class="col-9">{{ $kategoriKegiatan->nama_kategori_kegiatan }}</td>
+                        <th class="text-right col-3">Kode Jabatan Kegiatan:</th>
+                        <td class="col-9">{{ $jabatanKegiatan->kode_jabatan_kegiatan }}</td>
                     </tr>
                     <tr>
+                        <th class="text-right col-3">Nama Jabatan Kegiatan:</th>
+                        <td class="col-9">{{ $jabatanKegiatan->nama_jabatan_kegiatan }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right col-3">Is PIC:</th>
+                        <td class="col-9">{{ $jabatanKegiatan->is_pic }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right col-3">Urutan:</th>
+                        <td class="col-9">{{ $jabatanKegiatan->urutan }}</td>
+                    </tr>
                 </table>
             </div>
             <div class="modal-footer">
@@ -55,7 +66,6 @@
 <script>
 $(document).ready(function() {
     $("#form-delete").validate({
-        rules: {},
         submitHandler: function(form) {
             $.ajax({
                 url: form.action,
@@ -69,7 +79,7 @@ $(document).ready(function() {
                             title: 'Berhasil',
                             text: response.message
                         });
-                        $('#table_kategori_kegiatan').DataTable().ajax.reload(); // Reload tabel data barang
+                        $('#table_jabatan_kegiatan').DataTable().ajax.reload();
                     } else {
                         Swal.fire({
                             icon: 'error',

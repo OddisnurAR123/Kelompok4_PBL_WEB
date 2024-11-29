@@ -21,16 +21,21 @@ class KegiatanEksternalController extends Controller
         $request->validate([
             'nama_kegiatan' => 'required|string|max:255',
             'waktu_kegiatan' => 'required|date',
-            'pic' => 'required|string|max:255',
         ]);
-
+    
+        // Mendapatkan nama pengguna yang sedang login
+        $user = auth()->user(); // Pastikan Anda sudah melakukan autentikasi
+        $nama_pic = $user ? $user->nama_pengguna : 'Unknown';
+    
         // Menyimpan data ke database
         KegiatanEksternalModel::create([
             'nama_kegiatan' => $request->nama_kegiatan,
             'waktu_kegiatan' => $request->waktu_kegiatan,
-            'pic' => $request->pic,
+            'pic' => $nama_pic, // Nama PIC diambil dari nama pengguna yang sedang login
+            'id_kategori_kegiatan' => 3, // Kategori Kegiatan dengan ID 3
         ]);
-
+    
         return redirect()->route('kegiatan_eksternal.create')->with('success', 'Kegiatan eksternal berhasil ditambahkan!');
     }
+    
 }

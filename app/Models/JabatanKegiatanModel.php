@@ -11,7 +11,7 @@ class JabatanKegiatanModel extends Model
 
     protected $table = 'm_jabatan_kegiatan'; 
     protected $primaryKey = 'id_jabatan_kegiatan'; 
-    protected $fillable = ['kode_jabatan_kegiatan', 'nama_jabatan_kegiatan'];
+    protected $fillable = ['kode_jabatan_kegiatan', 'nama_jabatan_kegiatan', 'is_pic', 'urutan'];
     public $timestamps = false; 
 
     public function kegiatan()

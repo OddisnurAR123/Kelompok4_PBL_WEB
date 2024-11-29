@@ -4,12 +4,6 @@
     <div class="card-header">
         <h3 class="card-title">Daftar Jabatan Kegiatan</h3>
         <div class="card-tools">
-            <button onclick="modalAction('{{ url('/jabatan_kegiatan/import') }}')" class="btn btn-info">
-                <i class="fa fa-file-import"></i> Impor Jabatan Kegiatan
-            </button>
-            <a href="{{ url('/jabatan_kegiatan/export_pdf') }}" class="btn btn-warning">
-                <i class="fa fa-file-pdf"></i> Ekspor Jabatan Kegiatan PDF
-            </a>
             <button onclick="modalAction('{{ url('/jabatan_kegiatan/create') }}')" class="btn btn-success">
                 <i class="fa fa-plus"></i> Tambah Data
             </button>
@@ -29,6 +23,8 @@
                     <th>ID</th>
                     <th>Kode Jabatan Kegiatan</th>
                     <th>Nama Jabatan Kegiatan</th>
+                    <th>Is PIC</th>
+                    <th>Urutan</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -70,6 +66,8 @@
                 { data: "id_jabatan_kegiatan" },  // Kolom ID Jabatan Kegiatan
                 { data: "kode_jabatan_kegiatan" },  // Kolom Kode Jabatan Kegiatan
                 { data: "nama_jabatan_kegiatan" },  // Kolom Nama Jabatan Kegiatan
+                { data: "is_pic"},
+                { data: "urutan"},
                 {
                     data: "aksi",  // Kolom untuk tombol aksi (edit, delete, dll)
                     orderable: false,  // Tidak bisa diurutkan
