@@ -100,7 +100,7 @@ class KategoriKegiatanController extends Controller
         }
 
     // Tampilkan halaman edit
-    public function edit($id_kategori_kegiatan) {
+    public function edit(string $id_kategori_kegiatan) {
         $kategoriKegiatan = KategoriKegiatanModel::find($id_kategori_kegiatan);
 
         if (!$kategoriKegiatan) {
