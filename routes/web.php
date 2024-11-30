@@ -114,7 +114,7 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::post('/agenda/import', [AgendaKegiatanController::class, 'import'])->name('import'); // Impor agenda dari file
     Route::post('/agenda/list', [AgendaKegiatanController::class, 'list'])->name('list'); // Mengambil daftar agenda (AJAX)
 
-    Route::get('/pengguna', [PenggunaController::class, 'index']);
+    Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
     Route::post('/pengguna/list', [PenggunaController::class, 'list']);
     Route::get('/pengguna/{id}/show', [PenggunaController::class, 'show'])->name('pengguna.show');
     Route::get('/pengguna/create', [PenggunaController::class, 'create']);

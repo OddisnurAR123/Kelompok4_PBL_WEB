@@ -120,6 +120,47 @@ public function edit(string $id_pengguna) {
 
         return view('pengguna.edit', compact('jenisPengguna'));
     }
+    public function update(Request $request, $id_pengguna) {
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+            'nama_pengguna' => 'required|string',
+            'username' => 'required|string|unique:m_pengguna,username',
+            'email' => 'required|email|unique:m_pengguna,email',
+            'id_jenis_pengguna' => 'required|exists:m_jenis_pengguna,id_jenis_pengguna',
+            'password' => 'required|string|min:6',
+            'foto_profil' => 'nullable|image|max:2048',
+            ];
+
+            // Validasi input
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi gagal.',
+                    'msgField' => $validator->errors(),
+                ]);
+            }
+
+            $pengguna = PenggunaModel::find($id_pengguna);
+
+            if ($pengguna) {
+                $pengguna->update($request->all());
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil diupdate',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan',
+                ]);
+            }
+        }
+
+        return redirect('/');
+    }
+
     public function show(string $id)
     {
         $pengguna = PenggunaModel::find($id);
