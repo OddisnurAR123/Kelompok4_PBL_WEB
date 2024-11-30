@@ -3,7 +3,6 @@
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JenisPenggunaController;
-use App\Models\JenisPenggunaModel;
 use App\Http\Controllers\KategoriKegiatanController;
 use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\KegiatanEksternalController;
@@ -12,8 +11,6 @@ use App\Http\Controllers\JabatanKegiatanController;
 use App\Http\Controllers\AgendaKegiatanController;
 use App\Http\Controllers\DetailKegiatanController;
 use App\Http\Controllers\AuthController;
-use App\Models\JabatanKegiatanModel;
-use App\Models\KategoriKegiatanModel;
 use App\Http\Controllers\PenggunaController;
 
 
