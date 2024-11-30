@@ -73,7 +73,6 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::get('/jabatan_kegiatan/{id}/delete', [JabatanKegiatanController::class, 'confirm']);
     Route::delete('/jabatan_kegiatan/{id}/delete', [JabatanKegiatanController::class, 'delete']);
     
-
     // Kegiatan Routes
     Route::get('/kegiatan', [KegiatanController::class, 'index'])->name('kegiatan.index');
     Route::post('/kegiatan/list', [KegiatanController::class, 'list']);

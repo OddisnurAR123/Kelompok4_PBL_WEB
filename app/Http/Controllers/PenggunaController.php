@@ -112,14 +112,16 @@ class PenggunaController extends Controller
     }
 }
 public function edit(string $id_pengguna) {
-        $pengguna = PenggunaModel::find($id_pengguna);
+    $pengguna = PenggunaModel::find($id_pengguna);
+    $jenisPengguna = JenisPenggunaModel::all();
 
-        if (!$pengguna) {
-            return response()->json(['status' => false, 'message' => 'Data tidak ditemukan']);
-        }
-
-        return view('pengguna.edit', compact('jenisPengguna'));
+    if (!$pengguna) {
+        return response()->json(['status' => false, 'message' => 'Data tidak ditemukan']);
     }
+
+    return view('pengguna.edit', compact('pengguna', 'jenisPengguna'));
+}
+
     public function update(Request $request, $id_pengguna) {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [

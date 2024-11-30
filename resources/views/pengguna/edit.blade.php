@@ -107,13 +107,11 @@ $(document).ready(function() {
                 required: "Jenis Pengguna harus dipilih."
             },
         },
-        submitHandler: function(form) {
+            submitHandler: function(form) {
             $.ajax({
                 url: form.action,
                 type: form.method,
-                data: new FormData(form),
-                processData: false,
-                contentType: false,
+                data: $(form).serialize(),
                 success: function(response) {
                     if(response.status) {
                         $('#myModal').modal('hide');
