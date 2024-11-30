@@ -55,7 +55,7 @@ class KegiatanModel extends Model
     // Relasi satu ke banyak dengan jabatan kegiatan
     public function JabatanKegiatan()
     {
-        return $this->belongsTo(JabatanKegiatanModel::class, 'id_kategori_kegiatan');
+        return $this->belongsTo(JabatanKegiatanModel::class, 'id_jabatan_kegiatan');
     }
 
 }

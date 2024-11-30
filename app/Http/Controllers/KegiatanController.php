@@ -87,7 +87,7 @@ class KegiatanController extends Controller
                 'tanggal_mulai' => 'required|date',
                 'tanggal_selesai' => 'required|date',
                 'id_kategori_kegiatan' => 'required|exists:m_kategori_kegiatan,id_kategori_kegiatan',
-                'anggota.*.id_pengguna' => 'required|exists:m_pengguna,id_jenis_pengguna',
+                'anggota.*.id_pengguna' => 'required|exists:m_pengguna,id_pengguna',
                 'anggota.*.id_jabatan_kegiatan' => 'required|exists:m_jabatan_kegiatan,id_jabatan_kegiatan',
             ]);
 
@@ -117,7 +117,7 @@ class KegiatanController extends Controller
                     foreach ($request->anggota as $anggota) {
                         DB::table('t_kegiatan_user')->insert([
                             'id_kegiatan' => $kegiatan->id_kegiatan,
-                            'id_jenis_pengguna' => $anggota['id_pengguna'],
+                            'id_pengguna' => $anggota['id_pengguna'],
                             'id_jabatan_kegiatan' => $anggota['id_jabatan_kegiatan'],
                             'created_at' => now(),
                             'updated_at' => now(),
