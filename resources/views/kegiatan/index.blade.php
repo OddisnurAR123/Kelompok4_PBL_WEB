@@ -17,16 +17,6 @@
         @if(session('error'))
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
-
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="kegiatan-tab" data-bs-toggle="tab" href="#kegiatan" role="tab" aria-controls="kegiatan" aria-selected="true">Kegiatan</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="anggota-tab" data-bs-toggle="tab" href="#anggota" role="tab" aria-controls="anggota" aria-selected="false">Anggota Kegiatan</a>
-            </li>
-        </ul>
-            
         <table class="table table-bordered table-striped table-hover table-sm" id="table_kegiatan">
             <thead>
                 <tr>

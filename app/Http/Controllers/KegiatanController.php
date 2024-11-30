@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\KegiatanModel;
 use App\Models\KategoriKegiatanModel;
+use App\Models\PenggunaModel;
+use App\Models\JabatanKegiatanModel;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\IOFactory; 
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 
 class KegiatanController extends Controller
 {
@@ -62,22 +65,32 @@ class KegiatanController extends Controller
             'list' => ['Home', 'Kegiatan', 'Tambah Kegiatan']
         ];
 
+        // Mengambil data kategori kegiatan
         $kategoriKegiatan = KategoriKegiatanModel::all();
+
+        // Mengambil pengguna dengan id_jenis_pengguna = 3
+        $pengguna = PenggunaModel::where('id_jenis_pengguna', 3)->get();
+
+
+        // Mengambil data jabatan kegiatan
+        $jabatanKegiatan = JabatanKegiatanModel::all();
     
-        return view('kegiatan.create', ['breadcrumb' => $breadcrumb, 'kategoriKegiatan' => $kategoriKegiatan]);
+        return view('kegiatan.create', ['breadcrumb' => $breadcrumb, 'kategoriKegiatan' => $kategoriKegiatan, 'pengguna' => $pengguna,'jabatanKegiatan' => $jabatanKegiatan]);
     }
 
     public function store(Request $request)
     {
-        if ($request->ajax() || $request->wantsJson()) { 
+        if ($request->ajax() || $request->wantsJson()) {
             $validator = Validator::make($request->all(), [
                 'kode_kegiatan' => 'required|string|max:10|unique:t_kegiatan,kode_kegiatan',
                 'nama_kegiatan' => 'required|string|max:100',
                 'tanggal_mulai' => 'required|date',
                 'tanggal_selesai' => 'required|date',
                 'id_kategori_kegiatan' => 'required|exists:m_kategori_kegiatan,id_kategori_kegiatan',
+                'anggota.*.id_pengguna' => 'required|exists:m_pengguna,id_jenis_pengguna',
+                'anggota.*.id_jabatan_kegiatan' => 'required|exists:m_jabatan_kegiatan,id_jabatan_kegiatan',
             ]);
-    
+
             if ($validator->fails()) {
                 return response()->json([
                     'status' => false,
@@ -85,21 +98,56 @@ class KegiatanController extends Controller
                     'msgField' => $validator->errors(),
                 ]);
             }
-    
-            // Menyimpan data kegiatan ke database
-            KegiatanModel::create($request->only('kode_kegiatan', 'nama_kegiatan', 'tanggal_mulai', 'tanggal_selesai', 'id_kategori_kegiatan'));
-    
-            return response()->json([
-                'status' => true,
-                'message' => 'Data kegiatan berhasil disimpan',
-            ]);
+
+            try {
+                // Mulai transaksi
+                DB::beginTransaction();
+
+                // Menyimpan data kegiatan ke tabel t_kegiatan
+                $kegiatan = KegiatanModel::create($request->only(
+                    'kode_kegiatan',
+                    'nama_kegiatan',
+                    'tanggal_mulai',
+                    'tanggal_selesai',
+                    'id_kategori_kegiatan'
+                ));
+
+                // Menyimpan anggota ke tabel pivot t_kegiatan_user
+                if ($request->has('anggota') && is_array($request->anggota)) {
+                    foreach ($request->anggota as $anggota) {
+                        DB::table('t_kegiatan_user')->insert([
+                            'id_kegiatan' => $kegiatan->id_kegiatan,
+                            'id_jenis_pengguna' => $anggota['id_pengguna'],
+                            'id_jabatan_kegiatan' => $anggota['id_jabatan_kegiatan'],
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    }
+                }
+
+                // Commit transaksi
+                DB::commit();
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data kegiatan berhasil disimpan',
+                ]);
+            } catch (\Exception $e) {
+                // Rollback jika terjadi kesalahan
+                DB::rollBack();
+
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+                ]);
+            }
         }
-    
+
         return response()->json([
             'status' => false,
             'message' => 'Request bukan AJAX.',
         ]);
-    }    
+    }
 
     public function show(string $id)
     {
@@ -124,7 +172,11 @@ class KegiatanController extends Controller
     public function edit($id) {
         $kegiatan = KegiatanModel::findOrFail($id);
         $kategoriKegiatan = KategoriKegiatanModel::all();
-        return view('kegiatan.edit', ['kegiatan' => $kegiatan, 'kategoriKegiatan' => $kategoriKegiatan]);
+        // Mengambil pengguna dengan id_jenis_pengguna = 3
+        $pengguna = PenggunaModel::where('id_jenis_pengguna', 3)->get();
+        // Mengambil data jabatan kegiatan
+        $jabatanKegiatan = JabatanKegiatanModel::all();
+        return view('kegiatan.edit', ['kegiatan' => $kegiatan, 'kategoriKegiatan' => $kategoriKegiatan, 'pengguna' => $pengguna, 'jabatanKegiatan' => $jabatanKegiatan]);
     }
 
     public function update(Request $request, $id)

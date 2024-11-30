@@ -40,6 +40,65 @@
                     </select>
                     <small id="error-kategori_kegiatan" class="error-text form-text text-danger"></small>
                 </div>
+                <!-- Anggota Kegiatan -->
+                <div id="anggota-section">
+                    <!-- Loop untuk anggota yang sudah ada -->
+                    @foreach($kegiatan->pengguna as $index => $pengguna)
+                        <div class="anggota-group d-flex justify-content-between mb-3" id="anggota-group-{{ $index }}">
+                            <div class="col-5">
+                                <label>Pengguna {{ $index + 1 }}</label>
+                                <select name="anggota[{{ $index }}][id_pengguna]" class="form-control" required>
+                                    <option value="">Pilih Pengguna</option>
+                                    @foreach($pengguna as $user)
+                                        <option value="{{ $user->id_pengguna }}" {{ $pengguna->id_pengguna == $user->id_pengguna ? 'selected' : '' }}>{{ $user->nama_pengguna }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-5 position-relative">
+                                <label>Jabatan</label>
+                                <select name="anggota[{{ $index }}][id_jabatan_kegiatan]" class="form-control" required>
+                                    <option value="">Pilih Jabatan</option>
+                                    @foreach($jabatanKegiatan as $jabatan)
+                                        <option value="{{ $jabatan->id_jabatan_kegiatan }}" {{ $pengguna->id_jabatan_kegiatan == $jabatan->id_jabatan_kegiatan ? 'selected' : '' }}>{{ $jabatan->nama_jabatan_kegiatan }}</option>
+                                    @endforeach
+                                </select>
+                                <!-- Tombol hapus anggota jika sudah ada anggota lainnya -->
+                                @if($index > 0)
+                                    <button type="button" class="btn btn-danger btn-sm position-absolute remove-anggot" style="top: -5px; right: 0; border: none; background: none;" data-index="{{ $index }}">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                @endif
+                            </div>
+                            <div class="col-2"></div>
+                        </div>
+                    @endforeach
+
+                    <!-- Tombol untuk menambah anggota baru -->
+                    <div class="anggota-group d-flex justify-content-between mb-3" id="anggota-group-{{ count($kegiatan->pengguna) }}">
+                        <div class="col-5">
+                            <label>Pengguna {{ count($kegiatan->pengguna) + 1 }}</label>
+                            <select name="anggota[{{ count($kegiatan->pengguna) }}][id_pengguna]" class="form-control" required>
+                                <option value="">Pilih Pengguna</option>
+                                @foreach($pengguna as $user)
+                                    <option value="{{ $user->id_pengguna }}">{{ $user->nama_pengguna }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-5 position-relative">
+                            <label>Jabatan</label>
+                            <select name="anggota[{{ count($kegiatan->pengguna) }}][id_jabatan_kegiatan]" class="form-control" required>
+                                <option value="">Pilih Jabatan</option>
+                                @foreach($jabatanKegiatan as $jabatan)
+                                    <option value="{{ $jabatan->id_jabatan_kegiatan }}">{{ $jabatan->nama_jabatan_kegiatan }}</option>
+                                @endforeach
+                            </select>
+                            <button type="button" id="addAnggota" class="btn btn-light btn-sm position-absolute" style="top: -5px; right: 0; border: none; background: none;">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-warning" data-dismiss="modal">Batal</button>
