@@ -116,9 +116,9 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
 
     Route::get('/pengguna', [PenggunaController::class, 'index']);
     Route::post('/pengguna/list', [PenggunaController::class, 'list']);
-    Route::get('/pengguna/{id}/show', [PenggunaController::class, 'show']);
+    Route::get('/pengguna/{id}/show', [PenggunaController::class, 'show'])->name('pengguna.show');
     Route::get('/pengguna/create', [PenggunaController::class, 'create']);
     Route::post('/pengguna/store', [PenggunaController::class, 'store']);
-    Route::get('/pengguna/{id}/edit', [PenggunaController::class, 'edit']);
+    Route::get('/pengguna/{id}/edit', [PenggunaController::class, 'edit'])->name('pengguna.edit');
     Route::post('/pengguna/{id}/update', [PenggunaController::class, 'update']);
     Route::get('/pengguna/{id}/delete', [PenggunaController::class, 'delete']);
