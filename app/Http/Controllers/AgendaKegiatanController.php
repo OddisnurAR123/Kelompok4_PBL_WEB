@@ -29,9 +29,8 @@ class AgendaKegiatanController extends Controller
         return view('agenda.index', compact('breadcrumb', 'page', 'activeMenu'));
     }
 
-    public function list(Request $request)
-{
-    $agenda = AgendaModel::with(['kegiatan', 'jenisPengguna', 'jabatanKegiatan'])
+    public function list(Request $request){
+        $agenda = AgendaModel::with(['kegiatan', 'jenisPengguna', 'jabatanKegiatan'])
         ->select(
             'id_agenda',
             'kode_agenda',
@@ -44,7 +43,7 @@ class AgendaKegiatanController extends Controller
             'deskripsi',
             'tanggal_agenda'
         );
-
+    
     return DataTables::of($agenda)
         ->addIndexColumn()
         ->addColumn('aksi', function ($agenda) {
@@ -55,62 +54,121 @@ class AgendaKegiatanController extends Controller
         })
         ->rawColumns(['aksi'])
         ->make(true);
-}
-    public function create()
-    {
-        $jenisPengguna = JenisPenggunaModel::all(); // Ambil data jenis pengguna
-        $kegiatan = KegiatanModel::all(); // Ambil data kegiatan
-        $jabatanKegiatan = JabatanKegiatanModel::all(); // Ambil data jabatan kegiatan
-
-        return view('agenda.create', compact('jenisPengguna', 'kegiatan', 'jabatanKegiatan'));
     }
+        public function create()
+            {
+                $jenisPengguna = JenisPenggunaModel::all(); // Ambil data jenis pengguna
+                $kegiatan = KegiatanModel::all(); // Ambil data kegiatan
+                $jabatanKegiatan = JabatanKegiatanModel::all(); // Ambil data jabatan kegiatan
+
+            return view('agenda.create', compact('jenisPengguna', 'kegiatan', 'jabatanKegiatan'));
+        }       
 
     // Simpan data baru
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'kode_agenda' => 'required|unique:t_agenda,kode_agenda',
+    public function store(Request $request){
+        if ($request->ajax() || $request->wantsJson()) {
+            // Aturan validasi untuk input 
+            $rules = [
+            'kode_agenda' => 'required|string|max:20|unique:t_agenda,kode_agenda,id_agenda',            
             'nama_agenda' => 'required|string',
             'id_kegiatan' => 'required|exists:m_kegiatan,id_kegiatan',
             'tempat_agenda' => 'required|string',
             'id_jenis_pengguna' => 'required|exists:m_jenis_pengguna,id_jenis_pengguna',
             'id_jabatan_kegiatan' => 'nullable|exists:m_jabatan_kegiatan,id_jabatan_kegiatan',
             'bobot_anggota' => 'required|numeric',
-            'tanggal_agenda' => 'required|date',
             'deskripsi' => 'nullable|string',
-        ]);        
-        
-        if ($validator->fails()) {
-            return response()->json([
+            'tanggal_agenda' => 'required|date',
+        ];      
+        $validator = Validator::make($request->all(), $rules);
+    
+            if ($validator->fails()) {
+                return response()->json([
                 'status' => false,
-                'message' => 'Validasi Gagal',
-                'msgField' => $validator->errors(),
-            ], 400);
-        }
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors(),
+                ]);
+            }
         
-        try {
-            $agenda = AgendaModel::create([
+            AgendaModel::create([
                 'kode_agenda' => $request->kode_agenda,
                 'nama_agenda' => $request->nama_agenda,
                 'id_kegiatan' => $request->id_kegiatan,
                 'tempat_agenda' => $request->tempat_agenda,
                 'id_jenis_pengguna' => $request->id_jenis_pengguna,
-                'id_jabatan_kegiatan' => $request->id_jabatan_kegiatan ?? null, // Handle nullable field
+                'id_jabatan_kegiatan' => $request->id_jabatan_kegiatan, // Handle nullable field
                 'bobot_anggota' => $request->bobot_anggota,
-                'tanggal_agenda' => $request->tanggal_agenda,
-                'deskripsi' => $request->deskripsi
+                'deskripsi' => $request->deskripsi,
+                'tanggal_agenda' => $request->tanggal_agenda
             ]);
             
-            return response()->json([
-                'status' => true,
-                'message' => 'Data agenda berhasil disimpan',
-            ]);
-        } catch (\Exception $e) {
+          // Mengembalikan respon sukses
+          return response()->json([
+            'status' => true,
+            'message' => 'Data Agenda kegiatan berhasil disimpan',
+        ]);
+    }
+
+    return redirect('/');
+}
+
+    public function edit(string $id_agenda)
+    {
+        $agenda = AgendaModel::find($id_agenda);
+    
+        if (!$agenda) {
+            return response()->json(['status' => false, 'message' => 'Data agenda tidak ditemukan']);
+        }
+    
+        $jenisPengguna = JenisPenggunaModel::all(); // Ambil data jenis pengguna
+        $kegiatan = KegiatanModel::all(); // Ambil data kegiatan
+        $jabatanKegiatan = JabatanKegiatanModel::all(); // Ambil data jabatan kegiatan
+    
+        return view('agenda.edit', compact('agenda', 'jenisPengguna', 'kegiatan', 'jabatanKegiatan'));
+    }
+    public function update(Request $request, $id_agenda)
+{
+    if ($request->ajax() || $request->wantsJson()) {
+        $rules = [
+            'kode_agenda' => 'required|string|max:20|unique:t_agenda,kode_agenda,' . $id_agenda . ',id_agenda',
+            'nama_agenda' => 'required|string|max:100',
+            'id_kegiatan' => 'required|exists:m_kegiatan,id_kegiatan',
+            'tempat_agenda' => 'required|string|max:255',
+            'id_jenis_pengguna' => 'required|exists:m_jenis_pengguna,id_jenis_pengguna',
+            'id_jabatan_kegiatan' => 'required|exists:m_jabatan_kegiatan,id_jabatan_kegiatan',
+            'bobot_anggota' => 'required|numeric',
+            'deskripsi' => 'required|string',
+            'tanggal_agenda' => 'required|date',
+        ];
+
+        // Validasi input
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'message' => 'Terjadi kesalahan saat menyimpan data',
-                'error' => $e->getMessage(),
-            ], 500);
+                'message' => 'Validasi gagal.',
+                'msgField' => $validator->errors(),
+            ]);
+        }
+
+        $agenda = AgendaModel::find($id_agenda);
+
+        if ($agenda) {
+            $agenda->update($request->all());
+            return response()->json([
+                'status' => true,
+                'message' => 'Data agenda berhasil diperbarui',
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data agenda tidak ditemukan',
+            ]);
         }
     }
+
+    return redirect('/');
+}
+    
+
 }    

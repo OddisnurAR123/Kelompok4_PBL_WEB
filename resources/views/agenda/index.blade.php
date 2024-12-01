@@ -21,14 +21,11 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Kode Agenda</th>
                     <th>Nama Agenda</th>
-                    <th>Jenis Pengguna</th>
                     <th>Kegiatan</th>
-                    <th>Jabatan Kegiatan</th>
-                    <th>Bobot Anggota</th>
-                    <th>Deskripsi</th>
-                    <th>Tanggal</th>
                     <th>Tempat</th>
+                    <th>Tanggal</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -37,32 +34,37 @@
 </div>
 
 <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" data-width="75%" aria-hidden="true"></div>
-
 @endsection
 
 @push('css')
+<style>
+    #table_agenda th, #agenda td {
+        text-align: center; 
+        vertical-align: middle; 
+    }
+</style>
 @endpush
+
 
 @push('js')
 <script>
-   function modalAction(url = '') {
-    $('#myModal').load(url, function() {
-        $('#myModal').modal('show');
-    });
-}
+    function modalAction(url = '') {
+        $('#myModal').load(url, function() {
+            $('#myModal').modal('show');
+        });
+    }
 
     var dataAgenda;
 
     $(document).ready(function() {
         dataAgenda = $('#table_agenda').DataTable({
+            // serverSide: true, jika ingin menggunakan server side processing
             serverSide: true,
             ajax: {
                 "url": "{{ url('agenda/list') }}",
                 "dataType": "json",
                 "type": "POST",
-                "data": function(s) {
-                    s.jenis_pengguna_id = $('#jenis_pengguna_id').val();
-                }
+
             },
             columns: [
                 {
@@ -72,13 +74,13 @@
                     searchable: false
                 },
                 {
-                    data: "nama_agenda", 
+                    data: "kode_agenda",
                     className: "",
                     orderable: true,
                     searchable: true
                 },
                 {
-                    data: "jenis_pengguna.nama_jenis_pengguna", // Assuming relationship
+                    data: "nama_agenda", 
                     className: "",
                     orderable: true,
                     searchable: true
@@ -90,34 +92,16 @@
                     searchable: true
                 },
                 {
-                    data: "jabatan_kegiatan.id_jabatan_kegiatan", 
+                    data: "tempat_agenda",
                     className: "",
                     orderable: false,
                     searchable: true
-                },
-                {
-                    data: "bobot_anggota",
-                    className: "",
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: "deskripsi", // Show description in the table
-                    className: "",
-                    orderable: false,
-                    searchable: false
                 },
                 {
                     data: "tanggal_agenda",
                     className: "",
                     orderable: true,
                     searchable: false
-                },
-                {
-                    data: "tempat_agenda",
-                    className: "",
-                    orderable: false,
-                    searchable: true
                 },
                 {
                     data: "aksi", // Action buttons

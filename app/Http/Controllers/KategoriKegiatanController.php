@@ -202,4 +202,5 @@ class KategoriKegiatanController extends Controller
         // Kembalikan view konfirmasi penghapusan level
         return view('kategori_kegiatan.confirm', ['kategoriKegiatan' => $kategoriKegiatan]);
     }
+    
 }

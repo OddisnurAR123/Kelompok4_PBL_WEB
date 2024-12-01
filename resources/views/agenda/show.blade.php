@@ -12,7 +12,7 @@
                 <h5><i class="icon fas fa-ban"></i> Kesalahan!!!</h5>
                 Data yang anda cari tidak ditemukan
             </div>
-            <a href="{{ url()->previous() }}" class="btn btn-warning">Kembali</a>
+            <a href="{{ url('/agenda') }}" class="btn btn-warning">Kembali</a>
         </div>
     </div>
 </div>
@@ -27,10 +27,6 @@
         </div>
         <div class="modal-body">
             <table class="table table-sm table-bordered table-striped">
-                <tr>
-                    <th class="text-right col-3">ID Agenda:</th>
-                    <td class="col-9">{{ $agenda->id_agenda }}</td>
-                </tr>
                 <tr>
                     <th class="text-right col-3">Kode Agenda:</th>
                     <td class="col-9">{{ $agenda->kode_agenda }}</td>
@@ -53,7 +49,9 @@
                 </tr>
                 <tr>
                     <th class="text-right col-3">Jabatan Kegiatan:</th>
-                    <td class="col-9">{{ $agenda->jabatanKegiatan->nama_jabatan_kegiatan }}</td>
+                    <td class="col-9">
+                        {{ $agenda->jabatanKegiatan->nama_jabatan_kegiatan}}
+                    </td>
                 </tr>
                 <tr>
                     <th class="text-right col-3">Bobot Anggota:</th>
@@ -61,11 +59,11 @@
                 </tr>
                 <tr>
                     <th class="text-right col-3">Tanggal Agenda:</th>
-                    <td class="col-9">{{ \Carbon\Carbon::parse($agenda->tanggal_agenda)->format('d-m-Y H:i') }}</td>
+                    <td class="col-9">{{ $agenda->tanggal_agenda }}</td>
                 </tr>
                 <tr>
                     <th class="text-right col-3">Deskripsi:</th>
-                    <td class="col-9">{{ $agenda->deskripsi }}</td>
+                    <td class="col-9">{{ $agenda->deskripsi ?? 'Tidak Ada Deskripsi' }}</td>
                 </tr>
             </table>
         </div>
