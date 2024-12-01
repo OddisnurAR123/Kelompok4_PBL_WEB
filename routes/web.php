@@ -89,8 +89,8 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::get('/kegiatan/export_pdf', [KegiatanController::class, 'export_pdf'])->name('kegiatan.export.pdf');
 
     // Detail Kegiatan Routes
-    Route::get('/detail_kegiatan', [DetailKegiatanController::class, 'index'])->name('detail_kegiatan.index');
     Route::post('/detail_kegiatan/list', [DetailKegiatanController::class, 'list']);
+    Route::get('/detail_kegiatan', [DetailKegiatanController::class, 'index'])->name('detail_kegiatan.index');
     Route::get('/detail_kegiatan/{id}', [DetailKegiatanController::class, 'show'])->name('detail_kegiatan.show');
     Route::get('/detail_kegiatan/{id}/edit', [DetailKegiatanController::class, 'edit'])->name('detail_kegiatan.edit');
     Route::put('/detail_kegiatan/{id}/update', [DetailKegiatanController::class, 'update'])->name('detail_kegiatan.update');
