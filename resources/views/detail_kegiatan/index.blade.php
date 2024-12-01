@@ -74,28 +74,11 @@
                             return `
                                 <a href="{{ url('/detail_kegiatan/index') }}/${data}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> Lihat</a>
                                 <button onclick="modalAction('{{ url('/detail_kegiatan/edit') }}/${data}')" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> Edit</button>
-                                <button onclick="deleteAction(${data})" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Hapus</button>
                             `;
                         }
                     }
                 ]
             });
         });
-
-        function deleteAction(id) {
-            if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-                $.ajax({
-                    url: `{{ url('/detail_kegiatan/delete') }}/${id}`,
-                    type: 'DELETE',
-                    success: function(response) {
-                        alert(response.message);
-                        $('#table_detail_kegiatan').DataTable().ajax.reload();
-                    },
-                    error: function(error) {
-                        alert('Terjadi kesalahan saat menghapus data.');
-                    }
-                });
-            }
-        }
     </script>
 @endpush
