@@ -58,4 +58,15 @@ class KegiatanModel extends Model
         return $this->belongsTo(JabatanKegiatanModel::class, 'id_jabatan_kegiatan');
     }
 
+    public function anggota()
+    {
+        return $this->hasMany(KegiatanUser::class, 'id_kegiatan', 'id_kegiatan')
+            ->join('m_pengguna', 't_kegiatan_user.id_pengguna', '=', 'm_pengguna.id_pengguna')
+            ->join('m_jabatan_kegiatan', 't_kegiatan_user.id_jabatan_kegiatan', '=', 'm_jabatan_kegiatan.id_jabatan_kegiatan')
+            ->select(
+                'm_pengguna.nama_pengguna',
+                'm_jabatan_kegiatan.nama_jabatan_kegiatan',
+                't_kegiatan_user.*'
+            );
+    }
 }

@@ -151,21 +151,22 @@ class KegiatanController extends Controller
 
     public function show(string $id)
     {
-        $kegiatan = KegiatanModel::with('kategoriKegiatan')->find($id);
+        $kegiatan = KegiatanModel::with(['anggota'])->find($id);
 
+        // Debugging
         if (!$kegiatan) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Kegiatan tidak ditemukan.'
-            ]);
+            dd("Kegiatan dengan ID $id tidak ditemukan");
         }
 
         $breadcrumb = (object) [
-            'title' => 'Input Kegiatan',
+            'title' => 'Detail Kegiatan',
             'list' => ['Home', 'Kegiatan']
         ];
 
-        return view('kegiatan.show', ['kegiatan' => $kegiatan, 'breadcrumb' => $breadcrumb]);
+        return view('kegiatan.show', [
+            'kegiatan' => $kegiatan,
+            'breadcrumb' => $breadcrumb
+        ]);
     }
 
     // Menampilkan form edit kegiatan via Ajax
@@ -216,32 +217,42 @@ class KegiatanController extends Controller
         ]);
     }    
 
-    // Menampilkan konfirmasi hapus kegiatan via Ajax
-    public function confirm($id) {
-        $kegiatan = KegiatanModel::findOrFail($id);
-        return response()->json([
-            'status' => true,
-            'message' => 'Apakah Anda yakin ingin menghapus kegiatan ini?',
-            'data' => $kegiatan,
-        ]);
-    }
-
-    // Menghapus data kegiatan via Ajax
-    public function delete(Request $request, $id) {
+    public function delete(Request $request, $id)
+    {
         if ($request->ajax() || $request->wantsJson()) {
-            $kegiatan = KegiatanModel::findOrFail($id);
-            $kegiatan->delete();
+            $kegiatan = KegiatanModel::find($id);
 
-            return response()->json([
-                'status' => true,
-                'message' => 'Data berhasil dihapus',
-            ]);
+            if ($kegiatan) {
+                $kegiatan->delete();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil dihapus',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan',
+                ]);
+            }
         }
 
-        return response()->json([
-            'status' => false,
-            'message' => 'Request bukan AJAX.',
-        ]);
+        return redirect('/');
+    }
+
+    public function confirm(string $id)
+    {
+        $kegiatan = KegiatanModel::with('kategoriKegiatan')->find($id);
+    
+        // Jika data level tidak ditemukan, kirimkan respon error
+        if (!$kegiatan) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Kegiatan tidak ditemukan.'
+            ]);
+        }
+    
+        // Kembalikan view konfirmasi penghapusan level
+        return view('kegiatan.confirm', ['kegiatan' => $kegiatan]);
     }
 
     public function import() 
