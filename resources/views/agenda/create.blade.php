@@ -1,4 +1,4 @@
-<form action="{{ route('agenda.store') }}" method="POST" id="form-create-agenda" enctype="multipart/form-data">
+<form id="form-create-agenda" enctype="multipart/form-data">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -61,7 +61,7 @@
                 </div>
                 <div class="form-group">
                     <label>Tanggal Agenda</label>
-                    <input type="date" name="tanggal_agenda" id="tanggal_agenda" class="form-control" required>
+                    <input type="datetime-local" name="tanggal_agenda" id="tanggal_agenda" class="form-control" required>
                     <small id="error-tanggal_agenda" class="text-danger"></small>
                 </div>
                 <div class="form-group">
@@ -80,32 +80,49 @@
 
 <script>
     $(document).ready(function() {
-        $("#form-create-agenda").validate({
-            submitHandler: function(form) {
-                $.ajax({
-                    url: form.action,
-                    type: form.method,
-                    data: new FormData(form),
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-                        if (response.status) {
-                            Swal.fire('Berhasil', response.message, 'success');
-                            $('#modal-master').modal('hide');
-                            // Reload data jika menggunakan DataTables
-                            dataAgenda.ajax.reload();
-                        } else {
-                            $.each(response.msgField, function(key, value) {
-                                $('#error-' + key).text(value[0]);
-                            });
-                        }
-                    },
-                    error: function(xhr) {
-                        Swal.fire('Error', 'Terjadi kesalahan saat menyimpan data.', 'error');
-                    }
-                });
-                return false;
+        // Validasi dan pengiriman form menggunakan AJAX
+        $("#form-create-agenda").on("submit", function(e) {
+            e.preventDefault();
+
+            let formData = new FormData(this);
+
+            // Mengonversi tanggal dari format input datetime-local (Y-m-d\TH:i) ke format Y-m-d H:i:s
+            let tanggalAgenda = $('#tanggal_agenda').val();
+            if (tanggalAgenda) {
+                let date = new Date(tanggalAgenda);
+                let formattedDate = date.toISOString().slice(0, 19).replace("T", " "); // Format Y-m-d H:i:s
+                formData.set('tanggal_agenda', formattedDate);
             }
+
+            $.ajax({
+                url: "{{ route('agenda.store') }}",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    if (response.status) {
+                        Swal.fire("Berhasil", response.message, "success");
+                        $('#modal-master').modal('hide');
+                        // Reload data table atau refresh list agenda
+                        dataAgenda.ajax.reload();
+                    } else {
+                        Swal.fire("Gagal", "Terjadi kesalahan saat menyimpan data.", "error");
+                    }
+                },
+                error: function(xhr) {
+                    if (xhr.status === 422) {
+                        // Tangkap validasi error dari server
+                        let errors = xhr.responseJSON.errors;
+                        $(".text-danger").text(""); // Reset error messages
+                        $.each(errors, function(key, value) {
+                            $(`#error-${key}`).text(value[0]);
+                        });
+                    } else {
+                        Swal.fire("Error", "Terjadi kesalahan pada server.", "error");
+                    }
+                },
+            });
         });
     });
 </script>
