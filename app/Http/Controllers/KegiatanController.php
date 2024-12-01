@@ -189,6 +189,8 @@ class KegiatanController extends Controller
             'tanggal_mulai' => 'nullable|date',
             'tanggal_selesai' => 'nullable|date',
             'id_kategori_kegiatan' => 'nullable|exists:m_kategori_kegiatan,id_kategori_kegiatan',
+            'anggota.*.id_pengguna' => 'nullable|exists:m_pengguna,id_pengguna',
+            'anggota.*.id_jabatan_kegiatan' => 'nullable|exists:m_jabatan_kegiatan,id_jabatan_kegiatan',
         ]);
     
         if ($validator->fails()) {
@@ -210,6 +212,25 @@ class KegiatanController extends Controller
     
         // Simpan perubahan
         $kegiatan->save();
+
+        // Menyimpan anggota ke tabel pivot t_kegiatan_user jika ada
+        if ($request->has('anggota') && is_array($request->anggota)) {
+            // Hapus anggota yang lama dari pivot sebelum menambahkan yang baru
+            DB::table('t_kegiatan_user')->where('id_kegiatan', $kegiatan->id_kegiatan)->delete();
+
+            // Menambahkan anggota yang baru ke tabel pivot
+            foreach ($request->anggota as $anggota) {
+                if (isset($anggota['id_pengguna']) && isset($anggota['id_jabatan_kegiatan'])) {
+                    DB::table('t_kegiatan_user')->insert([
+                        'id_kegiatan' => $kegiatan->id_kegiatan,
+                        'id_pengguna' => $anggota['id_pengguna'],
+                        'id_jabatan_kegiatan' => $anggota['id_jabatan_kegiatan'],
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
+        }
     
         return response()->json([
             'status' => true,
