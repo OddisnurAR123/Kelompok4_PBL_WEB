@@ -9,7 +9,7 @@ use App\Models\KegiatanModel;
 use App\Models\JabatanKegiatanModel;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
-
+use Carbon\Carbon;
 
 class AgendaKegiatanController extends Controller
 {
@@ -55,61 +55,86 @@ class AgendaKegiatanController extends Controller
         ->rawColumns(['aksi'])
         ->make(true);
     }
-        public function create()
-            {
-                $jenisPengguna = JenisPenggunaModel::all(); // Ambil data jenis pengguna
-                $kegiatan = KegiatanModel::all(); // Ambil data kegiatan
-                $jabatanKegiatan = JabatanKegiatanModel::all(); // Ambil data jabatan kegiatan
+    public function create()
+    {
+        $jenisPengguna = JenisPenggunaModel::select('id_jenis_pengguna', 'nama_jenis_pengguna')->get();
+        $kegiatan = KegiatanModel::select('id_kegiatan', 'nama_kegiatan')->get();
+        $jabatanKegiatan = JabatanKegiatanModel::select('id_jabatan_kegiatan', 'nama_jabatan_kegiatan')->get();
 
-            return view('agenda.create', compact('jenisPengguna', 'kegiatan', 'jabatanKegiatan'));
-        }       
-
-    // Simpan data baru
-    public function store(Request $request){
-        if ($request->ajax() || $request->wantsJson()) {
-            // Aturan validasi untuk input 
-            $rules = [
-            'kode_agenda' => 'required|string|max:20|unique:t_agenda,kode_agenda,id_agenda',            
-            'nama_agenda' => 'required|string',
-            'id_kegiatan' => 'required|exists:m_kegiatan,id_kegiatan',
-            'tempat_agenda' => 'required|string',
-            'id_jenis_pengguna' => 'required|exists:m_jenis_pengguna,id_jenis_pengguna',
-            'id_jabatan_kegiatan' => 'nullable|exists:m_jabatan_kegiatan,id_jabatan_kegiatan',
-            'bobot_anggota' => 'required|numeric',
-            'deskripsi' => 'nullable|string',
-            'tanggal_agenda' => 'required|date',
-        ];      
-        $validator = Validator::make($request->all(), $rules);
-    
-            if ($validator->fails()) {
-                return response()->json([
-                'status' => false,
-                    'message' => 'Validasi Gagal',
-                    'msgField' => $validator->errors(),
-                ]);
-            }
-        
-            AgendaModel::create([
-                'kode_agenda' => $request->kode_agenda,
-                'nama_agenda' => $request->nama_agenda,
-                'id_kegiatan' => $request->id_kegiatan,
-                'tempat_agenda' => $request->tempat_agenda,
-                'id_jenis_pengguna' => $request->id_jenis_pengguna,
-                'id_jabatan_kegiatan' => $request->id_jabatan_kegiatan, // Handle nullable field
-                'bobot_anggota' => $request->bobot_anggota,
-                'deskripsi' => $request->deskripsi,
-                'tanggal_agenda' => $request->tanggal_agenda
-            ]);
-            
-          // Mengembalikan respon sukses
-          return response()->json([
-            'status' => true,
-            'message' => 'Data Agenda kegiatan berhasil disimpan',
-        ]);
+        return view('agenda.create', compact('jenisPengguna', 'kegiatan', 'jabatanKegiatan'));
     }
 
-    return redirect('/');
+    // Simpan data baru
+    // public function store(Request $request)
+    // {
+    //     $rules = [
+    //         'kode_agenda' => 'required|string|max:20|unique:t_agenda,kode_agenda',
+    //         'nama_agenda' => 'required|string|max:255',
+    //         'id_kegiatan' => 'required|exists:m_kegiatan,id_kegiatan',
+    //         'tempat_agenda' => 'required|string|max:255',
+    //         'id_jenis_pengguna' => 'required|exists:m_jenis_pengguna,id_jenis_pengguna',
+    //         'id_jabatan_kegiatan' => 'nullable|exists:m_jabatan_kegiatan,id_jabatan_kegiatan',
+    //         'bobot_anggota' => 'required|numeric|min:0',
+    //         'deskripsi' => 'nullable|string',
+    //         'tanggal_agenda' => 'required|date|date_format:Y-m-d H:i:s',
+    //     ];
+        
+
+    //     $validator = Validator::make($request->all(), $rules);
+
+    //     if ($validator->fails()) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => 'Validasi Gagal',
+    //             'msgField' => $validator->errors(),
+    //         ]);
+    //     }
+
+    //     $formattedDate = Carbon::parse($request->tanggal_agenda)->format('Y-m-d H:i:s');
+
+    //     AgendaModel::create([
+    //         'kode_agenda' => $request->kode_agenda,
+    //         'nama_agenda' => $request->nama_agenda,
+    //         'id_kegiatan' => $request->id_kegiatan,
+    //         'tempat_agenda' => $request->tempat_agenda,
+    //         'id_jenis_pengguna' => $request->id_jenis_pengguna,
+    //         'id_jabatan_kegiatan' => $request->id_jabatan_kegiatan,
+    //         'bobot_anggota' => $request->bobot_anggota,
+    //         'deskripsi' => $request->deskripsi,
+    //         'tanggal_agenda' => $formattedDate,
+    //     ]);
+
+    //     return response()->json([
+    //         'status' => true,
+    //         'message' => 'Data Agenda berhasil disimpan',
+    //     ]);
+    // }
+
+    public function store(Request $request)
+{
+    $rules = [
+        'kode_agenda' => 'required|string|max:20|unique:t_agenda,kode_agenda',
+        'nama_agenda' => 'required|string|max:255',
+        'id_kegiatan' => 'required|exists:t_kegiatan,id_kegiatan',
+        'tempat_agenda' => 'required|string|max:255',
+        'id_jenis_pengguna' => 'required|exists:m_jenis_pengguna,id_jenis_pengguna',
+        'id_jabatan_kegiatan' => 'nullable|exists:m_jabatan_kegiatan,id_jabatan_kegiatan',
+        'bobot_anggota' => 'required|numeric|min:0',
+        'deskripsi' => 'nullable|string',
+        'tanggal_agenda' => 'required|date|date_format:Y-m-d H:i:s',
+    ];
+
+    $validated = $request->validate($rules);
+
+    // Simpan data langsung ke database
+    AgendaModel::create($validated);
+
+    return response()->json([
+        'status' => true,
+        'message' => 'Data agenda berhasil disimpan.',
+    ]);
 }
+
 
     public function edit(string $id_agenda)
     {
@@ -131,7 +156,7 @@ class AgendaKegiatanController extends Controller
         $rules = [
             'kode_agenda' => 'required|string|max:20|unique:t_agenda,kode_agenda,' . $id_agenda . ',id_agenda',
             'nama_agenda' => 'required|string|max:100',
-            'id_kegiatan' => 'required|exists:m_kegiatan,id_kegiatan',
+            'id_kegiatan' => 'required|exists:t_kegiatan,id_kegiatan',
             'tempat_agenda' => 'required|string|max:255',
             'id_jenis_pengguna' => 'required|exists:m_jenis_pengguna,id_jenis_pengguna',
             'id_jabatan_kegiatan' => 'required|exists:m_jabatan_kegiatan,id_jabatan_kegiatan',
