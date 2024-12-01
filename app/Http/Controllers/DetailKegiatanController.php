@@ -25,23 +25,6 @@ class DetailKegiatanController extends Controller
         return view('detail_kegiatan.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu]);
     }
 
-    // Menampilkan data detail kegiatan dalam bentuk json untuk DataTables
-    // public function list(Request $request) {
-    //     $detail_kegiatan = DetailKegiatanModel::with('kegiatan:id_kegiatan,nama_kegiatan')
-    //     ->select('id_detail_kegiatan', 'id_kegiatan', 'keterangan', 'progres_kegiatan', 'beban_kerja')
-    //     ->get();    
-
-    //     return DataTables::of($detail_kegiatan)
-    //         ->addIndexColumn()
-    //         ->addColumn('aksi', function ($detail_kegiatan) {
-    //             $btn = '<button onclick="modalAction(\''.route('detail_kegiatan.show', $detail_kegiatan->id).'\')" class="btn btn-info btn-sm">Detail</button> ';
-    //             $btn .= '<button onclick="modalAction(\''.route('detail_kegiatan.edit', $detail_kegiatan->id).'\')" class="btn btn-warning btn-sm">Edit</button> ';
-    //             return $btn;
-    //         })
-    //         ->rawColumns(['aksi'])
-    //         ->make(true);
-    // }
-
     public function list(Request $request) {
         $detail_kegiatan = DetailKegiatanModel::with('kegiatan:id_kegiatan,nama_kegiatan')
             ->select('id_detail_kegiatan', 'id_kegiatan', 'keterangan', 'progres_kegiatan', 'beban_kerja')
@@ -49,8 +32,11 @@ class DetailKegiatanController extends Controller
     
         return DataTables::of($detail_kegiatan)
             ->addIndexColumn()
+            ->addColumn('kegiatan', function ($detail_kegiatan) {
+                // Menampilkan nama_kegiatan yang terkait dengan id_kegiatan
+                return $detail_kegiatan->kegiatan ? $detail_kegiatan->kegiatan->nama_kegiatan : 'Tidak ada';
+            })
             ->addColumn('aksi', function ($detail_kegiatan) {
-                // Mengubah rute untuk menuju ke index, bukan show
                 $btn = '<button onclick="modalAction(\''.route('detail_kegiatan.index', ['id' => $detail_kegiatan->id_detail_kegiatan]).'\')" class="btn btn-info btn-sm">Detail</button> ';
                 $btn .= '<button onclick="modalAction(\''.route('detail_kegiatan.edit', ['id' => $detail_kegiatan->id_detail_kegiatan]).'\')" class="btn btn-warning btn-sm">Edit</button> ';
                 return $btn;
