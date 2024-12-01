@@ -21,11 +21,10 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Jenis Pengguna</th>
                     <th>Nama Pengguna</th>
                     <th>Username</th>
                     <th>Email</th>
-                    <th>Jenis Pengguna</th>
-                    <th>Foto Profil</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -57,6 +56,10 @@
                 "url": "{{ url('pengguna/list') }}",
                 "dataType": "json",
                 "type": "POST",
+
+                "data": function(d) {
+                    d.id_jenis_pengguna = $('#id_jenis_pengguna').val();
+                }
             },
             columns: [
                 {
@@ -90,15 +93,6 @@
                     searchable: true
                 },
                 {
-                    data: "foto_profil",
-                    className: "",
-                    orderable: false,
-                    searchable: false,
-                    render: function(data, type, row) {
-                        return `<img src="${data}" alt="Foto Profil" class="img-thumbnail" style="width: 50px; height: 50px;">`;
-                    }
-                },
-                {
                     data: "aksi",
                     className: "",
                     orderable: false,
@@ -106,6 +100,10 @@
                 }
             ]
         });
+
+        $('#id_jenis_pengguna').on('change',function() {
+            dataPengguna.ajax.reload();
+        })
     });
 </script>
 @endpush

@@ -58,6 +58,7 @@
             <p>Data Pengguna</p>
           </a>
         </li>
+        
         <!-- Manajemen Kegiatan -->
         <li class="nav-item {{ ($activeMenu == 'manajemen-kegiatan') ? 'menu-open' : '' }}">
           <a href="#" class="nav-link {{ ($activeMenu == 'manajemen-kegiatan') ? 'active' : '' }}" style="color: {{ ($activeMenu == 'manajemen-kegiatan') ? '#3b82f6' : '#ffffff' }};">
@@ -163,4 +164,10 @@
       transition: all 0.3s ease;
   }
 
+  .modal {
+      z-index: 1050; /* Atur z-index lebih besar jika diperlukan */
+  }
+  .modal-backdrop {
+      z-index: 1049; /* Background modal */
+  }
   </style>

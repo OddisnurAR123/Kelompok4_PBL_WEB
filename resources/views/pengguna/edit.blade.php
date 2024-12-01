@@ -16,7 +16,7 @@
     </div>
 </div>
 @else
-<form action="{{ url('/pengguna/' . $pengguna->id_pengguna . '/update') }}" method="POST" id="form-edit">
+<form action="{{ url('/pengguna' . $pengguna->id_pengguna . '/update') }}" method="POST" id="form-edit">
     @csrf
     @method('PUT')
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
@@ -46,6 +46,11 @@
                     <input value="{{ $pengguna->email }}" type="email" name="email" id="email" class="form-control" required>
                     <small id="error-email" class="error-text form-text text-danger"></small>
                 </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input value="" type="password" name="password" id="password" class="form-control" required>
+                    <small id="error-password" class="error-text form-text text-danger"></small>
+                </div>
                 <!-- Jenis Pengguna -->
                 <div class="form-group">
                     <label>Jenis Pengguna</label>
@@ -58,17 +63,6 @@
                         @endforeach
                     </select>
                     <small id="error-id_jenis_pengguna" class="error-text form-text text-danger"></small>
-                </div>
-                <!-- Foto Profil -->
-                <div class="form-group">
-                    <label>Foto Profil</label>
-                    <input type="file" name="foto_profil" id="foto_profil" class="form-control">
-                    <small id="error-foto_profil" class="error-text form-text text-danger"></small>
-                    @if($pengguna->foto_profil)
-                        <div class="mt-2">
-                            <img src="{{ asset('storage/' . $pengguna->foto_profil) }}" alt="Foto Profil" class="img-thumbnail" style="width: 100px; height: 100px;">
-                        </div>
-                    @endif
                 </div>
             </div>
             <div class="modal-footer">
@@ -83,11 +77,14 @@
 $(document).ready(function() {
     $("#form-edit").validate({
         rules: {
-            nama_pengguna: { required: true, minlength: 3, maxlength: 50 },
-            username: { required: true, minlength: 3, maxlength: 20 },
-            email: { required: true, email: true },
-            id_jenis_pengguna: { required: true },
-        },
+    id_jenis_pengguna: { required: true },
+    nama_pengguna: { required: true, minlength: 3, maxlength: 50 },
+    username: { required: true, minlength: 3, maxlength: 20 },
+    password: { required: true, minlength: 6, maxlength: 20 },
+    email: { required: true, email: true }
+    }
+},
+
         messages: {
             nama_pengguna: {
                 required: "Nama Pengguna harus diisi.",
@@ -99,6 +96,7 @@ $(document).ready(function() {
                 minlength: "Username minimal 3 karakter.",
                 maxlength: "Username maksimal 20 karakter."
             },
+            password: { minlength: 6, maxlength: 20 },
             email: {
                 required: "Email harus diisi.",
                 email: "Format email tidak valid."
@@ -148,6 +146,5 @@ $(document).ready(function() {
             $(element).removeClass('is-invalid');
         }
     });
-});
 </script>
 @endempty
