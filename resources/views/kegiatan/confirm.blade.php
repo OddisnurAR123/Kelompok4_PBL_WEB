@@ -49,13 +49,15 @@
                             <td class="col-9">{{ $kegiatan->tanggal_selesai }}</td>
                         </tr>
                         <tr>
-                            <th class="text-right col-3">PIC (Penanggung Jawab):</th>
-                            <td class="col-9">{{ $kegiatan->pic }}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right col-3">Anggota :</th>
-                            <td class="col-9">{{ $kegiatan->anggota }}</td>
-                        </tr>
+                            <th class="text-right col-3">Kategori Kegiatan :</th>
+                            <td class="col-9">
+                                @isset($kegiatan->kategoriKegiatan)
+                                    {{ $kegiatan->kategoriKegiatan->nama_kategori_kegiatan ?? 'Tidak Ada' }}
+                                @else
+                                    Tidak Ditemukan
+                                @endisset
+                            </td>
+                        </tr>                        
                     </table>
                 </div>
                 <div class="modal-footer">

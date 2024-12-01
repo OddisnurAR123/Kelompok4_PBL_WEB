@@ -31,7 +31,7 @@
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input value="" type="password" name="password" id="password" class="form-control" required>
+                    <input type="password" name="password" id="password" class="form-control" required>
                     <small id="error-password" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
@@ -49,20 +49,22 @@
 </form>
 
 <script>
-$(document).ready(function() {
-    $("#form-create-pengguna").validate({
-        rules: {
-            id_jenis_pengguna: { required: true }
-            nama_pengguna: { required: true, minlength: 3 },
-            username: { required: true, minlength: 3 },
-            password: { required: true, minlength: 6, maxlength: 20 }
-            email: { required: true, email: true },
-        },
-        submitHandler: function(form) {
+    $(document).ready(function() {
+        $("#form-create-pengguna").validate({
+            rules: {
+                id_jenis_pengguna: { required: true },
+                nama_pengguna: { required: true, minlength: 3 },
+                username: { required: true, minlength: 3 },
+                password: { required: true, minlength: 6, maxlength: 20 },
+                email: { required: true, email: true }
+            },
+            submitHandler: function(form) {
                 $.ajax({
                     url: form.action,
                     type: form.method,
-                    data: $(form).serialize(),
+                    data: new FormData(form),  // Using FormData to handle file uploads
+                    contentType: false,
+                    processData: false,
                     success: function(response) {
                         if (response.status) {
                             $('#myModal').modal('hide');
@@ -71,7 +73,7 @@ $(document).ready(function() {
                                 title: 'Berhasil',
                                 text: response.message
                             });
-                            dataPengguna.ajax.reload();
+                            dataPengguna.ajax.reload();  // Assuming 'dataPengguna' is the DataTable
                         } else {
                             $('.error-text').text('');
                             $.each(response.msgField, function(prefix, val) {
@@ -87,16 +89,17 @@ $(document).ready(function() {
                 });
                 return false;
             },
-        errorElement: 'span',
-        errorPlacement: function(error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.form-group').append(error);
-        },
-        highlight: function(element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
-        },
-        unhighlight: function(element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
-        }
+            errorElement: 'span',
+            errorPlacement: function(error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
     });
-});
+</script>

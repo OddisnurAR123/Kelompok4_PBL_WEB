@@ -61,4 +61,9 @@ class PenggunaModel extends Authenticatable
     {
         return $this->belongsToMany(KegiatanModel::class, 't_kegiatan_user', 'id_pengguna', 'id_kegiatan');
     }
+
+    public function jabatanKegiatan()
+    {
+        return $this->belongsTo(JabatanKegiatanModel::class, 'id_jabatan_kegiatan');
+    }
 }
