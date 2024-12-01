@@ -28,23 +28,23 @@
         <div class="modal-body">
             <table class="table table-sm table-bordered table-striped">
                 <tr>
-                    <th class="text-right col-3">ID Jabatan Kegiatan:</th>
+                    <th style="width: 40%;">ID Jabatan Kegiatan:</th>
                     <td class="col-9">{{ $jabatanKegiatan->id_jabatan_kegiatan }}</td>
                 </tr>
                 <tr>
-                    <th class="text-right col-3">Kode Jabatan Kegiatan:</th>
+                    <th style="width: 40%;">Kode Jabatan Kegiatan:</th>
                     <td class="col-9">{{ $jabatanKegiatan->kode_jabatan_kegiatan }}</td>
                 </tr>
                 <tr>
-                    <th class="text-right col-3">Nama Jabatan Kegiatan:</th>
+                    <th style="width: 40%;">Nama Jabatan Kegiatan:</th>
                     <td class="col-9">{{ $jabatanKegiatan->nama_jabatan_kegiatan }}</td>
                 </tr>
                 <tr>
-                    <th class="text-right col-3">Is PIC:</th>
+                    <th style="width: 40%;">Is PIC:</th>
                     <td class="col-9">{{ $jabatanKegiatan->is_pic }}</td>
                 </tr>
                 <tr>
-                    <th class="text-right col-3">Urutan:</th>
+                    <th style="width: 40%;">Urutan:</th>
                     <td class="col-9">{{ $jabatanKegiatan->urutan }}</td>
                 </tr>
             </table>

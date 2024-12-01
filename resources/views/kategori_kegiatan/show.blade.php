@@ -20,23 +20,23 @@
 <div id="modal-master" class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Detail Data Kategori Kegiatan</h5>
+            <h5 class="modal-title" id="exampleModalLabel"> <b>Detail Data Kategori Kegiatan</b> </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
         <div class="modal-body">
-            <table class="table table-sm table-bordered table-striped">
+            <table class="table table-sm table-bordered table-striped text-start">
                 <tr>
-                    <th class="text-right col-3">ID Kategori Kegiatan:</th>
+                    <th style="width: 40%;">ID Kategori Kegiatan:</th>
                     <td class="col-9">{{ $kategoriKegiatan->id_kategori_kegiatan }}</td>
                 </tr>
                 <tr>
-                    <th class="text-right col-3">Kode Kategori Kegiatan:</th>
+                    <th style="width: 40%;">Kode Kategori Kegiatan:</th>
                     <td class="col-9">{{ $kategoriKegiatan->kode_kategori_kegiatan }}</td>
                 </tr>
                 <tr>
-                    <th class="text-right col-3">Nama Kategori Kegiatan:</th>
+                    <th style="width: 40%;">Nama Kategori Kegiatan:</th>
                     <td class="col-9">{{ $kategoriKegiatan->nama_kategori_kegiatan }}</td>
                 </tr>
             </table>

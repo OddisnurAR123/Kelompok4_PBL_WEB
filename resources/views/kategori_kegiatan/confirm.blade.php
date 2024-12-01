@@ -34,15 +34,15 @@
                 </div>
                 <table class="table table-sm table-bordered table-striped">
                     <tr>
-                        <th class="text-right col-3">ID Kategori Kegiatan:</th>
+                        <th style="width: 40%;">ID Kategori Kegiatan:</th>
                         <td class="col-9">{{ $kategoriKegiatan->id_kategori_kegiatan }}</td>
                     </tr>
                     <tr>
-                        <th class="text-right col-3">Kode Kategori Kegiatan:</th>
+                        <th style="width: 40%;">Kode Kategori Kegiatan:</th>
                         <td class="col-9">{{ $kategoriKegiatan->kode_kategori_kegiatan }}</td>
                     </tr>
                     <tr>
-                        <th class="text-right col-3">Nama Kategori Kegiatan:</th>
+                        <th style="width: 40%;">Nama Kategori Kegiatan:</th>
                         <td class="col-9">{{ $kategoriKegiatan->nama_kategori_kegiatan }}</td>
                     </tr>
                 </table>
