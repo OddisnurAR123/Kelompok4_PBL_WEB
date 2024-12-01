@@ -2,10 +2,6 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <!-- Judul Halaman -->
-                <h1>{{ $breadcrumb->title ?? 'Judul Halaman' }}</h1>
-            </div>
-            <div class="col-sm-6">
                 <!-- Breadcrumb -->
                 @if(isset($breadcrumb) && isset($breadcrumb->list))
                     <ol class="breadcrumb float-sm-right">
