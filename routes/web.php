@@ -3,7 +3,6 @@
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JenisPenggunaController;
-use App\Models\JenisPenggunaModel;
 use App\Http\Controllers\KategoriKegiatanController;
 use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\KegiatanEksternalController;
@@ -12,8 +11,6 @@ use App\Http\Controllers\JabatanKegiatanController;
 use App\Http\Controllers\AgendaKegiatanController;
 use App\Http\Controllers\DetailKegiatanController;
 use App\Http\Controllers\AuthController;
-use App\Models\JabatanKegiatanModel;
-use App\Models\KategoriKegiatanModel;
 use App\Http\Controllers\PenggunaController;
 
 
@@ -76,7 +73,6 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::get('/jabatan_kegiatan/{id}/delete', [JabatanKegiatanController::class, 'confirm']);
     Route::delete('/jabatan_kegiatan/{id}/delete', [JabatanKegiatanController::class, 'delete']);
     
-
     // Kegiatan Routes
     Route::get('/kegiatan', [KegiatanController::class, 'index'])->name('kegiatan.index');
     Route::post('/kegiatan/list', [KegiatanController::class, 'list']);
@@ -114,11 +110,11 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::post('/agenda/import', [AgendaKegiatanController::class, 'import'])->name('import'); // Impor agenda dari file
     Route::post('/agenda/list', [AgendaKegiatanController::class, 'list'])->name('list'); // Mengambil daftar agenda (AJAX)
 
-    Route::get('/pengguna', [PenggunaController::class, 'index']);
+    Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
     Route::post('/pengguna/list', [PenggunaController::class, 'list']);
-    Route::get('/pengguna/{id}/show', [PenggunaController::class, 'show']);
+    Route::get('/pengguna/{id}/show', [PenggunaController::class, 'show'])->name('pengguna.show');
     Route::get('/pengguna/create', [PenggunaController::class, 'create']);
     Route::post('/pengguna/store', [PenggunaController::class, 'store']);
-    Route::get('/pengguna/{id}/edit', [PenggunaController::class, 'edit']);
+    Route::get('/pengguna/{id}/edit', [PenggunaController::class, 'edit'])->name('pengguna.edit');
     Route::post('/pengguna/{id}/update', [PenggunaController::class, 'update']);
     Route::get('/pengguna/{id}/delete', [PenggunaController::class, 'delete']);

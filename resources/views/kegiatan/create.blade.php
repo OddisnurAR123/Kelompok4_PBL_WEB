@@ -39,6 +39,33 @@
                     </select>
                     <small id="error-kategori_kegiatan" class="error-text form-text text-danger"></small>
                 </div>
+                <!-- Anggota Kegiatan -->
+                <div id="anggota-section">
+                    <div class="anggota-group d-flex justify-content-between mb-3">
+                        <div class="col-5">
+                            <label>Pengguna 1</label>
+                            <select name="anggota[0][id_pengguna]" class="form-control" required>
+                                <option value="">Pilih Pengguna</option>
+                                @foreach($pengguna as $user)
+                                    <option value="{{ $user->id_pengguna }}">{{ $user->nama_pengguna }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-5 position-relative">
+                            <label>Jabatan</label>
+                            <select name="anggota[0][id_jabatan_kegiatan]" class="form-control" required>
+                                <option value="">Pilih Jabatan</option>
+                                @foreach($jabatanKegiatan as $jabatan)
+                                    <option value="{{ $jabatan->id_jabatan_kegiatan }}">{{ $jabatan->nama_jabatan_kegiatan }}</option>
+                                @endforeach
+                            </select>
+                            <button type="button" id="addAnggota" class="btn btn-light btn-sm position-absolute" style="top: -5px; right: 0; border: none; background: none;">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                </div>                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-warning" data-dismiss="modal">Batal</button>
@@ -50,6 +77,40 @@
 
 <script>
     $(document).ready(function() {
+        let anggotaIndex = 1; // Menyimpan indeks anggota yang ditambahkan
+        $("#addAnggota").click(function() {
+            // Menambahkan form anggota baru
+            let newAnggota = `
+                <div class="anggota-group d-flex justify-content-between mb-3">
+                <div class="col-5">
+                    <label>Pengguna ${anggotaIndex + 1}</label>
+                    <select name="anggota[${anggotaIndex}][id_pengguna]" class="form-control" required>
+                        <option value="">Pilih Pengguna</option>
+                        @foreach($pengguna as $user)
+                            <option value="{{ $user->id_pengguna }}">{{ $user->nama_pengguna }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-5">
+                    <label>Jabatan</label>
+                    <select name="anggota[${anggotaIndex}][id_jabatan_kegiatan]" class="form-control" required>
+                        <option value="">Pilih Jabatan</option>
+                        @foreach($jabatanKegiatan as $jabatan)
+                            <option value="{{ $jabatan->id_jabatan_kegiatan }}">{{ $jabatan->nama_jabatan_kegiatan }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-2 d-flex align-items-center">
+                </div>
+            </div>
+        `;
+
+            $('#anggota-section').append(newAnggota);
+
+            anggotaIndex++;
+        });
+
+        // Validasi form
         $("#form-tambah-kegiatan").validate({
             rules: {
                 kode_kegiatan: {

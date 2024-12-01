@@ -62,17 +62,20 @@ class PenggunaController extends Controller
         return view('pengguna.create', compact('jenisPengguna'));
     }    
 
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
+    public function store(Request $request) {
+        if ($request->ajax() || $request->wantsJson()) {
+            // Aturan validasi untuk input 
+            $rules = [
             'nama_pengguna' => 'required|string',
             'username' => 'required|string|unique:m_pengguna,username',
             'email' => 'required|email|unique:m_pengguna,email',
             'id_jenis_pengguna' => 'required|exists:m_jenis_pengguna,id_jenis_pengguna',
             'password' => 'required|string|min:6',
             'foto_profil' => 'nullable|image|max:2048',
-        ]);
-
+        ];
+        
+        $validator = Validator::make($request->all(), $rules);
+        
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
@@ -107,4 +110,73 @@ class PenggunaController extends Controller
             ], 500);
         }
     }
+}
+public function edit(string $id_pengguna) {
+    $pengguna = PenggunaModel::find($id_pengguna);
+    $jenisPengguna = JenisPenggunaModel::all();
+
+    if (!$pengguna) {
+        return response()->json(['status' => false, 'message' => 'Data tidak ditemukan']);
+    }
+
+    return view('pengguna.edit', compact('pengguna', 'jenisPengguna'));
+}
+
+    public function update(Request $request, $id_pengguna) {
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+            'nama_pengguna' => 'required|string',
+            'username' => 'required|string|unique:m_pengguna,username',
+            'email' => 'required|email|unique:m_pengguna,email',
+            'id_jenis_pengguna' => 'required|exists:m_jenis_pengguna,id_jenis_pengguna',
+            'password' => 'required|string|min:6',
+            'foto_profil' => 'nullable|image|max:2048',
+            ];
+
+            // Validasi input
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi gagal.',
+                    'msgField' => $validator->errors(),
+                ]);
+            }
+
+            $pengguna = PenggunaModel::find($id_pengguna);
+
+            if ($pengguna) {
+                $pengguna->update($request->all());
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil diupdate',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan',
+                ]);
+            }
+        }
+
+        return redirect('/');
+    }
+
+    public function show(string $id)
+    {
+        $pengguna = PenggunaModel::find($id);
+    
+        // Jika data tidak ditemukan, kembalikan respons error
+        if (!$pengguna) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak ditemukan.'
+            ]);
+        }
+    
+        // Jika data ditemukan, tampilkan view
+        return view('pengguna.show', ['pengguna' => $pengguna]);
+    }
+
 }

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use App\Models\KategoriKegiatanModel;
+use App\Models\PenggunaModel;
+use App\Models\JabatanKegiatanModel;
 
 class KegiatanModel extends Model
 {
@@ -43,4 +45,17 @@ class KegiatanModel extends Model
     {
         return $this->hasMany(DetailKegiatanModel::class, 'id_kegiatan', 'id_kegiatan');
     }
+    
+    // Relasi banyak ke banyak dengan pengguna
+    public function pengguna()
+    {
+        return $this->belongsToMany(PenggunaModel::class, 't_kegiatan_user', 'id_kegiatan', 'id_pengguna');
+    }
+
+    // Relasi satu ke banyak dengan jabatan kegiatan
+    public function JabatanKegiatan()
+    {
+        return $this->belongsTo(JabatanKegiatanModel::class, 'id_jabatan_kegiatan');
+    }
+
 }
