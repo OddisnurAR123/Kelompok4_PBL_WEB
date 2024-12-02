@@ -150,16 +150,23 @@
                 data: $(form).serialize(),
                 success: function(response) {
                     if (response.status) {
+                        // Menampilkan SweetAlert jika berhasil
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil',
                             text: response.message
+                        }).then(() => {
+                            // Setelah OK ditekan, halaman akan di-reload
+                            location.reload(); // Reload halaman
                         });
                     } else {
-                        $('.error-text').text(''); // Menghapus pesan error sebelumnya
+                        // Menghapus pesan error sebelumnya
+                        $('.error-text').text('');
+                        // Menampilkan pesan error untuk masing-masing field
                         $.each(response.msgField, function(prefix, val) {
-                            $('#error-' + prefix).text(val[0]); // Menampilkan pesan error untuk masing-masing field
+                            $('#error-' + prefix).text(val[0]);
                         });
+                        // Menampilkan SweetAlert jika terjadi kesalahan
                         Swal.fire({
                             icon: 'error',
                             title: 'Terjadi Kesalahan',
@@ -168,6 +175,7 @@
                     }
                 },
                 error: function() {
+                    // Menampilkan SweetAlert jika terjadi kesalahan server
                     Swal.fire({
                         icon: 'error',
                         title: 'Terjadi Kesalahan',
