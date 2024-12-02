@@ -57,21 +57,11 @@
                 },
                 columns: [
                     { data: "id_detail_kegiatan" },
-                    { data: "kegiatan" },  // Menambahkan kolom kegiatan
+                    { data: "kegiatan" },
                     { data: "keterangan" },
                     { data: "progres_kegiatan" },
                     { data: "beban_kerja" },
-                    { 
-                        data: "id_detail_kegiatan", 
-                        orderable: false, 
-                        searchable: false, 
-                        render: function(data, type, row) {
-                            return `
-                                <a href="{{ url('/detail_kegiatan/index') }}/${data}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> Lihat</a>
-                                <button onclick="modalAction('{{ url('/detail_kegiatan/edit') }}/${data}')" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> Edit</button>
-                            `;
-                        }
-                    }
+                    { data: "aksi", orderable: false, searchable: false } // Kolom aksi berasal dari controller
                 ]
             });
         });
