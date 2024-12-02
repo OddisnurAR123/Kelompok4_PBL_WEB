@@ -39,7 +39,7 @@
                             <td class="col-9">{{ $detailKegiatan->id_kegiatan }}</td>
                         </tr>
                         <tr>
-                            <th style="width: 40%;">Progres Kegiatan (%):</th>
+                            <th style="width: 40%;">Progres Kegiatan:</th>
                             <td class="col-9">{{ $detailKegiatan->progres_kegiatan }}%</td>
                         </tr>
                         <tr>
@@ -49,14 +49,6 @@
                         <tr>
                             <th style="width: 40%;">Beban Kerja:</th>
                             <td class="col-9">{{ $detailKegiatan->beban_kerja }}</td>
-                        </tr>
-                        <tr>
-                            <th style="width: 40%;">Tanggal Dibuat:</th>
-                            <td class="col-9">{{ $detailKegiatan->created_at }}</td>
-                        </tr>
-                        <tr>
-                            <th style="width: 40%;">Tanggal Diperbarui:</th>
-                            <td class="col-9">{{ $detailKegiatan->updated_at }}</td>
                         </tr>
                     </table>
                 </div>
