@@ -109,19 +109,18 @@ class DetailKegiatanController extends Controller
 
     // Menampilkan detail detail kegiatan
     public function show(string $id) {
-        $detail_kegiatan = DetailKegiatanModel::find($id);
+        $detailKegiatan = DetailKegiatanModel::find($id);
 
-        if (!$detail_kegiatan) {
+        if (!$detailKegiatan) {
             return response()->json([
                 'status' => false,
                 'message' => 'Data tidak ditemukan.'
             ]);
         }
 
-        return view('detail_kegiatan.show', ['detailKegiatan' => $detail_kegiatan]);
+        return view('detail_kegiatan.show', ['detailKegiatan' => $detailKegiatan]);
     }
-
-
+    
     // Menampilkan form edit detail kegiatan
     public function edit($id)
     {
