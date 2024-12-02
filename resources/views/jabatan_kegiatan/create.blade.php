@@ -64,8 +64,9 @@ $(document).ready(function() {
                             icon: 'success',
                             title: 'Berhasil',
                             text: response.message
-                        });
-                        datajabatanKegiatan.ajax.reload(); // Reload data table
+                        }).then(() => {
+                                location.reload(); // Reload halaman untuk melihat data terbaru
+                            });
                     } else {
                         // Menangani pesan error terkait urutan
                         if(response.message === 'Urutan sudah digunakan, silakan pilih urutan lain.') {

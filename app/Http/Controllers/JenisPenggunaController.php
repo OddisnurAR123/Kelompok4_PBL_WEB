@@ -30,7 +30,9 @@ class JenisPenggunaController extends Controller
         return DataTables::of($jenisPengguna)
             ->addIndexColumn()
             ->addColumn('aksi', function ($jenisPengguna) {
-                $btn = '<button onclick="modalAction(\''.url('/jenis_pengguna/' . $jenisPengguna->id_jenis_pengguna . '/show').'\')" class="btn btn-info btn-sm">Detail</button> ';
+                $btn = '<button onclick="modalAction(\''.url('/jenis_pengguna/' . $jenisPengguna->id_jenis_pengguna . '/show').'\')" class="btn btn-info btn-sm">
+                            <i class="fas fa-eye"></i>
+                        </button> ';
                 return $btn;
             })
             ->rawColumns(['aksi'])
@@ -53,23 +55,4 @@ class JenisPenggunaController extends Controller
         return view('jenis_pengguna.show', ['jenisPengguna' => $jenisPengguna]);
     }
 
-    // Mengambil data PIC (id_jenis_pengguna = 3)
-    public function getPic()
-    {
-        $pic = JenisPenggunaModel::where('id_jenis_pengguna', 3)->get(['id', 'nama_pengguna']);
-        return response()->json([
-            'status' => true,
-            'data' => $pic
-        ]);
-    }
-
-    // Mengambil data Anggota (id_jenis_pengguna != 3)
-    public function getAnggota()
-    {
-        $anggota = JenisPenggunaModel::where('id_jenis_pengguna', '!=', 3)->get(['id', 'nama_pengguna']);
-        return response()->json([
-            'status' => true,
-            'data' => $anggota
-        ]);
-    }
 }

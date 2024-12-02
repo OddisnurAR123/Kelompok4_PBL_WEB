@@ -78,8 +78,9 @@ $(document).ready(function() {
                             icon: 'success',
                             title: 'Berhasil',
                             text: response.message
-                        });
-                        $('#table_jabatan_kegiatan').DataTable().ajax.reload();
+                        }).then(() => {
+                                location.reload(); // Reload halaman untuk melihat data terbaru
+                        });;
                     } else {
                         Swal.fire({
                             icon: 'error',
