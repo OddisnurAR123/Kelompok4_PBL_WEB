@@ -7,6 +7,9 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Models\DetailKegiatanModel;
 use App\Models\KegiatanModel;
 use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class DetailKegiatanController extends Controller
 {
@@ -38,10 +41,10 @@ class DetailKegiatanController extends Controller
                 return $detail_kegiatan->kegiatan ? $detail_kegiatan->kegiatan->nama_kegiatan : 'Tidak ada';
             })
             ->addColumn('aksi', function ($detail_kegiatan) {
-                $btn = '<button onclick="window.location.href=\''.route('detail_kegiatan.show', ['id' => $detail_kegiatan->id_detail_kegiatan]).'\'" class="btn btn-info btn-sm">';
-                $btn .= '<i class="fas fa-eye"></i> Detail</button>';
+                $btn = '<button onclick="window.location.href=\''.route('detail_kegiatan.show', ['id' => $detail_kegiatan->id_detail_kegiatan]).'\'" class="btn btn-info btn-sm" style="margin-right: 5px;">';
+                $btn .= '<i class="fas fa-eye"></i></button>';
                 $btn .= '<button onclick="modalAction(\''.route('detail_kegiatan.edit', ['id' => $detail_kegiatan->id_detail_kegiatan]).'\')" class="btn btn-warning btn-sm">';
-                $btn .= '<i class="fas fa-edit"></i> Edit</button>';
+                $btn .= '<i class="fas fa-edit"></i></button>';
                 return $btn;
             })
             ->rawColumns(['aksi'])
@@ -155,5 +158,84 @@ class DetailKegiatanController extends Controller
                 'message' => 'Gagal memperbarui detail kegiatan. ' . $e->getMessage(),
             ]);
         }
+    }
+
+    public function export_excel()
+    {
+        // Ambil data detail kegiatan
+        $detail_kegiatan = DetailKegiatanModel::with('kegiatan:id_kegiatan,nama_kegiatan')
+            ->select('id_detail_kegiatan', 'id_kegiatan', 'keterangan', 'progres_kegiatan', 'beban_kerja')
+            ->get();
+
+        // Load library PhpSpreadsheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet(); // Ambil sheet yang aktif
+
+        // Header kolom
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Nama Kegiatan');
+        $sheet->setCellValue('C1', 'Keterangan');
+        $sheet->setCellValue('D1', 'Progres Kegiatan');
+        $sheet->setCellValue('E1', 'Beban Kerja');
+
+        // Buat header bold
+        $sheet->getStyle('A1:F1')->getFont()->setBold(true);
+
+        // Isi data detail kegiatan
+        $no = 1; // Nomor urut
+        $baris = 2; // Baris dimulai dari baris ke-2
+        foreach ($detail_kegiatan as $value) {
+            $sheet->setCellValue('A' . $baris, $no);
+            $sheet->setCellValue('B' . $baris, $value->kegiatan->nama_kegiatan);
+            $sheet->setCellValue('C' . $baris, $value->keterangan);
+            $sheet->setCellValue('D' . $baris, $value->progres_kegiatan . '%');
+            $sheet->setCellValue('E' . $baris, $value->beban_kerja);
+            $baris++;
+            $no++;
+        }
+
+        // Set auto width untuk kolom
+        foreach (range('A', 'E') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        // Set judul sheet
+        $sheet->setTitle('Data Detail Kegiatan');
+
+        // Buat file Excel
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $filename = 'Data Detail Kegiatan ' . date('Y-m-d H:i:s') . '.xlsx';
+
+        // Set header untuk download file
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Last-Modified:' . gmdate('D, d M Y H:i:s') . ' GMT');
+        header('Cache-Control: cache, must-revalidate');
+        header('Pragma: public');
+
+        // Simpan output ke browser
+        $writer->save('php://output');
+        exit;
+    }
+
+    // Eksport data ke PDF
+    public function export_pdf()
+    {
+        // Ambil data detail kegiatan
+        $detail_kegiatan = DetailKegiatanModel::with('kegiatan:id_kegiatan,nama_kegiatan')
+            ->select('id_detail_kegiatan', 'id_kegiatan', 'keterangan', 'progres_kegiatan', 'beban_kerja')
+            ->get();
+
+        // Load view untuk PDF
+        $pdf = Pdf::loadView('detail_kegiatan.export_pdf', ['detail_kegiatan' => $detail_kegiatan]);
+
+        // Set ukuran kertas dan orientasi
+        $pdf->setPaper('a4', 'portrait');
+        $pdf->setOption("isRemoteEnabled", true);
+
+        // Stream untuk mendownload file PDF
+        return $pdf->stream('Data Detail Kegiatan ' . date('Y-m-d H:i:s') . '.pdf');
     }
 }

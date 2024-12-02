@@ -49,12 +49,12 @@ class KegiatanController extends Controller
                 return $kegiatan->kategoriKegiatan ? $kegiatan->kategoriKegiatan->nama_kategori_kegiatan : 'Tidak ada kategori';
             })    
             ->addColumn('aksi', function ($kegiatan) {
-                $btn = '<button onclick="modalAction(\''.route('kegiatan.show', $kegiatan->id_kegiatan).'\')" class="btn btn-info btn-sm">';
-                $btn .= '<i class="fas fa-eye"></i> Detail</button>';
-                $btn .= '<button onclick="modalAction(\''.route('kegiatan.edit', $kegiatan->id_kegiatan).'\')" class="btn btn-warning btn-sm">';
-                $btn .= '<i class="fas fa-edit"></i> Edit</button>'; 
+                $btn = '<button onclick="modalAction(\''.route('kegiatan.show', $kegiatan->id_kegiatan).'\')" class="btn btn-info btn-sm" style="margin-right: 5px;">';
+                $btn .= '<i class="fas fa-eye"></i></button>';
+                $btn .= '<button onclick="modalAction(\''.route('kegiatan.edit', $kegiatan->id_kegiatan).'\')" class="btn btn-warning btn-sm" style="margin-right: 5px;">';
+                $btn .= '<i class="fas fa-edit"></i></button>';
                 $btn .= '<button onclick="modalAction(\''.route('kegiatan.delete', $kegiatan->id_kegiatan).'\')" class="btn btn-danger btn-sm">';
-                $btn .= '<i class="fas fa-trash"></i> Hapus</button>';              
+                $btn .= '<i class="fas fa-trash"></i></button>';
                 return $btn;
             })
             ->rawColumns(['aksi'])
@@ -414,22 +414,21 @@ class KegiatanController extends Controller
 
 
     public function export_pdf()
-{
-    // Mengambil data kegiatan beserta kategori_kegiatan
-    $kegiatan = KegiatanModel::select('kode_kegiatan', 'nama_kegiatan', 'tanggal_mulai', 'tanggal_selesai', 'id_kategori_kegiatan')
-        ->with('kategoriKegiatan')
-        ->orderBy('kode_kegiatan')
-        ->get();
+    {
+        // Mengambil data kegiatan beserta kategori_kegiatan
+        $kegiatan = KegiatanModel::select('kode_kegiatan', 'nama_kegiatan', 'tanggal_mulai', 'tanggal_selesai', 'id_kategori_kegiatan')
+            ->with('kategoriKegiatan')
+            ->orderBy('kode_kegiatan')
+            ->get();
 
-    // Load view untuk PDF
-    $pdf = Pdf::loadView('kegiatan.export_pdf', ['kegiatan' => $kegiatan]);
+        // Load view untuk PDF
+        $pdf = Pdf::loadView('kegiatan.export_pdf', ['kegiatan' => $kegiatan]);
 
-    // Set ukuran kertas dan orientasi
-    $pdf->setPaper('a4', 'portrait');
-    $pdf->setOption("isRemoteEnabled", true); // Jika ada gambar yang diambil dari URL
+        // Set ukuran kertas dan orientasi
+        $pdf->setPaper('a4', 'portrait');
+        $pdf->setOption("isRemoteEnabled", true); // Jika ada gambar yang diambil dari URL
 
-    // Stream untuk mendownload file PDF
-    return $pdf->stream('Data Kegiatan ' . date('Y-m-d H:i:s') . '.pdf');
-}
-
+        // Stream untuk mendownload file PDF
+        return $pdf->stream('Data Kegiatan ' . date('Y-m-d H:i:s') . '.pdf');
+    }
 }
