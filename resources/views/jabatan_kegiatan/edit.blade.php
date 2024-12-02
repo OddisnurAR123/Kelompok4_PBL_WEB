@@ -93,8 +93,9 @@ $(document).ready(function() {
                             icon: 'success',
                             title: 'Berhasil',
                             text: response.message
-                        });
-                        datajabatanKegiatan.ajax.reload();
+                        }).then(() => {
+                                location.reload(); // Reload halaman untuk melihat data terbaru
+                            });
                     } else {
                         $('.error-text').text('');
                         $.each(response.msgField, function(prefix, val) {

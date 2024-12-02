@@ -50,7 +50,7 @@ class KategoriKegiatanController extends Controller
             ->addIndexColumn()
             ->addColumn('aksi', function ($kategoriKegiatan) {
                 $btn = '<button onclick="modalAction(\''.url('/kategori_kegiatan/' . $kategoriKegiatan->id_kategori_kegiatan . '/show').'\')" class="btn btn-info btn-sm">Detail</button> ';
-                $btn .= '<button onclick="modalAction(\''.url('/kategori_kegiatan/' . $kategoriKegiatan->id_kategori_kegiatan . '/edit').'\')" class="btn btn-warning btn-sm">Edit</button> ';
+                $btn .= '<button onclick="modalAction(\''.url('/kategori_kegiatan/' . $kategoriKegiatan->id_kategori_kegiatan . '/edit').'\')" class="btn btn-warning btn-sm">Sunting</button> ';
                 $btn .= '<button onclick="modalAction(\''.url('/kategori_kegiatan/' . $kategoriKegiatan->id_kategori_kegiatan . '/delete').'\')" class="btn btn-danger btn-sm">Hapus</button>';
                 return $btn;
             })
