@@ -47,8 +47,9 @@
                                 icon: 'success',
                                 title: 'Berhasil',
                                 text: response.message
+                            }).then(() => {
+                                location.reload(); // Reload halaman untuk melihat data terbaru
                             });
-                            datakategoriKegiatan.ajax.reload();
                         } else {
                             $('.error-text').text('');
                             $.each(response.msgField, function(prefix, val) {
