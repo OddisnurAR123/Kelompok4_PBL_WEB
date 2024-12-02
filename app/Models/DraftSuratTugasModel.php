@@ -9,13 +9,13 @@ class DraftSuratTugas extends Model
 {
     use HasFactory;
 
-    protected $table = 'surat_tugas'; // Sesuaikan dengan nama tabel Anda
-    protected $primaryKey = 'id';
+    protected $table = 't_draft_surat_tugas';
+    protected $primaryKey = 'id_draft';
 
     protected $fillable = [
         'kode_surat',
         'judul_surat',
-        'id_jabatan_kegiatan',
+        'id_kegiatan',
         'created_at',
         'updated_at',
     ];
