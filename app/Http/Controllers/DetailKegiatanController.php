@@ -117,61 +117,43 @@ class DetailKegiatanController extends Controller
         return view('detail_kegiatan.show', compact('detail_kegiatan'));
     }
 
-    // Menampilkan form edit detail kegiatan via Ajax
-    public function edit_ajax($id) {
-        $detail_kegiatan = DetailKegiatanModel::findOrFail($id);
-        return view('kegiatan.edit', ['kegiatan' => $detail_kegiatan]);
+    // Menampilkan form edit detail kegiatan
+    public function edit($id)
+    {
+        $detailKegiatan = DetailKegiatanModel::findOrFail($id);
+        $kegiatanList = KegiatanModel::all();
+        return view('detail_kegiatan.edit', compact('detailKegiatan', 'kegiatanList'));
     }
 
-    // Menyimpan perubahan data detail kegiatan via Ajax
-    public function update_ajax(Request $request, $id) {
-        if ($request->ajax() || $request->wantsJson()) {
-            $validator = Validator::make($request->all(), [
-                'id_kegiatan' => 'required|integer|exists:t_kegiatan,id_kegiatan',
-                'keterangan' => 'nullable|string|max:255',
-                'progress_kegiatan' => 'required|numeric|min:0|max:100',
-                'beban_kerja' => 'required|numeric|min:0',
+    // Menyimpan perubahan data detail kegiatan
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'id_kegiatan' => 'nullable|integer|exists:t_kegiatan,id_kegiatan',
+            'keterangan' => 'nullable|string|max:255',
+            'progres_kegiatan' => 'nullable|numeric|min:0|max:100',
+            'beban_kerja' => 'nullable|in:Ringan,Sedang,Berat',
+        ]);
+
+        $detail_kegiatan = DetailKegiatanModel::findOrFail($id);
+
+        try {
+            $detail_kegiatan->update([
+                'id_kegiatan' => $request->id_kegiatan,
+                'keterangan' => $request->keterangan,
+                'progres_kegiatan' => $request->progres_kegiatan,
+                'beban_kerja' => $request->beban_kerja,
             ]);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Validasi gagal.',
-                    'msgField' => $validator->errors(),
-                ]);
-            }
-
-            $detail_kegiatan = DetailKegiatanModel::findOrFail($id);
-            $detail_kegiatan->update($request->only('id_kegiatan', 'kategori_kegiatan', 'keterangan', 'progres_kegiatan', 'beban_kerja'));
 
             return response()->json([
                 'status' => true,
-                'message' => 'Data berhasil diupdate',
+                'message' => 'Detail kegiatan berhasil diperbarui.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal memperbarui detail kegiatan. ' . $e->getMessage(),
             ]);
         }
-
-        return response()->json([
-            'status' => false,
-            'message' => 'Request bukan AJAX.',
-        ]);
-    }
-
-    // Menampilkan konfirmasi hapus detail kegiatan via Ajax
-    public function confirm_ajax($id) {
-        $detail_kegiatan = DetailKegiatanModel::findOrFail($id);
-        return response()->json([
-            'status' => true,
-            'message' => 'Apakah Anda yakin ingin menghapus kegiatan ini?',
-            'data' => $detail_kegiatan,
-        ]);
-    }
-
-    // Proses import excel detail  kegiatan dengan AJAX
-    public function import_ajax(Request $request) {
-        // Placeholder untuk implementasi import file Excel
-        return response()->json([
-            'status' => true,
-            'message' => 'Fitur import berhasil diimplementasikan.',
-        ]);
     }
 }

@@ -4,7 +4,6 @@
         <div class="card-header">
             <h3 class="card-title">Daftar Progres Kegiatan</h3>
             <div class="card-tools">
-                <button onclick="modalAction('{{ url('/detail_kegiatan/import') }}')" class="btn btn-info"><i class="fa fa-file-import"></i> Import Progres Kegiatan</button>
                 <a href="{{ url('/detail_kegiatan/export_excel') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i> Export Progres Kegiatan XLSX</a>
                 <a href="{{ url('/detail_kegiatan/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Export Progres Kegiatan PDF</a>
                 <button onclick="modalAction('{{ url('/detail_kegiatan/create') }}')" class="btn btn-success"><i class="fa fa-plus"></i> Tambah Progres Kegiatan</button>
