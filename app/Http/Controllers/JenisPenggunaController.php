@@ -31,7 +31,7 @@ class JenisPenggunaController extends Controller
             ->addIndexColumn()
             ->addColumn('aksi', function ($jenisPengguna) {
                 $btn = '<button onclick="modalAction(\''.url('/jenis_pengguna/' . $jenisPengguna->id_jenis_pengguna . '/show').'\')" class="btn btn-info btn-sm">
-                            <i class="fas fa-eye"></i> Detail
+                            <i class="fas fa-eye"></i>
                         </button> ';
                 return $btn;
             })
