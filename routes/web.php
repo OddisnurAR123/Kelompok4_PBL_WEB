@@ -104,13 +104,16 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
 
     Route::get('/agenda', [AgendaKegiatanController::class, 'index'])->name('agenda.index');
     Route::post('/agenda/list', [AgendaKegiatanController::class, 'list']);
-    Route::get('agenda/{id}/show', [AgendaKegiatanController::class, 'show'])->name('agenda.show');
+    Route::get('/agenda/{id}/show', [AgendaKegiatanController::class, 'show'])->name('agenda.show');
     Route::get('/agenda/create', [AgendaKegiatanController::class, 'create']);
     Route::post('/agenda/store', [AgendaKegiatanController::class, 'store'])->name('agenda.store');    
     Route::get('/agenda/{id}/edit', [AgendaKegiatanController::class, 'edit'])->name('agenda.edit');
     Route::put('/agenda/{id}/update', [AgendaKegiatanController::class, 'update']);
-    Route::get('/agenda/{id}/delete', [AgendaKegiatanController::class, 'confirm']);
-    Route::delete('/agenda/{id}/delete', [AgendaKegiatanController::class, 'delete']);
+    Route::get('/agenda/{id}/delete', [AgendaKegiatanController::class, 'confirm'])->name('agenda.confirm');
+    Route::delete('/agenda/{id}/delete', [AgendaKegiatanController::class, 'delete'])->name('agenda.delete');
+    Route::post('/agenda/import', [KegiatanController::class, 'import'])->name('agenda.import');
+    Route::get('/agenda/export_excel', [KegiatanController::class, 'export_excel'])->name('agenda.export_excel');
+    Route::get('/agenda/export_pdf', [KegiatanController::class, 'export_pdf'])->name('agenda.export_pdf');
 
     Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
     Route::post('/pengguna/list', [PenggunaController::class, 'list']);
