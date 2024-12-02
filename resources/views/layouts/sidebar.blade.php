@@ -125,7 +125,7 @@
 
         <!-- Dokumen Draft Surat Tugas -->
         <li class="nav-item">
-          <a href="{{ url('/dokumen-draft-surat-tugas') }}" class="nav-link {{ ($activeMenu == 'dokumen-draft-surat-tugas') ? 'active' : '' }}" style="color: {{ ($activeMenu == 'dokumen-draft-surat-tugas') ? '#3b82f6' : '#ffffff' }};">
+          <a href="{{ url('/draft_surat_tugas') }}" class="nav-link {{ ($activeMenu == 'draft_surat_tugas') ? 'active' : '' }}" style="color: {{ ($activeMenu == 'draft_surat_tugas') ? '#3b82f6' : '#ffffff' }};">
             <i class="nav-icon fas fa-file-alt"></i>
             <p>Draft Surat Tugas</p>
           </a>
