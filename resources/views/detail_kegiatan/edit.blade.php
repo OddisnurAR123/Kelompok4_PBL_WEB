@@ -1,4 +1,4 @@
-<form action="{{ url('/detail_kegiatan/update/'.$detailKegiatan->id_detail_kegiatan) }}" method="POST" id="form-edit-detail-kegiatan">
+<form action="{{ url('/detail_kegiatan/update/'.$detailKegiatan->id_detail_kegiatan) }}" method="POST" id="form-edit-detail_kegiatan">
     @csrf
     @method('PUT') <!-- Untuk mengubah data dengan method PUT -->
     <div class="modal-dialog modal-lg" role="document">
@@ -53,7 +53,7 @@
 
 <script>
     $(document).ready(function() {
-        $("#form-edit-detail-kegiatan").validate({
+        $("#form-edit-detail_kegiatan").validate({
             rules: {
                 id_kegiatan: {
                     required: true
@@ -82,12 +82,16 @@
                                 icon: 'success',
                                 title: 'Berhasil',
                                 text: response.message
+                            }).then(() => {
+                                location.reload(); // Reload halaman setelah OK
                             });
                         } else {
-                            $('.error-text').text('');
-                            $.each(response.msgField, function(prefix, val) {
-                                $('#error-' + prefix).text(val[0]);
-                            });
+                            $('.error-text').text(''); // Kosongkan pesan error lama
+                            if (response.msgField) {
+                                $.each(response.msgField, function(prefix, val) {
+                                    $('#error-' + prefix).text(val[0]);
+                                });
+                            }
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Terjadi Kesalahan',
@@ -95,15 +99,15 @@
                             });
                         }
                     },
-                    error: function() {
+                    error: function(xhr, status, error) {
                         Swal.fire({
                             icon: 'error',
                             title: 'Terjadi Kesalahan',
-                            text: 'Tidak dapat memperbarui detail kegiatan. Coba lagi.'
+                            text: 'Tidak dapat memperbarui detail kegiatan. Silakan coba lagi.'
                         });
                     }
                 });
-                return false; // Mencegah form dikirim secara default
+                return false; // Mencegah pengiriman form secara default
             },
             errorElement: 'span',
             errorPlacement: function(error, element) {

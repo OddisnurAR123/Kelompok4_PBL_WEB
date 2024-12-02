@@ -131,21 +131,26 @@
                     required: true
                 }
             },
-            submitHandler: function(form) {
+            submitHandler: function (form) {
                 $.ajax({
                     url: form.action,
                     type: form.method,
                     data: $(form).serialize(),
-                    success: function(response) {
+                    success: function (response) {
                         if (response.status) {
+                            // SweetAlert untuk notifikasi sukses
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Berhasil',
                                 text: response.message
+                            }).then(() => {
+                                // Auto reload setelah tombol OK ditekan
+                                location.reload();
                             });
                         } else {
+                            // Menangani kesalahan jika response.status == false
                             $('.error-text').text(''); // Menghapus pesan error sebelumnya
-                            $.each(response.msgField, function(prefix, val) {
+                            $.each(response.msgField, function (prefix, val) {
                                 $('#error-' + prefix).text(val[0]); // Menampilkan pesan error untuk masing-masing field
                             });
                             Swal.fire({
@@ -155,7 +160,8 @@
                             });
                         }
                     },
-                    error: function() {
+                    error: function () {
+                        // Menangani kesalahan server
                         Swal.fire({
                             icon: 'error',
                             title: 'Terjadi Kesalahan',

@@ -7,7 +7,7 @@
             <div class="card-tools"></div>
         </div>
         <div class="card-body">
-            @empty($detail_kegiatan)
+            @if(!$detail_kegiatan)
                 <div class="alert alert-danger alert-dismissible">
                     <h5><i class="icon fas fa-ban"></i> Kesalahan!</h5>
                     Data yang Anda cari tidak ditemukan.
@@ -16,7 +16,7 @@
                 <table class="table table-bordered table-striped table-hover table-sm">
                     <tr>
                         <th>ID Kegiatan</th>
-                        <td>{{ $detail_kegiatan->id_kegiatan }}</td>
+                        <td>{{ $detail_kegiatan->kegiatan->nama_kegiatan}}</td>
                     </tr>
                     <tr>
                         <th>Keterangan</th>
@@ -24,14 +24,14 @@
                     </tr>
                     <tr>
                         <th>Progres Kegiatan</th>
-                        <td>{{ $detail_kegiatan->progress_kegiatan }}</td>
+                        <td>{{ $detail_kegiatan->progres_kegiatan }}</td>
                     </tr>
                     <tr>
                         <th>Beban Kerja</th>
                         <td>{{ $detail_kegiatan->beban_kerja }}</td>
                     </tr>
                 </table>
-            @endempty
+            @endif
             <a href="{{ url('detail_kegiatan') }}" class="btn btn-sm btn-default mt-2">Kembali</a>
         </div>
     </div>

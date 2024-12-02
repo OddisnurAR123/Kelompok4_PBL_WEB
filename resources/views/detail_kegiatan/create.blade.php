@@ -31,9 +31,14 @@
                 </div>
                 <div class="form-group">
                     <label>Beban Kerja</label>
-                    <input type="text" name="beban_kerja" id="beban_kerja" class="form-control" maxlength="50" required>
+                    <select name="beban_kerja" id="beban_kerja" class="form-control" required>
+                        <option value="">Pilih Beban Kerja</option>
+                        <option value="Ringan">Ringan</option>
+                        <option value="Sedang">Sedang</option>
+                        <option value="Berat">Berat</option>
+                    </select>
                     <small id="error-beban_kerja" class="error-text form-text text-danger"></small>
-                </div>
+                </div>                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-warning" data-dismiss="modal">Batal</button>
@@ -45,7 +50,7 @@
 
 <script>
     $(document).ready(function() {
-        $("#form-tambah-detail-kegiatan").validate({
+        $("#form-tambah-detail_kegiatan").validate({
             rules: {
                 id_kegiatan: {
                     required: true
@@ -62,7 +67,6 @@
                 },
                 beban_kerja: {
                     required: true,
-                    minlength: 3
                 }
             },
             submitHandler: function(form) {
