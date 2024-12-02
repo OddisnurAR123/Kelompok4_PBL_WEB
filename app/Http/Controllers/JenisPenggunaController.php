@@ -30,7 +30,9 @@ class JenisPenggunaController extends Controller
         return DataTables::of($jenisPengguna)
             ->addIndexColumn()
             ->addColumn('aksi', function ($jenisPengguna) {
-                $btn = '<button onclick="modalAction(\''.url('/jenis_pengguna/' . $jenisPengguna->id_jenis_pengguna . '/show').'\')" class="btn btn-info btn-sm">Detail</button> ';
+                $btn = '<button onclick="modalAction(\''.url('/jenis_pengguna/' . $jenisPengguna->id_jenis_pengguna . '/show').'\')" class="btn btn-info btn-sm">
+                            <i class="fas fa-eye"></i> Detail
+                        </button> ';
                 return $btn;
             })
             ->rawColumns(['aksi'])

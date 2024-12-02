@@ -49,9 +49,18 @@ class KategoriKegiatanController extends Controller
         return DataTables::of($kategoriKegiatan)
             ->addIndexColumn()
             ->addColumn('aksi', function ($kategoriKegiatan) {
-                $btn = '<button onclick="modalAction(\''.url('/kategori_kegiatan/' . $kategoriKegiatan->id_kategori_kegiatan . '/show').'\')" class="btn btn-info btn-sm">Detail</button> ';
-                $btn .= '<button onclick="modalAction(\''.url('/kategori_kegiatan/' . $kategoriKegiatan->id_kategori_kegiatan . '/edit').'\')" class="btn btn-warning btn-sm">Sunting</button> ';
-                $btn .= '<button onclick="modalAction(\''.url('/kategori_kegiatan/' . $kategoriKegiatan->id_kategori_kegiatan . '/delete').'\')" class="btn btn-danger btn-sm">Hapus</button>';
+                // $btn = '<button onclick="modalAction(\''.url('/kategori_kegiatan/' . $kategoriKegiatan->id_kategori_kegiatan . '/show').'\')" class="btn btn-info btn-sm">Detail</button> ';
+                // $btn .= '<button onclick="modalAction(\''.url('/kategori_kegiatan/' . $kategoriKegiatan->id_kategori_kegiatan . '/edit').'\')" class="btn btn-warning btn-sm">Sunting</button> ';
+                // $btn .= '<button onclick="modalAction(\''.url('/kategori_kegiatan/' . $kategoriKegiatan->id_kategori_kegiatan . '/delete').'\')" class="btn btn-danger btn-sm">Hapus</button>';
+                $btn = '<button onclick="modalAction(\''.url('/kategori_kegiatan/' . $kategoriKegiatan->id_kategori_kegiatan . '/show').'\')" class="btn btn-info btn-sm">
+                            <i class="fas fa-eye"></i> Detail
+                        </button> ';
+                $btn .= '<button onclick="modalAction(\''.url('/kategori_kegiatan/' . $kategoriKegiatan->id_kategori_kegiatan . '/edit').'\')" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> Edit
+                        </button> ';
+                $btn .= '<button onclick="modalAction(\''.url('/kategori_kegiatan/' . $kategoriKegiatan->id_kategori_kegiatan . '/delete').'\')" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>';
                 return $btn;
             })
             ->rawColumns(['aksi'])

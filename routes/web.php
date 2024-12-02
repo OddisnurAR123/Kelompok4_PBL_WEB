@@ -12,7 +12,7 @@ use App\Http\Controllers\AgendaKegiatanController;
 use App\Http\Controllers\DetailKegiatanController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PenggunaController;
-
+use App\Http\Controllers\DraftSuratTugasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -123,6 +123,16 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::delete('/pengguna/{id}/delete', [PenggunaController::class, 'delete']);    
     Route::post('/pengguna/import', [PenggunaController::class, 'import']);
     Route::get('/pengguna/export_pdf', [PenggunaController::class, 'export_pdf']);
+
+    Route::get('/draft_surat_tugas', [DraftSuratTugasController::class, 'index'])->name('draft_surat_tugas.index');
+    Route::post('/draft_surat_tugas/list', [DraftSuratTugasController::class, 'list']);
+    Route::get('/draft_surat_tugas/{id}/show', [DraftSuratTugasController::class, 'show'])->name('draft_surat_tugas.show');
+    Route::get('/draft_surat_tugas/create', [DraftSuratTugasController::class, 'create']);
+    Route::post('/draft_surat_tugas/store', [DraftSuratTugasController::class, 'store'])->name('draft_surat_tugas.store');    
+    Route::get('/draft_surat_tugas/{id}/edit', [DraftSuratTugasController::class, 'edit'])->name('draft_surat_tugas.edit');
+    Route::put('/draft_surat_tugas/{id}/update', [DraftSuratTugasController::class, 'update']);
+    Route::get('/draft_surat_tugas/{id}/delete', [DraftSuratTugasController::class, 'confirm']);
+    Route::delete('/draft_surat_tugas/{id}/delete', [DraftSuratTugasController::class, 'delete']);
 
 
 
