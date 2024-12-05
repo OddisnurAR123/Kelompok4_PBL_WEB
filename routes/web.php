@@ -13,6 +13,8 @@ use App\Http\Controllers\DetailKegiatanController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\DraftSuratTugasController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TampilKegiatanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,21 +26,16 @@ use App\Http\Controllers\DraftSuratTugasController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/', [WelcomeController::class, 'index'])->name('dashboard');
-
-Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
-
 // Pattern untuk parameter ID harus berupa angka
 Route::pattern('id', '[0-9]+');
-
-// Routes untuk autentikasi login
 Route::get('/login', [AuthController::class, 'login'])->name('login');
-Route::post('login', [AuthController::class, 'postlogin']);
+Route::post('/login', [AuthController::class, 'postlogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
-Route::get('register', [AuthController::class, 'registerForm'])->name('register');
-Route::post('register', [AuthController::class, 'register'])->name('register');
+Route::get('register', [AuthController::class, 'register'])->name('register');
+Route::post('register', [AuthController::class, 'register'])->name('PostRegister');
 
+Route::get('/', [WelcomeController::class, 'index'])->name('dashboard');
+Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
 
     Route::get('/jenis_pengguna', [JenisPenggunaController::class, 'index']);
     Route::post('/jenis_pengguna/list', [JenisPenggunaController::class, 'list']);
@@ -50,7 +47,6 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::get('/jenis_pengguna/{id}/delete', [JenisPenggunaController::class, 'delete']);
     Route::get('/pic', [JenisPenggunaController::class, 'getPic']);
     Route::get('/anggota', [JenisPenggunaController::class, 'getAnggota']);    
-
 
     Route::get('/kategori_kegiatan', [KategoriKegiatanController::class, 'index'])->name('kategori_kegiatan.index');
     Route::post('/kategori_kegiatan/list', [KategoriKegiatanController::class, 'list']);
@@ -72,8 +68,9 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::put('/jabatan_kegiatan/{id}/update', [JabatanKegiatanController::class, 'update']);
     Route::get('/jabatan_kegiatan/{id}/delete', [JabatanKegiatanController::class, 'confirm']);
     Route::delete('/jabatan_kegiatan/{id}/delete', [JabatanKegiatanController::class, 'delete']);
-    
+
     // Kegiatan Routes
+
     Route::get('/kegiatan', [KegiatanController::class, 'index'])->name('kegiatan.index');
     Route::post('/kegiatan/list', [KegiatanController::class, 'list']);
     Route::get('/kegiatan/create', [KegiatanController::class, 'create'])->name('kegiatan.create');
@@ -89,6 +86,7 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::get('/kegiatan/export_pdf', [KegiatanController::class, 'export_pdf'])->name('kegiatan.export.pdf');
 
     // Detail Kegiatan Routes
+
     Route::get('/detail_kegiatan', [DetailKegiatanController::class, 'index'])->name('detail_kegiatan.index');
     Route::post('/detail_kegiatan/list', [DetailKegiatanController::class, 'list']);
     Route::get('/detail_kegiatan/create', [DetailKegiatanController::class, 'create'])->name('detail_kegiatan.create');
@@ -136,6 +134,4 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::put('/draft_surat_tugas/{id}/update', [DraftSuratTugasController::class, 'update']);
     Route::get('/draft_surat_tugas/{id}/delete', [DraftSuratTugasController::class, 'confirm']);
     Route::delete('/draft_surat_tugas/{id}/delete', [DraftSuratTugasController::class, 'delete']);
-
-
 
