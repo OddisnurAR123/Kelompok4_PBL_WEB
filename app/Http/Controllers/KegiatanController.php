@@ -26,7 +26,7 @@ class KegiatanController extends Controller
             'title' => 'Daftar kegiatan yang ada'
         ];
 
-        $activeMenu = 'kegiatan';
+        $activeMenu = 'kegiatan2';
 
         return view('kegiatan.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu]);
     }
