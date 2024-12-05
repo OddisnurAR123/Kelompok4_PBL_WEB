@@ -34,11 +34,9 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 Route::get('register', [AuthController::class, 'register'])->name('register');
 Route::post('register', [AuthController::class, 'register'])->name('PostRegister');
 
-Route::middleware(['auth'])->group(function(){
 Route::get('/', [WelcomeController::class, 'index'])->name('dashboard');
 Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
-});
-    Route::middleware(['auth'])->group(function(){
+
     Route::get('/jenis_pengguna', [JenisPenggunaController::class, 'index']);
     Route::post('/jenis_pengguna/list', [JenisPenggunaController::class, 'list']);
     Route::get('/jenis_pengguna/{id}/show', [JenisPenggunaController::class, 'show']);
@@ -49,8 +47,7 @@ Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
     Route::get('/jenis_pengguna/{id}/delete', [JenisPenggunaController::class, 'delete']);
     Route::get('/pic', [JenisPenggunaController::class, 'getPic']);
     Route::get('/anggota', [JenisPenggunaController::class, 'getAnggota']);    
-});
-    Route::middleware(['auth'])->group(function(){
+
     Route::get('/kategori_kegiatan', [KategoriKegiatanController::class, 'index'])->name('kategori_kegiatan.index');
     Route::post('/kategori_kegiatan/list', [KategoriKegiatanController::class, 'list']);
     Route::get('kategori_kegiatan/{id}/show', [KategoriKegiatanController::class, 'show'])->name('kategori_kegiatan.show');
@@ -60,8 +57,7 @@ Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
     Route::put('/kategori_kegiatan/{id}/update', [KategoriKegiatanController::class, 'update']);
     Route::get('/kategori_kegiatan/{id}/delete', [KategoriKegiatanController::class, 'confirm']);
     Route::delete('/kategori_kegiatan/{id}/delete', [KategoriKegiatanController::class, 'delete']);
-});
-Route::middleware(['auth'])->group(function(){
+
     Route::get('/jabatan_kegiatan', [JabatanKegiatanController::class, 'index']);
     Route::post('/jabatan_kegiatan/list', [JabatanKegiatanController::class, 'list']);
     Route::get('/jabatan_kegiatan/{id}/show', [JabatanKegiatanController::class, 'show'])->name('jabatan_kegiatan.show');
@@ -72,9 +68,9 @@ Route::middleware(['auth'])->group(function(){
     Route::put('/jabatan_kegiatan/{id}/update', [JabatanKegiatanController::class, 'update']);
     Route::get('/jabatan_kegiatan/{id}/delete', [JabatanKegiatanController::class, 'confirm']);
     Route::delete('/jabatan_kegiatan/{id}/delete', [JabatanKegiatanController::class, 'delete']);
-});  
+
     // Kegiatan Routes
-    Route::middleware(['auth'])->group(function(){
+
     Route::get('/kegiatan', [KegiatanController::class, 'index'])->name('kegiatan.index');
     Route::post('/kegiatan/list', [KegiatanController::class, 'list']);
     Route::get('/kegiatan/create', [KegiatanController::class, 'create'])->name('kegiatan.create');
@@ -88,9 +84,9 @@ Route::middleware(['auth'])->group(function(){
     Route::post('/kegiatan/import_ajax', [KegiatanController::class, 'import_ajax'])->name('kegiatan.import.ajax');
     Route::get('/kegiatan/export_excel', [KegiatanController::class, 'export_excel'])->name('kegiatan.export.excel');
     Route::get('/kegiatan/export_pdf', [KegiatanController::class, 'export_pdf'])->name('kegiatan.export.pdf');
-});
+
     // Detail Kegiatan Routes
-    Route::middleware(['auth'])->group(function(){
+
     Route::get('/detail_kegiatan', [DetailKegiatanController::class, 'index'])->name('detail_kegiatan.index');
     Route::post('/detail_kegiatan/list', [DetailKegiatanController::class, 'list']);
     Route::get('/detail_kegiatan/create', [DetailKegiatanController::class, 'create'])->name('detail_kegiatan.create');
@@ -100,12 +96,10 @@ Route::middleware(['auth'])->group(function(){
     Route::put('/detail_kegiatan/update/{id_detail_kegiatan}', [DetailKegiatanController::class, 'update'])->name('detail_kegiatan.update');
     Route::get('/detail_kegiatan/export_excel', [DetailKegiatanController::class, 'export_excel'])->name('detail_kegiatan.export_excel');
     Route::get('/detail_kegiatan/export_pdf', [DetailKegiatanController::class, 'export_pdf'])->name('detail_kegiatan.export_pdf');
-});
-Route::middleware(['auth'])->group(function(){
+
     Route::get('/kegiatan_eksternal', [KegiatanEksternalController::class, 'create'])->name('kegiatan_eksternal.create'); 
     Route::post('/kegiatan_eksternal', [KegiatanEksternalController::class, 'store'])->name('kegiatan_eksternal.store'); 
-});
-Route::middleware(['auth'])->group(function(){
+
     Route::get('/agenda', [AgendaKegiatanController::class, 'index'])->name('agenda.index');
     Route::post('/agenda/list', [AgendaKegiatanController::class, 'list']);
     Route::get('/agenda/{id}/show', [AgendaKegiatanController::class, 'show'])->name('agenda.show');
@@ -118,8 +112,7 @@ Route::middleware(['auth'])->group(function(){
     Route::post('/agenda/import', [KegiatanController::class, 'import'])->name('agenda.import');
     Route::get('/agenda/export_excel', [KegiatanController::class, 'export_excel'])->name('agenda.export_excel');
     Route::get('/agenda/export_pdf', [KegiatanController::class, 'export_pdf'])->name('agenda.export_pdf');
-});
-    Route::middleware(['auth'])->group(function(){
+
     Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
     Route::post('/pengguna/list', [PenggunaController::class, 'list']);
     Route::get('/pengguna/{id}/show', [PenggunaController::class, 'show'])->name('pengguna.show');
@@ -131,8 +124,7 @@ Route::middleware(['auth'])->group(function(){
     Route::delete('/pengguna/{id}/delete', [PenggunaController::class, 'delete']);    
     Route::post('/pengguna/import', [PenggunaController::class, 'import']);
     Route::get('/pengguna/export_pdf', [PenggunaController::class, 'export_pdf']);
-});
-    Route::middleware(['auth'])->group(function(){
+
     Route::get('/draft_surat_tugas', [DraftSuratTugasController::class, 'index'])->name('draft_surat_tugas.index');
     Route::post('/draft_surat_tugas/list', [DraftSuratTugasController::class, 'list']);
     Route::get('/draft_surat_tugas/{id}/show', [DraftSuratTugasController::class, 'show'])->name('draft_surat_tugas.show');
@@ -142,15 +134,4 @@ Route::middleware(['auth'])->group(function(){
     Route::put('/draft_surat_tugas/{id}/update', [DraftSuratTugasController::class, 'update']);
     Route::get('/draft_surat_tugas/{id}/delete', [DraftSuratTugasController::class, 'confirm']);
     Route::delete('/draft_surat_tugas/{id}/delete', [DraftSuratTugasController::class, 'delete']);
-});
-    // Route Detail Kegiatan
-    Route::middleware(['auth'])->group(function(){
-    Route::get('/detail-kegiatan', [TampilKegiatanController::class, 'index'])->name('detail_kegiatan.index');
-    Route::post('detail-kegiatan/list', [TampilKegiatanController::class, 'list'])->name('detail-kegiatan.list');
-});
-    
-//Route Pengaturan Profile
-    Route::middleware(['auth'])->group(function(){
-    Route::get('/pengaturan-profil', [ProfileController::class, 'index'])->name('profile.index');
-    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-});
+
