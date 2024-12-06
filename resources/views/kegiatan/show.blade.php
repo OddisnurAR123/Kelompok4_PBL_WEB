@@ -1,41 +1,49 @@
-@extends('layouts.template')
-
-@section('content')
-    <div class="card card-outline card-primary">
-        <div class="card-header">
-            <h3 class="card-title">Detail Kegiatan</h3>
+<!-- Modal -->
+<div id="modal-master" class="modal-dialog modal-lg modal-shake" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+                @if(!$kegiatan)
+                    Kesalahan
+                @else
+                    Detail Kegiatan
+                @endif
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
-        <div class="card-body">
-            @if(empty($kegiatan))
-                <div class="alert alert-danger alert-dismissible">
-                    <h5><i class="icon fas fa-ban"></i> Kesalahan!</h5>
+        <div class="modal-body">
+            @if(!$kegiatan)
+                <div class="alert alert-danger text-center">
+                    <h5><i class="icon fas fa-ban"></i> Kesalahan!!!</h5>
                     Data yang Anda cari tidak ditemukan.
                 </div>
             @else
-                <table class="table table-bordered table-striped table-hover table-sm">
+                <table class="table table-sm table-bordered table-striped">
                     <tr>
-                        <th>ID Kegiatan</th>
-                        <td>{{ $kegiatan->id_kegiatan }}</td>
+                        <th style="width: 40%;">ID Kegiatan:</th>
+                        <td class="col-9">{{ $kegiatan->id_kegiatan }}</td>
                     </tr>
                     <tr>
-                        <th>Kode Kegiatan</th>
-                        <td>{{ $kegiatan->kode_kegiatan }}</td>
+                        <th style="width: 40%;">Kode Kegiatan:</th>
+                        <td class="col-9">{{ $kegiatan->kode_kegiatan }}</td>
                     </tr>
                     <tr>
-                        <th>Nama Kegiatan</th>
-                        <td>{{ $kegiatan->nama_kegiatan }}</td>
+                        <th style="width: 40%;">Nama Kegiatan:</th>
+                        <td class="col-9">{{ $kegiatan->nama_kegiatan }}</td>
                     </tr>
                     <tr>
-                        <th>Tanggal Mulai</th>
-                        <td>{{ $kegiatan->tanggal_mulai ? \Carbon\Carbon::parse($kegiatan->tanggal_mulai)->format('d-m-Y H:i') : '-' }}</td>
+                        <th style="width: 40%;">Tanggal Mulai:</th>
+                        <td class="col-9">{{ $kegiatan->tanggal_mulai ? \Carbon\Carbon::parse($kegiatan->tanggal_mulai)->format('d-m-Y H:i') : '-' }}</td>
                     </tr>
                     <tr>
-                        <th>Tanggal Selesai</th>
-                        <td>{{ $kegiatan->tanggal_selesai ? \Carbon\Carbon::parse($kegiatan->tanggal_selesai)->format('d-m-Y H:i') : '-' }}</td>
+                        <th style="width: 40%;">Tanggal Selesai:</th>
+                        <td class="col-9">{{ $kegiatan->tanggal_selesai ? \Carbon\Carbon::parse($kegiatan->tanggal_selesai)->format('d-m-Y H:i') : '-' }}</td>
                     </tr>
                     <tr>
-                        <th>Kategori Kegiatan</th>
-                        <td>{{ $kegiatan->kategoriKegiatan->nama_kategori_kegiatan ?? 'Tidak ada kategori' }}</td>
+                        <th style="width: 40%;">Kategori Kegiatan:</th>
+                        <td class="col-9">{{ $kegiatan->kategoriKegiatan->nama_kategori_kegiatan ?? 'Tidak ada kategori' }}</td>
                     </tr>
                 </table>
 
@@ -50,8 +58,8 @@
                     <tbody>
                         @forelse($kegiatan->anggota as $anggota)
                             <tr>
-                                <td>{{ $anggota['nama_pengguna'] }}</td>
-                                <td>{{ $anggota['nama_jabatan_kegiatan'] }}</td>
+                                <td>{{ $anggota->nama_pengguna }}</td>
+                                <td>{{ $anggota->nama_jabatan_kegiatan }}</td>
                             </tr>
                         @empty
                             <tr>
@@ -61,13 +69,53 @@
                     </tbody>
                 </table>
             @endif
-            <a href="{{ url('kegiatan') }}" class="btn btn-sm btn-default mt-2">Kembali</a>
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-warning">Tutup</button>
         </div>
     </div>
-@endsection
+</div>
 
-@push('css')
-@endpush
+<!-- CSS untuk Animasi -->
+<style>
+    @keyframes shake {
+        0% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        50% { transform: translateX(10px); }
+        75% { transform: translateX(-10px); }
+        100% { transform: translateX(0); }
+    }
 
-@push('js')
-@endpush
+    .modal-shake {
+        animation: shake 0.5s ease-in-out;
+    }
+
+    .modal-content {
+        border-radius: 10px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+        background-color: #01274E;
+        color: #fff;
+        border-bottom: none;
+    }
+
+    .modal-footer {
+        border-top: none;
+    }
+
+    .btn-warning {
+        background-color: #ff9f43;
+        border: none;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.querySelector('#modal-master');
+        if (modal) {
+            modal.classList.add('modal-shake');
+        }
+    });
+</script>
