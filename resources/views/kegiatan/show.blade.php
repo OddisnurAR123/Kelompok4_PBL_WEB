@@ -42,6 +42,10 @@
                         <td class="col-9">{{ $kegiatan->tanggal_selesai ? \Carbon\Carbon::parse($kegiatan->tanggal_selesai)->format('d-m-Y H:i') : '-' }}</td>
                     </tr>
                     <tr>
+                        <th style="width: 40%;">Periode:</th>
+                        <td class="col-9">{{ $kegiatan->periode }}</td>
+                    </tr>
+                    <tr>
                         <th style="width: 40%;">Kategori Kegiatan:</th>
                         <td class="col-9">{{ $kegiatan->kategoriKegiatan->nama_kategori_kegiatan ?? 'Tidak ada kategori' }}</td>
                     </tr>

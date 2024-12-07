@@ -1,15 +1,23 @@
 @extends('layouts.template')
 @section('content')
 <div class="card card-outline card-primary">
-    <div class="card-header">
-        <h3 class="card-title">Daftar Kegiatan</h3>
-        <div class="card-tools">
-          <button onclick="modalAction('{{ url('/kegiatan/import') }}')" class="btn btn-info"><i class="fa fa-file-import"></i> Import Kegiatan</button>
-          <a href="{{ url('/kegiatan/export_excel') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i> Export Kegiatan XLSX</a>
-          <a href="{{ url('/kegiatan/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Export Kegiatan PDF</a>
-          <button onclick="modalAction('{{ url('/kegiatan/create') }}')" class="btn btn-success"><i class="fa fa-plus"></i> Tambah Kegiatan</button>
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title mb-0">Daftar Kegiatan</h3>
+        <div class="card-tools ml-auto d-flex">
+            <button onclick="modalAction('{{ url('/kegiatan/import') }}')" class="btn btn-info btn-sm mr-2">
+                <i class="fa fa-file-import"></i> Import Kegiatan
+            </button>
+            <a href="{{ url('/kegiatan/export_excel') }}" class="btn btn-primary btn-sm mr-2">
+                <i class="fa fa-file-excel"></i> Export XLSX
+            </a>
+            <a href="{{ url('/kegiatan/export_pdf') }}" class="btn btn-warning btn-sm mr-2">
+                <i class="fa fa-file-pdf"></i> Export PDF
+            </a>
+            <button onclick="modalAction('{{ url('/kegiatan/create') }}')" class="btn btn-success btn-sm">
+                <i class="fa fa-plus"></i> Tambah Kegiatan
+            </button>
         </div>
-    </div>
+    </div>     
     <div class="card-body">
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -25,6 +33,7 @@
                     <th>Nama Kegiatan</th>
                     <th>Tanggal Mulai</th>
                     <th>Tanggal Selesai</th>
+                    <th>Periode</th>
                     <th>Kategori Kegiatan</th>
                     <th>Aksi</th>
                 </tr>
@@ -83,6 +92,12 @@
                 },
                 {
                     data: "tanggal_selesai",
+                    className: "",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "periode",
                     className: "",
                     orderable: true,
                     searchable: true

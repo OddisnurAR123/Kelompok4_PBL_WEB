@@ -2,13 +2,24 @@
 @section('content')
     <div class="card card-outline card-primary">
         <div class="card-header">
-            <h3 class="card-title">Daftar Progres Kegiatan</h3>
-            <div class="card-tools">
-                <a href="{{ url('/detail_kegiatan/export_excel') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i> Export Progres Kegiatan XLSX</a>
-                <a href="{{ url('/detail_kegiatan/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Export Progres Kegiatan PDF</a>
-                <button onclick="modalAction('{{ url('/detail_kegiatan/create') }}')" class="btn btn-success"><i class="fa fa-plus"></i> Tambah Progres Kegiatan</button>
+            <div class="d-flex align-items-center w-100">
+                <a href="{{ route('kegiatan.index') }}" class="btn btn-link p-0 mr-3" style="font-size: 18px;">
+                    <i class="fa fa-arrow-left"></i>
+                </a>
+                <h3 class="card-title mb-0 flex-grow-1">Daftar Progres Kegiatan</h3>
+                <div class="card-tools ml-auto">
+                    <a href="{{ url('/detail_kegiatan/export_excel') }}" class="btn btn-primary btn-sm">
+                        <i class="fa fa-file-excel"></i> Export XLSX
+                    </a>
+                    <a href="{{ url('/detail_kegiatan/export_pdf') }}" class="btn btn-warning btn-sm">
+                        <i class="fa fa-file-pdf"></i> Export PDF
+                    </a>
+                    <button onclick="modalAction('{{ url('/detail_kegiatan/create') }}')" class="btn btn-success btn-sm">
+                        <i class="fa fa-plus"></i> Tambah Progres
+                    </button>
+                </div>
             </div>
-        </div>
+        </div>        
         <div class="card-body">
             @if (session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>

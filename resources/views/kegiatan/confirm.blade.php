@@ -49,6 +49,10 @@
                             <td class="col-9">{{ $kegiatan->tanggal_selesai }}</td>
                         </tr>
                         <tr>
+                            <th class="text-right col-3">Periode :</th>
+                            <td class="col-9">{{ $kegiatan->periode }}</td>
+                        </tr>
+                        <tr>
                             <th class="text-right col-3">Kategori Kegiatan :</th>
                             <td class="col-9">
                                 @isset($kegiatan->kategoriKegiatan)
