@@ -3,64 +3,113 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // Tambahkan ini jika belum ada
-use App\Models\PenggunaModel; // Model yang Anda gunakan
-use Hash;
-
+use App\Models\PenggunaModel; // Model untuk m_pengguna
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-    public function index()
+    // Menampilkan halaman profil
+    public function showProfile()
     {
-        // Ambil data pengguna yang sedang login
-        $user = PenggunaModel::find(Auth::id());
+        // Ambil data pengguna yang sedang login berdasarkan ID
+        $user = PenggunaModel::where('id_pengguna', Auth::id())->first();
 
-        // Definisikan variabel $activeMenu agar sidebar aktif
-        $activeMenu = 'pengaturan-profil';
-        
-        // Kirim data pengguna ke view
-        return view('profile.index', compact('user', 'activeMenu'));
-    }
-        // Menampilkan form untuk mengedit profil
-        public function edit()
-        {
-            $user = Auth::user();
-            return view('update_profile.index', compact('user'));
+        if (!$user) {
+            return redirect()->route('login')->withErrors('Anda harus login terlebih dahulu.');
         }
 
+        // Membuat breadcrumb untuk halaman profil
+        $breadcrumb = (object) [
+            'title' => 'Profile',
+            'list' => [
+                'Home',
+                (object) ['url' => route('profile.profil'), 'label' => 'Profile'],
+                'Profil'
+            ]
+        ];
+
+        return view('profile.profil', compact('user', 'breadcrumb'));
+    }
+
+    // Menampilkan halaman edit profil
+    public function edit()
+    {
+        // Ambil data pengguna yang sedang login
+        $user = PenggunaModel::where('id_pengguna', Auth::id())->first();
+
+        $breadcrumb = (object) [
+            'title' => 'Edit Profile',
+            'list' => [
+                (object) ['label' => 'Profile', 'url' => route('profile.edit')],
+                'Edit'
+            ]
+        ];
+
+        return view('profile.edit', compact('user', 'breadcrumb'));
+    }
+
+    // Memperbarui data profil
     public function update(Request $request)
     {
-        // Validasi data
-        $validated = $request->validate([
-            'username' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+        $user = PenggunaModel::where('id_pengguna', Auth::id())->first();
+
+        $request->validate([
             'nama_pengguna' => 'required|string|max:255',
-            'password' => 'nullable|confirmed|min:8',
-            'fotoprofil' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'username' => 'required|string|max:20|unique:m_pengguna,username,' . $user->id_pengguna . ',id_pengguna',
+            'email' => 'required|email|max:255',
+            'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10048',
         ]);
 
-        // Ambil data pengguna yang sedang login
-        $user = Auth::user();
+        // Update nama, username, dan email
+        $user->nama_pengguna = $request->nama_pengguna;
+        $user->username = $request->username;
+        $user->email = $request->email;
 
-        // Update foto profil jika ada file yang di-upload
-        if ($request->hasFile('fotoprofil')) {
-            $path = $request->file('fotoprofil')->store('public/profiles');
-            $user->fotoprofil = $path;
+        // Handle upload foto profil
+        if ($request->hasFile('foto_profil')) {
+            $fotoPath = $request->file('foto_profil')->store('uploads/foto_profil', 'public');
+            $user->foto_profil = $fotoPath;
         }
 
-        // Simpan perubahan
-        if ($request->hasFile('fotoprofil')) {
-    // Menghapus foto lama jika ada
-    if ($user->fotoprofil && file_exists(public_path($user->fotoprofil))) {
-        unlink(public_path($user->fotoprofil));
+        $user->save();
+
+        return redirect()->route('profile.profil')->with('success', 'Profil berhasil diperbarui!');
     }
 
-    // Simpan file foto baru
-    $path = $request->file('fotoprofil')->store('profiles', 'public');
-    $user->fotoprofil = 'storage/' . $path;
-}
+    // Menampilkan halaman ganti password
+    public function changePassword()
+    {
+        $breadcrumb = (object) [
+            'title' => 'Ganti Password',
+            'list' => [
+                (object) ['url' => route('profile.profil'), 'label' => 'Profile'],
+                'Ganti Password'
+            ]
+        ];
 
-        // Redirect kembali dengan pesan sukses
-        return redirect()->route('profile.index')->with('success', 'Profil berhasil diperbarui');
+        return view('profile.password', compact('breadcrumb'));
+    }
+
+    // Memperbarui password pengguna
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|string|min:6|confirmed',
+        ]);
+
+        $user = PenggunaModel::where('id_pengguna', Auth::id())->first();
+
+        // Cek apakah password lama benar
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Password lama salah']);
+        }
+
+        // Update password baru
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return redirect()->route('profile.profil')->with('success', 'Password berhasil diubah.');
     }
 }
