@@ -38,7 +38,7 @@
                     <th>Tanggal Selesai</th>
                     <th>Periode</th>
                     <th>Kategori Kegiatan</th>
-                    <th>Aksi</th>
+                    <th class="text-center">Aksi</th>
                 </tr>
             </thead>
         </table>

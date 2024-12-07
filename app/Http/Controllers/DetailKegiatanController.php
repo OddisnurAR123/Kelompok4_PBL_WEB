@@ -41,10 +41,12 @@ class DetailKegiatanController extends Controller
                 return $detail_kegiatan->kegiatan ? $detail_kegiatan->kegiatan->nama_kegiatan : 'Tidak ada';
             })
             ->addColumn('aksi', function ($detail_kegiatan) {
-                $btn = '<button onclick="modalAction(\''.route('detail_kegiatan.show', ['id' => $detail_kegiatan->id_detail_kegiatan]).'\')" class="btn btn-info btn-sm" style="margin-right: 5px;">';
+                $btn = '<div class="d-flex justify-content-center">';  // Center the buttons horizontally
+                $btn .= '<button onclick="modalAction(\''.route('detail_kegiatan.show', ['id' => $detail_kegiatan->id_detail_kegiatan]).'\')" class="btn btn-info btn-sm" style="margin-right: 5px;">';
                 $btn .= '<i class="fas fa-eye"></i></button>';
                 $btn .= '<button onclick="modalAction(\''.route('detail_kegiatan.edit', ['id' => $detail_kegiatan->id_detail_kegiatan]).'\')" class="btn btn-warning btn-sm">';
                 $btn .= '<i class="fas fa-edit"></i></button>';
+                $btn .= '</div>';
                 return $btn;
             })
             ->rawColumns(['aksi'])

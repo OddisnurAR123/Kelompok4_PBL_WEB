@@ -53,9 +53,12 @@ class PenggunaController extends Controller
         return DataTables::of($pengguna)
             ->addIndexColumn()
             ->addColumn('aksi', function ($pengguna) {
-                $btn = '<button onclick="modalAction(\''.url('/pengguna/' . $pengguna->id_pengguna . '/show').'\')" class="btn btn-info btn-sm">Detail</button> ';
-                $btn .= '<button onclick="modalAction(\''.url('/pengguna/' . $pengguna->id_pengguna . '/edit').'\')" class="btn btn-warning btn-sm">Edit</button> ';
-                $btn .= '<button onclick="modalAction(\''.url('/pengguna/' . $pengguna->id_pengguna . '/delete').'\')" class="btn btn-danger btn-sm">Hapus</button>';
+                $btn = '<button onclick="modalAction(\''.url('/pengguna/' . $pengguna->id_pengguna . '/show').'\')" class="btn btn-info btn-sm">';
+                $btn .= '<i class="fas fa-eye"></i></button> ';
+                $btn .= '<button onclick="modalAction(\''.url('/pengguna/' . $pengguna->id_pengguna . '/edit').'\')" class="btn btn-warning btn-sm">';
+                $btn .= '<i class="fas fa-edit"></i></button> ';
+                $btn .= '<button onclick="modalAction(\''.url('/pengguna/' . $pengguna->id_pengguna . '/delete').'\')" class="btn btn-danger btn-sm">';
+                $btn .= '<i class="fas fa-trash"></i></button>';
                 return $btn;
             })
             ->rawColumns(['foto', 'aksi'])

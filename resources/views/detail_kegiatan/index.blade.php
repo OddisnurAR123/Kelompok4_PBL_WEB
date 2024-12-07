@@ -36,7 +36,7 @@
                         <th>Keterangan</th>
                         <th>Progres Kegiatan</th>
                         <th>Beban Kerja</th>
-                        <th>Aksi</th>
+                        <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
             </table>
