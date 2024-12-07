@@ -10,28 +10,35 @@ class LoginController extends Controller
 {
     public function __invoke(Request $request)
     {
+        // Validasi input
         $validator = Validator::make($request->all(), [
             'username' => 'required',
             'password' => 'required'
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
         }
 
+        // Ambil kredensial dari request
         $credentials = $request->only('username', 'password');
 
-        if (!$token = auth()->guard('api')->attempt($credentials)) {
+        // Coba autentikasi menggunakan JWT
+        if (!$token = auth('api')->attempt($credentials)) {
             return response()->json([
-                'succsess' => false,
-                'message' => 'Username atau password salahj'
+                'success' => false,
+                'message' => 'Username atau Password salah',
             ], 401);
         }
 
+        // Login berhasil
         return response()->json([
             'success' => true,
-            'user' => auth()->guard('api')->user(),
-            'token' => $token
+            'user' => auth('api')->user(),
+            'token' => $token,
         ], 200);
     }
 }

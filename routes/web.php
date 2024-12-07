@@ -15,6 +15,9 @@ use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\DraftSuratTugasController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TampilKegiatanController;
+use Illuminate\Http\Request;
+use App\Http\Controllers\LoginController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,11 +31,18 @@ use App\Http\Controllers\TampilKegiatanController;
 */
 // Pattern untuk parameter ID harus berupa angka
 Route::pattern('id', '[0-9]+');
-Route::get('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/login', [AuthController::class, 'postlogin']);
+
+// Routes untuk autentikasi login
+Route::get('login', [AuthController::class, 'login'])->name('login');
+Route::post('login', [AuthController::class, 'postlogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
-Route::get('register', [AuthController::class, 'register'])->name('register');
-Route::post('register', [AuthController::class, 'register'])->name('PostRegister');
+
+
+Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.profil');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.password');
+    Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
 
 Route::get('/', [WelcomeController::class, 'index'])->name('dashboard');
 Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
