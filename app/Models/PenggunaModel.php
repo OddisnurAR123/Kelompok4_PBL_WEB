@@ -25,6 +25,7 @@ class PenggunaModel extends Authenticatable
         'nama_pengguna',
         'username', 
         'password', 
+        'nip',
         'email', 
         'foto_profil'
     ];

@@ -16,7 +16,7 @@
     </div>
 </div>
 @else
-<form action="{{ url('/pengguna' . $pengguna->id_pengguna . '/update') }}" method="POST" id="form-edit">
+<form action="{{ url('/pengguna/' . $pengguna->id_pengguna . '/update') }}" method="POST" id="form-edit">
     @csrf
     @method('PUT')
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
@@ -40,15 +40,22 @@
                     <input value="{{ $pengguna->username }}" type="text" name="username" id="username" class="form-control" required>
                     <small id="error-username" class="error-text form-text text-danger"></small>
                 </div>
+                <!-- NIP -->
+                <div class="form-group">
+                    <label>NIP Pengguna</label>
+                    <input value="{{ $pengguna->nip }}" type="text" name="nip" id="nip" class="form-control" required>
+                    <small id="error-nip" class="error-text form-text text-danger"></small>
+                </div>
                 <!-- Email -->
                 <div class="form-group">
                     <label>Email</label>
                     <input value="{{ $pengguna->email }}" type="email" name="email" id="email" class="form-control" required>
                     <small id="error-email" class="error-text form-text text-danger"></small>
                 </div>
+                <!-- Password -->
                 <div class="form-group">
                     <label>Password</label>
-                    <input value="" type="password" name="password" id="password" class="form-control" required>
+                    <input value="" type="password" name="password" id="password" class="form-control">
                     <small id="error-password" class="error-text form-text text-danger"></small>
                 </div>
                 <!-- Jenis Pengguna -->
@@ -77,14 +84,19 @@
 $(document).ready(function() {
     $("#form-edit").validate({
         rules: {
-    id_jenis_pengguna: { required: true },
-    nama_pengguna: { required: true, minlength: 3, maxlength: 50 },
-    username: { required: true, minlength: 3, maxlength: 20 },
-    password: { required: true, minlength: 6, maxlength: 20 },
-    email: { required: true, email: true }
-    }
-},
-
+            id_jenis_pengguna: { required: true },
+            nama_pengguna: { required: true, minlength: 3, maxlength: 50 },
+            username: { required: true, minlength: 3, maxlength: 20 },
+            password: { 
+                minlength: 6, 
+                maxlength: 20,
+                required: function() {
+                    return $('#password').val() !== '';
+                }
+            },
+            nip: { required: true, minlength: 3, maxlength: 50 },
+            email: { required: true, email: true }
+        },
         messages: {
             nama_pengguna: {
                 required: "Nama Pengguna harus diisi.",
@@ -96,16 +108,24 @@ $(document).ready(function() {
                 minlength: "Username minimal 3 karakter.",
                 maxlength: "Username maksimal 20 karakter."
             },
-            password: { minlength: 6, maxlength: 20 },
+            nip: {
+                required: "NIP Pengguna harus diisi.",
+                minlength: "NIP Pengguna minimal 3 karakter.",
+                maxlength: "NIP Pengguna maksimal 20 karakter."
+            },
+            password: { 
+                minlength: "Password minimal 6 karakter.",
+                maxlength: "Password maksimal 20 karakter."
+            },
             email: {
                 required: "Email harus diisi.",
                 email: "Format email tidak valid."
             },
             id_jenis_pengguna: {
                 required: "Jenis Pengguna harus dipilih."
-            },
+            }
         },
-            submitHandler: function(form) {
+        submitHandler: function(form) {
             $.ajax({
                 url: form.action,
                 type: form.method,
@@ -117,8 +137,9 @@ $(document).ready(function() {
                             icon: 'success',
                             title: 'Berhasil',
                             text: response.message
+                        }).then(() => {
+                            location.reload(); // Reload halaman untuk melihat data terbaru
                         });
-                        dataPengguna.ajax.reload();
                     } else {
                         $('.error-text').text('');
                         $.each(response.msgField, function(prefix, val) {
@@ -135,16 +156,8 @@ $(document).ready(function() {
             return false;
         },
         errorElement: 'span',
-        errorPlacement: function (error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.form-group').append(error);
-        },
-        highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
-        },
-        unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
-        }
+        errorClass: 'help-block text-danger'
     });
+});
 </script>
 @endempty
