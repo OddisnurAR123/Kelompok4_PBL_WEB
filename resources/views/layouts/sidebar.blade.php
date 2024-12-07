@@ -64,7 +64,7 @@
 
             <!-- Statistik Kinerja -->
             <li class="nav-item">
-                <a href="{{ url('/statistik-kinerja') }}" class="nav-link {{ ($activeMenu == 'statistik-kinerja') ? 'active' : '' }}" style="color: {{ ($activeMenu == 'statistik-kinerja') ? '#3b82f6' : '#ffffff' }};">
+                <a href="{{ url('/kinerja-dosen') }}" class="nav-link {{ ($activeMenu == 'kinerja-dosen') ? 'active' : '' }}" style="color: {{ ($activeMenu == 'kinerja-dosen') ? '#3b82f6' : '#ffffff' }};">
                     <i class="nav-icon fas fa-chart-line"></i>
                     <p>Statistik Kinerja</p>
                 </a>
