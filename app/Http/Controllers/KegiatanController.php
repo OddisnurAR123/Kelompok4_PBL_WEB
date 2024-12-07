@@ -53,8 +53,10 @@ class KegiatanController extends Controller
                 $btn .= '<i class="fas fa-eye"></i></button>';
                 $btn .= '<button onclick="modalAction(\''.route('kegiatan.edit', $kegiatan->id_kegiatan).'\')" class="btn btn-warning btn-sm" style="margin-right: 5px;">';
                 $btn .= '<i class="fas fa-edit"></i></button>';
-                $btn .= '<button onclick="modalAction(\''.route('kegiatan.delete', $kegiatan->id_kegiatan).'\')" class="btn btn-danger btn-sm">';
+                $btn .= '<button onclick="modalAction(\''.route('kegiatan.delete', $kegiatan->id_kegiatan).'\')" class="btn btn-danger btn-sm" style="margin-right: 5px;">';
                 $btn .= '<i class="fas fa-trash"></i></button>';
+                $btn .= '<button onclick="window.location.href=\''.route('detail_kegiatan.index').'?id_kegiatan='.$kegiatan->id_kegiatan.'\'" class="btn btn-primary btn-sm">';
+                $btn .= '<i class="fas fa-tasks"></i></button>';
                 return $btn;
             })
             ->rawColumns(['aksi'])
@@ -152,25 +154,23 @@ class KegiatanController extends Controller
         ]);
     }
 
-    public function show(string $id)
+    public function show($id)
     {
         $kegiatan = KegiatanModel::with(['anggota'])->find($id);
 
-        // Debugging
         if (!$kegiatan) {
-            dd("Kegiatan dengan ID $id tidak ditemukan");
+            return response()->json([
+                'success' => false,
+                'message' => "Kegiatan dengan ID $id tidak ditemukan"
+            ], 404);
         }
 
-        $breadcrumb = (object) [
-            'title' => 'Detail Kegiatan',
-            'list' => ['Home', 'Kegiatan']
-        ];
-
-        return view('kegiatan.show', [
-            'kegiatan' => $kegiatan,
-            'breadcrumb' => $breadcrumb
+        return response()->json([
+            'success' => true,
+            'data' => $kegiatan
         ]);
     }
+
 
     // Menampilkan form edit kegiatan via Ajax
     public function edit($id) {

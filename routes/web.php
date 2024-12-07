@@ -85,7 +85,7 @@ Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
     Route::post('/kegiatan/list', [KegiatanController::class, 'list']);
     Route::get('/kegiatan/create', [KegiatanController::class, 'create'])->name('kegiatan.create');
     Route::post('/kegiatan/store', [KegiatanController::class, 'store'])->name('kegiatan.store');
-    Route::get('/kegiatan/{id}', [KegiatanController::class, 'show'])->name('kegiatan.show');
+    Route::get('/kegiatan/{id}/show', [KegiatanController::class, 'show'])->name('kegiatan.show');
     Route::get('/kegiatan/{id}/edit', [KegiatanController::class, 'edit'])->name('kegiatan.edit');
     Route::put('/kegiatan/update/{id_kegiatan}', [KegiatanController::class, 'update'])->name('kegiatan.update');
     Route::get('/kegiatan/{id}/delete', [KegiatanController::class, 'confirm'])->name('kegiatan.delete');
