@@ -18,6 +18,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TampilKegiatanController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\KinerjaDosenController;
 
 
 /*
@@ -148,4 +149,6 @@ Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
     Route::put('/draft_surat_tugas/{id}/update', [DraftSuratTugasController::class, 'update']);
     Route::get('/draft_surat_tugas/{id}/delete', [DraftSuratTugasController::class, 'confirm']);
     Route::delete('/draft_surat_tugas/{id}/delete', [DraftSuratTugasController::class, 'delete']);
+
+    Route::get('/kinerja-dosen', [KinerjaDosenController::class, 'index'])->name('kinerja.dosen');
 
