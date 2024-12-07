@@ -13,10 +13,13 @@
             <a href="{{ url('/kegiatan/export_pdf') }}" class="btn btn-warning btn-sm mr-2">
                 <i class="fa fa-file-pdf"></i> Export PDF
             </a>
-            <button onclick="modalAction('{{ url('/kegiatan/create') }}')" class="btn btn-success btn-sm">
+            <button onclick="modalAction('{{ url('/kegiatan/create') }}')" class="btn btn-success btn-sm mr-2">
                 <i class="fa fa-plus"></i> Tambah Kegiatan
             </button>
-        </div>
+            <button onclick="window.location.href='{{ route('detail_kegiatan.index') }}'" class="btn btn-primary btn-sm ml-0">
+                <i class="fas fa-tasks"></i>
+            </button>                        
+        </div>        
     </div>     
     <div class="card-body">
         @if(session('success'))

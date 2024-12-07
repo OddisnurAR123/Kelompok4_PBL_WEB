@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use App\Models\KategoriKegiatanModel;
 use App\Models\PenggunaModel;
+use App\Models\AgendaModel;
 use App\Models\JabatanKegiatanModel;
 
 class KegiatanModel extends Model
@@ -70,4 +71,9 @@ class KegiatanModel extends Model
                 't_kegiatan_user.*'
             );
     }
+    public function agenda()
+    {
+        return $this->hasMany(AgendaModel::class, 'id_kegiatan');
+    }
+    
 }
