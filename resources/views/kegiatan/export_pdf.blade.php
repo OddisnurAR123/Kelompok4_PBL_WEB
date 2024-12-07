@@ -98,6 +98,7 @@
                 <th class="font-12">Nama Kegiatan</th>
                 <th class="text-center font-12">Tanggal Mulai</th>
                 <th class="text-center font-12">Tanggal Selesai</th>
+                <th class="font-12">Periode</th>
                 <th class="font-12">Kategori</th>
             </tr>
         </thead>
@@ -109,6 +110,7 @@
                     <td class="font-10">{{ $k->nama_kegiatan }}</td>
                     <td class="text-center font-10">{{ \Carbon\Carbon::parse($k->tanggal_mulai)->format('d/m/Y') }}</td>
                     <td class="text-center font-10">{{ \Carbon\Carbon::parse($k->tanggal_selesai)->format('d/m/Y') }}</td>
+                    <td class="font-10">{{ $k->periode }}</td>
                     <td class="font-10">{{ $k->kategoriKegiatan->nama_kategori_kegiatan }}</td>
                 </tr>
             @endforeach
