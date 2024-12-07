@@ -12,7 +12,7 @@ class JabatanKegiatanController extends Controller
     public function index() {
         $breadcrumb = (object) [
             'title' => 'Daftar Jabatan Kegiatan',
-            'list' => ['Home', 'Jabatan Kegiatan']
+            'list' => ['Dashboard', 'Jabatan Kegiatan']
         ];
 
         $page = (object) [

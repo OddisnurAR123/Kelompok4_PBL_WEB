@@ -11,6 +11,7 @@ class KegiatanEksternalController extends Controller
     public function create() {
         $breadcrumb = [
             'title' => 'Input Kegiatan Eksternal Non-JTI',
+            'list' => ['Dashboard', 'Kegiatan', 'Kegiatan Non-JTI']
         ];        
         return view('kegiatan_eksternal.create', ['title' => $breadcrumb['title']]); // Tampilkan halaman form
     }
