@@ -35,6 +35,11 @@
                     <small id="error-password" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
+                    <label>NIP Pengguna</label>
+                    <input type="text" name="nip" id="nip" class="form-control" required>
+                    <small id="error-nip" class="error-text form-text text-danger"></small>
+                </div>
+                <div class="form-group">
                     <label>Email</label>
                     <input type="email" name="email" id="email" class="form-control" required>
                     <small id="error-email" class="error-text form-text text-danger"></small>
@@ -56,6 +61,7 @@
                 nama_pengguna: { required: true, minlength: 3 },
                 username: { required: true, minlength: 3 },
                 password: { required: true, minlength: 6, maxlength: 20 },
+                nip: { required: true, minlength: 6},
                 email: { required: true, email: true }
             },
             submitHandler: function(form) {

@@ -45,6 +45,9 @@
                         <th style="width: 40%;">Nama Pengguna:</th>
                         <td class="col-9">{{ $pengguna->nama_pengguna }}</td>
                     </tr>
+                    <th style="width: 40%;">NIP Pengguna:</th>
+                    <td class="col-9">{{ $pengguna->nip }}</td>
+                </tr>
                 </table>
             </div>
             <div class="modal-footer">

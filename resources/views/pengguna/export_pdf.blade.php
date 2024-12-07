@@ -80,6 +80,7 @@
                 <th>ID Jenis Pengguna</th>
                 <th>Nama Pengguna</th>
                 <th>Username</th>
+                <th>NIP Pengguna</th>
                 <th>Email</th>
             </tr>
         </thead>
@@ -90,6 +91,7 @@
                     <td>{{ $pengguna->id_jenis_pengguna }}</td>
                     <td>{{ $pengguna->nama_pengguna }}</td>
                     <td>{{ $pengguna->username }}</td>
+                    <td>{{ $pengguna->nip }}</td>
                     <td>{{ $pengguna->email }}</td>
                 </tr>
             @endforeach

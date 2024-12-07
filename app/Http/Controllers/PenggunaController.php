@@ -17,7 +17,7 @@ class PenggunaController extends Controller
     {
         $breadcrumb = (object) [
             'title' => 'Daftar Pengguna',
-            'list' => ['Home', 'Pengguna']
+            'list' => ['Dashboard', 'Pengguna']
         ];
 
         $page = (object) [
@@ -44,6 +44,7 @@ class PenggunaController extends Controller
                 'nama_pengguna',
                 'username', 
                 'password', 
+                'nip',
                 'email', 
             )->with('jenisPengguna');
             if ($request->id_jenis_pengguna) {
@@ -76,6 +77,7 @@ class PenggunaController extends Controller
                 'nama_pengguna' => 'required|string|max:100',
                 'username' => 'required|string|unique:m_pengguna,username|max:50',
                 'password' => 'required|string|min:6',
+                'nip' => 'required|string|max:100',
                 'email' => 'nullable|email|max:100',
             ];
             $validator = Validator::make($request->all(), $rules);
@@ -93,6 +95,7 @@ class PenggunaController extends Controller
                 'nama_pengguna' => $request->nama_pengguna,
                 'username' => $request->username,
                 'password' => bcrypt($request->password), // Hashing password
+                'nip' => $request->nip,
                 'email' => $request->email,
             ]);
 
@@ -117,9 +120,10 @@ class PenggunaController extends Controller
                 $rules = [
                     'id_jenis_pengguna' => 'required|exists:m_jenis_pengguna,id_jenis_pengguna',
                     'nama_pengguna' => 'required|string',
-                    'username' => 'required|string|unique:m_pengguna,username,' . $id_pengguna . ',pengguna',
+                    'username' => 'required|string|unique:m_pengguna,username,' . $id_pengguna . ',id_pengguna',
                     'password' => 'required|string|min:6',
-                    'email' => 'required|email|unique:m_pengguna,email,' . $id_pengguna . ',pengguna',
+                    'nip' => 'required|string',
+                    'email' => 'required|email|unique:m_pengguna,email,' . $id_pengguna . ',id_pengguna',
                 ];
         
                 $validator = Validator::make($request->all(), $rules);
@@ -240,7 +244,8 @@ class PenggunaController extends Controller
                             'id_jenis_pengguna' => $value['A'], // Kolom A
                             'nama_pengguna' => $value['B'],      // Kolom B
                             'username' => $value['C'],           // Kolom C
-                            'email' => $value['D'],              // Kolom E
+                            'nip' => $value['D'],
+                            'email' => $value['E'],              // Kolom E
                         ];
                     }
                 }
@@ -276,8 +281,9 @@ class PenggunaController extends Controller
     $sheet->setCellValue('A1', 'ID Jenis Pengguna');
     $sheet->setCellValue('B1', 'Nama Pengguna');
     $sheet->setCellValue('C1', 'Username');
-    $sheet->setCellValue('D1', 'Email');
-    $sheet->getStyle('A1:D1')->getFont()->setBold(true);
+    $sheet->setCellValue('D1', 'NIP');
+    $sheet->setCellValue('E1', 'Email');
+    $sheet->getStyle('A1:E1')->getFont()->setBold(true);
 
     $baris = 2; // Dimulai dari baris kedua setelah header
 
@@ -286,13 +292,14 @@ class PenggunaController extends Controller
         $sheet->setCellValue('A' . $baris, $value->id_jenis_pengguna);  // ID Jenis Pengguna
         $sheet->setCellValue('B' . $baris, $value->nama_pengguna);      // Nama Pengguna
         $sheet->setCellValue('C' . $baris, $value->username);           // Username
-        $sheet->setCellValue('D' . $baris, $value->email);              // Email
+        $sheet->setCellValue('D' . $baris, $value->nip);
+        $sheet->setCellValue('E' . $baris, $value->email);              // Email
 
         $baris++;
     }
 
     // Menyesuaikan lebar kolom agar otomatis
-    foreach (range('A', 'D') as $columnID) {
+    foreach (range('A', 'E') as $columnID) {
         $sheet->getColumnDimension($columnID)->setAutoSize(true);
     }
 
