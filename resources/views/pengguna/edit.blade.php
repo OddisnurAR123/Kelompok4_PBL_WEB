@@ -54,7 +54,7 @@
                 </div>
                 <!-- Password -->
                 <div class="form-group">
-                    <label>Password</label>
+                    <label>Password (kosongkan jika tidak ingin mengganti)</label>
                     <input value="" type="password" name="password" id="password" class="form-control">
                     <small id="error-password" class="error-text form-text text-danger"></small>
                 </div>
@@ -87,12 +87,9 @@ $(document).ready(function() {
             id_jenis_pengguna: { required: true },
             nama_pengguna: { required: true, minlength: 3, maxlength: 50 },
             username: { required: true, minlength: 3, maxlength: 20 },
-            password: { 
-                minlength: 6, 
-                maxlength: 20,
-                required: function() {
-                    return $('#password').val() !== '';
-                }
+            password: {
+                minlength: 6,
+                maxlength: 20
             },
             nip: { required: true, minlength: 3, maxlength: 50 },
             email: { required: true, email: true }
