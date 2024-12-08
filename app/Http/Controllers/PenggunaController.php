@@ -67,95 +67,115 @@ class PenggunaController extends Controller
 
     public function create()
     {
-        $jenisPengguna = JenisPenggunaModel::select('id_jenis_pengguna', 'nama_jenis_pengguna')->get();// Ambil data jenis pengguna dari database
-        return view('pengguna.create')->with('jenisPengguna',$jenisPengguna);
-    }    
+        $jenisPengguna = JenisPenggunaModel::select('id_jenis_pengguna', 'nama_jenis_pengguna')->get();
+        return view('pengguna.create', compact('jenisPengguna'));
+    }
 
     public function store(Request $request)
     {
-        if ($request->ajax() || $request->wantsJson()) {
-            // Aturan validasi untuk input 
-            $rules = [
-                'id_jenis_pengguna' => 'required|integer',
-                'nama_pengguna' => 'required|string|max:100',
-                'username' => 'required|string|unique:m_pengguna,username|max:50',
-                'password' => 'required|string|min:6',
-                'nip' => 'required|string|max:100',
-                'email' => 'nullable|email|max:100',
-            ];
-            $validator = Validator::make($request->all(), $rules);
+        $rules = [
+            'id_jenis_pengguna' => 'required|integer',
+            'nama_pengguna' => 'required|string|max:100',
+            'username' => 'required|string|unique:m_pengguna,username|max:50',
+            'password' => 'required|string|min:6',
+            'nip' => 'required|string|max:100',
+            'email' => 'nullable|email|max:100',
+        ];
+        $validator = Validator::make($request->all(), $rules);
 
-            if ($validator->fails()) {
-                // Mengembalikan respon jika validasi gagal
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validasi Gagal',
+                'msgField' => $validator->errors(),
+            ]);
+        }
+
+        PenggunaModel::create([
+            'id_jenis_pengguna' => $request->id_jenis_pengguna,
+            'nama_pengguna' => $request->nama_pengguna,
+            'username' => $request->username,
+            'password' => bcrypt($request->password),
+            'nip' => $request->nip,
+            'email' => $request->email,
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Pengguna berhasil ditambahkan.',
+        ]);
+    }
+
+    public function edit($id_pengguna)
+    {
+        $pengguna = PenggunaModel::find($id_pengguna);
+        $jenisPengguna = JenisPenggunaModel::select('id_jenis_pengguna', 'nama_jenis_pengguna')->get();
+
+        return view('pengguna.edit', compact('pengguna', 'jenisPengguna'));
+    }
+
+    public function update(Request $request, $id_pengguna)
+    {
+        $rules = [
+            'id_jenis_pengguna' => 'required|exists:m_jenis_pengguna,id_jenis_pengguna',
+            'nama_pengguna' => 'required|string',
+            'username' => 'required|string|unique:m_pengguna,username,' . $id_pengguna . ',id_pengguna',
+            'password' => 'nullable|string|min:6',
+            'nip' => 'required|string',
+            'email' => 'required|email|unique:m_pengguna,email,' . $id_pengguna . ',id_pengguna',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validasi Gagal',
+                'msgField' => $validator->errors(),
+            ]);
+        }
+
+        $pengguna = PenggunaModel::find($id_pengguna);
+        if (!$pengguna) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak ditemukan',
+            ]);
+        }
+
+        $data = $request->except('password');
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->password);
+        }
+
+        $pengguna->update($data);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Data berhasil diupdate.',
+        ]);
+    }
+
+    public function delete(Request $request, $id)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $pengguna = PenggunaModel::find($id);
+            if ($pengguna) {
+                $pengguna->delete();
                 return response()->json([
-                    'status' => false,
-                    'message' => 'Validasi Gagal',
-                    'msgField' => $validator->errors(),
+                    'status' => true,
+                    'message' => 'Data berhasil dihapus.',
                 ]);
             }
-            PenggunaModel::create([
-                'id_jenis_pengguna' => $request->id_jenis_pengguna,
-                'nama_pengguna' => $request->nama_pengguna,
-                'username' => $request->username,
-                'password' => bcrypt($request->password), // Hashing password
-                'nip' => $request->nip,
-                'email' => $request->email,
-            ]);
 
             return response()->json([
-                'status' => true,
-                'message' => 'Pengguna berhasil ditambahkan.',
+                'status' => false,
+                'message' => 'Data tidak ditemukan.',
             ]);
         }
 
         return redirect('/');
     }
-
-        public function edit(string $id_pengguna) {
-            $pengguna = PenggunaModel::find($id_pengguna);
-            $jenisPengguna = JenisPenggunaModel::select('id_jenis_pengguna', 'nama_jenis_pengguna')->get();
-
-            return view('pengguna.edit', ['pengguna' => $pengguna, 'jenisPengguna' => $jenisPengguna]);
-        }
-
-        public function update(Request $request, $id_pengguna) {
-            if ($request->ajax() || $request->wantsJson()) {
-                $rules = [
-                    'id_jenis_pengguna' => 'required|exists:m_jenis_pengguna,id_jenis_pengguna',
-                    'nama_pengguna' => 'required|string',
-                    'username' => 'required|string|unique:m_pengguna,username,' . $id_pengguna . ',id_pengguna',
-                    'password' => 'required|string|min:6',
-                    'nip' => 'required|string',
-                    'email' => 'required|email|unique:m_pengguna,email,' . $id_pengguna . ',id_pengguna',
-                ];
-        
-                $validator = Validator::make($request->all(), $rules);
-        
-                if ($validator->fails()) {
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'Validasi gagal.',
-                        'msgField' => $validator->errors(),
-                    ]);
-                }
-                    // Update pengguna with new data
-                    $pengguna = PenggunaModel::find($id_pengguna);                    
-                    if ($pengguna) {
-                        $pengguna->update($request->all());
-                        return response()->json([
-                            'status' => true,
-                            'message' => 'Data berhasil diupdate',
-                        ]);
-                    } else {
-                        return response()->json([
-                            'status' => false,
-                            'message' => 'Data tidak ditemukan',
-                        ]);
-                    }
-                }
-        
-                return redirect('/');
-            }
 
             public function show(string $id)
             {
@@ -189,28 +209,6 @@ class PenggunaController extends Controller
                 return view('pengguna.confirm', ['pengguna' => $pengguna]);
             }
         
-            public function delete(Request $request, $id)
-            {
-                // Cek apakah request dari ajax
-                if ($request->ajax() || $request->wantsJson()) {
-                    $pengguna = PenggunaModel::find($id);
-        
-                    if ($pengguna) {
-                        $pengguna->delete();
-                        return response()->json([
-                            'status' => true,
-                            'message' => 'Data berhasil dihapus',
-                        ]);
-                    } else {
-                        return response()->json([
-                            'status' => false,
-                            'message' => 'Data tidak ditemukan',
-                        ]);
-                    }
-                }
-        
-                return redirect('/');
-            }
     public function import(Request $request)
     {
         if ($request->ajax() || $request->wantsJson()) {

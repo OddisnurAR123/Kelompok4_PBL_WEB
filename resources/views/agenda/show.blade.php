@@ -9,8 +9,8 @@
         </div>
         <div class="modal-body">
             <div class="alert alert-danger">
-                <h5><i class="icon fas fa-ban"></i> Kesalahan!!!</h5>
-                Data yang anda cari tidak ditemukan
+                <h5><i class="icon fas fa-ban"></i> Kesalahan!</h5>
+                Data yang Anda cari tidak ditemukan.
             </div>
             <a href="{{ url()->previous() }}" class="btn btn-warning">Kembali</a>
         </div>
@@ -28,10 +28,6 @@
         <div class="modal-body">
             <table class="table table-sm table-bordered table-striped">
                 <tr>
-                    <th class="text-right col-3">Kode Agenda:</th>
-                    <td class="col-9">{{ $agenda->kode_agenda }}</td>
-                </tr>
-                <tr>
                     <th class="text-right col-3">Nama Agenda:</th>
                     <td class="col-9">{{ $agenda->nama_agenda }}</td>
                 </tr>
@@ -44,14 +40,12 @@
                     <td class="col-9">{{ $agenda->tempat_agenda }}</td>
                 </tr>
                 <tr>
-                    <th class="text-right col-3">Jenis Pengguna:</th>
-                    <td class="col-9">{{ $agenda->jenisPengguna->nama_jenis_pengguna }}</td>
+                    <th class="text-right col-3">Nama Pengguna:</th>
+                    <td class="col-9">{{ $agenda->kegiatanUser->pengguna->nama_pengguna ?? '-' }}</td>
                 </tr>
                 <tr>
-                    <th class="text-right col-3">Jabatan Kegiatan:</th>
-                    <td class="col-9">
-                        {{ $agenda->jabatanKegiatan->nama_jabatan_kegiatan}}
-                    </td>
+                    <th class="text-right col-3">Jabatan Pengguna:</th>
+                    <td class="col-9">{{ $agenda->kegiatanUser->jabatanKegiatan->nama_jabatan_kegiatan ?? '-' }}</td>
                 </tr>
                 <tr>
                     <th class="text-right col-3">Bobot Anggota:</th>
@@ -59,7 +53,7 @@
                 </tr>
                 <tr>
                     <th class="text-right col-3">Tanggal Agenda:</th>
-                    <td class="col-9">{{ $agenda->tanggal_agenda }}</td>
+                    <td class="col-9">{{ \Carbon\Carbon::parse($agenda->tanggal_agenda)->format('d M Y H:i') }}</td>
                 </tr>
                 <tr>
                     <th class="text-right col-3">Deskripsi:</th>
