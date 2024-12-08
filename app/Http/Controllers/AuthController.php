@@ -67,4 +67,5 @@ class AuthController extends Controller
         // Redirect ke halaman login
         return redirect('login');
     }
+    
 }
