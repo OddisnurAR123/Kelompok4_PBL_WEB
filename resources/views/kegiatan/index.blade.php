@@ -34,7 +34,7 @@
                 <a class="nav-link active" id="daftar-tab" data-bs-toggle="tab" href="#daftar" role="tab" aria-controls="daftar" aria-selected="true">Daftar Kegiatan</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="eksternal-tab" data-bs-toggle="tab" href="{{ route('kegiatan_eksternal.create') }}" role="tab" aria-controls="eksternal" aria-selected="false">Kegiatan Eksternal</a>
+                <a class="nav-link" id="eksternal-tab" data-bs-toggle="tab" href="{{ route('kegiatan_eksternal') }}" role="tab" aria-controls="eksternal" aria-selected="false">Kegiatan Non-JTI</a>
             </li>            
         </ul>
 

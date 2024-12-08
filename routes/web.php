@@ -222,8 +222,8 @@ Route::pattern('id', '[0-9]+');
         //route kegiatan non jti
         Route::get('/kegiatan_eksternal/create', [KegiatanEksternalController::class, 'create'])->name('kegiatan_eksternal.create'); //semua
         Route::post('/kegiatan_eksternal/store', [KegiatanEksternalController::class, 'store'])->name('kegiatan_eksternal.store'); //semua
-        Route::get('/kegiatan-eksternal', [KegiatanEksternalController::class, 'index'])->name('kegiatan_eksternal.index');
-        Route::get('/kegiatan-eksternal/list', [KegiatanEksternalController::class, 'list'])->name('kegiatan_eksternal.list');
+        Route::get('/kegiatan_eksternal', [KegiatanEksternalController::class, 'index'])->name('kegiatan_eksternal.index');
+        Route::post('kegiatan_eksternal/list', [KegiatanEksternalController::class, 'list']);
     // });
 
     // Route logout
