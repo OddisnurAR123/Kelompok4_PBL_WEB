@@ -73,6 +73,18 @@
                         <th>Kategori Kegiatan</th>
                         <td>{{ $kegiatan->kategoriKegiatan->nama_kategori_kegiatan ?? 'Tidak ada kategori' }}</td>
                     </tr>
+                    <tr>
+                        <th>Progres Kegiatan</th>
+                        <td>
+                            @if($kegiatan->detailKegiatan && $kegiatan->detailKegiatan->count())
+                                @foreach($kegiatan->detailKegiatan as $detail)
+                                    <p>{{ $detail->progres_kegiatan }}%</p>
+                                @endforeach
+                            @else
+                                Tidak ada progres.
+                            @endif
+                        </td>
+                    </tr>                    
                 </table>
 
                 <h4 class="mt-4">Anggota Kegiatan</h4>
@@ -97,14 +109,19 @@
                     </tbody>
                 </table>
 
-                <h4 class="mt-4">Agenda Kegiatan</h4>
+                <h4 class="mt-4 d-flex justify-content-between">
+                    Agenda Kegiatan
+                    <a href="{{ route('detail_agenda.index') }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-tasks"></i>
+                    </a>
+                </h4>
                 <table class="table table-bordered table-striped table-hover table-sm">
                     <thead>
                         <tr>
                             <th>Nama Agenda</th>
                             <th>Tempat Agenda</th>
                             <th>Tanggal Agenda</th>
-                            <th>Aksi</th>
+                            <th>Progres</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -114,10 +131,14 @@
                                 <td>{{ $agenda->tempat_agenda }}</td>
                                 <td>{{ \Carbon\Carbon::parse($agenda->tanggal_agenda)->format('d-m-Y H:i') }}</td>
                                 <td>
-                                    <a href="{{ route('detail_agenda.index') }}?id_kegiatan={{ $agenda->id_agenda }}" class="btn btn-primary btn-sm">
-                                        <i class="fas fa-tasks"></i>
-                                    </a>
-                                </td>
+                                    @if($agenda->detailAgenda && $agenda->detailAgenda->count())
+                                        @foreach($agenda->detailAgenda as $detail)
+                                            <p>{{ $detail->progres_agenda }}%</p>
+                                        @endforeach
+                                    @else
+                                        Tidak ada progres.
+                                    @endif
+                                </td>                                
                             </tr>
                         @empty
                             <tr>
@@ -125,7 +146,7 @@
                             </tr>
                         @endforelse
                     </tbody>
-                </table>
+                </table>                
             @endif
             <div class="text-right">
                 <a href="{{ url('kegiatan') }}" class="btn btn-warning btn-sm mt-2">Tutup</a>

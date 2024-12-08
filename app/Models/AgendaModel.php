@@ -37,7 +37,7 @@ class AgendaModel extends Model
     // Relasi dengan DetailAgenda
     public function detailAgenda()
     {
-        return $this->hasMany(DetailAgendaModel::class, 'id_detail_agenda', 'id_detail_agenda');
+        return $this->hasMany(DetailAgendaModel::class, 'id_agenda', 'id_agenda');
     }
 
     public function pengguna() {

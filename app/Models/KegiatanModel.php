@@ -9,6 +9,7 @@ use App\Models\KategoriKegiatanModel;
 use App\Models\PenggunaModel;
 use App\Models\AgendaModel;
 use App\Models\JabatanKegiatanModel;
+use App\Models\DetailKegiatanModel;
 
 class KegiatanModel extends Model
 {
