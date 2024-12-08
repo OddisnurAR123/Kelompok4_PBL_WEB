@@ -7,31 +7,66 @@ use App\Models\PenggunaModel; // Model untuk m_pengguna
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class ProfileController extends Controller
+class ProfilController extends Controller
 {
     // Menampilkan halaman profil
-    public function showProfile()
+    public function showProfil()
     {
-        // Ambil data pengguna yang sedang login berdasarkan ID
         $user = PenggunaModel::where('id_pengguna', Auth::id())->first();
 
         if (!$user) {
             return redirect()->route('login')->withErrors('Anda harus login terlebih dahulu.');
         }
 
-        // Membuat breadcrumb untuk halaman profil
         $breadcrumb = (object) [
             'title' => 'Profile',
             'list' => [
                 'Home',
-                (object) ['url' => route('profile.profil'), 'label' => 'Profile'],
+                (object) ['url' => route('profil.profil'), 'label' => 'Profil'],
                 'Profil'
             ]
         ];
 
-        return view('profile.profil', compact('user', 'breadcrumb'));
+        return view('profil.profil', compact('user', 'breadcrumb'));
     }
 
+    // Mengupdate profil pengguna
+    public function updateProfil(Request $request)
+    {
+        $request->validate([
+            'id_jenis_pengguna' => 'required|integer',
+            'username' => 'required|string|max:255',
+            'email' => 'required|email',
+            'nama_pengguna' => 'required|string|max:255',
+            'password' => 'nullable|min:6',
+            'nip' => 'required|string|max:100',
+            'foto_profil' => 'nullable|image|max:2048'
+        ]);
+
+        $user = PenggunaModel::find(Auth::id());
+
+        if ($user) {
+            $user->username = $request->input('username');
+            $user->email = $request->input('email');
+            $user->nama_pengguna = $request->input('nama_pengguna');
+
+            if ($request->filled('password')) {
+                $user->password = bcrypt($request->input('password'));
+            }
+
+            if ($request->hasFile('fotoprofil')) {
+                $fotoprofil = $request->file('fotoprofil');
+                $path = $fotoprofil->store('public/fotoprofil');
+                $user->fotoprofil = $path;
+            }
+
+            $user->save();
+
+            return redirect()->route('profil.profil')->with('success', 'Profil berhasil diperbarui.');
+        }
+
+        return redirect()->route('profil.profil')->withErrors('Terjadi kesalahan saat mengupdate profil.');
+    }
     // Menampilkan halaman edit profil
     public function edit()
     {
@@ -41,42 +76,13 @@ class ProfileController extends Controller
         $breadcrumb = (object) [
             'title' => 'Edit Profile',
             'list' => [
-                (object) ['label' => 'Profile', 'url' => route('profile.edit')],
+                (object) ['label' => 'Profile', 'url' => route('profil.edit')],
                 'Edit'
             ]
         ];
 
-        return view('profile.edit', compact('user', 'breadcrumb'));
+        return view('profil.edit', compact('user', 'breadcrumb'));
     }
-
-    // Memperbarui data profil
-    public function update(Request $request)
-    {
-        $user = PenggunaModel::where('id_pengguna', Auth::id())->first();
-
-        $request->validate([
-            'nama_pengguna' => 'required|string|max:255',
-            'username' => 'required|string|max:20|unique:m_pengguna,username,' . $user->id_pengguna . ',id_pengguna',
-            'email' => 'required|email|max:255',
-            'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10048',
-        ]);
-
-        // Update nama, username, dan email
-        $user->nama_pengguna = $request->nama_pengguna;
-        $user->username = $request->username;
-        $user->email = $request->email;
-
-        // Handle upload foto profil
-        if ($request->hasFile('foto_profil')) {
-            $fotoPath = $request->file('foto_profil')->store('uploads/foto_profil', 'public');
-            $user->foto_profil = $fotoPath;
-        }
-
-        $user->save();
-
-        return redirect()->route('profile.profil')->with('success', 'Profil berhasil diperbarui!');
-    }
-
     // Menampilkan halaman ganti password
     public function changePassword()
     {
@@ -88,7 +94,7 @@ class ProfileController extends Controller
             ]
         ];
 
-        return view('profile.password', compact('breadcrumb'));
+        return view('profil.password', compact('breadcrumb'));
     }
 
     // Memperbarui password pengguna
@@ -110,6 +116,6 @@ class ProfileController extends Controller
         $user->password = Hash::make($request->new_password);
         $user->save();
 
-        return redirect()->route('profile.profil')->with('success', 'Password berhasil diubah.');
+        return redirect()->route('profil.profil')->with('success', 'Password berhasil diubah.');
     }
 }
