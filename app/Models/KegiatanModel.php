@@ -51,9 +51,10 @@ class KegiatanModel extends Model
     
     // Relasi banyak ke banyak dengan pengguna
     public function pengguna()
-    {
-        return $this->belongsToMany(PenggunaModel::class, 't_kegiatan_user', 'id_kegiatan', 'id_pengguna');
-    }
+{
+    return $this->belongsToMany(PenggunaModel::class, 't_kegiatan_user', 'id_kegiatan', 'id_pengguna')
+                ->withPivot('id_jabatan_kegiatan');
+}
 
     // Relasi satu ke banyak dengan jabatan kegiatan
     public function JabatanKegiatan()

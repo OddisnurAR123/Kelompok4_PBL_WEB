@@ -173,15 +173,32 @@ class KegiatanController extends Controller
 
 
     // Menampilkan form edit kegiatan via Ajax
-    public function edit($id) {
-        $kegiatan = KegiatanModel::findOrFail($id);
-        $kategoriKegiatan = KategoriKegiatanModel::all();
-        // Mengambil pengguna dengan id_jenis_pengguna = 3
-        $pengguna = PenggunaModel::where('id_jenis_pengguna', 3)->get();
-        // Mengambil data jabatan kegiatan
-        $jabatanKegiatan = JabatanKegiatanModel::all();
-        return view('kegiatan.edit', ['kegiatan' => $kegiatan, 'kategoriKegiatan' => $kategoriKegiatan, 'pengguna' => $pengguna, 'jabatanKegiatan' => $jabatanKegiatan]);
-    }
+public function edit($id) {
+    // Mengambil data kegiatan
+    $kegiatan = KegiatanModel::findOrFail($id);
+    
+    // Mengambil kategori kegiatan
+    $kategoriKegiatan = KategoriKegiatanModel::all();
+    
+    // Mengambil pengguna dengan id_jenis_pengguna = 3
+    $pengguna = PenggunaModel::where('id_jenis_pengguna', 3)->get();
+    
+    // Mengambil data jabatan kegiatan
+    $jabatanKegiatan = JabatanKegiatanModel::all();
+    
+    // Menambahkan data pivot 'id_jabatan_kegiatan' ke pengguna yang terhubung dengan kegiatan
+    // Pastikan Anda sudah menambahkan relasi 'pengguna' di model Kegiatan
+    $kegiatan->load('pengguna'); // Menyertakan relasi pengguna dengan pivot data
+
+    // Kirim data ke view
+    return view('kegiatan.edit', [
+        'kegiatan' => $kegiatan, 
+        'kategoriKegiatan' => $kategoriKegiatan, 
+        'pengguna' => $pengguna, 
+        'jabatanKegiatan' => $jabatanKegiatan
+    ]);
+}
+
 
     public function update(Request $request, $id)
     {
