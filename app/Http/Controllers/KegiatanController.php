@@ -85,7 +85,6 @@ class KegiatanController extends Controller
 
     public function store(Request $request)
     {
-        if ($request->ajax() || $request->wantsJson()) {
             $validator = Validator::make($request->all(), [
                 'kode_kegiatan' => 'required|string|max:10|unique:t_kegiatan,kode_kegiatan',
                 'nama_kegiatan' => 'required|string|max:100',
@@ -150,11 +149,6 @@ class KegiatanController extends Controller
             }
         }
 
-        return response()->json([
-            'status' => false,
-            'message' => 'Request bukan AJAX.',
-        ]);
-    }
 
     public function show(string $id)
     {

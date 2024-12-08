@@ -83,35 +83,32 @@
 <script>
     $(document).ready(function() {
         let anggotaIndex = 1; // Menyimpan indeks anggota yang ditambahkan
+        
         $("#addAnggota").click(function() {
-            // Menambahkan form anggota baru
             let newAnggota = `
                 <div class="anggota-group d-flex justify-content-between mb-3">
-                <div class="col-5">
-                    <label>Pengguna ${anggotaIndex + 1}</label>
-                    <select name="anggota[${anggotaIndex}][id_pengguna]" class="form-control" required>
-                        <option value="">Pilih Pengguna</option>
-                        @foreach($pengguna as $user)
-                            <option value="{{ $user->id_pengguna }}">{{ $user->nama_pengguna }}</option>
-                        @endforeach
-                    </select>
+                    <div class="col-5">
+                        <label>Pengguna ${anggotaIndex + 1}</label>
+                        <select name="anggota[${anggotaIndex}][id_pengguna]" class="form-control" required>
+                            <option value="">Pilih Pengguna</option>
+                            @foreach($pengguna as $user)
+                                <option value="{{ $user->id_pengguna }}">{{ $user->nama_pengguna }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-5">
+                        <label>Jabatan</label>
+                        <select name="anggota[${anggotaIndex}][id_jabatan_kegiatan]" class="form-control" required>
+                            <option value="">Pilih Jabatan</option>
+                            @foreach($jabatanKegiatan as $jabatan)
+                                <option value="{{ $jabatan->id_jabatan_kegiatan }}">{{ $jabatan->nama_jabatan_kegiatan }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-2 d-flex align-items-center"></div>
                 </div>
-                <div class="col-5">
-                    <label>Jabatan</label>
-                    <select name="anggota[${anggotaIndex}][id_jabatan_kegiatan]" class="form-control" required>
-                        <option value="">Pilih Jabatan</option>
-                        @foreach($jabatanKegiatan as $jabatan)
-                            <option value="{{ $jabatan->id_jabatan_kegiatan }}">{{ $jabatan->nama_jabatan_kegiatan }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-2 d-flex align-items-center">
-                </div>
-            </div>
-        `;
-
+            `;
             $('#anggota-section').append(newAnggota);
-
             anggotaIndex++;
         });
 
@@ -146,21 +143,19 @@
                     type: form.method,
                     data: $(form).serialize(),
                     success: function (response) {
+                        console.log(response);
                         if (response.status) {
-                            // SweetAlert untuk notifikasi sukses
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Berhasil',
                                 text: response.message
                             }).then(() => {
-                                // Auto reload setelah tombol OK ditekan
-                                location.reload();
+                                location.reload(); // Reload halaman setelah alert OK ditekan
                             });
                         } else {
-                            // Menangani kesalahan jika response.status == false
-                            $('.error-text').text(''); // Menghapus pesan error sebelumnya
+                            $('.error-text').text('');
                             $.each(response.msgField, function (prefix, val) {
-                                $('#error-' + prefix).text(val[0]); // Menampilkan pesan error untuk masing-masing field
+                                $('#error-' + prefix).text(val[0]);
                             });
                             Swal.fire({
                                 icon: 'error',
