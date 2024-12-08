@@ -4275,7 +4275,6 @@
             "time": "2024-10-27T17:38:32+00:00"
         },
         {
-<<<<<<< HEAD
             "name": "staudenmeir/eloquent-has-many-deep",
             "version": "v1.19.4",
             "source": {
@@ -4318,7 +4317,6 @@
             "autoload": {
                 "psr-4": {
                     "Staudenmeir\\EloquentHasManyDeep\\": "src/"
-=======
             "name": "stella-maris/clock",
             "version": "0.1.7",
             "source": {
@@ -4340,7 +4338,6 @@
             "autoload": {
                 "psr-4": {
                     "StellaMaris\\Clock\\": "src"
->>>>>>> baf2a3e2ef1f958f503081267dbbe4535f054e56
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -4349,7 +4346,6 @@
             ],
             "authors": [
                 {
-<<<<<<< HEAD
                     "name": "Jonas Staudenmeir",
                     "email": "mail@jonas-staudenmeir.de"
                 }
@@ -4407,8 +4403,7 @@
                 "source": "https://github.com/staudenmeir/eloquent-has-many-deep-contracts/tree/v1.1"
             },
             "time": "2023-01-18T12:43:26+00:00"
-=======
-                    "name": "Andreas Heigl",
+                    "name" : "Andreas Heigl",
                     "role": "Maintainer"
                 }
             ],
@@ -4424,7 +4419,6 @@
                 "source": "https://github.com/stella-maris-solutions/clock/tree/0.1.7"
             },
             "time": "2022-11-25T16:15:06+00:00"
->>>>>>> baf2a3e2ef1f958f503081267dbbe4535f054e56
         },
         {
             "name": "symfony/console",
