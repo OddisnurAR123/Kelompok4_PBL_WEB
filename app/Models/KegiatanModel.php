@@ -69,4 +69,5 @@ class KegiatanModel extends Model
                 't_kegiatan_user.*'
             );
     }
+    
 }
