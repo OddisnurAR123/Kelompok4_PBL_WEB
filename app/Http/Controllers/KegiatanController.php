@@ -158,12 +158,13 @@ class KegiatanController extends Controller
 
     public function show(string $id)
     {
-        $kegiatan = KegiatanModel::with(['anggota', 'agenda'])->find($id);
+        $kegiatan = KegiatanModel::with(['anggota', 'agenda.detailAgenda', 'detailKegiatan'])->find($id);
 
         $breadcrumb = (object) [
             'title' => 'Detail Kegiatan',
             'list' => ['Home', 'Kegiatan']
         ];
+        
         return view('kegiatan.show', [
             'kegiatan' => $kegiatan,
             'breadcrumb' => $breadcrumb

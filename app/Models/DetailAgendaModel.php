@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\AgendaModel;
+use App\Models\KegiatanModel;
 
-class DetailAgenda extends Model
+class DetailAgendaModel extends Model
 {
     use HasFactory;
 
@@ -13,18 +15,22 @@ class DetailAgenda extends Model
     protected $primaryKey = 'id_detail_agenda';
 
     protected $fillable = [
+        'id_kegiatan',
         'id_agenda',
-        'dokumen',
         'progres_agenda',
         'keterangan',
         'berkas',
-        'created_at',
-        'updated_at',
     ];
 
     // Relasi ke tabel Agenda
     public function agenda()
     {
-        return $this->belongsTo(AgendaModel::class, 'id_agenda');
+        return $this->belongsTo(AgendaModel::class, 'id_agenda', 'id_agenda');
     }
+    
+    public function kegiatan()
+    {
+        return $this->belongsTo(KegiatanModel::class, 'id_kegiatan', 'id_kegiatan');
+    }
+    
 }

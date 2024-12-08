@@ -2,82 +2,197 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DetailAgenda;
+use App\Models\DetailAgendaModel;
 use App\Models\AgendaModel;
+use App\Models\DetailKegiatanModel;
+use App\Models\KegiatanModel;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class DetailAgendaController extends Controller
 {
-    // Menampilkan daftar detail agenda berdasarkan agenda tertentu
-    public function index($agendaId)
-    {
-        // Cari agenda berdasarkan ID
-        $agenda = AgendaModel::findOrFail($agendaId);
-        // Ambil semua detail agenda terkait agenda ini
-        $details = $agenda->detailAgenda; 
+    public function index() {
+        $breadcrumb = (object) [
+            'title' => 'Detail Agenda',
+            'list' => ['Home', 'Detail Agenda']
+        ];
 
-        return view('detail_agenda.index', compact('details', 'agenda')); // Kirim data ke view
+        $page = (object) [
+            'title' => 'Daftar Progres Agenda yang ada'
+        ];
+
+        $activeMenu = 'detail_agenda';
+
+        return view('detail_agenda.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu]);
     }
 
-    // Menampilkan form untuk membuat detail agenda baru
-    public function create($agendaId)
+    public function list(Request $request)
     {
-        $agenda = AgendaModel::findOrFail($agendaId); // Cari agenda berdasarkan ID
-        return view('detail_agenda.create', compact('agenda'));
+        $detail_agenda = DetailAgendaModel::with(['kegiatan', 'agenda'])
+            ->select('id_detail_agenda', 'id_kegiatan', 'id_agenda', 'progres_agenda', 'keterangan', 'berkas')
+            ->get();
+
+        return DataTables::of($detail_agenda)
+            ->addIndexColumn()
+            ->addColumn('nama_kegiatan', function ($detail_agenda) {
+                return $detail_agenda->kegiatan ? $detail_agenda->kegiatan->nama_kegiatan : 'Tidak ada';
+            })
+            ->addColumn('nama_agenda', function ($detail_agenda) {
+                return $detail_agenda->agenda ? $detail_agenda->agenda->nama_agenda : 'Tidak ada';
+            })
+            ->addColumn('aksi', function ($detail_agenda) {
+                $btn = '<div class="d-flex justify-content-center">';
+                $btn .= '<button onclick="modalAction(\''.route('detail_agenda.show', ['id' => $detail_agenda->id_detail_agenda]).'\')" class="btn btn-info btn-sm" style="margin-right: 5px;">';
+                $btn .= '<i class="fas fa-eye"></i></button>';
+                $btn .= '<button onclick="modalAction(\''.route('detail_agenda.edit', ['id' => $detail_agenda->id_detail_agenda]).'\')" class="btn btn-warning btn-sm">';
+                $btn .= '<i class="fas fa-edit"></i></button>';
+                $btn .= '</div>';
+                return $btn;
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
     }
 
-    // Menyimpan detail agenda yang baru dibuat
-    public function store(Request $request, $agendaId)
+    public function create(Request $request)
     {
-        // Validasi data dari request
-        $validated = $request->validate([
-            'dokumen' => 'nullable|string|max:255',
-            'progres_agenda' => 'nullable|string|max:255',
-            'keterangan' => 'nullable|string',
-            'berkas' => 'nullable|file|mimes:pdf,docx,jpg,png', // Validasi file
+        $kegiatan = KegiatanModel::select('id_kegiatan', 'nama_kegiatan')->get();
+        
+        $agenda = [];
+        foreach ($kegiatan as $item) {
+            $agenda[$item->id_kegiatan] = $item->agenda;
+        }
+
+        return view('detail_agenda.create', compact('kegiatan', 'agenda'));
+    }
+  
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id_kegiatan' => 'required|exists:t_kegiatan,id_kegiatan',
+            'id_agenda' => 'required|exists:t_agenda,id_agenda',
+            'keterangan' => 'required|min:3|max:100',
+            'progres_agenda' => 'required|numeric|min:0|max:100',
+            'berkas' => 'nullable|mimes:pdf,doc,docx,jpg,jpeg,png,txt|max:2048',
+        ]);
+    
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Ada kesalahan pada input.',
+                'msgField' => $validator->errors()
+            ]);
+        }
+    
+        $detailAgenda = new DetailAgendaModel();
+        $detailAgenda->id_kegiatan = $request->id_kegiatan;
+        $detailAgenda->id_agenda = $request->id_agenda;
+        $detailAgenda->keterangan = $request->keterangan;
+        $detailAgenda->progres_agenda = $request->progres_agenda;
+    
+        if ($request->hasFile('berkas')) {
+            $berkas = $request->file('berkas');
+        
+            $mimeType = $berkas->getMimeType();
+            $extension = $berkas->getClientOriginalExtension();
+        
+            $validMimeTypes = [
+                'application/pdf',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'image/jpeg',
+                'image/png',
+                'text/plain'
+            ];
+            
+            if (!in_array($mimeType, $validMimeTypes)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Format file tidak didukung. MIME type tidak valid.'
+                ]);
+            }
+
+            $fileName = time() . '.' . $extension;
+    
+            $berkas->storeAs('public/berkas', $fileName);
+
+            $detailAgenda->berkas = 'storage/berkas/' . $fileName;
+        }
+
+        $detailAgenda->save();
+    
+        return response()->json([
+            'status' => true,
+            'message' => 'Detail Agenda berhasil disimpan.'
+        ]);
+    }
+
+    // Menampilkan detail detail kegiatan
+    public function show(string $id) {
+        $detailAgenda = DetailAgendaModel::find($id);
+
+        if (!$detailAgenda) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak ditemukan.'
+            ]);
+        }
+
+        return view('detail_agenda.show', ['detailAgenda' => $detailAgenda]);
+    }   
+
+    public function edit($id)
+    {
+        $detailAgenda = DetailAgendaModel::findOrFail($id);
+        $kegiatan = KegiatanModel::all();
+        $agenda = AgendaModel::all();
+        return view('detail_agenda.edit', compact('detailAgenda', 'kegiatan', 'agenda'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'id_kegiatan' => 'nullable',
+            'id_agenda' => 'nullable',
+            'keterangan' => 'nullable|min:3',
+            'progres_agenda' => 'nullable|numeric|min:0|max:100',
+            'berkas' => 'nullable|mimes:pdf,doc,docx,jpg,png,txt|max:2048'
         ]);
 
-        // Tambahkan id_agenda ke data yang akan disimpan
-        $validated['id_agenda'] = $agendaId;
+        $detailAgenda = DetailAgendaModel::findOrFail($id);
+        
+        // Cek dan update hanya jika ada perubahan
+        if ($request->has('id_kegiatan')) {
+            $detailAgenda->id_kegiatan = $request->id_kegiatan;
+        }
+        
+        if ($request->has('id_agenda')) {
+            $detailAgenda->id_agenda = $request->id_agenda;
+        }
+        
+        if ($request->has('keterangan')) {
+            $detailAgenda->keterangan = $request->keterangan;
+        }
 
-        // Simpan detail agenda baru ke database
-        DetailAgenda::create($validated);
+        if ($request->has('progres_agenda')) {
+            $detailAgenda->progres_agenda = $request->progres_agenda;
+        }
+        
+        if ($request->hasFile('berkas')) {
+            $file = $request->file('berkas');
+            $filePath = $file->store('uploads', 'public');
+            $detailAgenda->berkas = $filePath;
+        }
 
-        return redirect()->route('detailAgenda.index', $agendaId)->with('success', 'Detail agenda berhasil dibuat!');
-    }
+        $detailAgenda->save();
 
-    // Menampilkan form untuk mengedit detail agenda
-    public function edit($agendaId, $id)
-    {
-        $detail = DetailAgenda::findOrFail($id); // Cari detail agenda berdasarkan ID
-        $agenda = AgendaModel::findOrFail($agendaId); // Cari agenda berdasarkan ID
-
-        return view('detail_agenda.edit', compact('detail', 'agenda'));
-    }
-
-    // Memperbarui detail agenda
-    public function update(Request $request, $agendaId, $id)
-    {
-        // Validasi data dari request
-        $validated = $request->validate([
-            'dokumen' => 'nullable|string|max:255',
-            'progres_agenda' => 'nullable|string|max:255',
-            'keterangan' => 'nullable|string',
-            'berkas' => 'nullable|file|mimes:pdf,docx,jpg,png',
+        return response()->json([
+            'status' => true,
+            'message' => 'Detail agenda berhasil diperbarui'
         ]);
-
-        $detail = DetailAgenda::findOrFail($id); // Cari detail agenda berdasarkan ID
-        $detail->update($validated); // Perbarui detail agenda
-
-        return redirect()->route('detailAgenda.index', $agendaId)->with('success', 'Detail agenda berhasil diperbarui!');
     }
 
-    // Menghapus detail agenda
-    public function destroy($agendaId, $id)
-    {
-        $detail = DetailAgenda::findOrFail($id); // Cari detail agenda berdasarkan ID
-        $detail->delete(); // Hapus detail agenda
-
-        return redirect()->route('detailAgenda.index', $agendaId)->with('success', 'Detail agenda berhasil dihapus!');
-    }
 }

@@ -9,36 +9,39 @@ class AgendaModel extends Model
 {
     use HasFactory;
 
-    protected $table = 't_agenda';
-    protected $primaryKey = 'id_agenda';
+    protected $table = 't_agenda'; // Nama tabel di database
+    protected $primaryKey = 'id_agenda'; // Primary key
+    public $timestamps = true;
 
     protected $fillable = [
-        'kode_agenda',
         'nama_agenda',
         'id_kegiatan',
         'tempat_agenda',
-        'id_jenis_pengguna',
-        'id_jabatan_kegiatan',
+        'id_pengguna',  // Relasi id_pengguna
         'bobot_anggota',
         'deskripsi',
         'tanggal_agenda',
+        'created_at',
+        'updated_at',
     ];
 
-    // Relasi ke tabel JenisPengguna
-    public function jenisPengguna()
-    {
-        return $this->belongsTo(JenisPenggunaModel::class, 'id_jenis_pengguna', 'id_jenis_pengguna');
-    }
-
-    // Relasi ke tabel Kegiatan
-    public function kegiatan()
-    {
+    // Relasi ke KegiatanUser
+    public function kegiatan() {
         return $this->belongsTo(KegiatanModel::class, 'id_kegiatan', 'id_kegiatan');
     }
-
-    // Relasi ke tabel JabatanKegiatan
-    public function jabatanKegiatan()
-    {
-        return $this->belongsTo(JabatanKegiatanModel::class, 'id_jabatan_kegiatan', 'id_jabatan_kegiatan');
+    
+    public function kegiatanUser() {
+        return $this->belongsTo(KegiatanUser::class, 'id_pengguna', 'id_pengguna');
     }
+
+    // Relasi dengan DetailAgenda
+    public function detailAgenda()
+    {
+        return $this->hasMany(DetailAgendaModel::class, 'id_agenda', 'id_agenda');
+    }
+
+    public function pengguna() {
+        return $this->belongsTo(PenggunaModel::class, 'id_pengguna', 'id_pengguna');
+    }
+    
 }

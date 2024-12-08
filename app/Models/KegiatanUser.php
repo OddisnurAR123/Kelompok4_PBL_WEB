@@ -9,9 +9,8 @@ class KegiatanUser extends Model
 {
     use HasFactory;
 
-    protected $table = 't_kegiatan_user'; // Nama tabel di database
-    protected $primaryKey = 'id_legiatan_user'; // Primary key
-    // Tambahkan jika tabel menggunakan timestamp
+    protected $table = 't_kegiatan_user';
+    protected $primaryKey = 'id_kegiatan_user'; // Perbaikan dari id_legiatan_user
     public $timestamps = true;
 
     protected $fillable = [
@@ -22,13 +21,11 @@ class KegiatanUser extends Model
         'updated_at',
     ];
 
-    // Relasi ke model pengguna
     public function pengguna()
     {
         return $this->belongsTo(PenggunaModel::class, 'id_pengguna', 'id_pengguna');
     }
 
-    // Relasi ke model jabatan kegiatan
     public function jabatanKegiatan()
     {
         return $this->belongsTo(JabatanKegiatanModel::class, 'id_jabatan_kegiatan', 'id_jabatan_kegiatan');

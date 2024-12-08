@@ -145,6 +145,30 @@ Route::pattern('id', '[0-9]+');
         Route::get('/detail_kegiatan/export_excel', [DetailKegiatanController::class, 'export_excel'])->name('detail_kegiatan.export_excel'); //dosen
         Route::get('/detail_kegiatan/export_pdf', [DetailKegiatanController::class, 'export_pdf'])->name('detail_kegiatan.export_pdf'); //dosen
 
+    // Detail Kegiatan Routes
+    Route::get('/detail_kegiatan', [DetailKegiatanController::class, 'index'])->name('detail_kegiatan.index');
+    Route::post('/detail_kegiatan/list', [DetailKegiatanController::class, 'list']);
+    Route::get('/detail_kegiatan/create', [DetailKegiatanController::class, 'create'])->name('detail_kegiatan.create');
+    Route::post('/detail_kegiatan/store', [DetailKegiatanController::class, 'store'])->name('detail_kegiatan.store');
+    Route::get('/detail_kegiatan/{id}/show', [DetailKegiatanController::class, 'show'])->name('detail_kegiatan.show');
+    Route::get('/detail_kegiatan/{id}/edit', [DetailKegiatanController::class, 'edit'])->name('detail_kegiatan.edit');
+    Route::put('/detail_kegiatan/update/{id_detail_kegiatan}', [DetailKegiatanController::class, 'update'])->name('detail_kegiatan.update');
+    Route::get('/detail_kegiatan/export_excel', [DetailKegiatanController::class, 'export_excel'])->name('detail_kegiatan.export_excel');
+    Route::get('/detail_kegiatan/export_pdf', [DetailKegiatanController::class, 'export_pdf'])->name('detail_kegiatan.export_pdf');
+
+    // Detail Agenda Routes
+    Route::get('/detail_agenda', [DetailAgendaController::class, 'index'])->name('detail_agenda.index');
+    Route::post('/detail_agenda/list', [DetailAgendaController::class, 'list']);
+    Route::get('/detail_agenda/create', [DetailAgendaController::class, 'create'])->name('detail_agenda.create');
+    Route::post('/detail_agenda/store', [DetailAgendaController::class, 'store'])->name('detail_agenda.store');
+    Route::get('/detail_agenda/{id}/show', [DetailAgendaController::class, 'show'])->name('detail_agenda.show');
+    Route::get('/detail_agenda/{id}/edit', [DetailAgendaController::class, 'edit'])->name('detail_agenda.edit');
+    Route::put('/detail_agenda/update/{id_detail_agenda}', [DetailAgendaController::class, 'update'])->name('detail_agenda.update');
+    Route::get('/detail_agenda/export_excel', [DetailAgendaController::class, 'export_excel'])->name('detail_agenda.export_excel');
+    Route::get('/detail_agenda/export_pdf', [DetailAgendaController::class, 'export_pdf'])->name('detail_agenda.export_pdf');
+       
+
+
         //route detail kegiatan
         Route::get('/detail_agenda', [DetailAgendaController::class, 'index'])->name('detail_agenda.index'); //dos agt
 
@@ -167,6 +191,33 @@ Route::pattern('id', '[0-9]+');
         //route notifikasi
         Route::get('/', [WelcomeController::class, 'index'])->name('dashboard');
         Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
+
+    Route::get('/agenda', [AgendaKegiatanController::class, 'index'])->name('agenda.index');
+    Route::post('/agenda/list', [AgendaKegiatanController::class, 'list']);
+    Route::get('/agenda/{id}/show', [AgendaKegiatanController::class, 'show'])->name('agenda.show');
+    Route::get('/agenda/create', [AgendaKegiatanController::class, 'create']);
+    Route::get('/agenda/getPengguna', [AgendaKegiatanController::class, 'getPengguna'])->name('agenda.getPengguna');
+    Route::post('/agenda/store', [AgendaKegiatanController::class, 'store'])->name('agenda.store');
+    Route::get('/agenda/{id}/edit', [AgendaKegiatanController::class, 'edit'])->name('agenda.edit');
+    Route::put('/agenda/{id}/update', [AgendaKegiatanController::class, 'update'])->name('agenda.update');
+    Route::get('/agenda/{id}/delete', [AgendaKegiatanController::class, 'confirm'])->name('agenda.confirm');
+    Route::delete('/agenda/{id}/delete', [AgendaKegiatanController::class, 'delete'])->name('agenda.delete');
+    Route::post('/agenda/import', [KegiatanController::class, 'import'])->name('agenda.import');
+    Route::get('/agenda/export_excel', [KegiatanController::class, 'export_excel'])->name('agenda.export_excel');
+    Route::get('/agenda/export_pdf', [KegiatanController::class, 'export_pdf'])->name('agenda.export_pdf');
+
+    Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
+    Route::post('/pengguna/list', [PenggunaController::class, 'list']);
+    Route::get('/pengguna/{id}/show', [PenggunaController::class, 'show'])->name('pengguna.show');
+    Route::get('/pengguna/create', [PenggunaController::class, 'create']);
+    Route::post('/pengguna/store', [PenggunaController::class, 'store'])->name('pengguna.store');
+    Route::get('/pengguna/{id}/edit', [PenggunaController::class, 'edit'])->name('pengguna.edit');
+    Route::put('/pengguna/{id}/update', [PenggunaController::class, 'update']);
+    Route::get('/pengguna/{id}/delete', [PenggunaController::class, 'confirm']);
+    Route::delete('/pengguna/{id}/delete', [PenggunaController::class, 'delete']);    
+    Route::post('/pengguna/import_ajax', [PenggunaController::class, 'import_ajax'])->name('pengguna.import.ajax');
+    Route::get('/pengguna/export_excel', [PenggunaController::class, 'export_excel'])->name('pengguna.export.excel');
+    Route::get('/pengguna/export_pdf', [PenggunaController::class, 'export_pdf'])->name('pengguna.export.pdf');
 
         //route kegiatan non jti
         Route::get('/kegiatan_eksternal/create', [KegiatanEksternalController::class, 'create'])->name('kegiatan_eksternal.create'); //semua

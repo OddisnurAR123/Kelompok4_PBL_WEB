@@ -2,6 +2,9 @@
 
 @section('content')
 <div class="container">
+    <a href="{{ route('kegiatan.index') }}" class="btn btn-link p-0 mr-3" style="font-size: 18px;">
+        <i class="fa fa-arrow-left"></i>
+    </a>
     <h1>Tambah Kegiatan Eksternal</h1>
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>

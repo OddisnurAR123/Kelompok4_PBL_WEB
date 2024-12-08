@@ -1,10 +1,9 @@
-<form action="{{ url('/detail_agenda/update/'.$detailAgenda->id_detail_agenda) }}" method="POST" id="form-edit-detail_agenda" enctype="multipart/form-data">
+<form action="{{ url('/detail_agenda/store') }}" method="POST" id="form-tambah-detail_kegiatan" enctype="multipart/form-data">
     @csrf
-    @method('PUT') <!-- Untuk mengubah data dengan method PUT -->
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Detail Agenda</h5>
+                <h5 class="modal-title">Tambah Detail Agenda</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -15,9 +14,7 @@
                     <select name="id_kegiatan" id="id_kegiatan" class="form-control" required>
                         <option value="">Pilih Kegiatan</option>
                         @foreach ($kegiatan as $kegiatan)
-                            <option value="{{ $kegiatan->id_kegiatan }}" {{ $detailAgenda->id_kegiatan == $kegiatan->id_kegiatan ? 'selected' : '' }}>
-                                {{ $kegiatan->nama_kegiatan }}
-                            </option>
+                            <option value="{{ $kegiatan->id_kegiatan }}">{{ $kegiatan->nama_kegiatan }}</option>
                         @endforeach
                     </select>
                     <small id="error-id_kegiatan" class="error-text form-text text-danger"></small>
@@ -26,34 +23,23 @@
                     <label for="id_agenda">Pilih Agenda</label>
                     <select name="id_agenda" id="id_agenda" class="form-control" required>
                         <option value="">Pilih Agenda</option>
-                        @foreach ($agenda as $agenda)
-                            <option value="{{ $agenda->id_agenda }}" {{ $detailAgenda->id_agenda == $agenda->id_agenda ? 'selected' : '' }}>
-                                {{ $agenda->nama_agenda }}
-                            </option>
-                        @endforeach
                     </select>
                     <small id="error-id_agenda" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Keterangan</label>
-                    <input type="text" name="keterangan" id="keterangan" class="form-control" maxlength="100" value="{{ old('keterangan', $detailAgenda->keterangan) }}" required>
+                    <input type="text" name="keterangan" id="keterangan" class="form-control" maxlength="100" required>
                     <small id="error-keterangan" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Progres Agenda</label>
-                    <input type="number" name="progres_agenda" id="progres_agenda" class="form-control" step="0.01" min="0" max="100" value="{{ old('progres_agenda', $detailAgenda->progres_agenda) }}" required>
+                    <input type="number" name="progres_agenda" id="progres_agenda" class="form-control" step="0.01" min="0" max="100" required>
                     <small id="error-progres_agenda" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Berkas</label>
-                    <input type="file" name="berkas" id="berkas" class="form-control">
+                    <input type="file" name="berkas" id="berkas" class="form-control" required>
                     <small id="error-berkas" class="error-text form-text text-danger"></small>
-                    @if ($detailAgenda->berkas)
-                        <div class="mt-2">
-                            <strong>File Saat Ini:</strong>
-                            <a href="{{ asset('storage/'.Str::replaceFirst('storage/', '', $detailAgenda->berkas)) }}" target="_blank">Lihat Berkas</a>
-                        </div>
-                    @endif
                 </div>
             </div>
             <div class="modal-footer">
@@ -77,7 +63,7 @@
             if (id_kegiatan && agendaData[id_kegiatan]) {
                 agendaData[id_kegiatan].forEach(function (agenda) {
                     agendaDropdown.append(
-                        `<option value="${agenda.id_agenda}" ${agenda.id_agenda == '{{ $detailAgenda->id_agenda }}' ? 'selected' : ''}>${agenda.nama_agenda}</option>`
+                        `<option value="${agenda.id_agenda}">${agenda.nama_agenda}</option>`
                     );
                 });
             } else {
@@ -86,7 +72,7 @@
         });
 
         // Validasi Form
-        $("#form-edit-detail_agenda").validate({
+        $("#form-tambah-detail_kegiatan").validate({
             rules: {
                 id_kegiatan: {
                     required: true
@@ -105,8 +91,9 @@
                     max: 100
                 },
                 berkas: {
-                    accept: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png,text/plain"
-                }
+    required: true,
+    accept: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png,text/plain"
+}
             },
             submitHandler: function(form) {
                 $.ajax({
@@ -140,7 +127,7 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'Terjadi Kesalahan',
-                            text: 'Tidak dapat memperbarui detail agenda. Coba lagi.'
+                            text: 'Tidak dapat menyimpan data detail kegiatan. Coba lagi.'
                         });
                     }
                 });

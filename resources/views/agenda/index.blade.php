@@ -21,7 +21,6 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Kode Agenda</th>
                     <th>Nama Agenda</th>
                     <th>Kegiatan</th>
                     <th>Tempat</th>
@@ -72,12 +71,6 @@
                     className: "",
                     orderable: false,
                     searchable: false
-                },
-                {
-                    data: "kode_agenda",
-                    className: "",
-                    orderable: true,
-                    searchable: true
                 },
                 {
                     data: "nama_agenda", 
