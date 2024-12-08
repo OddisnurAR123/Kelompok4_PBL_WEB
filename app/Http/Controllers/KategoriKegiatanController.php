@@ -13,7 +13,7 @@ class KategoriKegiatanController extends Controller
     public function index() {
         $breadcrumb = (object) [
             'title' => 'Daftar Kategori Kegiatan',
-            'list' => ['Home', 'Kategori Kegiatan']
+            'list' => ['Dashboard', 'Kategori Kegiatan']
         ];
 
         $page = (object) [
@@ -24,24 +24,6 @@ class KategoriKegiatanController extends Controller
 
         return view('kategori_kegiatan.index', compact('breadcrumb', 'page', 'activeMenu'));
     }
-
-    // List data untuk DataTables
-    // public function list(Request $request)
-    // {
-    //     $kategoriKegiatan = KategoriKegiatanModel::select('id_kategori_kegiatan', 'kode_kategori_kegiatan', 'nama_kategori_kegiatan');
-    
-    //     return DataTables::of($kategoriKegiatan)
-    //         ->addIndexColumn()
-    //         ->addColumn('aksi', function($row) {
-    //             return '
-    //                 <button onclick="modalAction(\''.url('kategori_kegiatan/', $row->id_kategori_kegiatan, '/show').'\')" class="btn btn-info btn-sm" title="Detail"><i class="fas fa-eye"></i></button>
-    //                 <button onclick="modalAction(\''.url('kategori_kegiatan.edit', $row->id_kategori_kegiatan).'\')" class="btn btn-warning btn-sm" title="Edit"><i class="fas fa-edit"></i></button>
-    //                 <button onclick="deleteData(\''.url('kategori_kegiatan.delete', $row->id_kategori_kegiatan).'\')" class="btn btn-danger btn-sm" title="Delete"><i class="fas fa-trash-alt"></i></button>
-    //             ';
-    //         })
-    //         ->rawColumns(['aksi'])
-    //         ->make(true);
-    // }
 
     public function list(Request $request) {
         $kategoriKegiatan = KategoriKegiatanModel::select('id_kategori_kegiatan', 'kode_kategori_kegiatan', 'nama_kategori_kegiatan');

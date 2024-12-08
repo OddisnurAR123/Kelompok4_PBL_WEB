@@ -12,7 +12,7 @@ class JenisPenggunaController extends Controller
     public function index() {
         $breadcrumb = (object) [
             'title' => 'Daftar Jenis Pengguna',
-            'list' => ['Home', 'Jenis Pengguna']
+            'list' => ['Dashboard', 'Jenis Pengguna']
         ];
 
         $page = (object) [

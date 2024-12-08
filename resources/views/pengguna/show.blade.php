@@ -40,6 +40,10 @@
                     <td class="col-9">{{ $pengguna->username }}</td>
                 </tr>
                 <tr>
+                    <th class="text-right col-3">NIP Pengguna:</th>
+                    <td class="col-9">{{ $pengguna->nip }}</td>
+                </tr>
+                <tr>
                     <th class="text-right col-3">Email:</th>
                     <td class="col-9">{{ $pengguna->email }}</td>
                 </tr>
@@ -53,7 +57,7 @@
                         @if($pengguna->foto_profil)
                             <img src="{{ asset('storage/' . $pengguna->foto_profil) }}" class="img-fluid img-thumbnail" width="150">
                         @else
-                            <span class="text-muted">No photo available</span>
+                            <span class="text-muted">Foto tidak tersedia.</span>
                         @endif
                     </td>
                 </tr>

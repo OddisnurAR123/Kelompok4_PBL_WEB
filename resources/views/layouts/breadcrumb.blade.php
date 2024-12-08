@@ -4,7 +4,7 @@
             <div class="col-sm-6">
                 <!-- Breadcrumb -->
                 @if(isset($breadcrumb) && isset($breadcrumb->list))
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-left"> <!-- Ubah float-sm-right menjadi float-sm-left -->
                         @foreach($breadcrumb->list as $key => $item)
                             @if(is_string($item))
                                 <!-- Jika item adalah string -->

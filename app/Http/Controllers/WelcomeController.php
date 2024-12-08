@@ -11,13 +11,13 @@ class WelcomeController extends Controller
     {
         $today = Carbon::now();
 
-        // Ambil kegiatan terdekat
+        // Cek apakah tanggal_mulai ada di t_kegiatan
         $kegiatan = DB::table('t_kegiatan')
             ->whereDate('tanggal_mulai', '>=', $today)
             ->orderBy('tanggal_mulai', 'asc')
             ->first();
 
-        // Ambil agenda terdekat
+        // Cek apakah tanggal_agenda ada di t_agenda
         $agenda = DB::table('t_agenda')
             ->whereDate('tanggal_agenda', '>=', $today)
             ->orderBy('tanggal_agenda', 'asc')
@@ -26,4 +26,3 @@ class WelcomeController extends Controller
         return view('dashboard', compact('kegiatan', 'agenda'));
     }
 }
-?>

@@ -30,6 +30,11 @@
                     <small id="error-tanggal_selesai" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
+                    <label>Periode Kegiatan</label>
+                    <input type="number" name="periode" id="periode" class="form-control" placeholder="Masukkan Tahun" length="4" required>
+                    <small id="error-periode" class="error-text form-text text-danger"></small>
+                </div>                
+                <div class="form-group">
                     <label>Kategori Kegiatan</label>
                     <select name="id_kategori_kegiatan" id="id_kategori_kegiatan" class="form-control" required>
                         <option value="">Pilih Kategori Kegiatan</option>
@@ -126,6 +131,10 @@
                 },
                 tanggal_selesai: {
                     required: true
+                },
+                periode: {
+                    required: true,
+                    length: 4
                 },
                 id_kategori_kegiatan: {
                     required: true

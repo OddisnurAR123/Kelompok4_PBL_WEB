@@ -26,7 +26,7 @@ class KegiatanController extends Controller
             'title' => 'Daftar kegiatan yang ada'
         ];
 
-        $activeMenu = 'kegiatan';
+        $activeMenu = 'kegiatan2';
 
         return view('kegiatan.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu]);
     }
@@ -40,6 +40,7 @@ class KegiatanController extends Controller
                 'nama_kegiatan',
                 'tanggal_mulai',
                 'tanggal_selesai',
+                'periode',
                 'id_kategori_kegiatan'
             );
 
@@ -49,11 +50,12 @@ class KegiatanController extends Controller
                 return $kegiatan->kategoriKegiatan ? $kegiatan->kategoriKegiatan->nama_kategori_kegiatan : 'Tidak ada kategori';
             })    
             ->addColumn('aksi', function ($kegiatan) {
-                $btn = '<button onclick="modalAction(\''.route('kegiatan.show', $kegiatan->id_kegiatan).'\')" class="btn btn-info btn-sm" style="margin-right: 5px;">';
+                $btn = '<div class="d-flex justify-content-center">';
+                $btn .= '<button onclick="modalAction(\''.route('kegiatan.show', $kegiatan->id_kegiatan).'\')" class="btn btn-info btn-sm mr-2">';
                 $btn .= '<i class="fas fa-eye"></i></button>';
-                $btn .= '<button onclick="modalAction(\''.route('kegiatan.edit', $kegiatan->id_kegiatan).'\')" class="btn btn-warning btn-sm" style="margin-right: 5px;">';
+                $btn .= '<button onclick="modalAction(\''.route('kegiatan.edit', $kegiatan->id_kegiatan).'\')" class="btn btn-warning btn-sm mr-2">';
                 $btn .= '<i class="fas fa-edit"></i></button>';
-                $btn .= '<button onclick="modalAction(\''.route('kegiatan.delete', $kegiatan->id_kegiatan).'\')" class="btn btn-danger btn-sm">';
+                $btn .= '<button onclick="modalAction(\''.route('kegiatan.delete', $kegiatan->id_kegiatan).'\')" class="btn btn-danger btn-sm mr-2">';
                 $btn .= '<i class="fas fa-trash"></i></button>';
                 return $btn;
             })
@@ -89,6 +91,7 @@ class KegiatanController extends Controller
                 'nama_kegiatan' => 'required|string|max:100',
                 'tanggal_mulai' => 'required|date',
                 'tanggal_selesai' => 'required|date',
+                'periode' => 'required|string|max:50',
                 'id_kategori_kegiatan' => 'required|exists:m_kategori_kegiatan,id_kategori_kegiatan',
                 'anggota.*.id_pengguna' => 'required|exists:m_pengguna,id_pengguna',
                 'anggota.*.id_jabatan_kegiatan' => 'required|exists:m_jabatan_kegiatan,id_jabatan_kegiatan',
@@ -112,6 +115,7 @@ class KegiatanController extends Controller
                     'nama_kegiatan',
                     'tanggal_mulai',
                     'tanggal_selesai',
+                    'periode',
                     'id_kategori_kegiatan'
                 ));
 
@@ -154,23 +158,18 @@ class KegiatanController extends Controller
 
     public function show(string $id)
     {
-        $kegiatan = KegiatanModel::with(['anggota'])->find($id);
-
-        // Debugging
-        if (!$kegiatan) {
-            dd("Kegiatan dengan ID $id tidak ditemukan");
-        }
+        $kegiatan = KegiatanModel::with(['anggota', 'agenda'])->find($id);
 
         $breadcrumb = (object) [
             'title' => 'Detail Kegiatan',
             'list' => ['Home', 'Kegiatan']
         ];
-
         return view('kegiatan.show', [
             'kegiatan' => $kegiatan,
             'breadcrumb' => $breadcrumb
         ]);
     }
+
 
     // Menampilkan form edit kegiatan via Ajax
     public function edit($id) {
@@ -191,6 +190,7 @@ class KegiatanController extends Controller
             'nama_kegiatan' => 'nullable|string|max:100',
             'tanggal_mulai' => 'nullable|date',
             'tanggal_selesai' => 'nullable|date',
+            'periode' => 'nullable|string|max:50',
             'id_kategori_kegiatan' => 'nullable|exists:m_kategori_kegiatan,id_kategori_kegiatan',
             'anggota.*.id_pengguna' => 'nullable|exists:m_pengguna,id_pengguna',
             'anggota.*.id_jabatan_kegiatan' => 'nullable|exists:m_jabatan_kegiatan,id_jabatan_kegiatan',
@@ -211,6 +211,7 @@ class KegiatanController extends Controller
         $kegiatan->nama_kegiatan = $request->nama_kegiatan ?? $kegiatan->nama_kegiatan;
         $kegiatan->tanggal_mulai = $request->tanggal_mulai ?? $kegiatan->tanggal_mulai;
         $kegiatan->tanggal_selesai = $request->tanggal_selesai ?? $kegiatan->tanggal_selesai;
+        $kegiatan->periode = $request->periode ?? $kegiatan->periode;
         $kegiatan->id_kategori_kegiatan = $request->id_kategori_kegiatan ?? $kegiatan->id_kategori_kegiatan;
     
         // Simpan perubahan
@@ -319,7 +320,8 @@ class KegiatanController extends Controller
                             'nama_kegiatan' => $value['B'], 
                             'tanggal_mulai' => $value['C'], 
                             'tanggal_selesai' => $value['D'], 
-                            'id_kategori_kegiatan' => $value['E'], 
+                            'periode' => $value['E'], 
+                            'id_kategori_kegiatan' => $value['F'], 
                             'created_at' => now(), 
                         ]; 
                     } 
@@ -352,6 +354,7 @@ class KegiatanController extends Controller
             'nama_kegiatan',
             'tanggal_mulai',
             'tanggal_selesai',
+            'periode', 
             'id_kategori_kegiatan'
         )
         ->with('kategoriKegiatan') // Relasi dengan kategori
@@ -367,7 +370,8 @@ class KegiatanController extends Controller
         $sheet->setCellValue('C1', 'Nama Kegiatan');
         $sheet->setCellValue('D1', 'Tanggal Mulai');
         $sheet->setCellValue('E1', 'Tanggal Selesai');
-        $sheet->setCellValue('F1', 'Kategori Kegiatan');
+        $sheet->setCellValue('F1', 'Periode');
+        $sheet->setCellValue('G1', 'Kategori Kegiatan');
 
         // Buat header bold
         $sheet->getStyle('A1:F1')->getFont()->setBold(true);
@@ -381,7 +385,8 @@ class KegiatanController extends Controller
             $sheet->setCellValue('C' . $baris, $value->nama_kegiatan);
             $sheet->setCellValue('D' . $baris, $value->tanggal_mulai);
             $sheet->setCellValue('E' . $baris, $value->tanggal_selesai);
-            $sheet->setCellValue('F' . $baris, $value->kategoriKegiatan->nama_kategori_kegiatan ?? 'Tidak Ada Kategori'); // Ambil nama kategori
+            $sheet->setCellValue('F' . $baris, $value->periode);
+            $sheet->setCellValue('G' . $baris, $value->kategoriKegiatan->nama_kategori_kegiatan ?? 'Tidak Ada Kategori'); // Ambil nama kategori
             $baris++;
             $no++;
         }
@@ -416,7 +421,7 @@ class KegiatanController extends Controller
     public function export_pdf()
     {
         // Mengambil data kegiatan beserta kategori_kegiatan
-        $kegiatan = KegiatanModel::select('kode_kegiatan', 'nama_kegiatan', 'tanggal_mulai', 'tanggal_selesai', 'id_kategori_kegiatan')
+        $kegiatan = KegiatanModel::select('kode_kegiatan', 'nama_kegiatan', 'tanggal_mulai', 'tanggal_selesai', 'periode', 'id_kategori_kegiatan')
             ->with('kategoriKegiatan')
             ->orderBy('kode_kegiatan')
             ->get();

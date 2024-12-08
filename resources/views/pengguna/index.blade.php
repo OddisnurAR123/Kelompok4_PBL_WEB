@@ -24,6 +24,7 @@
                     <th>Jenis Pengguna</th>
                     <th>Nama Pengguna</th>
                     <th>Username</th>
+                    <th>NIP</th>
                     <th>Email</th>
                     <th>Aksi</th>
                 </tr>
@@ -56,54 +57,142 @@
                 "url": "{{ url('pengguna/list') }}",
                 "dataType": "json",
                 "type": "POST",
-
                 "data": function(d) {
                     d.id_jenis_pengguna = $('#id_jenis_pengguna').val();
                 }
             },
             columns: [
                 {
-                    data: "id_pengguna",
-                    className: "",
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: "nama_pengguna",
-                    className: "",
+                    data: "id_pengguna", // ID Pengguna
+                    className: "text-center",
                     orderable: true,
                     searchable: true
                 },
                 {
-                    data: "username",
-                    className: "",
+                    data: "jenis_pengguna.nama_jenis_pengguna", // Jenis Pengguna dari relasi
+                    className: "text-left",
                     orderable: true,
                     searchable: true
                 },
                 {
-                    data: "email",
-                    className: "",
+                    data: "nama_pengguna", // Nama Pengguna
+                    className: "text-left",
                     orderable: true,
                     searchable: true
                 },
                 {
-                    data: "jenis_pengguna.nama_jenis_pengguna", // Assuming relationship
-                    className: "",
+                    data: "username", // Username
+                    className: "text-left",
                     orderable: true,
                     searchable: true
                 },
                 {
-                    data: "aksi",
-                    className: "",
+                    data: "nip", // NIP
+                    className: "text-left",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "email", // Email
+                    className: "text-left",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "aksi", // Aksi
+                    className: "text-center",
                     orderable: false,
                     searchable: false
                 }
             ]
         });
 
-        $('#id_jenis_pengguna').on('change',function() {
+        // Filter berdasarkan jenis pengguna
+        $('#id_jenis_pengguna').on('change', function() {
             dataPengguna.ajax.reload();
-        })
+        });
     });
+
 </script>
+<style>
+    /* Mengubah tampilan tabel */
+    #table_pengguna {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    #table_pengguna th, #table_pengguna td {
+        text-align: center;
+        vertical-align: middle;
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #dee2e6;
+    }
+
+    /* Mengubah warna header tabel */
+    #table_pengguna th {
+        background-color: #11315F;
+        color: white;
+        font-weight: bold;
+    }
+
+    /* Efek hover pada baris tabel */
+    #table_pengguna tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Menambahkan border dan rounded corners untuk tombol */
+    .btn-success {
+        border-radius: 25px;
+    }
+
+    /* Menambahkan efek hover pada tombol */
+    .btn-success:hover {
+        background-color: #28a745;
+        border-color: #28a745;
+        transition: background-color 0.3s ease;
+    }
+
+    /* Styling untuk modal */
+    #myModal .modal-content {
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    }
+
+    #myModal .modal-header {
+        background-color: #11315F;
+        color: white;
+    }
+
+    #myModal .modal-footer {
+        background-color: #f8f9fa;
+    }
+
+    /* Animasi shake untuk modal */
+    .animate.shake {
+        animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+        0% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        50% { transform: translateX(5px); }
+        75% { transform: translateX(-5px); }
+        100% { transform: translateX(0); }
+    }
+
+    /* Menambahkan animasi loading */
+    #table_pengguna.loading::after {
+        content: "Memuat Data...";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 18px;
+        font-weight: bold;
+        color: #007bff;
+        opacity: 0.7;
+    }
+</style>
+
 @endpush
