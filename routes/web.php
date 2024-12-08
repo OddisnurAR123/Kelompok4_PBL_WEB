@@ -35,15 +35,15 @@ use App\Http\Controllers\KinerjaDosenController;
 Route::pattern('id', '[0-9]+');
 
 // Routes untuk autentikasi login
-// Route::get('login', [AuthController::class, 'login'])->name('auth.login');
-// Route::post('login', [AuthController::class, 'postlogin']);
-// Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
+Route::get('login', [AuthController::class, 'login'])->name('auth.login');
+Route::post('login', [AuthController::class, 'postlogin']);
+Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 
 //route yang memerlukan autentikasi
-// Route::middleware(['auth'])->group(function(){
-//     Route::get('/', [WelcomeController::class, 'index']);
+Route::middleware(['auth'])->group(function(){
+    Route::get('/', [WelcomeController::class, 'index']);
 
-    // Route::middleware(['authorize:ADM'])->group(function(){
+    Route::middleware(['authorize:ADM'])->group(function(){
         //route data master jenis pengguna
         Route::get('/jenis_pengguna', [JenisPenggunaController::class, 'index']);
         Route::post('/jenis_pengguna/list', [JenisPenggunaController::class, 'list']);
@@ -113,9 +113,10 @@ Route::pattern('id', '[0-9]+');
         Route::get('/draft_surat_tugas/{id}/delete', [DraftSuratTugasController::class, 'confirm']); //adm
         Route::delete('/draft_surat_tugas/{id}/delete', [DraftSuratTugasController::class, 'delete']); //adm
 
-    // });
+    });
 
-    // Route::middleware(['authorize:ADM, PIM, DSN'])->group(function(){
+    Route::middleware(['authorize:ADM, PIM, DSN'])->group(function(){
+        
         //route profil
         Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.profil');
         Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -131,9 +132,9 @@ Route::pattern('id', '[0-9]+');
         //route statistik kinerja
         Route::get('/kinerja-dosen', [KinerjaDosenController::class, 'index'])->name('kinerja.dosen'); //semua
 
-    // });
+    });
     
-    // Route::middleware(['authorize:DSN'])->group(function(){
+    Route::middleware(['authorize:DSN'])->group(function(){
         //route detail kegiatan
         Route::get('/detail_kegiatan', [DetailKegiatanController::class, 'index'])->name('detail_kegiatan.index'); //semua pic
         Route::post('/detail_kegiatan/list', [DetailKegiatanController::class, 'list']); //semua pic
@@ -185,9 +186,9 @@ Route::pattern('id', '[0-9]+');
         Route::post('/agenda/import', [KegiatanController::class, 'import'])->name('agenda.import'); //dos
         Route::get('/agenda/export_excel', [KegiatanController::class, 'export_excel'])->name('agenda.export_excel'); //dos
         Route::get('/agenda/export_pdf', [KegiatanController::class, 'export_pdf'])->name('agenda.export_pdf'); //dos
-    // });
+    });
 
-    // Route::middleware(['authorize:DSN, PIM'])->group(function(){ 
+    Route::middleware(['authorize:DSN, PIM'])->group(function(){ 
         //route notifikasi
         Route::get('/', [WelcomeController::class, 'index'])->name('dashboard');
         Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
@@ -224,8 +225,8 @@ Route::pattern('id', '[0-9]+');
         Route::post('/kegiatan_eksternal/store', [KegiatanEksternalController::class, 'store'])->name('kegiatan_eksternal.store'); //semua
         Route::get('/kegiatan_eksternal', [KegiatanEksternalController::class, 'index'])->name('kegiatan_eksternal.index');
         Route::post('kegiatan_eksternal/list', [KegiatanEksternalController::class, 'list']);
-    // });
+    });
 
     // Route logout
-//     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-// });
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});
