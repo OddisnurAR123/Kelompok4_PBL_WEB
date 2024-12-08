@@ -66,7 +66,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\UserModel::class,
+            'model' => App\Models\PenggunaModel::class,
         ],
 
         // 'users' => [
@@ -96,11 +96,11 @@ return [
 
     'passwords' => [
         'users' => [
-            'provider' => 'users',
-            'table' => 'password_reset_tokens',
-            'expire' => 60,
-            'throttle' => 60,
-        ],
+                'driver' => 'eloquent',
+                'model' => App\Models\PenggunaModel::class,
+                'table' => 'm_pengguna', // Pastikan table sesuai dengan yang ada
+                'username' => 'username', // Menambahkan kolom username untuk autentikasi
+            ],
     ],
 
     /*

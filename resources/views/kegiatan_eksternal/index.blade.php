@@ -19,11 +19,8 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Kode Jabatan Kegiatan</th>
-                    <th>Nama Jabatan Kegiatan</th>
-                    <th>Is PIC</th>
-                    <th>Urutan</th>
-                    <th>Aksi</th>
+                    <th>Nama Kegiatan Eksternal</th>
+                    <th>Waktu Kegiatan</th>
                 </tr>
             </thead>
         </table>        
@@ -46,11 +43,11 @@
     }
 
     $(document).ready(function() {
-    $('#table_jabatan_kegiatan').DataTable({
+    $('#table_kegiatan_eksternal').DataTable({
         serverSide: true, // Menggunakan data dari server
         processing: true, // Menampilkan indikator loading
         ajax: {
-            url: "{{ url('jabatan_kegiatan/list') }}", // Endpoint untuk mendapatkan data
+            url: "{{ url('kegiatan_eksternal/list') }}", // Endpoint untuk mendapatkan data
             type: "POST", // Metode pengambilan data
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}' // Sertakan CSRF token
@@ -60,17 +57,9 @@
             }
         },
         columns: [
-            { data: "id_jabatan_kegiatan", title: "ID" }, // Kolom ID Jabatan Kegiatan
-            { data: "kode_jabatan_kegiatan", title: "Kode Jabatan Kegiatan" }, // Kolom Kode
-            { data: "nama_jabatan_kegiatan", title: "Nama Jabatan Kegiatan" }, // Kolom Nama
-            { data: "is_pic", title: "Is PIC" }, // Kolom Is PIC
-            { data: "urutan", title: "Urutan" }, // Kolom Urutan
-            {
-                data: "aksi", // Kolom aksi
-                orderable: false, // Non-sortable
-                searchable: false, // Non-searchable
-                title: "Aksi"
-            }
+            { data: "id_kegiatan_eksternal", title: "ID" }, // Kolom ID Jabatan Kegiatan
+            { data: "nama_kegiatan_eksternal", title: "Nama Kegiatan Eksternal" }, // Kolom Nama
+            { data: "waktu_kegiatan", title: "Waktu Kegiatan" }
         ],
         order: [[0, 'asc']], // Urutkan berdasarkan kolom pertama (ID)
         responsive: true, // Tambahkan responsivitas untuk tampilan mobile
@@ -82,12 +71,12 @@
 </script>
 <style>
     /* Mengubah tampilan tabel */
-    #table_jabatan_kegiatan {
+    #table_kegiatan_eksternal {
         width: 100%;
         border-collapse: collapse;
     }
 
-    #table_jabatan_kegiatan th, #table_jabatan_kegiatan td {
+    #table_kegiatan_eksternal th, #table_kegiatan_eksternal td {
         text-align: center;
         vertical-align: middle;
         padding: 10px;
@@ -96,19 +85,19 @@
     }
 
     /* Mengubah warna header tabel */
-    #table_jabatan_kegiatan th {
+    #table_kegiatan_eksternal th {
         background-color: #11315F;
         color: white;
         font-weight: bold;
     }
 
     /* Efek hover pada baris tabel */
-    #table_jabatan_kegiatan tbody tr:hover {
+    #table_kegiatan_eksternal tbody tr:hover {
         background-color: #f1f1f1;
     }
 
     /* Animasi loading (opsional, jika diperlukan) */
-    #table_jabatan_kegiatan.loading::after {
+    #table_kegiatan_eksternal.loading::after {
         content: "Memuat Data...";
         position: absolute;
         left: 50%;

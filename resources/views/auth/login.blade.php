@@ -17,14 +17,13 @@
 </head>
 <body class="hold-transition login-page">
   <div class="login-box">
-    <!-- /.login-logo -->
     <div class="card card-outline card-primary">
       <div class="card-header text-center">
-        <a href="{{ url('/') }}" class="h1"><b>Admin</b>LTE</a>
+        <a href="{{ url('/login') }}" class="h1"><b>Admin</b>LTE</a>
       </div>
       <div class="card-body">
         <p class="login-box-msg">Sign in to start your session</p>
-        <form action="{{ url('login') }}" method="POST" id="form-login">
+        <form action="{{ url('/login') }}" method="POST" id="form-login">
           @csrf
           <div class="input-group mb-3">
             <input type="text" id="username" name="username" class="form-control" placeholder="Username">
@@ -51,20 +50,14 @@
                 <label for="remember">Remember Me</label>
               </div>
             </div>
-            <!-- /.col -->
             <div class="col-4">
               <button type="submit" class="btn btn-primary btn-block">Sign In</button>
             </div>
-            <p><h7>Belum punya akun? <a href="{{ route('register') }}">Daftar di sini</a></p>
-            <!-- /.col -->
           </div>
         </form>
       </div>
-      <!-- /.card-body -->
     </div>
-    <!-- /.card -->
   </div>
-  <!-- /.login-box -->
 
   <!-- jQuery -->
   <script src="{{ asset('adminlte/plugins/jquery/jquery.min.js') }}"></script>
@@ -78,12 +71,6 @@
   <!-- AdminLTE App -->
   <script src="{{ asset('adminlte/dist/js/adminlte.min.js') }}"></script>
   <script>
-    $.ajaxSetup({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      }
-    });
-
     $(document).ready(function() {
       $("#form-login").validate({
         rules: {
@@ -91,14 +78,12 @@
           password: { required: true, minlength: 5, maxlength: 20 }
         },
         submitHandler: function(form) {
-          // ketika valid, maka bagian yg akan dijalankan
           $.ajax({
             url: form.action,
             type: form.method,
             data: $(form).serialize(),
             success: function(response) {
               if (response.status) {
-                // jika sukses
                 Swal.fire({
                   icon: 'success',
                   title: 'Berhasil',
@@ -107,39 +92,17 @@
                   window.location = response.redirect;
                 });
               } else {
-                // jika error
-                $('.error-text').text('');
-                $.each(response.msgField, function(prefix, val) {
-                  $('#error-' + prefix).text(val[0]);
-                });
                 Swal.fire({
                   icon: 'error',
-                  title: 'Terjadi Kesalahan',
-                  text: response.message
+                  title: 'Gagal',
+                  text: response.message,
                 });
               }
             }
           });
-          return false;
-        },
-        errorElement: 'span',
-        errorPlacement: function(error, element) {
-          error.addClass('invalid-feedback');
-          element.closest('.input-group').append(error);
-        },
-        highlight: function(element, errorClass, validClass) {
-          $(element).addClass('is-invalid');
-        },
-        unhighlight: function(element, errorClass, validClass) {
-          $(element).removeClass('is-invalid');
         }
       });
     });
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
   </script>
 </body>
 </html>

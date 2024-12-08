@@ -3,68 +3,46 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable; 
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class PenggunaModel extends Authenticatable
+class PenggunaModel extends Authenticatable implements JWTSubject
 {
     use HasFactory;
 
-    // Specify the table name if it's different from the default
-    protected $table = 'm_pengguna'; // Replace with your actual table name if different
-
-    // Set the primary key if it's not the default 'id'
+    protected $table = 'm_pengguna';
     protected $primaryKey = 'id_pengguna';
 
-    // Disable automatic timestamps if you're using custom timestamp names (created_at, updated_at)
-    public $timestamps = true;
-
-    // Define the fillable attributes (columns that can be mass-assigned)
     protected $fillable = [
-        'id_jenis_pengguna', 
+        'id_jenis_pengguna',
         'nama_pengguna',
-        'username', 
-        'password', 
+        'username',
+        'password',
         'nip',
-        'email', 
-        'foto_profil'
+        'email',
+        'foto_profil',
+        'created_at',
+        'updated_at',
     ];
 
     protected $hidden = ['password'];
 
-    protected $casts = ['password' => 'hashed'];
+    protected $casts = [
+        'password' => 'hashed',
+    ];
 
-    // Define the relationships (if any)
     public function jenisPengguna()
     {
         return $this->belongsTo(JenisPenggunaModel::class, 'id_jenis_pengguna', 'id_jenis_pengguna');
     }
 
-    // Mutator to hash the password before saving
-    public function setPasswordAttribute($value)
+    public function getJWTIdentifier()
     {
-        $this->attributes['password'] = bcrypt($value);
+        return $this->getKey();  // Mengembalikan ID pengguna
     }
 
-    // Accessor to get the user's profile photo URL
-    public function getFotoProfilAttribute($value)
+    public function getJWTCustomClaims()
     {
-        return asset('storage/' . $value);  // Assuming you are storing profile photos in the storage folder
-    }
-
-    // Method to retrieve the user's full name (if applicable)
-    public function getFullNameAttribute()
-    {
-        return $this->nama_pengguna . ' (' . $this->username . ')';
-    }
-
-    public function kegiatan()
-    {
-        return $this->belongsToMany(KegiatanModel::class, 't_kegiatan_user', 'id_pengguna', 'id_kegiatan');
-    }
-
-    public function jabatanKegiatan()
-    {
-        return $this->belongsTo(JabatanKegiatanModel::class, 'id_jabatan_kegiatan');
+        return [];  // Kustom klaim JWT, bisa ditambahkan jika perlu
     }
 }

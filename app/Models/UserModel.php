@@ -14,6 +14,14 @@ class UserModel extends Authenticatable implements JWTSubject
 {
     use HasFactory;
 
+    public function getJWTIdentifier(){
+        return $this->getKey();
+       }
+    
+    public function getJWTCustomClaims() {
+        return [];
+       }
+
     protected $table = 'm_pengguna';
     protected $primaryKey = 'id_pengguna';
 
@@ -31,17 +39,18 @@ class UserModel extends Authenticatable implements JWTSubject
     protected $hidden = ['password'];
 
     protected $casts = [
-        'password' => 'hashed', // This will auto-hash password before saving
+        'password' => 'hashed',
     ];
 
-    public function getJWTIdentifier()
+    public function jenisPengguna(): BelongsTo
     {
-        return $this->getKey();
+        return $this->belongsTo(JenisPenggunaModel::class, 'id_jenis_pengguna', 'id_jenis_pengguna');
     }
 
-    public function getJWTCustomClaims()
-    {
-        return [];
+    protected function image(): Attribute{
+        return Attribute::make(
+            get: fn ($image) => url('/storage/posts/' . $image),
+        );
     }
 
     /**
@@ -49,7 +58,7 @@ class UserModel extends Authenticatable implements JWTSubject
      */
     public function getRoleName(): string
     {
-        return $this->jenis_pengguna->nama_jenis_pengguna ?? '';
+        return $this->jenis_pengguna->nama_jenis_pengguna;
     }
 
     /**
@@ -66,5 +75,15 @@ class UserModel extends Authenticatable implements JWTSubject
     public function getRole()
     {
         return $this->jenis_pengguna->kode_jenis_pengguna ?? null;
+    }
+
+    public function getAuthIdentifier()
+    {
+        return $this->getKey();
+    }
+    
+    public function getAuthPassword()
+    {
+        return $this->password;
     }
 }
