@@ -17,12 +17,16 @@
 </head>
 <body class="hold-transition login-page">
   <div class="login-box">
-    <div class="card card-outline card-primary">
-      <div class="card-header text-center">
-        <a href="{{ url('/login') }}" class="h1"><b>Admin</b>LTE</a>
+    <div class="card card-outline card-primary" style="border-radius: 15px; overflow: hidden;">
+      <!-- Tambahkan elemen ini di bagian atas -->
+      <div class="brand-logo text-center" style="background-color: #f0f0f0; padding: 20px; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+          <span style="font-size: 34px; font-family: 'Poppins', sans-serif; font-weight: 700; color: #333333;">IN</span>
+          <span style="font-size: 34px; font-family: 'Poppins', sans-serif; font-weight: 700; color: #FF4500;">FOR</span>
+          <span style="font-size: 34px; font-family: 'Poppins', sans-serif; font-weight: 700; color: #FFD700;">MS</span>
+        </a>
       </div>
       <div class="card-body">
-        <p class="login-box-msg">Sign in to start your session</p>
+        <p class="login-box-msg">Silahkan masuk dengan akun yang telah terdaftar</p>
         <form action="{{ url('/login') }}" method="POST" id="form-login">
           @csrf
           <div class="input-group mb-3">
@@ -47,16 +51,16 @@
             <div class="col-8">
               <div class="icheck-primary">
                 <input type="checkbox" id="remember">
-                <label for="remember">Remember Me</label>
+                <label for="remember">Ingat Saya</label>
               </div>
             </div>
             <div class="col-4">
-              <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+              <button type="submit" class="btn btn-primary btn-block">Masuk</button>
             </div>
           </div>
         </form>
       </div>
-    </div>
+    </div>    
   </div>
 
   <!-- jQuery -->
