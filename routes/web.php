@@ -44,11 +44,11 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/dashboard', [WelcomeController::class, 'index']);
         
     //route profil
-    Route::get('/profile', [ProfilController::class, 'showProfile'])->name('profile.profil');
-    Route::get('/profile/edit', [ProfilController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile/update', [ProfilController::class, 'update'])->name('profile.update');
-    Route::get('/profile/change-password', [ProfilController::class, 'changePassword'])->name('profile.password');
-   Route::post('/profile/update-password', [ProfilController::class, 'updatePassword'])->name('profile.update-password');
+    Route::get('/profil', [ProfilController::class, 'showProfil'])->name('profil.profil');
+    Route::get('/profil/edit', [ProfilController::class, 'edit'])->name('profil.edit');
+    Route::post('/profil/update', [ProfilController::class, 'update'])->name('profil.update');
+    Route::get('/profil/change-password', [ProfilController::class, 'changePassword'])->name('profil.password');
+   Route::post('/profil/update-password', [ProfilController::class, 'updatePassword'])->name('profil.update-password');
 });
    //Route::middleware(['authorize:ADM, PIM, DSN'])->group(function(){
     //route profill
