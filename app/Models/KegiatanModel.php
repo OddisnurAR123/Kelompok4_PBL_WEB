@@ -71,9 +71,17 @@ class KegiatanModel extends Model
                 't_kegiatan_user.*'
             );
     }
+
     public function agenda()
     {
-        return $this->hasMany(AgendaModel::class, 'id_kegiatan');
+        return $this->hasMany(AgendaModel::class, 'id_kegiatan', 'id_kegiatan');
+    }
+    
+
+    // Relasi dengan DetailAgenda
+    public function detailAgenda()
+    {
+        return $this->hasMany(DetailAgendaModel::class, 'id_kegiatan');
     }
     
 }
