@@ -14,7 +14,7 @@ use App\Http\Controllers\DetailAgendaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\DraftSuratTugasController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\TampilKegiatanController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\LoginController;
@@ -34,14 +34,38 @@ use App\Http\Controllers\KinerjaDosenController;
 // Pattern untuk parameter ID harus berupa angka
 Route::pattern('id', '[0-9]+');
 
-Route::get('login', [AuthController::class, 'login'])->name('login');
-Route::post('login', [AuthController::class, 'postlogin'])->name('postlogin');
-Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+// Routes untuk autentikasi login
+Route::get('/login', [AuthController::class, 'login'])->name('auth.login');
+Route::post('/login', [AuthController::class, 'postlogin']);
+Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 
 
 //route yang memerlukan autentikasi
 Route::middleware(['auth'])->group(function(){
     Route::get('/dashboard', [WelcomeController::class, 'index']);
+        
+    //route profil
+    Route::get('/profil', [ProfilController::class, 'showProfil'])->name('profil.profil');
+    Route::get('/profil/edit', [ProfilController::class, 'edit'])->name('profil.edit');
+    Route::post('/profil/update', [ProfilController::class, 'update'])->name('profil.update');
+    Route::get('/profil/change-password', [ProfilController::class, 'changePassword'])->name('profil.password');
+   Route::post('/profil/update-password', [ProfilController::class, 'updatePassword'])->name('profil.update-password');
+});
+   //Route::middleware(['authorize:ADM, PIM, DSN'])->group(function(){
+    //route profill
+// Route untuk Profil
+//Route::get('/profil', [ProfilController::class, 'showProfil'])->name('profil.profil');
+//Route::get('/profil/edit', [ProfilController::class, 'edit'])->name('profil.edit');
+//Route::post('/profil/update', [ProfilController::class, 'updateProfil'])->name('profil.update');
+//Route::get('/profil/password', [ProfilController::class, 'changePassword'])->name('profil.changePassword');
+//Route::post('/profil/update-password', [ProfilController::class, 'updatePassword'])->name('profil.updatePassword');
+//});
+    Route::middleware(['authorize:ADM,PIM'])->group(function () {
+    //route statistik kinerja
+    Route::get('/kinerja-dosen', [KinerjaDosenController::class, 'index'])->name('kinerja.dosen'); //semua
+    });
+    
+    //Route::middleware(['authorize:ADM'])->group(function () {
 
     Route::middleware(['authorize:ADM'])->group(function(){
         //route data master jenis pengguna
@@ -113,28 +137,20 @@ Route::middleware(['auth'])->group(function(){
         Route::get('/draft_surat_tugas/{id}/delete', [DraftSuratTugasController::class, 'confirm']); //adm
         Route::delete('/draft_surat_tugas/{id}/delete', [DraftSuratTugasController::class, 'delete']); //adm
 
-    });
-
-    Route::middleware(['authorize:ADM, PIM, DSN'])->group(function(){
-        
-        //route profil
-        Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.profil');
-        Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-        Route::get('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.password');
-        Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
-
         //route kegiatan
         Route::get('/kegiatan', [KegiatanController::class, 'index'])->name('kegiatan.index');
         Route::post('/kegiatan/list', [KegiatanController::class, 'list']);
         Route::get('/kegiatan/{id}/show', [KegiatanController::class, 'show'])->name('kegiatan.show'); //semua
 
         //route statistik kinerja
-        Route::get('/kinerja-dosen', [KinerjaDosenController::class, 'index'])->name('kinerja.dosen'); //semua
+        //Route::get('/kinerja-dosen', [KinerjaDosenController::class, 'index'])->name('kinerja.dosen'); //semua
 
-    });
+     });
     
-    Route::middleware(['authorize:DSN'])->group(function(){
+    //Route::middleware(['authorize:DSN'])->group(function(){
+        
+    Route::middleware(['authorize:ADM,PIM,DSN'])->group(function () {
+    // Route::middleware(['authorize:DSN'])->group(function(){
         //route detail kegiatan
         Route::get('/detail_kegiatan', [DetailKegiatanController::class, 'index'])->name('detail_kegiatan.index'); //semua pic
         Route::post('/detail_kegiatan/list', [DetailKegiatanController::class, 'list']); //semua pic
@@ -145,6 +161,20 @@ Route::middleware(['auth'])->group(function(){
         Route::put('/detail_kegiatan/update/{id_detail_kegiatan}', [DetailKegiatanController::class, 'update'])->name('detail_kegiatan.update'); //dosen
         Route::get('/detail_kegiatan/export_excel', [DetailKegiatanController::class, 'export_excel'])->name('detail_kegiatan.export_excel'); //dosen
         Route::get('/detail_kegiatan/export_pdf', [DetailKegiatanController::class, 'export_pdf'])->name('detail_kegiatan.export_pdf'); //dosen
+    });
+        //Detail Kegiatan Routes
+        Route::get('/detail_kegiatan', [DetailKegiatanController::class, 'index'])->name('detail_kegiatan.index');
+        Route::post('/detail_kegiatan/list', [DetailKegiatanController::class, 'list']);
+        Route::get('/detail_kegiatan/create', [DetailKegiatanController::class, 'create'])->name('detail_kegiatan.create');
+        Route::post('/detail_kegiatan/store', [DetailKegiatanController::class, 'store'])->name('detail_kegiatan.store');
+    Route::get('/detail_kegiatan/{id}/show', [DetailKegiatanController::class, 'show'])->name('detail_kegiatan.show');
+        Route::get('/detail_kegiatan/{id}/edit', [DetailKegiatanController::class, 'edit'])->name('detail_kegiatan.edit');
+        Route::put('/detail_kegiatan/update/{id_detail_kegiatan}', [DetailKegiatanController::class, 'update'])->name('detail_kegiatan.update');
+        Route::get('/detail_kegiatan/export_excel', [DetailKegiatanController::class, 'export_excel'])->name('detail_kegiatan.export_excel');
+        Route::get('/detail_kegiatan/export_pdf', [DetailKegiatanController::class, 'export_pdf'])->name('detail_kegiatan.export_pdf');
+
+   Route::middleware(['authorize:DSN'])->group(function () {
+
 
         // Detail Kegiatan Routes
         Route::get('/detail_kegiatan', [DetailKegiatanController::class, 'index'])->name('detail_kegiatan.index');
@@ -227,4 +257,5 @@ Route::middleware(['auth'])->group(function(){
 
     // Route logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-});
+//     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+ 

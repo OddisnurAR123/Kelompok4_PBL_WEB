@@ -1,9 +1,9 @@
-<form action="{{ url('/pengguna/import') }}" method="POST" id="form-import-pengguna" enctype="multipart/form-data">
+<form action="{{ url('/pengguna/import_ajax') }}" method="POST" id="form-import" enctype="multipart/form-data">
     @csrf
-    <div id="modal-user" class="modal-dialog modal-lg" role="document">
+    <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Import Data User</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Import Data Pengguna</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -12,10 +12,10 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Download Template</label>
-                    <a href="{{ asset('template_pengguna.xlsx') }}" class="btn btn-info btn-sm" download>
+                    <a href="{{ asset('template_level.xlsx') }}" class="btn btn-info btn-sm" download>
                         <i class="fa fa-file-excel"></i>Download
                     </a>
-                    <small id="error-user_id" class="error-text form-text text-danger"></small>
+                    <small id="error-file_pengguna" class="error-text form-text text-danger"></small>
                 </div>
 
                 <div class="form-group">
@@ -34,8 +34,8 @@
 </form>
 
 <script>
-    $(document).ready(function() {
-        $("#form-import-pengguna").validate({
+ $(document).ready(function() {
+        $("#form-import").validate({
             rules: {
                 file_pengguna: {
                     required: true,
@@ -45,34 +45,33 @@
             submitHandler: function(form) {
                 var formData = new FormData(form);
                 $.ajax({
-    url: '/pengguna/import',  // Pastikan form.action adalah URL yang benar (POST)
-    type: 'POST',      // Gunakan metode POST
-    data: formData,
-    processData: false,
-    contentType: false,
-    success: function(response) {
-        if (response.status) {
-            $('#modal-user').modal('hide');
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil',
-                text: response.message
-            });
-            tablePengguna.ajax.reload();
-        } else {
-            $('.error-text').text('');
-            $.each(response.msgField, function(prefix, val) {
-                $('#error-' + prefix).text(val[0]);
-            });
-            Swal.fire({
-                icon: 'error',
-                title: 'Terjadi Kesalahan',
-                text: response.message
-            });
-        }
-    }
-});
-
+                    url: form.action,
+                    type: form.method,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response.status) {
+                            $('#modal-pengguna').modal('hide');
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: response.message
+                            });
+                            dataPengguna.ajax.reload();
+                        } else {
+                            $('.error-text').text('');
+                            $.each(response.msgField, function(prefix, val) {
+                                $('#error-' + prefix).text(val[0]);
+                            });
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Terjadi Kesalahan',
+                                text: response.message
+                            });
+                        }
+                    }
+                });
                 return false;
             },
             errorElement: 'span',

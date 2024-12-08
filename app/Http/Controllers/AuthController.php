@@ -12,7 +12,7 @@ class AuthController extends Controller
     public function login()
     {
         if (Auth::check()) {
-            return redirect('/'); // Jika sudah login, redirect ke halaman utama
+            return redirect('/dashboard'); // Jika sudah login, redirect ke halaman utama
         }
         return view('auth.login');
     }
@@ -37,7 +37,7 @@ class AuthController extends Controller
                 return response()->json([
                     'status' => true,
                     'message' => 'Login Berhasil',
-                    'redirect' => url('/')  // Redirect ke halaman utama
+                    'redirect' => url('/dashboard')  // Redirect ke halaman utama
                 ]);
             }
 
@@ -65,7 +65,7 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         // Redirect ke halaman login
-        return redirect('login');
+        return redirect('/');
     }
     
 }

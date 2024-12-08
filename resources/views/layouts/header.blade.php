@@ -59,7 +59,7 @@
         <a class="nav-link" data-toggle="dropdown" href="#">
             @if(Auth::user() && Auth::user()->foto_profil)
                 <img src="{{ asset('storage/' . Auth::user()->foto_profil) }}" 
-                     alt="Profile Picture" 
+                     alt="Profil Picture" 
                      class="img-circle elevation-2" 
                      style="width: 30px; height: 30px;">
             @else
@@ -67,7 +67,7 @@
             @endif
         </a>
         <div class="dropdown-menu dropdown-menu-right">
-            <a href="{{ route('profile.profil') }}" class="dropdown-item">
+            <a href="{{ route('profil.profil') }}" class="dropdown-item">
                 <i class="fas fa-user-cog mr-2"></i> Pengaturan Profil
             </a>
             <div class="dropdown-divider"></div>
