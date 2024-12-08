@@ -28,22 +28,40 @@
         @if(session('error'))
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
-        <table class="table table-bordered table-striped table-hover table-sm" id="table_kegiatan">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Kode Kegiatan</th>
-                    <th>Nama Kegiatan</th>
-                    <th>Tanggal Mulai</th>
-                    <th>Tanggal Selesai</th>
-                    <th>Periode</th>
-                    <th>Kategori Kegiatan</th>
-                    <th class="text-center">Aksi</th>
-                </tr>
-            </thead>
-        </table>
+        <!-- Tab Nav -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="daftar-tab" data-bs-toggle="tab" href="#daftar" role="tab" aria-controls="daftar" aria-selected="true">Daftar Kegiatan</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="eksternal-tab" data-bs-toggle="tab" href="{{ route('kegiatan_eksternal.create') }}" role="tab" aria-controls="eksternal" aria-selected="false">Kegiatan Eksternal</a>
+            </li>            
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="myTabContent">
+            <!-- Tab Daftar Kegiatan -->
+            <div class="tab-pane fade show active" id="daftar" role="tabpanel" aria-labelledby="daftar-tab">
+                <table class="table table-bordered table-striped table-hover table-sm" id="table_kegiatan">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Kode Kegiatan</th>
+                            <th>Nama Kegiatan</th>
+                            <th>Tanggal Mulai</th>
+                            <th>Tanggal Selesai</th>
+                            <th>Periode</th>
+                            <th>Kategori Kegiatan</th>
+                            <th class="text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
+
+<!-- Modal -->
 <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" data-width="75%" aria-hidden="true"></div>
 @endsection
 
@@ -76,10 +94,10 @@
                     searchable: true
                 },
                 {
-                data: "kode_kegiatan",
-                className: "",
-                orderable: true,
-                searchable: true
+                    data: "kode_kegiatan",
+                    className: "",
+                    orderable: true,
+                    searchable: true
                 },
                 {
                     data: "nama_kegiatan",
