@@ -58,17 +58,14 @@ class UserModel extends Authenticatable implements JWTSubject
      */
     public function getRoleName(): string
     {
-        return $this->jenis_pengguna->nama_jenis_pengguna;
+        return $this->jenisPengguna->nama_jenis_pengguna;
     }
-
-    /**
-     * Cek apakah user memiliki role tertentu
-     */
+    
     public function hasRole($role): bool
     {
-        return $this->jenis_pengguna->kode_jenis_pengguna == $role;
+        return $this->jenisPengguna->kode_jenis_pengguna == $role;
     }
-
+    
     /**
      * Mendapatkan kode role
      */
