@@ -12,10 +12,7 @@ class PenggunaModel extends Authenticatable implements JWTSubject
 
     protected $table = 'm_pengguna';
     protected $primaryKey = 'id_pengguna';
-<<<<<<< HEAD
-=======
 
->>>>>>> 15aa86715d184a53f80f7d81adb17d2b91b085bd
     public $timestamps = true;
 
     protected $fillable = [
@@ -50,10 +47,7 @@ class PenggunaModel extends Authenticatable implements JWTSubject
     {
         return [];  // Kustom klaim JWT, bisa ditambahkan jika perlu
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> 15aa86715d184a53f80f7d81adb17d2b91b085bd
+    
     public function kegiatan()
     {
         return $this->belongsToMany(KegiatanModel::class, 't_kegiatan_user', 'id_pengguna', 'id_kegiatan');
