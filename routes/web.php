@@ -34,10 +34,9 @@ use App\Http\Controllers\KinerjaDosenController;
 // Pattern untuk parameter ID harus berupa angka
 Route::pattern('id', '[0-9]+');
 
-// Routes untuk autentikasi login
-Route::get('/login', [AuthController::class, 'login'])->name('auth.login');
-Route::post('/login', [AuthController::class, 'postlogin']);
-Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
+Route::get('login', [AuthController::class, 'login'])->name('login');
+Route::post('login', [AuthController::class, 'postlogin'])->name('postlogin');
+Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 //route yang memerlukan autentikasi
 Route::middleware(['auth'])->group(function(){
