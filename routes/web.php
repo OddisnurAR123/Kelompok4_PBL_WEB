@@ -14,7 +14,7 @@ use App\Http\Controllers\DetailAgendaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\DraftSuratTugasController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\TampilKegiatanController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\LoginController;
@@ -87,7 +87,8 @@ Route::pattern('id', '[0-9]+');
         Route::put('/pengguna/{id}/update', [PenggunaController::class, 'update']);
         Route::get('/pengguna/{id}/delete', [PenggunaController::class, 'confirm']);
         Route::delete('/pengguna/{id}/delete', [PenggunaController::class, 'delete']);    
-        Route::post('/pengguna/import', [PenggunaController::class, 'import']);
+        Route::get('/pengguna/import', [PenggunaController::class, 'import']);
+        Route::post('/pengguna/import_ajax', [PenggunaController::class, 'import_ajax']);
         Route::get('/pengguna/export_pdf', [PenggunaController::class, 'export_pdf']);
 
         //route kegiatan
@@ -116,13 +117,14 @@ Route::pattern('id', '[0-9]+');
     // });
 
     // Route::middleware(['authorize:ADM, PIM, DSN'])->group(function(){
-        //route profil
-        Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.profil');
-        Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-        Route::get('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.password');
-        Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
-
+        //route profill
+// Route untuk Profil
+Route::get('/profil', [ProfilController::class, 'showProfil'])->name('profil.profil');
+Route::get('/profil/edit', [ProfilController::class, 'edit'])->name('profil.edit');
+Route::post('/profil/update', [ProfilController::class, 'updateProfil'])->name('profil.update');
+Route::get('/profil/password', [ProfilController::class, 'changePassword'])->name('profil.changePassword');
+Route::post('/profil/update-password', [ProfilController::class, 'updatePassword'])->name('profil.updatePassword');
+        
         //route kegiatan
         Route::get('/kegiatan', [KegiatanController::class, 'index'])->name('kegiatan.index');
         Route::post('/kegiatan/list', [KegiatanController::class, 'list']);

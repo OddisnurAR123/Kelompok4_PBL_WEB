@@ -8,8 +8,9 @@ use App\Models\JenisPenggunaModel;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Hash;
-use PhpOffice\PhpSpreadsheet\Writer\Pdf;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 
@@ -210,69 +211,76 @@ class PenggunaController extends Controller
                 // Kirimkan data user ke view
                 return view('pengguna.confirm', ['pengguna' => $pengguna]);
             }
-            public function import_ajax(Request $request) {
-                if ($request->ajax() || $request->wantsJson()) {
-                    $rules = [
-                        'file_pengguna' => ['required', 'mimes:xlsx', 'max:1024']
-                    ];
-            
-                    $validator = Validator::make($request->all(), $rules);
-            
-                    if ($validator->fails()) {
-                        return response()->json([
-                            'status' => false,
-                            'message' => 'Validasi Gagal',
-                            'msgField' => $validator->errors()
-                        ]);
-                    }
-            
-                    $file = $request->file('file_pengguna');
-                    $reader = IOFactory::createReader('Xlsx');
-                    $reader->setReadDataOnly(true);
-                    $spreadsheet = $reader->load($file->getRealPath());
-                    $sheet = $spreadsheet->getActiveSheet();
-            
-                    $data = $sheet->toArray(null, false, true, true);
-            
-                    $insert = [];
-                    if (count($data) > 1) {
-                        foreach ($data as $baris => $value) {
-                            if ($baris > 1) {
-                                $insert[] = [
-                                    'id_jenis_pengguna' => $value['A'],
-                                    'nama_pengguna' => $value['B'],
-                                    'username' => $value['C'],
-                                    'password' => bcrypt($value['D']), // Hash password
-                                    'nip' => $value['E'],
-                                    'email' => $value['F'],
-                                    'created_at' => now(),
-                                ];
-                            }
-                        }
-            
-                        if (count($insert) > 0) {
-                            PenggunaModel::insertOrIgnore($insert);
-                        }
-            
-                        return response()->json([
-                            'status' => true,
-                            'message' => 'Data pengguna berhasil diimport'
-                        ]);
-                    } else {
-                        return response()->json([
-                            'status' => false,
-                            'message' => 'Tidak ada data yang diimport'
-                        ]);
-                    }
-                }
-                return redirect('/');
+            public function import() 
+            { 
+                return view('pengguna.import'); 
             }
+            public function import_ajax(Request $request)
+{
+    if ($request->ajax() || $request->wantsJson()) {
+        $rules = [
+            // Validasi file harus xlsx, max 1MB
+            'file_pengguna' => ['required', 'mimes:xlsx', 'max:1024']
+        ];
+        
+        $validator = Validator::make($request->all(), $rules);
+        
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validasi Gagal',
+                'msgField' => $validator->errors()
+            ]);
+        }
+
+        $file = $request->file('file_pengguna'); // Ambil file dari request
+        $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader('Xlsx'); // Load reader file excel
+        $reader->setReadDataOnly(true); // Hanya membaca data
+        $spreadsheet = $reader->load($file->getRealPath()); // Load file excel
+        $sheet = $spreadsheet->getActiveSheet(); // Ambil sheet yang aktif
+        $data = $sheet->toArray(null, false, true, true); // Ambil data excel
+        $insert = [];
+
+        if (count($data) > 1) { // Jika data lebih dari 1 baris
+            foreach ($data as $baris => $value) {
+                if ($baris > 1) { // Baris ke 1 adalah header, maka lewati
+                    $insert[] = [
+                        'id_jenis_pengguna' => $value['A'], 
+                        'nama_pengguna' => $value['B'],
+                        'username' => $value['C'],
+                        'password' => $value['D'],
+                        'nip' => $value['E'],
+                        'email' => $value['F'],
+                        'created_at' => now(),
+                    ];
+                }
+            }
+
+            if (count($insert) > 0) {
+                // Insert data ke database, jika data sudah ada, maka diabaikan
+                PenggunaModel::insertOrIgnore($insert);
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Data berhasil diimport'
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Tidak ada data yang diimport'
+            ]);
+        }
+    }
+    return redirect('/');
+}
             
             public function export_excel() {
                 $pengguna = PenggunaModel::select(
                     'id_jenis_pengguna',
                     'nama_pengguna',
                     'username',
+                    'password',
                     'nip',
                     'email'
                 )->get();
@@ -285,8 +293,9 @@ class PenggunaController extends Controller
                 $sheet->setCellValue('B1', 'ID Jenis Pengguna');
                 $sheet->setCellValue('C1', 'Nama Pengguna');
                 $sheet->setCellValue('D1', 'Username');
-                $sheet->setCellValue('E1', 'NIP');
-                $sheet->setCellValue('F1', 'Email');
+                $sheet->setCellValue('E1', 'Password');
+                $sheet->setCellValue('F1', 'NIP');
+                $sheet->setCellValue('G1', 'Email');
             
                 $sheet->getStyle('A1:F1')->getFont()->setBold(true);
             
@@ -298,13 +307,14 @@ class PenggunaController extends Controller
                     $sheet->setCellValue('B' . $baris, $value->id_jenis_pengguna);
                     $sheet->setCellValue('C' . $baris, $value->nama_pengguna);
                     $sheet->setCellValue('D' . $baris, $value->username);
-                    $sheet->setCellValue('E' . $baris, $value->nip);
-                    $sheet->setCellValue('F' . $baris, $value->email);
+                    $sheet->setCellValue('E' . $baris, $value->password);
+                    $sheet->setCellValue('F' . $baris, $value->nip);
+                    $sheet->setCellValue('G' . $baris, $value->email);
                     $baris++;
                     $no++;
                 }
             
-                foreach (range('A', 'F') as $columnID) {
+                foreach (range('A', 'G') as $columnID) {
                     $sheet->getColumnDimension($columnID)->setAutoSize(true);
                 }
             
@@ -320,23 +330,24 @@ class PenggunaController extends Controller
                 $writer->save('php://output');
                 exit;
             }
+            public function export_pdf()
+            {
+                // Mengambil data pengguna beserta jenis_pengguna
+                $pengguna = PenggunaModel::with('jenisPengguna')
+                    ->select('id_pengguna', 'id_jenis_pengguna', 'nama_pengguna', 'username', 'password', 'nip', 'email')
+                    ->get();
             
-
-            public function export_pdf() {
-                $pengguna = PenggunaModel::select(
-                    'id_jenis_pengguna',
-                    'nama_pengguna',
-                    'username',
-                    'nip',
-                    'email'
-                )->orderBy('nama_pengguna')->get();
+                try {
+                    // Load view untuk membuat PDF
+                    $pdf = Pdf::loadView('pengguna.export_pdf', ['pengguna' => $pengguna]);
             
-                $pdf = Pdf::loadView('pengguna.export_pdf', ['pengguna' => $pengguna]);
+                    $pdf->setPaper('a4', 'portrait');
+                    $pdf->setOption("isRemoteEnabled", true);
             
-                $pdf->setPaper('a4', 'portrait');
-                $pdf->setOption("isRemoteEnabled", true);
-            
-                return $pdf->stream('Data Pengguna ' . date('Y-m-d H:i:s') . '.pdf');
+                    return $pdf->stream('Data_Pengguna_' . date('Y-m-d_H-i-s') . '.pdf');
+                } catch (\Exception $e) {
+                    return response()->json(['error' => $e->getMessage()]);
+                }
             }
             
 }
