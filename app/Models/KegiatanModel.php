@@ -71,12 +71,9 @@ class KegiatanModel extends Model
                 't_kegiatan_user.*'
             );
     }
-<<<<<<< HEAD
-=======
     public function agenda()
     {
         return $this->hasMany(AgendaModel::class, 'id_kegiatan');
     }
->>>>>>> baf2a3e2ef1f958f503081267dbbe4535f054e56
     
 }
