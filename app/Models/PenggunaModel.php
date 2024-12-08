@@ -57,4 +57,29 @@ class PenggunaModel extends Authenticatable implements JWTSubject
     {
         return $this->belongsTo(JabatanKegiatanModel::class, 'id_jabatan_kegiatan', 'id_jabatan_kegiatan');
     }
+
+    /**
+     * Mendapatkan nama role
+     */
+    public function getRoleName(): string
+    {
+        return $this->jenisPengguna->nama_jenis_pengguna;
+    }
+
+    /**
+     * Cek apakah user memiliki role tertentu
+     */
+    public function hasRole($role): bool
+    {
+        return $this->jenisPengguna->kode_jenis_pengguna == $role;
+    }
+
+    /**
+     * Mendapatkan kode role
+     */
+    public function getRole()
+    {
+        return $this->jenisPengguna->kode_jenis_pengguna;
+    }
+
 }
