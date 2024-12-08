@@ -24,9 +24,9 @@ class KegiatanEksternalController extends Controller
     }
 
     public function list(Request $request) {
-        // Mengambil data kegiatan eksternal
-        $kegiatanEksternal = KegiatanEksternalModel::select('id_kegiatan_eksteral', 'nama_kegiatan_eksternal', 'waktu_kegiatan');
-        
+        // Mengambil data kegiatan eksternal dengan nama kolom yang benar
+        $kegiatanEksternal = KegiatanEksternalModel::select('id_kegiatan_eksternal', 'nama_kegiatan', 'waktu_kegiatan');
+
         // Menampilkan data dalam bentuk DataTables tanpa kolom aksi
         return DataTables::of($kegiatanEksternal)
             ->make(true); // Mengaktifkan DataTables

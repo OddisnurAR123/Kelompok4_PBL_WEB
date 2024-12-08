@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <a href="{{ route('kegiatan.index') }}" class="btn btn-link p-0 mr-3" style="font-size: 18px;">
+    <a href="{{ route('/kegiatan_eksternal') }}" class="btn btn-link p-0 mr-3" style="font-size: 18px;">
         <i class="fa fa-arrow-left"></i>
     </a>
     <h1>Tambah Kegiatan Eksternal</h1>

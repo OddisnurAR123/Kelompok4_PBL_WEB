@@ -1,4 +1,5 @@
 @extends('layouts.template')
+
 @section('content')
 <div class="card card-outline card-primary">
     <div class="card-header">
@@ -26,7 +27,10 @@
         </table>        
     </div>
 </div>
+
+<!-- Modal -->
 <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" data-width="75%" aria-hidden="true"></div>
+
 @endsection
 
 @push('css')
@@ -43,32 +47,33 @@
     }
 
     $(document).ready(function() {
-    $('#table_kegiatan_eksternal').DataTable({
-        serverSide: true, // Menggunakan data dari server
-        processing: true, // Menampilkan indikator loading
-        ajax: {
-            url: "{{ url('kegiatan_eksternal/list') }}", // Endpoint untuk mendapatkan data
-            type: "POST", // Metode pengambilan data
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Sertakan CSRF token
+        $('#table_kegiatan_eksternal').DataTable({
+            serverSide: true, // Menggunakan data dari server
+            processing: true, // Menampilkan indikator loading
+            ajax: {
+                url: "{{ url('kegiatan_eksternal/list') }}", // Endpoint untuk mendapatkan data
+                type: "POST", // Metode pengambilan data
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}' // Sertakan CSRF token
+                },
+                error: function(xhr, error, code) {
+                    alert("Terjadi kesalahan: " + code); // Notifikasi error
+                }
             },
-            error: function(xhr, error, code) {
-                alert("Terjadi kesalahan: " + code); // Notifikasi error
+            columns: [
+                { data: "id_kegiatan_eksternal", title: "ID" }, // Kolom ID Kegiatan Eksternal
+                { data: "nama_kegiatan", title: "Nama Kegiatan Eksternal" }, // Kolom Nama
+                { data: "waktu_kegiatan", title: "Waktu Kegiatan" }
+            ],
+            order: [[0, 'asc']], // Urutkan berdasarkan kolom pertama (ID)
+            responsive: true, // Tambahkan responsivitas untuk tampilan mobile
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.11.5/i18n/Indonesian.json" // Bahasa Indonesia (opsional)
             }
-        },
-        columns: [
-            { data: "id_kegiatan_eksternal", title: "ID" }, // Kolom ID Jabatan Kegiatan
-            { data: "nama_kegiatan_eksternal", title: "Nama Kegiatan Eksternal" }, // Kolom Nama
-            { data: "waktu_kegiatan", title: "Waktu Kegiatan" }
-        ],
-        order: [[0, 'asc']], // Urutkan berdasarkan kolom pertama (ID)
-        responsive: true, // Tambahkan responsivitas untuk tampilan mobile
-        language: {
-            url: "//cdn.datatables.net/plug-ins/1.11.5/i18n/Indonesian.json" // Bahasa Indonesia (opsional)
-        }
+        });
     });
-});
 </script>
+
 <style>
     /* Mengubah tampilan tabel */
     #table_kegiatan_eksternal {
@@ -96,21 +101,8 @@
         background-color: #f1f1f1;
     }
 
-    /* Animasi loading (opsional, jika diperlukan) */
-    #table_kegiatan_eksternal.loading::after {
-        content: "Memuat Data...";
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 18px;
-        font-weight: bold;
-        color: #007bff;
-        opacity: 0.7;
-    }
-
-/* Menambahkan border dan rounded corners untuk tombol */
-.btn-success {
+    /* Menambahkan border dan rounded corners untuk tombol */
+    .btn-success {
         border-radius: 25px;
     }
 
@@ -150,7 +142,7 @@
     }
 
     /* Menambahkan animasi loading */
-    #table_kategori_kegiatan.loading::after {
+    #table_kegiatan_eksternal.loading::after {
         content: "Memuat Data...";
         position: absolute;
         left: 50%;
@@ -161,7 +153,6 @@
         color: #007bff;
         opacity: 0.7;
     }
-
 </style>
 
 @endpush
