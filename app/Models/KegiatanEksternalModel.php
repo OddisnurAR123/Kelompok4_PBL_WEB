@@ -12,5 +12,5 @@ class KegiatanEksternalModel extends Model
     protected $table= 't_kegiatan_eksternal'; //mendefinisikan nama tabel yang akan digunakan. :o
     protected $primaryKey = 'id_kegiatan_eksternal';
     public $timestamps = true;
-    protected $fillable = ['nama_kegiatan','waktu_kegiatan','pic'];
+    protected $fillable = ['nama_kegiatan','waktu_kegiatan','pic', 'periode'];
 }
