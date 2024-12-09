@@ -42,15 +42,19 @@
                     processData: false, // setting processData dan contentType ke false, untuk menghandle file 
                     contentType: false, 
                     success: function(response) { 
-                        if(response.status){ // jika sukses 
-                            $('#modal-master-kegiatan').modal('hide'); 
-                            Swal.fire({ 
-                                icon: 'success', 
-                                title: 'Berhasil', 
-                                text: response.message 
-                            }); 
-                            tableKegiatan.ajax.reload(); // reload datatable 
-                        } else { // jika error 
+                        if(response.status){ // jika sukses
+                                $('#modal-master-kegiatan').modal('hide');
+                                Swal.fire({ 
+                                    icon: 'success', 
+                                    title: 'Berhasil', 
+                                    text: response.message 
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        // Reload halaman setelah tombol OK pada Swal ditekan
+                                        location.reload();
+                                    }
+                                });
+                            }else { // jika error 
                             $('.error-text').text(''); 
                             $.each(response.msgField, function(prefix, val) { 
                                 $('#error-'+prefix).text(val[0]); 

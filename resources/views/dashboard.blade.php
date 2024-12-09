@@ -60,7 +60,7 @@
             <div class="d-flex justify-content-center mt-5">
                 <!-- Tombol Lihat Semua Kegiatan -->
                 <div class="col-md-6 mb-3">
-                    <a href="{{ url('/detail_kegiatan') }}" class="btn btn-lg btn-block" style="background-color: #8B1A1A; color: white; border-radius: 30px;">
+                    <a href="{{ url('/kegiatan') }}" class="btn btn-lg btn-block" style="background-color: #8B1A1A; color: white; border-radius: 30px;">
                         <i class="fas fa-list"></i> Lihat Semua Kegiatan
                     </a>
                 </div>

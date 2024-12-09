@@ -70,4 +70,9 @@ class Kernel extends HttpKernel
         'authorize' => \App\Http\Middleware\AuthorizeUser::class,
 
     ];
+
+    protected $routeMiddleware = [
+        'checkRole' => \App\Http\Middleware\CheckRole::class,
+    ];
+    
 }

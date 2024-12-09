@@ -4,9 +4,11 @@
 <div class="card card-outline card-primary">
     <div class="card-header">
         <h3 class="card-title">Daftar Kegiatan Eksternal Non-JTI</h3>
-        <div class="card-tools">
-            <button onclick="modalAction('{{ url('/kegiatan_eksternal/create') }}')" class="btn btn-success"><i class="fa fa-plus"></i> Tambah Data</button>
-        </div>
+        <div class="card-tools ml-auto d-flex">
+            <button onclick="modalAction('{{ route('kegiatan_eksternal.create') }}')" class="btn btn-success btn-sm mr-2">
+                <i class="fa fa-plus"></i> Tambah Kegiatan
+            </button>                    
+        </div>   
     </div>
     <div class="card-body">
         @if(session('success'))
@@ -15,6 +17,16 @@
         @if(session('error'))
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
+
+        <!-- Tab Nav -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="daftar-tab" data-bs-toggle="tab" href="{{ route('kegiatan.index')}}" role="tab" aria-controls="daftar" aria-selected="true">Daftar Kegiatan</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="eksternal-tab" data-bs-toggle="tab" href="#daftar" role="tab" aria-controls="eksternal" aria-selected="false">Kegiatan Eksternal</a>
+            </li>            
+        </ul>
             
         <table class="table table-bordered table-striped table-hover table-sm" id="table_kegiatan_eksternal">
             <thead>
@@ -22,6 +34,7 @@
                     <th>ID</th>
                     <th>Nama Kegiatan Eksternal</th>
                     <th>Waktu Kegiatan</th>
+                    <th>Periode</th>
                 </tr>
             </thead>
         </table>        
@@ -63,7 +76,8 @@
             columns: [
                 { data: "id_kegiatan_eksternal", title: "ID" }, // Kolom ID Kegiatan Eksternal
                 { data: "nama_kegiatan", title: "Nama Kegiatan Eksternal" }, // Kolom Nama
-                { data: "waktu_kegiatan", title: "Waktu Kegiatan" }
+                { data: "waktu_kegiatan", title: "Waktu Kegiatan" },
+                { data: "periode", title: "Periode"},
             ],
             order: [[0, 'asc']], // Urutkan berdasarkan kolom pertama (ID)
             responsive: true, // Tambahkan responsivitas untuk tampilan mobile
