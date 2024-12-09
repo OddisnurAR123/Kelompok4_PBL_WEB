@@ -40,7 +40,7 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 
 
 //route yang memerlukan autentikasi
-Route::middleware(['auth'])->group(function(){
+// Route::middleware(['auth'])->group(function(){
     Route::get('/dashboard', [WelcomeController::class, 'index']);
         
     //route profil
@@ -289,5 +289,5 @@ Route::middleware(['auth'])->group(function(){
 
     // Route logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-});
+//});
  
