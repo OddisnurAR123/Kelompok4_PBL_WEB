@@ -82,86 +82,50 @@
 
 <script>
     $(document).ready(function() {
-        let anggotaIndex = 1; // Menyimpan indeks anggota yang ditambahkan
+        // Menambahkan anggota baru
+        let anggotaIndex = 1;
         $("#addAnggota").click(function() {
-            // Menambahkan form anggota baru
             let newAnggota = `
-                <div class="anggota-group d-flex justify-content-between mb-3">
-                <div class="col-5">
-                    <label>Pengguna ${anggotaIndex + 1}</label>
-                    <select name="anggota[${anggotaIndex}][id_pengguna]" class="form-control" required>
-                        <option value="">Pilih Pengguna</option>
-                        @foreach($pengguna as $user)
-                            <option value="{{ $user->id_pengguna }}">{{ $user->nama_pengguna }}</option>
-                        @endforeach
-                    </select>
+                <div class="anggota-group d-flex mb-3">
+                    <div class="col-5">
+                        <label>Pengguna ${anggotaIndex + 1}</label>
+                        <select name="anggota[${anggotaIndex}][id_pengguna]" class="form-control" required>
+                            <option value="">Pilih Pengguna</option>
+                            @foreach($pengguna as $user)
+                                <option value="{{ $user->id_pengguna }}">{{ $user->nama_pengguna }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-5">
+                        <label>Jabatan</label>
+                        <select name="anggota[${anggotaIndex}][id_jabatan_kegiatan]" class="form-control" required>
+                            <option value="">Pilih Jabatan</option>
+                            @foreach($jabatanKegiatan as $jabatan)
+                                <option value="{{ $jabatan->id_jabatan_kegiatan }}">{{ $jabatan->nama_jabatan_kegiatan }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-                <div class="col-5">
-                    <label>Jabatan</label>
-                    <select name="anggota[${anggotaIndex}][id_jabatan_kegiatan]" class="form-control" required>
-                        <option value="">Pilih Jabatan</option>
-                        @foreach($jabatanKegiatan as $jabatan)
-                            <option value="{{ $jabatan->id_jabatan_kegiatan }}">{{ $jabatan->nama_jabatan_kegiatan }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-2 d-flex align-items-center">
-                </div>
-            </div>
-        `;
-
+            `;
             $('#anggota-section').append(newAnggota);
-
             anggotaIndex++;
         });
 
-        // Validasi form
+        // Validasi form menggunakan jQuery Validate
         $("#form-tambah-kegiatan").validate({
-            rules: {
-                kode_kegiatan: {
-                    required: true,
-                    minlength: 3
-                },
-                nama_kegiatan: {
-                    required: true,
-                    minlength: 3
-                },
-                tanggal_mulai: {
-                    required: true
-                },
-                tanggal_selesai: {
-                    required: true
-                },
-                periode: {
-                    required: true,
-                    length: 4
-                },
-                id_kategori_kegiatan: {
-                    required: true
-                }
-            },
             submitHandler: function (form) {
                 $.ajax({
                     url: form.action,
                     type: form.method,
                     data: $(form).serialize(),
-                    success: function (response) {
+                    success: function(response) {
                         if (response.status) {
-                            // SweetAlert untuk notifikasi sukses
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Berhasil',
                                 text: response.message
-                            }).then(() => {
-                                // Auto reload setelah tombol OK ditekan
-                                location.reload();
-                            });
+                            }).then(() => location.reload());
                         } else {
-                            // Menangani kesalahan jika response.status == false
-                            $('.error-text').text(''); // Menghapus pesan error sebelumnya
-                            $.each(response.msgField, function (prefix, val) {
-                                $('#error-' + prefix).text(val[0]); // Menampilkan pesan error untuk masing-masing field
-                            });
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Terjadi Kesalahan',
@@ -170,7 +134,6 @@
                         }
                     },
                     error: function () {
-                        // Menangani kesalahan server
                         Swal.fire({
                             icon: 'error',
                             title: 'Terjadi Kesalahan',
@@ -178,18 +141,7 @@
                         });
                     }
                 });
-                return false; // Mencegah form dikirim secara default
-            },
-            errorElement: 'span',
-            errorPlacement: function(error, element) {
-                error.addClass('invalid-feedback');
-                element.closest('.form-group').append(error);
-            },
-            highlight: function(element, errorClass, validClass) {
-                $(element).addClass('is-invalid');
-            },
-            unhighlight: function(element, errorClass, validClass) {
-                $(element).removeClass('is-invalid');
+                return false;
             }
         });
     });

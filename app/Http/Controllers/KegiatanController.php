@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\IOFactory; 
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class KegiatanController extends Controller
 {
@@ -85,74 +86,52 @@ class KegiatanController extends Controller
 
     public function store(Request $request)
     {
-        if ($request->ajax() || $request->wantsJson()) {
-            $validator = Validator::make($request->all(), [
-                'kode_kegiatan' => 'required|string|max:10|unique:t_kegiatan,kode_kegiatan',
-                'nama_kegiatan' => 'required|string|max:100',
-                'tanggal_mulai' => 'required|date',
-                'tanggal_selesai' => 'required|date',
-                'periode' => 'required|string|max:50',
-                'id_kategori_kegiatan' => 'required|exists:m_kategori_kegiatan,id_kategori_kegiatan',
-                'anggota.*.id_pengguna' => 'required|exists:m_pengguna,id_pengguna',
-                'anggota.*.id_jabatan_kegiatan' => 'required|exists:m_jabatan_kegiatan,id_jabatan_kegiatan',
+        // Validasi inputan
+        $validator = Validator::make($request->all(), [
+            'kode_kegiatan' => 'required|string|max:10|unique:t_kegiatan,kode_kegiatan',
+            'nama_kegiatan' => 'required|string|max:100',
+            'tanggal_mulai' => 'required|date',
+            'tanggal_selesai' => 'required|date',
+            'periode' => 'required|string|max:50',
+            'id_kategori_kegiatan' => 'required|exists:m_kategori_kegiatan,id_kategori_kegiatan',
+            'anggota.*.id_pengguna' => 'required|exists:m_pengguna,id_pengguna',
+            'anggota.*.id_jabatan_kegiatan' => 'required|exists:m_jabatan_kegiatan,id_jabatan_kegiatan',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validasi Gagal',
+                'msgField' => $validator->errors(),
             ]);
+        }
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Validasi Gagal',
-                    'msgField' => $validator->errors(),
-                ]);
-            }
+        // Menyimpan data kegiatan ke tabel t_kegiatan
+        $kegiatan = KegiatanModel::create($request->only(
+            'kode_kegiatan',
+            'nama_kegiatan',
+            'tanggal_mulai',
+            'tanggal_selesai',
+            'periode',
+            'id_kategori_kegiatan'
+        ));
 
-            try {
-                // Mulai transaksi
-                DB::beginTransaction();
-
-                // Menyimpan data kegiatan ke tabel t_kegiatan
-                $kegiatan = KegiatanModel::create($request->only(
-                    'kode_kegiatan',
-                    'nama_kegiatan',
-                    'tanggal_mulai',
-                    'tanggal_selesai',
-                    'periode',
-                    'id_kategori_kegiatan'
-                ));
-
-                // Menyimpan anggota ke tabel pivot t_kegiatan_user
-                if ($request->has('anggota') && is_array($request->anggota)) {
-                    foreach ($request->anggota as $anggota) {
-                        DB::table('t_kegiatan_user')->insert([
-                            'id_kegiatan' => $kegiatan->id_kegiatan,
-                            'id_pengguna' => $anggota['id_pengguna'],
-                            'id_jabatan_kegiatan' => $anggota['id_jabatan_kegiatan'],
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ]);
-                    }
-                }
-
-                // Commit transaksi
-                DB::commit();
-
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Data kegiatan berhasil disimpan',
-                ]);
-            } catch (\Exception $e) {
-                // Rollback jika terjadi kesalahan
-                DB::rollBack();
-
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+        // Menyimpan anggota ke tabel pivot t_kegiatan_user
+        if ($request->has('anggota') && is_array($request->anggota)) {
+            foreach ($request->anggota as $anggota) {
+                DB::table('t_kegiatan_user')->insert([
+                    'id_kegiatan' => $kegiatan->id_kegiatan,
+                    'id_pengguna' => $anggota['id_pengguna'],
+                    'id_jabatan_kegiatan' => $anggota['id_jabatan_kegiatan'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
             }
         }
 
         return response()->json([
-            'status' => false,
-            'message' => 'Request bukan AJAX.',
+            'status' => true,
+            'message' => 'Data kegiatan berhasil disimpan',
         ]);
     }
 
@@ -173,31 +152,31 @@ class KegiatanController extends Controller
 
 
     // Menampilkan form edit kegiatan via Ajax
-public function edit($id) {
-    // Mengambil data kegiatan
-    $kegiatan = KegiatanModel::findOrFail($id);
-    
-    // Mengambil kategori kegiatan
-    $kategoriKegiatan = KategoriKegiatanModel::all();
-    
-    // Mengambil pengguna dengan id_jenis_pengguna = 3
-    $pengguna = PenggunaModel::where('id_jenis_pengguna', 3)->get();
-    
-    // Mengambil data jabatan kegiatan
-    $jabatanKegiatan = JabatanKegiatanModel::all();
-    
-    // Menambahkan data pivot 'id_jabatan_kegiatan' ke pengguna yang terhubung dengan kegiatan
-    // Pastikan Anda sudah menambahkan relasi 'pengguna' di model Kegiatan
-    $kegiatan->load('pengguna'); // Menyertakan relasi pengguna dengan pivot data
+    public function edit($id) {
+        // Mengambil data kegiatan
+        $kegiatan = KegiatanModel::findOrFail($id);
+        
+        // Mengambil kategori kegiatan
+        $kategoriKegiatan = KategoriKegiatanModel::all();
+        
+        // Mengambil pengguna dengan id_jenis_pengguna = 3
+        $pengguna = PenggunaModel::where('id_jenis_pengguna', 3)->get();
+        
+        // Mengambil data jabatan kegiatan
+        $jabatanKegiatan = JabatanKegiatanModel::all();
+        
+        // Menambahkan data pivot 'id_jabatan_kegiatan' ke pengguna yang terhubung dengan kegiatan
+        // Pastikan Anda sudah menambahkan relasi 'pengguna' di model Kegiatan
+        $kegiatan->load('pengguna'); // Menyertakan relasi pengguna dengan pivot data
 
-    // Kirim data ke view
-    return view('kegiatan.edit', [
-        'kegiatan' => $kegiatan, 
-        'kategoriKegiatan' => $kategoriKegiatan, 
-        'pengguna' => $pengguna, 
-        'jabatanKegiatan' => $jabatanKegiatan
-    ]);
-}
+        // Kirim data ke view
+        return view('kegiatan.edit', [
+            'kegiatan' => $kegiatan, 
+            'kategoriKegiatan' => $kategoriKegiatan, 
+            'pengguna' => $pengguna, 
+            'jabatanKegiatan' => $jabatanKegiatan
+        ]);
+    }
 
 
     public function update(Request $request, $id)
@@ -309,10 +288,10 @@ public function edit($id) {
     public function import_ajax(Request $request) {
         if($request->ajax() || $request->wantsJson()){ 
             $rules = [ 
-                // validasi file harus xls atau xlsx, max 1MB 
+                // Validasi file harus xls atau xlsx, max 1MB 
                 'file_kegiatan' => ['required', 'mimes:xlsx', 'max:1024'] 
             ]; 
- 
+    
             $validator = Validator::make($request->all(), $rules); 
             if($validator->fails()){ 
                 return response()->json([ 
@@ -321,42 +300,45 @@ public function edit($id) {
                     'msgField' => $validator->errors() 
                 ]); 
             } 
- 
-            $file = $request->file('file_kegiatan');  // ambil file dari request 
- 
-            $reader = IOFactory::createReader('Xlsx');  // load reader file excel 
-            $reader->setReadDataOnly(true);             // hanya membaca data 
-            $spreadsheet = $reader->load($file->getRealPath()); // load file excel 
-            $sheet = $spreadsheet->getActiveSheet();    // ambil sheet yang aktif 
- 
-            $data = $sheet->toArray(null, false, true, true);   // ambil data excel 
- 
+    
+            $file = $request->file('file_kegiatan');  // Ambil file dari request 
+    
+            $reader = IOFactory::createReader('Xlsx');  // Load reader file excel 
+            $reader->setReadDataOnly(true);             // Hanya membaca data 
+            $spreadsheet = $reader->load($file->getRealPath()); // Load file excel 
+            $sheet = $spreadsheet->getActiveSheet();    // Ambil sheet yang aktif 
+    
+            $data = $sheet->toArray(null, false, true, true);   // Ambil data excel 
+    
             $insert = []; 
-            if(count($data) > 1){ // jika data lebih dari 1 baris 
+            if(count($data) > 1){ // Jika data lebih dari 1 baris 
                 foreach ($data as $baris => $value) { 
-                    if($baris > 1){ // baris ke 1 adalah header, maka lewati 
+                    if($baris > 1){ // Baris ke 1 adalah header, maka lewati 
+                        // Konversi tanggal mulai dan selesai dari format Excel ke format MySQL
+                        $tanggal_mulai = Date::excelToDateTimeObject($value['C'])->format('Y-m-d H:i:s');
+                        $tanggal_selesai = Date::excelToDateTimeObject($value['D'])->format('Y-m-d H:i:s');
+    
                         $insert[] = [ 
                             'kode_kegiatan' => $value['A'], 
                             'nama_kegiatan' => $value['B'], 
-                            'tanggal_mulai' => $value['C'], 
-                            'tanggal_selesai' => $value['D'], 
+                            'tanggal_mulai' => $tanggal_mulai, 
+                            'tanggal_selesai' => $tanggal_selesai, 
                             'periode' => $value['E'], 
                             'id_kategori_kegiatan' => $value['F'], 
-                            'created_at' => now(), 
                         ]; 
                     } 
                 } 
- 
+    
                 if(count($insert) > 0){ 
-                    // insert data ke database, jika data sudah ada, maka diabaikan 
-                    KegiatanModel::insertOrIgnore($insert);    
+                    // Insert data ke database
+                    KegiatanModel::insert($insert);    
                 } 
- 
+    
                 return response()->json([ 
                     'status' => true, 
                     'message' => 'Data berhasil diimport' 
                 ]); 
-            }else{ 
+            } else { 
                 return response()->json([ 
                     'status' => false, 
                     'message' => 'Tidak ada data yang diimport' 

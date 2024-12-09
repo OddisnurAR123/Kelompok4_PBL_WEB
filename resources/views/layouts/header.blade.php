@@ -67,9 +67,6 @@
             @endif
         </a>
         <div class="dropdown-menu dropdown-menu-right">
-            <a href="{{ route('profil.profil') }}" class="dropdown-item">
-                <i class="fas fa-user-cog mr-2"></i> Pengaturan Profil
-            </a>
             <div class="dropdown-divider"></div>
             <a href="{{ url('/logout') }}" class="dropdown-item">
                 <i class="fas fa-sign-out-alt mr-2"></i> Keluar
