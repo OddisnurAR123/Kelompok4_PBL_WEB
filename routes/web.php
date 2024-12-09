@@ -138,8 +138,9 @@ Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
     Route::put('/pengguna/{id}/update', [PenggunaController::class, 'update']);
     Route::get('/pengguna/{id}/delete', [PenggunaController::class, 'confirm']);
     Route::delete('/pengguna/{id}/delete', [PenggunaController::class, 'delete']);    
-    Route::post('/pengguna/import', [PenggunaController::class, 'import']);
-    Route::get('/pengguna/export_pdf', [PenggunaController::class, 'export_pdf']);
+    Route::post('/pengguna/import_ajax', [PenggunaController::class, 'import_ajax'])->name('pengguna.import.ajax');
+    Route::get('/pengguna/export_excel', [PenggunaController::class, 'export_excel'])->name('pengguna.export.excel');
+    Route::get('/pengguna/export_pdf', [PenggunaController::class, 'export_pdf'])->name('pengguna.export.pdf');
 
     Route::get('/draft_surat_tugas', [DraftSuratTugasController::class, 'index'])->name('draft_surat_tugas.index');
     Route::post('/draft_surat_tugas/list', [DraftSuratTugasController::class, 'list']);

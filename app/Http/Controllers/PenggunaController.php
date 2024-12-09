@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Hash;
 use PhpOffice\PhpSpreadsheet\Writer\Pdf;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
 
 
 class PenggunaController extends Controller
@@ -208,141 +210,135 @@ class PenggunaController extends Controller
                 // Kirimkan data user ke view
                 return view('pengguna.confirm', ['pengguna' => $pengguna]);
             }
-        
-    public function import(Request $request)
-    {
-        if ($request->ajax() || $request->wantsJson()) {
-            // Validasi file yang diupload
-            $rules = [
-                'file_pengguna' => ['required', 'mimes:xlsx', 'max:1024']
-            ];
-            $validator = Validator::make($request->all(), $rules);
+            public function import_ajax(Request $request) {
+                if ($request->ajax() || $request->wantsJson()) {
+                    $rules = [
+                        'file_pengguna' => ['required', 'mimes:xlsx', 'max:1024']
+                    ];
             
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Validasi Gagal',
-                    'msgField' => $validator->errors()
-                ]);
-            }
-    
-            // Mengambil file yang diupload
-            $file = $request->file('file_pengguna');
-            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader('Xlsx');
-            $reader->setReadDataOnly(true);
-            $spreadsheet = $reader->load($file->getRealPath());
-            $sheet = $spreadsheet->getActiveSheet();
-            $data = $sheet->toArray(null, false, true, true);
-    
-            // Menyiapkan data untuk dimasukkan ke dalam database
-            $insert = [];
-            if (count($data) > 1) {
-                foreach ($data as $baris => $value) {
-                    if ($baris > 1) {
-                        // Pastikan Anda memeriksa apakah file foto ada atau tidak, jika ada simpan ke folder
-                        $fotoProfil = $value['F']; // Misal file path foto profil, Anda bisa melakukan pengecekan dan upload gambar di sini
-                        $insert[] = [
-                            'id_jenis_pengguna' => $value['A'], // Kolom A
-                            'nama_pengguna' => $value['B'],      // Kolom B
-                            'username' => $value['C'],           // Kolom C
-                            'nip' => $value['D'],
-                            'email' => $value['E'],              // Kolom E
-                        ];
+                    $validator = Validator::make($request->all(), $rules);
+            
+                    if ($validator->fails()) {
+                        return response()->json([
+                            'status' => false,
+                            'message' => 'Validasi Gagal',
+                            'msgField' => $validator->errors()
+                        ]);
+                    }
+            
+                    $file = $request->file('file_pengguna');
+                    $reader = IOFactory::createReader('Xlsx');
+                    $reader->setReadDataOnly(true);
+                    $spreadsheet = $reader->load($file->getRealPath());
+                    $sheet = $spreadsheet->getActiveSheet();
+            
+                    $data = $sheet->toArray(null, false, true, true);
+            
+                    $insert = [];
+                    if (count($data) > 1) {
+                        foreach ($data as $baris => $value) {
+                            if ($baris > 1) {
+                                $insert[] = [
+                                    'id_jenis_pengguna' => $value['A'],
+                                    'nama_pengguna' => $value['B'],
+                                    'username' => $value['C'],
+                                    'password' => bcrypt($value['D']), // Hash password
+                                    'nip' => $value['E'],
+                                    'email' => $value['F'],
+                                    'created_at' => now(),
+                                ];
+                            }
+                        }
+            
+                        if (count($insert) > 0) {
+                            PenggunaModel::insertOrIgnore($insert);
+                        }
+            
+                        return response()->json([
+                            'status' => true,
+                            'message' => 'Data pengguna berhasil diimport'
+                        ]);
+                    } else {
+                        return response()->json([
+                            'status' => false,
+                            'message' => 'Tidak ada data yang diimport'
+                        ]);
                     }
                 }
-    
-                if (count($insert) > 0) {
-                    // Insert data ke dalam tabel 'pengguna' jika ada data yang valid
-                    PenggunaModel::insertOrIgnore($insert);
-                }
-    
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Data berhasil diimport'
-                ]);
-            } else {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Tidak ada data yang diimport'
-                ]);
+                return redirect('/');
             }
-        }
-        return redirect('/');
-    }    
-    public function export_excel()
-{
-    // Mengambil data pengguna dari model PenggunaModel
-    $pengguna = PenggunaModel::all();
+            
+            public function export_excel() {
+                $pengguna = PenggunaModel::select(
+                    'id_jenis_pengguna',
+                    'nama_pengguna',
+                    'username',
+                    'nip',
+                    'email'
+                )->get();
+            
+                $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+                $sheet = $spreadsheet->getActiveSheet();
+            
+                // Header kolom
+                $sheet->setCellValue('A1', 'No');
+                $sheet->setCellValue('B1', 'ID Jenis Pengguna');
+                $sheet->setCellValue('C1', 'Nama Pengguna');
+                $sheet->setCellValue('D1', 'Username');
+                $sheet->setCellValue('E1', 'NIP');
+                $sheet->setCellValue('F1', 'Email');
+            
+                $sheet->getStyle('A1:F1')->getFont()->setBold(true);
+            
+                // Isi data pengguna
+                $no = 1;
+                $baris = 2;
+                foreach ($pengguna as $value) {
+                    $sheet->setCellValue('A' . $baris, $no);
+                    $sheet->setCellValue('B' . $baris, $value->id_jenis_pengguna);
+                    $sheet->setCellValue('C' . $baris, $value->nama_pengguna);
+                    $sheet->setCellValue('D' . $baris, $value->username);
+                    $sheet->setCellValue('E' . $baris, $value->nip);
+                    $sheet->setCellValue('F' . $baris, $value->email);
+                    $baris++;
+                    $no++;
+                }
+            
+                foreach (range('A', 'F') as $columnID) {
+                    $sheet->getColumnDimension($columnID)->setAutoSize(true);
+                }
+            
+                $sheet->setTitle('Data Pengguna');
+            
+                $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+                $filename = 'Data Pengguna ' . date('Y-m-d H:i:s') . '.xlsx';
+            
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                header('Content-Disposition: attachment;filename="' . $filename . '"');
+                header('Cache-Control: max-age=0');
+            
+                $writer->save('php://output');
+                exit;
+            }
+            
 
-    // Membuat objek spreadsheet baru
-    $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
-    $sheet = $spreadsheet->getActiveSheet();
-    
-    // Set kolom header
-    $sheet->setCellValue('A1', 'ID Jenis Pengguna');
-    $sheet->setCellValue('B1', 'Nama Pengguna');
-    $sheet->setCellValue('C1', 'Username');
-    $sheet->setCellValue('D1', 'NIP');
-    $sheet->setCellValue('E1', 'Email');
-    $sheet->getStyle('A1:E1')->getFont()->setBold(true);
-
-    $baris = 2; // Dimulai dari baris kedua setelah header
-
-    // Loop melalui data pengguna dan masukkan ke dalam spreadsheet
-    foreach ($pengguna as $value) {
-        $sheet->setCellValue('A' . $baris, $value->id_jenis_pengguna);  // ID Jenis Pengguna
-        $sheet->setCellValue('B' . $baris, $value->nama_pengguna);      // Nama Pengguna
-        $sheet->setCellValue('C' . $baris, $value->username);           // Username
-        $sheet->setCellValue('D' . $baris, $value->nip);
-        $sheet->setCellValue('E' . $baris, $value->email);              // Email
-
-        $baris++;
-    }
-
-    // Menyesuaikan lebar kolom agar otomatis
-    foreach (range('A', 'E') as $columnID) {
-        $sheet->getColumnDimension($columnID)->setAutoSize(true);
-    }
-
-    // Memberi nama file sheet
-    $sheet->setTitle('Data Pengguna');
-
-    // Menyimpan file Excel
-    $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
-    $filename = 'Data_Pengguna_' . date('Y-m-d_H-i-s') . '.xlsx';
-
-    // Mengatur header HTTP untuk pengunduhan file Excel
-    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    header('Content-Disposition: attachment; filename="' . $filename . '"');
-    header('Cache-Control: max-age=0');
-    header('Cache-Control: max-age=1');
-    header('Expires: Mon, 25 Jul 1997 05:00:00 GMT');
-    header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-    header('Cache-Control: cache, must-revalidate');
-    header('Pragma: public');
-
-    // Menyimpan file ke output PHP
-    $writer->save('php://output');
-    exit;
-}
-public function export_pdf()
-{
-    // Mengambil data pengguna dari model PenggunaModel
-    $pengguna = PenggunaModel::select('id_jenis_pengguna', 'nama_pengguna', 'username', 'email')
-        ->orderBy('id_jenis_pengguna')  // Anda bisa sesuaikan pengurutan jika diperlukan
-        ->get();
-
-    // Menyiapkan data untuk view
-    $pdf = Pdf::loadView('pengguna.export_pdf', ['pengguna' => $pengguna]);
-
-    // Mengatur ukuran kertas A4 dengan orientasi portrait
-    $pdf->setPaper('a4', 'portrait');
-
-    // Menyajikan file PDF untuk diunduh dengan nama yang dinamis
-    return $pdf->stream('Data Pengguna ' . date('Y-m-d H:i:s') . '.pdf');
-}
-
-
+            public function export_pdf() {
+                $pengguna = PenggunaModel::select(
+                    'id_jenis_pengguna',
+                    'nama_pengguna',
+                    'username',
+                    'nip',
+                    'email'
+                )->orderBy('nama_pengguna')->get();
+            
+                $pdf = Pdf::loadView('pengguna.export_pdf', ['pengguna' => $pengguna]);
+            
+                $pdf->setPaper('a4', 'portrait');
+                $pdf->setOption("isRemoteEnabled", true);
+            
+                return $pdf->stream('Data Pengguna ' . date('Y-m-d H:i:s') . '.pdf');
+            }
+            
 }
 
 
