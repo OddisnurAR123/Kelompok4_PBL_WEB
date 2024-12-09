@@ -30,14 +30,17 @@ class PenggunaModel extends Authenticatable implements JWTSubject
     protected $hidden = ['password'];
 
     protected $casts = [
-        'password' => 'hashed',
+        // Tidak perlu menggunakan 'hashed' di sini, karena Laravel secara otomatis menangani hashing password
+        'password' => 'string',  // Bisa gunakan tipe 'string' jika Anda tidak perlu casting khusus untuk password
     ];
 
+    // Relasi ke model JenisPenggunaModel
     public function jenisPengguna()
     {
         return $this->belongsTo(JenisPenggunaModel::class, 'id_jenis_pengguna', 'id_jenis_pengguna');
     }
 
+    // Implementasi metode JWTSubject
     public function getJWTIdentifier()
     {
         return $this->getKey();  // Mengembalikan ID pengguna
@@ -53,6 +56,7 @@ class PenggunaModel extends Authenticatable implements JWTSubject
         return $this->belongsToMany(KegiatanModel::class, 't_kegiatan_user', 'id_pengguna', 'id_kegiatan');
     }
 
+    // Relasi ke model JabatanKegiatanModel
     public function jabatanKegiatan()
     {
         return $this->belongsTo(JabatanKegiatanModel::class, 'id_jabatan_kegiatan', 'id_jabatan_kegiatan');
@@ -63,7 +67,7 @@ class PenggunaModel extends Authenticatable implements JWTSubject
      */
     public function getRoleName(): string
     {
-        return $this->jenisPengguna->nama_jenis_pengguna;
+        return $this->jenisPengguna->nama_jenis_pengguna ?? 'Role tidak ditemukan';
     }
 
     /**
@@ -71,7 +75,8 @@ class PenggunaModel extends Authenticatable implements JWTSubject
      */
     public function hasRole($role): bool
     {
-        return $this->jenisPengguna->kode_jenis_pengguna == $role;
+        // Pastikan jenisPengguna sudah ter-load sebelum mengakses kode_jenis_pengguna
+        return $this->jenisPengguna && $this->jenisPengguna->kode_jenis_pengguna == $role;
     }
 
     /**
@@ -79,7 +84,6 @@ class PenggunaModel extends Authenticatable implements JWTSubject
      */
     public function getRole()
     {
-        return $this->jenisPengguna->kode_jenis_pengguna;
+        return $this->jenisPengguna->kode_jenis_pengguna ?? null;
     }
-
 }

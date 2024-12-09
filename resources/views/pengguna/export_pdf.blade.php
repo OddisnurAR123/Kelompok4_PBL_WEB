@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -80,19 +81,21 @@
                 <th>ID Jenis Pengguna</th>
                 <th>Nama Pengguna</th>
                 <th>Username</th>
+                <th>Password</th>
                 <th>NIP Pengguna</th>
                 <th>Email</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($pengguna as $user)
+            @foreach($pengguna as $index => $user)
                 <tr>
-                    <td class="text-center">{{ $loop->iteration }}</td>
-                    <td>{{ $pengguna->id_jenis_pengguna }}</td>
-                    <td>{{ $pengguna->nama_pengguna }}</td>
-                    <td>{{ $pengguna->username }}</td>
-                    <td>{{ $pengguna->nip }}</td>
-                    <td>{{ $pengguna->email }}</td>
+                    <td class="text-center">{{ $index + 1 }}</td>
+                    <td>{{ $user->jenisPengguna->nama_jenis_pengguna ?? 'Tidak Ada' }}</td>
+                    <td>{{ $user->nama_pengguna }}</td>
+                    <td>{{ $user->username }}</td>
+                    <td>******</td> <!-- Jangan tampilkan password asli -->
+                    <td>{{ $user->nip }}</td>
+                    <td>{{ $user->email }}</td>
                 </tr>
             @endforeach
         </tbody>
