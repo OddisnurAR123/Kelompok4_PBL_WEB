@@ -39,6 +39,7 @@ Route::get('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::post('/login', [AuthController::class, 'postlogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 
+
 //route yang memerlukan autentikasi
 Route::middleware(['auth'])->group(function(){
     Route::get('/dashboard', [WelcomeController::class, 'index']);
