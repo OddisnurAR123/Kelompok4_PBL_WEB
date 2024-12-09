@@ -14,6 +14,8 @@ use Barryvdh\DomPDF\Facade as PDF;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Barryvdh\DomPDF\PDF as DomPDFPDF;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+
 
 class AgendaKegiatanController extends Controller
 {

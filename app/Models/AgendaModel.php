@@ -33,7 +33,13 @@ class AgendaModel extends Model
     public function kegiatanUser() {
         return $this->belongsTo(KegiatanUser::class, 'id_pengguna', 'id_pengguna');
     }
-    
+
+    // Relasi dengan DetailAgenda
+    public function detailAgenda()
+    {
+        return $this->hasMany(DetailAgendaModel::class, 'id_agenda', 'id_agenda');
+    }
+
     public function pengguna() {
         return $this->belongsTo(PenggunaModel::class, 'id_pengguna', 'id_pengguna');
     }
