@@ -34,12 +34,7 @@ use App\Http\Controllers\KinerjaDosenController;
 // Pattern untuk parameter ID harus berupa angka
 Route::pattern('id', '[0-9]+');
 
-<<<<<<< HEAD
-Route::get('/', [AuthController::class, 'login'])->name('auth.login');
-=======
-// Routes untuk autentikasi login
 Route::get('/login', [AuthController::class, 'login'])->name('auth.login');
->>>>>>> b04e71e109d268f15a0b995b0cf4e3a10d3511ff
 Route::post('/login', [AuthController::class, 'postlogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 
@@ -49,12 +44,11 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/dashboard', [WelcomeController::class, 'index']);
         
     //route profil
-<<<<<<< HEAD
-    Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.profil');
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-    Route::get('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.password');
-    Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
+    Route::get('/profil', [ProfilController::class, 'showProfil'])->name('profil.profil');
+    Route::get('/profil/edit', [ProfilController::class, 'edit'])->name('profil.edit');
+    Route::post('/profil/update', [ProfilController::class, 'update'])->name('profil.update');
+    Route::get('/profil/change-password', [ProfilController::class, 'changePassword'])->name('profil.password');
+    Route::post('/profil/update-password', [ProfilController::class, 'updatePassword'])->name('profil.update-password');
 
     //route kegiatan
     Route::get('/kegiatan', [KegiatanController::class, 'index'])->name('kegiatan.index');
@@ -95,14 +89,6 @@ Route::middleware(['auth'])->group(function(){
 
     
     // Route::middleware(['checkRole:ADM'])->group(function () {
-=======
-    Route::get('/profil', [ProfilController::class, 'showProfil'])->name('profil.profil');
-    Route::get('/profil/edit', [ProfilController::class, 'edit'])->name('profil.edit');
-    Route::post('/profil/update', [ProfilController::class, 'update'])->name('profil.update');
-    Route::get('/profil/change-password', [ProfilController::class, 'changePassword'])->name('profil.password');
-    Route::post('/profil/update-password', [ProfilController::class, 'updatePassword'])->name('profil.update-password');
-});
->>>>>>> b04e71e109d268f15a0b995b0cf4e3a10d3511ff
         //route data master jenis pengguna
         Route::get('/jenis_pengguna', [JenisPenggunaController::class, 'index']);
         Route::post('/jenis_pengguna/list', [JenisPenggunaController::class, 'list']);
@@ -111,14 +97,14 @@ Route::middleware(['auth'])->group(function(){
         Route::post('/jenis_pengguna/store', [JenisPenggunaController::class, 'store']);
         Route::get('/jenis_pengguna/{id}/edit', [JenisPenggunaController::class, 'edit']);
         Route::post('/jenis_pengguna/{id}/update', [JenisPenggunaController::class, 'update']);
-<<<<<<< HEAD
         Route::get('/jenis_pengguna/{id}/delete', [JenisPenggunaController::class, 'delete']);
+        Route::post('/pengguna/import_ajax', [PenggunaController::class, 'import_ajax'])->name('pengguna.import.ajax');
+        Route::get('/pengguna/export_excel', [PenggunaController::class, 'export_excel'])->name('pengguna.export.excel');
+        Route::get('/pengguna/export_pdf', [PenggunaController::class, 'export_pdf'])->name('pengguna.export.pdf');
     // });
 
     // Route::middleware(['checkRole:ADM'])->group(function () {
-=======
 
->>>>>>> b04e71e109d268f15a0b995b0cf4e3a10d3511ff
         //route data master kategori pengguna
         Route::get('/kategori_kegiatan', [KategoriKegiatanController::class, 'index'])->name('kategori_kegiatan.index');
         Route::post('/kategori_kegiatan/list', [KategoriKegiatanController::class, 'list']);
@@ -129,13 +115,11 @@ Route::middleware(['auth'])->group(function(){
         Route::put('/kategori_kegiatan/{id}/update', [KategoriKegiatanController::class, 'update']);
         Route::get('/kategori_kegiatan/{id}/delete', [KategoriKegiatanController::class, 'confirm']);
         Route::delete('/kategori_kegiatan/{id}/delete', [KategoriKegiatanController::class, 'delete']);
-<<<<<<< HEAD
+
     // });
     
     // Route::middleware(['checkRole:ADM'])->group(function () {
-=======
-        
->>>>>>> b04e71e109d268f15a0b995b0cf4e3a10d3511ff
+
         //route data master jabatan kegiatan
         Route::get('/jabatan_kegiatan', [JabatanKegiatanController::class, 'index']);
         Route::post('/jabatan_kegiatan/list', [JabatanKegiatanController::class, 'list']);
@@ -147,13 +131,11 @@ Route::middleware(['auth'])->group(function(){
         Route::put('/jabatan_kegiatan/{id}/update', [JabatanKegiatanController::class, 'update']);
         Route::get('/jabatan_kegiatan/{id}/delete', [JabatanKegiatanController::class, 'confirm']);
         Route::delete('/jabatan_kegiatan/{id}/delete', [JabatanKegiatanController::class, 'delete']);
-<<<<<<< HEAD
+
     // });
 
     // Route::middleware(['checkRole:ADM'])->group(function () {
-=======
 
->>>>>>> b04e71e109d268f15a0b995b0cf4e3a10d3511ff
         //route data master pengguna
         Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
         Route::post('/pengguna/list', [PenggunaController::class, 'list']);
@@ -166,7 +148,7 @@ Route::middleware(['auth'])->group(function(){
         Route::delete('/pengguna/{id}/delete', [PenggunaController::class, 'delete']);    
         Route::post('/pengguna/import', [PenggunaController::class, 'import']);
         Route::get('/pengguna/export_pdf', [PenggunaController::class, 'export_pdf']);
-<<<<<<< HEAD
+
     // });
 
     // Route::middleware(['checkRole:ADM,PIM'])->group(function () {
@@ -183,7 +165,6 @@ Route::middleware(['auth'])->group(function(){
     // });
         
     // Route::middleware(['checkRole:DSN'])->group(function () {
-=======
 
         //route kegiatan
         Route::get('/kegiatan', [KegiatanController::class, 'index'])->name('kegiatan.index');
@@ -211,7 +192,6 @@ Route::middleware(['auth'])->group(function(){
         Route::get('/detail_kegiatan/export_excel', [DetailKegiatanController::class, 'export_excel'])->name('detail_kegiatan.export_excel');
         Route::get('/detail_kegiatan/export_pdf', [DetailKegiatanController::class, 'export_pdf'])->name('detail_kegiatan.export_pdf');
 
->>>>>>> b04e71e109d268f15a0b995b0cf4e3a10d3511ff
         // Detail Agenda Routes
         Route::get('/detail_agenda', [DetailAgendaController::class, 'index'])->name('detail_agenda.index');
         Route::post('/detail_agenda/list', [DetailAgendaController::class, 'list']);
@@ -222,7 +202,7 @@ Route::middleware(['auth'])->group(function(){
         Route::put('/detail_agenda/update/{id_detail_agenda}', [DetailAgendaController::class, 'update'])->name('detail_agenda.update');
         Route::get('/detail_agenda/export_excel', [DetailAgendaController::class, 'export_excel'])->name('detail_agenda.export_excel');
         Route::get('/detail_agenda/export_pdf', [DetailAgendaController::class, 'export_pdf'])->name('detail_agenda.export_pdf');
-<<<<<<< HEAD
+
     // });
 
     // Route::middleware(['checkRole:DSN'])->group(function () {
@@ -242,7 +222,7 @@ Route::middleware(['auth'])->group(function(){
     // });
 
     // Route::middleware(['checkRole:PIM,DSN'])->group(function () {
-=======
+
 
         //route draft surat tugas
         Route::get('/draft_surat_tugas', [DraftSuratTugasController::class, 'index'])->name('draft_surat_tugas.index');
@@ -295,19 +275,19 @@ Route::middleware(['auth'])->group(function(){
         Route::get('/pengguna/export_excel', [PenggunaController::class, 'export_excel'])->name('pengguna.export.excel');
         Route::get('/pengguna/export_pdf', [PenggunaController::class, 'export_pdf'])->name('pengguna.export.pdf');
 
->>>>>>> b04e71e109d268f15a0b995b0cf4e3a10d3511ff
+
         //route kegiatan non jti
         Route::get('/kegiatan_eksternal', [KegiatanEksternalController::class, 'index'])->name('kegiatan_eksternal.index');
-<<<<<<< HEAD
+
         Route::post('/kegiatan_eksternal/list', [KegiatanEksternalController::class, 'list']);
         Route::get('/kegiatan_eksternal/create', [KegiatanEksternalController::class, 'create'])->name('kegiatan_eksternal.create'); //semua
         Route::post('/kegiatan_eksternal/store', [KegiatanEksternalController::class, 'store'])->name('kegiatan_eksternal.store'); //semua
         
     // });
-=======
+
         Route::post('kegiatan_eksternal/list', [KegiatanEksternalController::class, 'list']);
->>>>>>> b04e71e109d268f15a0b995b0cf4e3a10d3511ff
 
     // Route logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});
  
