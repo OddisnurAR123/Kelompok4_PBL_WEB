@@ -77,6 +77,12 @@
                     <p>Kegiatan</p>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{{ url('/profil') }}" class="nav-link {{ ($activeMenu == 'profil') ? 'active' : '' }}" style="color: {{ ($activeMenu == 'profil') ? '#3b82f6' : '#ffffff' }};">
+                    <i class="nav-icon fas fa-tasks"></i>
+                    <p>Profil</p>
+                </a>
+            </li>
         </ul>
     </div>
 

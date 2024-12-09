@@ -40,7 +40,7 @@ Route::post('/login', [AuthController::class, 'postlogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 
 //route yang memerlukan autentikasi
-Route::middleware(['auth'])->group(function(){
+//Route::middleware(['auth'])->group(function(){
     Route::get('/dashboard', [WelcomeController::class, 'index']);
         
     //route profil
@@ -49,7 +49,7 @@ Route::middleware(['auth'])->group(function(){
     Route::post('/profil/update', [ProfilController::class, 'update'])->name('profil.update');
     Route::get('/profil/change-password', [ProfilController::class, 'changePassword'])->name('profil.password');
    Route::post('/profil/update-password', [ProfilController::class, 'updatePassword'])->name('profil.update-password');
-});
+//});
    //Route::middleware(['authorize:ADM, PIM, DSN'])->group(function(){
     //route profill
 // Route untuk Profil
@@ -59,14 +59,14 @@ Route::middleware(['auth'])->group(function(){
 //Route::get('/profil/password', [ProfilController::class, 'changePassword'])->name('profil.changePassword');
 //Route::post('/profil/update-password', [ProfilController::class, 'updatePassword'])->name('profil.updatePassword');
 //});
-    Route::middleware(['authorize:ADM,PIM'])->group(function () {
+    //Route::middleware(['authorize:ADM,PIM'])->group(function () {
     //route statistik kinerja
-    Route::get('/kinerja-dosen', [KinerjaDosenController::class, 'index'])->name('kinerja.dosen'); //semua
-    });
+   // Route::get('/kinerja-dosen', [KinerjaDosenController::class, 'index'])->name('kinerja.dosen'); //semua
+    //});
     
     //Route::middleware(['authorize:ADM'])->group(function () {
 
-    Route::middleware(['authorize:ADM'])->group(function(){
+   // Route::middleware(['authorize:ADM'])->group(function(){
         //route data master jenis pengguna
         Route::get('/jenis_pengguna', [JenisPenggunaController::class, 'index']);
         Route::post('/jenis_pengguna/list', [JenisPenggunaController::class, 'list']);
@@ -101,6 +101,17 @@ Route::middleware(['auth'])->group(function(){
         Route::delete('/jabatan_kegiatan/{id}/delete', [JabatanKegiatanController::class, 'delete']);
 
         //route data master pengguna
+        //Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
+        //Route::post('/pengguna/list', [PenggunaController::class, 'list']);
+        //Route::get('/pengguna/{id}/show', [PenggunaController::class, 'show'])->name('pengguna.show');
+        //Route::get('/pengguna/create', [PenggunaController::class, 'create']);
+       // Route::post('/pengguna/store', [PenggunaController::class, 'store'])->name('pengguna.store');
+        //Route::get('/pengguna/{id}/edit', [PenggunaController::class, 'edit'])->name('pengguna.edit');
+       // Route::put('/pengguna/{id}/update', [PenggunaController::class, 'update']);
+       // Route::get('/pengguna/{id}/delete', [PenggunaController::class, 'confirm']);
+       // Route::delete('/pengguna/{id}/delete', [PenggunaController::class, 'delete']);    
+        //Route::post('/pengguna/import', [PenggunaController::class, 'import']);
+        //Route::get('/pengguna/export_pdf', [PenggunaController::class, 'export_pdf']);
         Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
         Route::post('/pengguna/list', [PenggunaController::class, 'list']);
         Route::get('/pengguna/{id}/show', [PenggunaController::class, 'show'])->name('pengguna.show');
@@ -110,8 +121,9 @@ Route::middleware(['auth'])->group(function(){
         Route::put('/pengguna/{id}/update', [PenggunaController::class, 'update']);
         Route::get('/pengguna/{id}/delete', [PenggunaController::class, 'confirm']);
         Route::delete('/pengguna/{id}/delete', [PenggunaController::class, 'delete']);    
-        Route::post('/pengguna/import', [PenggunaController::class, 'import']);
-        Route::get('/pengguna/export_pdf', [PenggunaController::class, 'export_pdf']);
+        Route::post('/pengguna/import_ajax', [PenggunaController::class, 'import_ajax'])->name('pengguna.import.ajax');
+        Route::get('/pengguna/export_excel', [PenggunaController::class, 'export_excel'])->name('pengguna.export.excel');
+        Route::get('/pengguna/export_pdf', [PenggunaController::class, 'export_pdf'])->name('pengguna.export.pdf');
 
         //route kegiatan
         Route::get('/kegiatan/create', [KegiatanController::class, 'create'])->name('kegiatan.create'); //adm
@@ -144,11 +156,11 @@ Route::middleware(['auth'])->group(function(){
         //route statistik kinerja
         //Route::get('/kinerja-dosen', [KinerjaDosenController::class, 'index'])->name('kinerja.dosen'); //semua
 
-     });
+    // });
     
     //Route::middleware(['authorize:DSN'])->group(function(){
         
-    Route::middleware(['authorize:ADM,PIM,DSN'])->group(function () {
+   // Route::middleware(['authorize:ADM,PIM,DSN'])->group(function () {
     // Route::middleware(['authorize:DSN'])->group(function(){
         //route detail kegiatan
         Route::get('/detail_kegiatan', [DetailKegiatanController::class, 'index'])->name('detail_kegiatan.index'); //semua pic
@@ -160,7 +172,7 @@ Route::middleware(['auth'])->group(function(){
         Route::put('/detail_kegiatan/update/{id_detail_kegiatan}', [DetailKegiatanController::class, 'update'])->name('detail_kegiatan.update'); //dosen
         Route::get('/detail_kegiatan/export_excel', [DetailKegiatanController::class, 'export_excel'])->name('detail_kegiatan.export_excel'); //dosen
         Route::get('/detail_kegiatan/export_pdf', [DetailKegiatanController::class, 'export_pdf'])->name('detail_kegiatan.export_pdf'); //dosen
-    });
+    //});
         //Detail Kegiatan Routes
         Route::get('/detail_kegiatan', [DetailKegiatanController::class, 'index'])->name('detail_kegiatan.index');
         Route::post('/detail_kegiatan/list', [DetailKegiatanController::class, 'list']);
@@ -172,7 +184,7 @@ Route::middleware(['auth'])->group(function(){
         Route::get('/detail_kegiatan/export_excel', [DetailKegiatanController::class, 'export_excel'])->name('detail_kegiatan.export_excel');
         Route::get('/detail_kegiatan/export_pdf', [DetailKegiatanController::class, 'export_pdf'])->name('detail_kegiatan.export_pdf');
 
-   Route::middleware(['authorize:DSN'])->group(function () {
+   //Route::middleware(['authorize:DSN'])->group(function () {
 
 
         // Detail Kegiatan Routes
@@ -213,9 +225,9 @@ Route::middleware(['auth'])->group(function(){
         Route::post('/agenda/import', [KegiatanController::class, 'import'])->name('agenda.import'); //dos
         Route::get('/agenda/export_excel', [KegiatanController::class, 'export_excel'])->name('agenda.export_excel'); //dos
         Route::get('/agenda/export_pdf', [KegiatanController::class, 'export_pdf'])->name('agenda.export_pdf'); //dos
-    });
+    //});
 
-    Route::middleware(['authorize:DSN, PIM'])->group(function(){ 
+   // Route::middleware(['authorize:DSN, PIM'])->group(function(){ 
         //route notifikasi
         Route::get('/', [WelcomeController::class, 'index'])->name('dashboard');
         Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
@@ -234,25 +246,12 @@ Route::middleware(['auth'])->group(function(){
         Route::get('/agenda/export_excel', [KegiatanController::class, 'export_excel'])->name('agenda.export_excel');
         Route::get('/agenda/export_pdf', [KegiatanController::class, 'export_pdf'])->name('agenda.export_pdf');
 
-        Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
-        Route::post('/pengguna/list', [PenggunaController::class, 'list']);
-        Route::get('/pengguna/{id}/show', [PenggunaController::class, 'show'])->name('pengguna.show');
-        Route::get('/pengguna/create', [PenggunaController::class, 'create']);
-        Route::post('/pengguna/store', [PenggunaController::class, 'store'])->name('pengguna.store');
-        Route::get('/pengguna/{id}/edit', [PenggunaController::class, 'edit'])->name('pengguna.edit');
-        Route::put('/pengguna/{id}/update', [PenggunaController::class, 'update']);
-        Route::get('/pengguna/{id}/delete', [PenggunaController::class, 'confirm']);
-        Route::delete('/pengguna/{id}/delete', [PenggunaController::class, 'delete']);    
-        Route::post('/pengguna/import_ajax', [PenggunaController::class, 'import_ajax'])->name('pengguna.import.ajax');
-        Route::get('/pengguna/export_excel', [PenggunaController::class, 'export_excel'])->name('pengguna.export.excel');
-        Route::get('/pengguna/export_pdf', [PenggunaController::class, 'export_pdf'])->name('pengguna.export.pdf');
-
         //route kegiatan non jti
         Route::get('/kegiatan_eksternal/create', [KegiatanEksternalController::class, 'create'])->name('kegiatan_eksternal.create'); //semua
         Route::post('/kegiatan_eksternal/store', [KegiatanEksternalController::class, 'store'])->name('kegiatan_eksternal.store'); //semua
         Route::get('/kegiatan_eksternal', [KegiatanEksternalController::class, 'index'])->name('kegiatan_eksternal.index');
         Route::post('kegiatan_eksternal/list', [KegiatanEksternalController::class, 'list']);
-    });
+   // });
 
     // Route logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

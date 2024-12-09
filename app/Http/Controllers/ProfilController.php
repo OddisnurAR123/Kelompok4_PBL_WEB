@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\PenggunaModel; // Model untuk m_pengguna
+use App\Models\PenggunaModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -13,11 +13,11 @@ class ProfilController extends Controller
     public function showProfil()
     {
         $user = PenggunaModel::where('id_pengguna', Auth::id())->first();
-
+    
         if (!$user) {
             return redirect()->route('login')->withErrors('Anda harus login terlebih dahulu.');
         }
-
+    
         $breadcrumb = (object) [
             'title' => 'Profile',
             'list' => [
@@ -26,20 +26,19 @@ class ProfilController extends Controller
                 'Profil'
             ]
         ];
-
+    
+        // Pastikan $breadcrumb dikirim ke view
         return view('profil.profil', compact('user', 'breadcrumb'));
     }
-
     // Mengupdate profil pengguna
     public function updateProfil(Request $request)
     {
         $request->validate([
-            'id_jenis_pengguna' => 'required|integer',
             'username' => 'required|string|max:255',
             'email' => 'required|email',
             'nama_pengguna' => 'required|string|max:255',
-            'password' => 'nullable|min:6',
             'nip' => 'required|string|max:100',
+            'password' => 'nullable|min:6',
             'foto_profil' => 'nullable|image|max:2048'
         ]);
 
@@ -49,15 +48,16 @@ class ProfilController extends Controller
             $user->username = $request->input('username');
             $user->email = $request->input('email');
             $user->nama_pengguna = $request->input('nama_pengguna');
+            $user->nip = $request->input('nip');
 
             if ($request->filled('password')) {
-                $user->password = bcrypt($request->input('password'));
+                $user->password = Hash::make($request->input('password'));
             }
 
-            if ($request->hasFile('fotoprofil')) {
-                $fotoprofil = $request->file('fotoprofil');
-                $path = $fotoprofil->store('public/fotoprofil');
-                $user->fotoprofil = $path;
+            if ($request->hasFile('foto_profil')) {
+                $foto_profil = $request->file('foto_profil');
+                $path = $foto_profil->store('public/fotoprofil');
+                $user->foto_profil = $path;
             }
 
             $user->save();
@@ -67,37 +67,20 @@ class ProfilController extends Controller
 
         return redirect()->route('profil.profil')->withErrors('Terjadi kesalahan saat mengupdate profil.');
     }
+
     // Menampilkan halaman edit profil
     public function edit()
     {
-        // Ambil data pengguna yang sedang login
-        $user = PenggunaModel::where('id_pengguna', Auth::id())->first();
+        $user = PenggunaModel::find(Auth::id());
 
-        $breadcrumb = (object) [
-            'title' => 'Edit Profile',
-            'list' => [
-                (object) ['label' => 'Profile', 'url' => route('profil.edit')],
-                'Edit'
-            ]
-        ];
+        if (!$user) {
+            return redirect()->route('login')->withErrors('Pengguna tidak ditemukan.');
+        }
 
-        return view('profil.edit', compact('user', 'breadcrumb'));
-    }
-    // Menampilkan halaman ganti password
-    public function changePassword()
-    {
-        $breadcrumb = (object) [
-            'title' => 'Ganti Password',
-            'list' => [
-                (object) ['url' => route('profile.profil'), 'label' => 'Profile'],
-                'Ganti Password'
-            ]
-        ];
-
-        return view('profil.password', compact('breadcrumb'));
+        return view('profil.edit', compact('user'));
     }
 
-    // Memperbarui password pengguna
+    // Mengubah password
     public function updatePassword(Request $request)
     {
         $request->validate([
@@ -105,14 +88,12 @@ class ProfilController extends Controller
             'new_password' => 'required|string|min:6|confirmed',
         ]);
 
-        $user = PenggunaModel::where('id_pengguna', Auth::id())->first();
+        $user = PenggunaModel::find(Auth::id());
 
-        // Cek apakah password lama benar
         if (!Hash::check($request->current_password, $user->password)) {
             return back()->withErrors(['current_password' => 'Password lama salah']);
         }
 
-        // Update password baru
         $user->password = Hash::make($request->new_password);
         $user->save();
 

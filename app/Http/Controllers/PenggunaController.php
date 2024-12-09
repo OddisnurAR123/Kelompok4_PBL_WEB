@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 
-
 class PenggunaController extends Controller
 {
     public function index()
@@ -211,6 +210,11 @@ class PenggunaController extends Controller
                 // Kirimkan data user ke view
                 return view('pengguna.confirm', ['pengguna' => $pengguna]);
             }
+            public function edit_profile()
+            {
+                return view('profil.profil', ['user' => auth()->user()]);
+            }
+        
             public function import() 
             { 
                 return view('pengguna.import'); 

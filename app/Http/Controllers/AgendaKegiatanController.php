@@ -114,12 +114,12 @@ class AgendaKegiatanController extends Controller
                 'nama_agenda' => 'required|string|max:255',
                 'id_kegiatan' => 'required|exists:t_kegiatan,id_kegiatan',
                 'tempat_agenda' => 'required|string|max:255',
-                'id_pengguna' => 'required|exists:t_kegiatan_user,id_pengguna',
+                'id_pengguna' => 'nullable|exists:t_kegiatan_user,id_pengguna',
                 'bobot_anggota' => 'required|numeric|min:0',
                 'deskripsi' => 'nullable|string',
-                'tanggal_agenda' => 'required|date_format:Y-m-d\TH:i',
+                'tanggal_agenda' => 'required|date|date_format:Y-m-d\TH:i',
             ];
-
+            
             $validated = $request->validate($rules);
             try {
                 AgendaModel::create($validated);
@@ -161,12 +161,12 @@ public function update(Request $request, $id_agenda)
         'nama_agenda' => 'required|string|max:255',
         'id_kegiatan' => 'required|exists:t_kegiatan,id_kegiatan',
         'tempat_agenda' => 'required|string|max:255',
-        'id_pengguna' => 'required|exists:t_kegiatan_user,id_pengguna',
+        'id_pengguna' => 'nullable|exists:t_kegiatan_user,id_pengguna',
         'bobot_anggota' => 'required|numeric|min:0',
         'deskripsi' => 'nullable|string',
         'tanggal_agenda' => 'required|date|date_format:Y-m-d\TH:i',
     ];
-
+    
     $validator = Validator::make($request->all(), $rules);
 
     if ($validator->fails()) {
