@@ -263,10 +263,12 @@ public function edit($id) {
     public function delete(Request $request, $id)
     {
         if ($request->ajax() || $request->wantsJson()) {
-            $kegiatan = KegiatanModel::find($id);
-
+            $kegiatan = KegiatanModel::with('kategoriKegiatan', 'users')->find($id); // Pastikan relasi 'users' sudah didefinisikan
+            
             if ($kegiatan) {
-                $kegiatan->delete();
+                $kegiatan->users()->detach(); // Menghapus data di tabel pivot jika relasi menggunakan `belongsToMany`
+                $kegiatan->delete(); // Hapus data utama
+                
                 return response()->json([
                     'status' => true,
                     'message' => 'Data berhasil dihapus',

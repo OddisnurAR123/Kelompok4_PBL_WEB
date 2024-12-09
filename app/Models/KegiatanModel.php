@@ -85,5 +85,10 @@ class KegiatanModel extends Model
     {
         return $this->hasMany(DetailAgendaModel::class, 'id_kegiatan');
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 't_kegiatan_user', 'id_kegiatan', 'id_kegiatan_user');
+    }
     
 }

@@ -16,7 +16,7 @@
         </div>
     </div>
 @else
-    <form action="{{ url('/kegiatan/' . $kegiatan->id_kegiatan . '/delete_ajax') }}" method="POST" id="form-delete">
+    <form action="{{ url('/kegiatan/' . $kegiatan->id_kegiatan . '/delete') }}" method="POST" id="form-delete">
         @csrf
         @method('DELETE')
         <div id="modal-master" class="modal-dialog modal-lg" role="document">
@@ -87,6 +87,10 @@
                                     icon: 'success',
                                     title: 'Berhasil',
                                     text: response.message
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        location.reload();
+                                    }
                                 });
                                 tableKegiatan.ajax.reload();
                             } else {

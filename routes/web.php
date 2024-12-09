@@ -59,7 +59,6 @@ Route::middleware(['auth'])->group(function(){
         Route::post('/jenis_pengguna/store', [JenisPenggunaController::class, 'store']);
         Route::get('/jenis_pengguna/{id}/edit', [JenisPenggunaController::class, 'edit']);
         Route::post('/jenis_pengguna/{id}/update', [JenisPenggunaController::class, 'update']);
-        Route::get('/jenis_pengguna/{id}/delete', [JenisPenggunaController::class, 'delete']);
 
         //route data master kategori pengguna
         Route::get('/kategori_kegiatan', [KategoriKegiatanController::class, 'index'])->name('kategori_kegiatan.index');
@@ -105,8 +104,8 @@ Route::middleware(['auth'])->group(function(){
         Route::post('/kegiatan/store', [KegiatanController::class, 'store'])->name('kegiatan.store');
         Route::get('/kegiatan/{id}/edit', [KegiatanController::class, 'edit'])->name('kegiatan.edit');
         Route::put('/kegiatan/update/{id_kegiatan}', [KegiatanController::class, 'update'])->name('kegiatan.update');
-        Route::get('/kegiatan/{id}/delete', [KegiatanController::class, 'confirm'])->name('kegiatan.delete');
-        Route::delete('/kegiatan/{id}', [KegiatanController::class, 'delete'])->name('kegiatan.destroy');
+        Route::get('/kegiatan/{id}/delete', [KegiatanController::class, 'confirm']);
+        Route::delete('/kegiatan/{id}/delete', [KegiatanController::class, 'delete'])->name('kegiatan.delete');
         Route::get('/kegiatan/import', [KegiatanController::class, 'import'])->name('kegiatan.import');
         Route::post('/kegiatan/import_ajax', [KegiatanController::class, 'import_ajax'])->name('kegiatan.import.ajax');
         Route::get('/kegiatan/export_excel', [KegiatanController::class, 'export_excel'])->name('kegiatan.export.excel');
