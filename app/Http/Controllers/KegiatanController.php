@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\IOFactory; 
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class KegiatanController extends Controller
 {
@@ -287,10 +288,10 @@ class KegiatanController extends Controller
     public function import_ajax(Request $request) {
         if($request->ajax() || $request->wantsJson()){ 
             $rules = [ 
-                // validasi file harus xls atau xlsx, max 1MB 
+                // Validasi file harus xls atau xlsx, max 1MB 
                 'file_kegiatan' => ['required', 'mimes:xlsx', 'max:1024'] 
             ]; 
- 
+    
             $validator = Validator::make($request->all(), $rules); 
             if($validator->fails()){ 
                 return response()->json([ 
@@ -299,42 +300,45 @@ class KegiatanController extends Controller
                     'msgField' => $validator->errors() 
                 ]); 
             } 
- 
-            $file = $request->file('file_kegiatan');  // ambil file dari request 
- 
-            $reader = IOFactory::createReader('Xlsx');  // load reader file excel 
-            $reader->setReadDataOnly(true);             // hanya membaca data 
-            $spreadsheet = $reader->load($file->getRealPath()); // load file excel 
-            $sheet = $spreadsheet->getActiveSheet();    // ambil sheet yang aktif 
- 
-            $data = $sheet->toArray(null, false, true, true);   // ambil data excel 
- 
+    
+            $file = $request->file('file_kegiatan');  // Ambil file dari request 
+    
+            $reader = IOFactory::createReader('Xlsx');  // Load reader file excel 
+            $reader->setReadDataOnly(true);             // Hanya membaca data 
+            $spreadsheet = $reader->load($file->getRealPath()); // Load file excel 
+            $sheet = $spreadsheet->getActiveSheet();    // Ambil sheet yang aktif 
+    
+            $data = $sheet->toArray(null, false, true, true);   // Ambil data excel 
+    
             $insert = []; 
-            if(count($data) > 1){ // jika data lebih dari 1 baris 
+            if(count($data) > 1){ // Jika data lebih dari 1 baris 
                 foreach ($data as $baris => $value) { 
-                    if($baris > 1){ // baris ke 1 adalah header, maka lewati 
+                    if($baris > 1){ // Baris ke 1 adalah header, maka lewati 
+                        // Konversi tanggal mulai dan selesai dari format Excel ke format MySQL
+                        $tanggal_mulai = Date::excelToDateTimeObject($value['C'])->format('Y-m-d H:i:s');
+                        $tanggal_selesai = Date::excelToDateTimeObject($value['D'])->format('Y-m-d H:i:s');
+    
                         $insert[] = [ 
                             'kode_kegiatan' => $value['A'], 
                             'nama_kegiatan' => $value['B'], 
-                            'tanggal_mulai' => $value['C'], 
-                            'tanggal_selesai' => $value['D'], 
+                            'tanggal_mulai' => $tanggal_mulai, 
+                            'tanggal_selesai' => $tanggal_selesai, 
                             'periode' => $value['E'], 
                             'id_kategori_kegiatan' => $value['F'], 
-                            'created_at' => now(), 
                         ]; 
                     } 
                 } 
- 
+    
                 if(count($insert) > 0){ 
-                    // insert data ke database, jika data sudah ada, maka diabaikan 
-                    KegiatanModel::insertOrIgnore($insert);    
+                    // Insert data ke database
+                    KegiatanModel::insert($insert);    
                 } 
- 
+    
                 return response()->json([ 
                     'status' => true, 
                     'message' => 'Data berhasil diimport' 
                 ]); 
-            }else{ 
+            } else { 
                 return response()->json([ 
                     'status' => false, 
                     'message' => 'Tidak ada data yang diimport' 
