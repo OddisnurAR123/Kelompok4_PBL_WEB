@@ -85,74 +85,52 @@ class KegiatanController extends Controller
 
     public function store(Request $request)
     {
-        if ($request->ajax() || $request->wantsJson()) {
-            $validator = Validator::make($request->all(), [
-                'kode_kegiatan' => 'required|string|max:10|unique:t_kegiatan,kode_kegiatan',
-                'nama_kegiatan' => 'required|string|max:100',
-                'tanggal_mulai' => 'required|date',
-                'tanggal_selesai' => 'required|date',
-                'periode' => 'required|string|max:50',
-                'id_kategori_kegiatan' => 'required|exists:m_kategori_kegiatan,id_kategori_kegiatan',
-                'anggota.*.id_pengguna' => 'required|exists:m_pengguna,id_pengguna',
-                'anggota.*.id_jabatan_kegiatan' => 'required|exists:m_jabatan_kegiatan,id_jabatan_kegiatan',
+        // Validasi inputan
+        $validator = Validator::make($request->all(), [
+            'kode_kegiatan' => 'required|string|max:10|unique:t_kegiatan,kode_kegiatan',
+            'nama_kegiatan' => 'required|string|max:100',
+            'tanggal_mulai' => 'required|date',
+            'tanggal_selesai' => 'required|date',
+            'periode' => 'required|string|max:50',
+            'id_kategori_kegiatan' => 'required|exists:m_kategori_kegiatan,id_kategori_kegiatan',
+            'anggota.*.id_pengguna' => 'required|exists:m_pengguna,id_pengguna',
+            'anggota.*.id_jabatan_kegiatan' => 'required|exists:m_jabatan_kegiatan,id_jabatan_kegiatan',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validasi Gagal',
+                'msgField' => $validator->errors(),
             ]);
+        }
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Validasi Gagal',
-                    'msgField' => $validator->errors(),
-                ]);
-            }
+        // Menyimpan data kegiatan ke tabel t_kegiatan
+        $kegiatan = KegiatanModel::create($request->only(
+            'kode_kegiatan',
+            'nama_kegiatan',
+            'tanggal_mulai',
+            'tanggal_selesai',
+            'periode',
+            'id_kategori_kegiatan'
+        ));
 
-            try {
-                // Mulai transaksi
-                DB::beginTransaction();
-
-                // Menyimpan data kegiatan ke tabel t_kegiatan
-                $kegiatan = KegiatanModel::create($request->only(
-                    'kode_kegiatan',
-                    'nama_kegiatan',
-                    'tanggal_mulai',
-                    'tanggal_selesai',
-                    'periode',
-                    'id_kategori_kegiatan'
-                ));
-
-                // Menyimpan anggota ke tabel pivot t_kegiatan_user
-                if ($request->has('anggota') && is_array($request->anggota)) {
-                    foreach ($request->anggota as $anggota) {
-                        DB::table('t_kegiatan_user')->insert([
-                            'id_kegiatan' => $kegiatan->id_kegiatan,
-                            'id_pengguna' => $anggota['id_pengguna'],
-                            'id_jabatan_kegiatan' => $anggota['id_jabatan_kegiatan'],
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ]);
-                    }
-                }
-
-                // Commit transaksi
-                DB::commit();
-
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Data kegiatan berhasil disimpan',
-                ]);
-            } catch (\Exception $e) {
-                // Rollback jika terjadi kesalahan
-                DB::rollBack();
-
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+        // Menyimpan anggota ke tabel pivot t_kegiatan_user
+        if ($request->has('anggota') && is_array($request->anggota)) {
+            foreach ($request->anggota as $anggota) {
+                DB::table('t_kegiatan_user')->insert([
+                    'id_kegiatan' => $kegiatan->id_kegiatan,
+                    'id_pengguna' => $anggota['id_pengguna'],
+                    'id_jabatan_kegiatan' => $anggota['id_jabatan_kegiatan'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
             }
         }
 
         return response()->json([
-            'status' => false,
-            'message' => 'Request bukan AJAX.',
+            'status' => true,
+            'message' => 'Data kegiatan berhasil disimpan',
         ]);
     }
 
@@ -173,31 +151,31 @@ class KegiatanController extends Controller
 
 
     // Menampilkan form edit kegiatan via Ajax
-public function edit($id) {
-    // Mengambil data kegiatan
-    $kegiatan = KegiatanModel::findOrFail($id);
-    
-    // Mengambil kategori kegiatan
-    $kategoriKegiatan = KategoriKegiatanModel::all();
-    
-    // Mengambil pengguna dengan id_jenis_pengguna = 3
-    $pengguna = PenggunaModel::where('id_jenis_pengguna', 3)->get();
-    
-    // Mengambil data jabatan kegiatan
-    $jabatanKegiatan = JabatanKegiatanModel::all();
-    
-    // Menambahkan data pivot 'id_jabatan_kegiatan' ke pengguna yang terhubung dengan kegiatan
-    // Pastikan Anda sudah menambahkan relasi 'pengguna' di model Kegiatan
-    $kegiatan->load('pengguna'); // Menyertakan relasi pengguna dengan pivot data
+    public function edit($id) {
+        // Mengambil data kegiatan
+        $kegiatan = KegiatanModel::findOrFail($id);
+        
+        // Mengambil kategori kegiatan
+        $kategoriKegiatan = KategoriKegiatanModel::all();
+        
+        // Mengambil pengguna dengan id_jenis_pengguna = 3
+        $pengguna = PenggunaModel::where('id_jenis_pengguna', 3)->get();
+        
+        // Mengambil data jabatan kegiatan
+        $jabatanKegiatan = JabatanKegiatanModel::all();
+        
+        // Menambahkan data pivot 'id_jabatan_kegiatan' ke pengguna yang terhubung dengan kegiatan
+        // Pastikan Anda sudah menambahkan relasi 'pengguna' di model Kegiatan
+        $kegiatan->load('pengguna'); // Menyertakan relasi pengguna dengan pivot data
 
-    // Kirim data ke view
-    return view('kegiatan.edit', [
-        'kegiatan' => $kegiatan, 
-        'kategoriKegiatan' => $kategoriKegiatan, 
-        'pengguna' => $pengguna, 
-        'jabatanKegiatan' => $jabatanKegiatan
-    ]);
-}
+        // Kirim data ke view
+        return view('kegiatan.edit', [
+            'kegiatan' => $kegiatan, 
+            'kategoriKegiatan' => $kategoriKegiatan, 
+            'pengguna' => $pengguna, 
+            'jabatanKegiatan' => $jabatanKegiatan
+        ]);
+    }
 
 
     public function update(Request $request, $id)
