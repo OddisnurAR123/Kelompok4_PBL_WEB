@@ -4,9 +4,6 @@
       <li class="nav-item">
           <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
-          <a href="{{ url('/') }}" class="nav-link">Dashboard</a>
-      </li>
   </ul>
 
   <!-- Right navbar links -->
@@ -56,7 +53,7 @@
 
       <!-- User Profile Dropdown -->
       <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
             @if(Auth::user() && Auth::user()->foto_profil)
                 <img src="{{ asset('storage/' . Auth::user()->foto_profil) }}" 
                      alt="Profil Picture" 
@@ -72,7 +69,8 @@
                 <i class="fas fa-sign-out-alt mr-2"></i> Keluar
             </a>
         </div>
-    </li>    
+    </li>
+      
   </ul>
 </nav>
 
