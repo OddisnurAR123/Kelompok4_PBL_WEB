@@ -1,4 +1,3 @@
-@extends('layouts.template')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,14 +33,14 @@
                     x: {
                         title: {
                             display: true,
-                            text: 'Jumlah Kegiatan', // Label untuk sumbu X
+                            text: 'Jumlah Kegiatan',
                         },
                         beginAtZero: true,
                     },
                     y: {
                         title: {
                             display: true,
-                            text: 'Nama Pengguna', // Label untuk sumbu Y
+                            text: 'Nama Pengguna',
                         },
                     },
                 },
