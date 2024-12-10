@@ -28,12 +28,14 @@
                     </select>
                     <small id="error-id_kegiatan" class="text-danger"></small>
                 </div>
+            <!-- Dropdown Pengguna -->
+            <div class="form-group">
+                <label>Pilih Pengguna</label>
+                <select name="id_pengguna" id="id_pengguna" class="form-control">
+                    <option value="">-- Pilih Pengguna --</option>
+                </select>
+        </div>
 
-                <!-- Dropdown Pengguna -->
-                <div class="form-group">
-                    <label>Pilih Pengguna</label>
-                    <select name="id_pengguna" id="id_pengguna" class="form-control"></select>
-                </div>
                 <!-- Tempat Agenda -->
                 <div class="form-group">
                     <label>Tempat Agenda</label>
@@ -116,6 +118,7 @@
             return false;
         },
     });
+ });
 
     $("#id_kegiatan").on("change", function () {
         let idKegiatan = $(this).val();
@@ -123,29 +126,35 @@
 
         penggunaDropdown.empty().append('<option value="">-- Pilih Pengguna --</option>');
 
-        if (idKegiatan) {
-            $.ajax({
-                url: "{{ route('agenda.getPengguna') }}",
-                type: "GET",
-                data: { id_kegiatan: idKegiatan },
-                success: function (response) {
-                    response.forEach(function (user) {
-                        penggunaDropdown.append(
-                            `<option value="${user.id_pengguna}">${user.nama_pengguna}</option>`
-                        );
-                    });
-                },
-                error: function () {
-                    penggunaDropdown.append('<option value="">Data pengguna tidak tersedia</option>');
-                    Swal.fire({
-                        icon: "error",
-                        title: "Gagal",
-                        text: "Gagal memuat data pengguna.",
-                    });
-                },
-            });
-        }
-    });
+        $("#id_kegiatan").on("change", function () {
+    let idKegiatan = $(this).val();
+    let penggunaDropdown = $("#id_pengguna");
+
+    penggunaDropdown.empty().append('<option value="">-- Pilih Pengguna --</option>'); // Tambahkan opsi kosong
+
+    if (idKegiatan) {
+        $.ajax({
+            url: "{{ route('agenda.getPengguna') }}",
+            type: "GET",
+            data: { id_kegiatan: idKegiatan },
+            success: function (response) {
+                response.forEach(function (user) {
+                    penggunaDropdown.append(
+                        `<option value="${user.id_pengguna}">${user.nama_pengguna}</option>`
+                    );
+                });
+            },
+            error: function () {
+                penggunaDropdown.append('<option value="">Data pengguna tidak tersedia</option>');
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text: "Gagal memuat data pengguna.",
+                });
+            },
+        });
+    }
+});
 });
 
 </script>
