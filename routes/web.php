@@ -14,7 +14,7 @@ use App\Http\Controllers\DetailAgendaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\DraftSuratTugasController;
-use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TampilKegiatanController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\LoginController;
@@ -42,13 +42,15 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 //route yang memerlukan autentikasi
 // Route::middleware(['auth'])->group(function(){
     Route::get('/dashboard', [WelcomeController::class, 'index']);
-        
-    //route profil
-    Route::get('/profil', [ProfilController::class, 'showProfil'])->name('profil.profil');
-    Route::get('/profil/edit', [ProfilController::class, 'edit'])->name('profil.edit');
-    Route::post('/profil/update', [ProfilController::class, 'update'])->name('profil.update');
-    Route::get('/profil/change-password', [ProfilController::class, 'changePassword'])->name('profil.password');
-    Route::post('/profil/update-password', [ProfilController::class, 'updatePassword'])->name('profil.update-password');
+            
+    // Routes untuk halaman profil
+    Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
+    // Routes untuk ganti password
+    Route::get('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.changePassword');
+    Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
 
     //route kegiatan
     Route::get('/kegiatan', [KegiatanController::class, 'index'])->name('kegiatan.index');

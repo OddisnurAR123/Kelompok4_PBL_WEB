@@ -1,73 +1,115 @@
 @extends('layouts.template')
-
-@section('title', 'Statistik Kinerja Dosen') <!-- Menentukan judul halaman -->
-
-@section('content') <!-- Bagian untuk konten utama -->
-    <h1 style="text-align: center;">Statistik Kinerja Dosen</h1>
-
-    <!-- Tabel Kinerja Dosen -->
-    <table style="width: 80%; margin: 20px auto; border-collapse: collapse; border: 1px solid #ddd;">
-        <thead>
-            <tr style="background-color: #f4f4f4;">
-                <th style="padding: 10px; text-align: center;">Nama Pengguna</th>
-                <th style="padding: 10px; text-align: center;">Jumlah Kegiatan</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($dosenKegiatan as $dosen)
-                <tr>
-                    <td style="padding: 10px; text-align: center;">{{ $dosen->nama_pengguna }}</td>
-                    <td style="padding: 10px; text-align: center;">{{ $dosen->kegiatan_count }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-    <!-- Grafik Kinerja Dosen -->
-    <div style="width: 80%; margin: 40px auto;">
-        <canvas id="chart" width="400" height="200"></canvas>
+@section('content')
+<div class="card card-outline card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Statistik Kinerja Dosen</h3>
     </div>
+    <div class="card-body">
+        <!-- Tambahkan Grafik -->
+        <div class="chart-container" style="position: relative; height:400px;">
+            <canvas id="kinerjaChart"></canvas>
+        </div>
+    </div>
+</div>
 @endsection
 
-@section('scripts') <!-- Bagian untuk skrip tambahan -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const ctx = document.getElementById('chart').getContext('2d');
-        const chart = new Chart(ctx, {
+@push('css')
+<style>
+    /* Styling untuk membuat grafik lebih menarik */
+    .chart-container {
+        margin-top: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+</style>
+@endpush
+
+@push('js')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Ambil data dari controller
+        const chartData = @json($chartData);
+
+        const ctx = document.getElementById('kinerjaChart').getContext('2d');
+        const kinerjaChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: @json($dosenKegiatan->pluck('nama_pengguna')),
-                datasets: [{
-                    label: 'Jumlah Kegiatan',
-                    data: @json($dosenKegiatan->pluck('kegiatan_count')),
-                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
+                labels: chartData.labels,
+                datasets: chartData.datasets,
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false, // Untuk menjaga rasio tampilan grafik responsif
                 plugins: {
                     legend: {
                         display: true,
-                        position: 'top'
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14,
+                                family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                            },
+                            padding: 15
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.dataset.label + ': ' + tooltipItem.raw + ' Kegiatan';
+                            }
+                        },
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff'
                     }
                 },
                 scales: {
                     x: {
                         title: {
                             display: true,
-                            text: 'Nama Pengguna'
+                            text: 'Nama Dosen',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        },
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                size: 12
+                            },
+                            maxRotation: 45,
+                            minRotation: 45
                         }
                     },
                     y: {
-                        beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Jumlah Kegiatan'
+                            text: 'Total Kegiatan',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        },
+                        beginAtZero: true,
+                        ticks: {
+                            font: {
+                                size: 12
+                            }
                         }
-                    }
-                }
-            }
+                    },
+                },
+                animation: {
+                    duration: 1500,  // Durasi animasi untuk tampilan pertama grafik
+                    easing: 'easeOutBounce'
+                },
+            },
         });
-    </script>
-@endsection
+    });
+</script>
+@endpush
