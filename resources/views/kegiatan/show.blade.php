@@ -112,9 +112,9 @@
                 <h4 class="mt-4 d-flex justify-content-between">
                     Agenda Kegiatan
                     <!-- Tautan Tambah Agenda -->
-                    <a href="{{ route('agenda.index') }}" id="addAnggota" class="btn p-0 border-0 bg-transparent mt-3" title="Tambah Agenda">
+                    <a href="{{ route('agenda.create', ['id_kegiatan' => $kegiatan->id_kegiatan]) }}" id="addAgenda" class="btn p-0 border-0 bg-transparent mt-3" title="Tambah Agenda">
                         <i class="fas fa-plus text-primary"></i>
-                    </a>                    
+                    </a>                                   
                 </h4>
                 <table class="table table-bordered table-striped table-hover table-sm">
                     <thead>
@@ -143,20 +143,16 @@
                                 </td>
                                 <td>
                                     <!-- Link Detail -->
-                                    <a 
-                                        href="{{ url('/agenda/' . $agenda->id_agenda . '/show') }}" class="btn btn-info btn-sm">
+                                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="openModal('{{ url('/agenda/' . $agenda->id_agenda . '/show') }}')">
                                         <i class="fas fa-eye"></i>
                                     </a>
-
                                     <!-- Tombol Edit -->
-                                    <a 
-                                        href="{{ url('/agenda/' . $agenda->id_agenda . '/edit') }}" class="btn btn-warning btn-sm">
-                                        <i class="fas fa-edit"></i> 
+                                    <a href="javascript:void(0);" class="btn btn-warning btn-sm" onclick="openModal('{{ url('/agenda/' . $agenda->id_agenda . '/edit') }}')">
+                                        <i class="fas fa-edit"></i>
                                     </a>
                                     <!-- Tombol Hapus -->
-                                    <a 
-                                        href="{{ url('/agenda/' . $agenda->id_agenda . '/delete') }}" class="btn btn-danger btn-sm">
-                                        <i class="fas fa-trash"></i> 
+                                    <a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="openModal('{{ url('/agenda/' . $agenda->id_agenda . '/delete') }}')">
+                                        <i class="fas fa-trash"></i>
                                     </a>
                                     <!-- Tombol Upgrade -->
                                     <a href="{{ route('detail_agenda.upgrade', ['id_kegiatan' => $kegiatan->id_kegiatan, 'id_agenda' => $agenda->id_agenda]) }}" class="btn btn-primary btn-sm">
@@ -178,10 +174,39 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+    
+            <div class="modal-body" id="modalContent">
+                <div class="text-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
-
+<script>
+    function openModal(url) {
+        $('#modalContent').html('<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div></div>');
+        $('#crudModal').modal('show');
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function(response) {
+                $('#modalContent').html(response);
+            },
+            error: function(xhr) {
+                $('#modalContent').html('<div class="alert alert-danger">Terjadi kesalahan saat memuat data.</div>');
+            }
+        });
+    }
+</script>
 </body>
 </html>

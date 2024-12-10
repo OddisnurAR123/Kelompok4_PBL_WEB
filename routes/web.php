@@ -140,7 +140,7 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
     Route::get('/agenda', [AgendaKegiatanController::class, 'index'])->name('agenda.index');
     Route::post('/agenda/list', [AgendaKegiatanController::class, 'list']);
     Route::get('/agenda/{id}/show', [AgendaKegiatanController::class, 'show'])->name('agenda.show');
-    Route::get('/agenda/create', [AgendaKegiatanController::class, 'create']);
+    Route::get('/agenda/create/{id_kegiatan}', [AgendaKegiatanController::class, 'create'])->name('agenda.create');
     Route::get('/agenda/getPengguna', [AgendaKegiatanController::class, 'getPengguna'])->name('agenda.getPengguna');
     Route::post('/agenda/store', [AgendaKegiatanController::class, 'store'])->name('agenda.store');
     Route::get('/agenda/{id}/edit', [AgendaKegiatanController::class, 'edit'])->name('agenda.edit');

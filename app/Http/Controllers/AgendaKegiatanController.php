@@ -61,14 +61,10 @@ class AgendaKegiatanController extends Controller
             ->rawColumns(['aksi']) // Menandai kolom aksi sebagai HTML
             ->make(true); // Menghasilkan output JSON untuk DataTables
     }
-        public function create(Request $request)
-        {
-            // Mengambil data kegiatan dari tabel kegiatan
-            $kegiatan = KegiatanModel::select('id_kegiatan', 'nama_kegiatan')->get();
-
-            return view('agenda.create', compact('kegiatan'));
-        }
-
+    public function create($id_kegiatan)
+    {
+        return view('agenda.create', ['id_kegiatan' => $id_kegiatan]);
+    }    
         // Mengambil pengguna berdasarkan kegiatan yang dipilih
         public function getPengguna(Request $request)
         {
