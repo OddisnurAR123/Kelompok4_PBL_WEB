@@ -56,15 +56,18 @@ class DetailAgendaController extends Controller
             ->make(true);
     }
 
-    public function create(Request $request)
+    public function create($id_kegiatan, $id_agenda)
     {
-        $kegiatan = KegiatanModel::select('id_kegiatan', 'nama_kegiatan')->get();
-        
-        $agenda = [];
-        foreach ($kegiatan as $item) {
-            $agenda[$item->id_kegiatan] = $item->agenda;
+        // Ambil data kegiatan dan agenda berdasarkan ID
+        $kegiatan = KegiatanModel::find($id_kegiatan);
+        $agenda = AgendaModel::find($id_agenda);
+
+        // Pastikan data ditemukan sebelum melanjutkan
+        if (!$kegiatan || !$agenda) {
+            return redirect()->route('detail_agenda.create')->with('error', 'Kegiatan atau Agenda tidak ditemukan.');
         }
 
+        // Kirim data ke view
         return view('detail_agenda.create', compact('kegiatan', 'agenda'));
     }
   
@@ -194,5 +197,19 @@ class DetailAgendaController extends Controller
             'message' => 'Detail agenda berhasil diperbarui'
         ]);
     }
+    public function upgrade($id_kegiatan, $id_agenda)
+    {
+        // Cek apakah sudah ada detail untuk agenda tersebut
+        $detailAgenda = DetailAgendaModel::where('id_kegiatan', $id_kegiatan)
+                                        ->where('id_agenda', $id_agenda)
+                                        ->first();
 
+        // Jika detail agenda ada, arahkan ke halaman edit
+        if ($detailAgenda) {
+            return redirect()->route('detail_agenda.edit', ['id' => $detailAgenda->id_detail_agenda]);
+        }
+
+        // Jika detail agenda belum ada, arahkan ke halaman create
+        return redirect()->route('detail_agenda.create', ['id_kegiatan' => $id_kegiatan, 'id_agenda' => $id_agenda]);
+    }
 }

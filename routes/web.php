@@ -68,7 +68,7 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
     // Detail Kegiatan Routes
     Route::get('/detail_kegiatan', [DetailKegiatanController::class, 'index'])->name('detail_kegiatan.index');
     Route::post('/detail_kegiatan/list', [DetailKegiatanController::class, 'list']);
-    Route::get('/detail_kegiatan/create', [DetailKegiatanController::class, 'create'])->name('detail_kegiatan.create');
+    Route::get('/detail_agenda/create/{id_kegiatan}/{id_agenda}', [DetailAgendaController::class, 'create'])->name('detail_agenda.create');
     Route::post('/detail_kegiatan/store', [DetailKegiatanController::class, 'store'])->name('detail_kegiatan.store');
     Route::get('/detail_kegiatan/{id}/show', [DetailKegiatanController::class, 'show'])->name('detail_kegiatan.show');
     Route::get('/detail_kegiatan/{id}/edit', [DetailKegiatanController::class, 'edit'])->name('detail_kegiatan.edit');
@@ -79,13 +79,14 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
     // Detail Agenda Routes
     Route::get('/detail_agenda', [DetailAgendaController::class, 'index'])->name('detail_agenda.index');
     Route::post('/detail_agenda/list', [DetailAgendaController::class, 'list']);
-    Route::get('/detail_agenda/create', [DetailAgendaController::class, 'create'])->name('detail_agenda.create');
+    Route::get('/detail_agenda/create/{id_kegiatan}/{id_agenda}', [DetailAgendaController::class, 'create'])->name('detail_agenda.create');
     Route::post('/detail_agenda/store', [DetailAgendaController::class, 'store'])->name('detail_agenda.store');
     Route::get('/detail_agenda/{id}/show', [DetailAgendaController::class, 'show'])->name('detail_agenda.show');
     Route::get('/detail_agenda/{id}/edit', [DetailAgendaController::class, 'edit'])->name('detail_agenda.edit');
     Route::put('/detail_agenda/update/{id_detail_agenda}', [DetailAgendaController::class, 'update'])->name('detail_agenda.update');
     Route::get('/detail_agenda/export_excel', [DetailAgendaController::class, 'export_excel'])->name('detail_agenda.export_excel');
     Route::get('/detail_agenda/export_pdf', [DetailAgendaController::class, 'export_pdf'])->name('detail_agenda.export_pdf');
+    Route::get('/detail_agenda/upgrade/{id_kegiatan}/{id_agenda}', [DetailAgendaController::class, 'upgrade'])->name('detail_agenda.upgrade');
     
     //route data master kategori pengguna
     Route::get('/kategori_kegiatan', [KategoriKegiatanController::class, 'index'])->name('kategori_kegiatan.index');
@@ -147,6 +148,8 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
     Route::post('/agenda/import', [KegiatanController::class, 'import'])->name('agenda.import');
     Route::get('/agenda/export_excel', [KegiatanController::class, 'export_excel'])->name('agenda.export_excel');
     Route::get('/agenda/export_pdf', [KegiatanController::class, 'export_pdf'])->name('agenda.export_pdf');
+    Route::get('/get-agenda-by-kegiatan/{id}', [AgendaKegiatanController::class, 'getAgendaByKegiatan']);
+
 
     //route statistik kinerja
     Route::get('/kinerja-dosen', [KinerjaDosenController::class, 'index'])->name('kinerja.dosen');

@@ -11,27 +11,13 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="id_kegiatan">Pilih Kegiatan</label>
-                    <select name="id_kegiatan" id="id_kegiatan" class="form-control" required>
-                        <option value="">Pilih Kegiatan</option>
-                        @foreach ($kegiatan as $kegiatan)
-                            <option value="{{ $kegiatan->id_kegiatan }}" {{ $detailAgenda->id_kegiatan == $kegiatan->id_kegiatan ? 'selected' : '' }}>
-                                {{ $kegiatan->nama_kegiatan }}
-                            </option>
-                        @endforeach
-                    </select>
+                    <label for="id_kegiatan">Kegiatan</label>
+                    <input type="text" id="id_kegiatan" class="form-control" value="{{ $detailAgenda->kegiatan->nama_kegiatan }}" readonly>
                     <small id="error-id_kegiatan" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
-                    <label for="id_agenda">Pilih Agenda</label>
-                    <select name="id_agenda" id="id_agenda" class="form-control" required>
-                        <option value="">Pilih Agenda</option>
-                        @foreach ($agenda as $agenda)
-                            <option value="{{ $agenda->id_agenda }}" {{ $detailAgenda->id_agenda == $agenda->id_agenda ? 'selected' : '' }}>
-                                {{ $agenda->nama_agenda }}
-                            </option>
-                        @endforeach
-                    </select>
+                    <label for="id_agenda">Agenda</label>
+                    <input type="text" id="id_agenda" class="form-control" value="{{ $detailAgenda->agenda->nama_agenda }}" readonly>
                     <small id="error-id_agenda" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
@@ -66,34 +52,8 @@
 
 <script>
     $(document).ready(function () {
-        const agendaData = @json($agenda);
-
-        $("#id_kegiatan").on("change", function () {
-            let id_kegiatan = $(this).val();
-            let agendaDropdown = $("#id_agenda");
-
-            agendaDropdown.empty().append('<option value="">Pilih Agenda</option>');
-
-            if (id_kegiatan && agendaData[id_kegiatan]) {
-                agendaData[id_kegiatan].forEach(function (agenda) {
-                    agendaDropdown.append(
-                        `<option value="${agenda.id_agenda}" ${agenda.id_agenda == '{{ $detailAgenda->id_agenda }}' ? 'selected' : ''}>${agenda.nama_agenda}</option>`
-                    );
-                });
-            } else {
-                agendaDropdown.append('<option value="">Tidak ada agenda</option>');
-            }
-        });
-
-        // Validasi Form
         $("#form-edit-detail_agenda").validate({
             rules: {
-                id_kegiatan: {
-                    required: true
-                },
-                id_agenda: {
-                    required: true
-                },
                 keterangan: {
                     required: true,
                     minlength: 3

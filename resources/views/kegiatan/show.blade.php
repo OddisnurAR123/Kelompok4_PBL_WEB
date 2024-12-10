@@ -159,9 +159,9 @@
                                         <i class="fas fa-trash"></i> 
                                     </a>
                                     <!-- Tombol Upgrade -->
-                                    <a href="{{ route('detail_agenda.index') }}" class="btn btn-primary btn-sm">
+                                    <a href="{{ route('detail_agenda.upgrade', ['id_kegiatan' => $kegiatan->id_kegiatan, 'id_agenda' => $agenda->id_agenda]) }}" class="btn btn-primary btn-sm">
                                         <i class="fas fa-tasks"></i>
-                                    </a>
+                                    </a>                                    
                                 </td>                               
                             </tr>
                         @empty

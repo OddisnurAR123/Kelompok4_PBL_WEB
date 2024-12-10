@@ -1,4 +1,4 @@
-<form action="{{ url('/detail_agenda/store') }}" method="POST" id="form-tambah-detail_kegiatan" enctype="multipart/form-data">
+<form action="{{ url('/detail_agenda/store') }}" method="POST" id="form-tambah-detail_agenda" enctype="multipart/form-data">
     @csrf
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -10,22 +10,18 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="id_kegiatan">Pilih Kegiatan</label>
-                    <select name="id_kegiatan" id="id_kegiatan" class="form-control" required>
-                        <option value="">Pilih Kegiatan</option>
-                        @foreach ($kegiatan as $kegiatan)
-                            <option value="{{ $kegiatan->id_kegiatan }}">{{ $kegiatan->nama_kegiatan }}</option>
-                        @endforeach
-                    </select>
+                    <label for="id_kegiatan">Kegiatan</label>
+                    <input type="text" id="id_kegiatan" class="form-control" value="{{ $kegiatan->nama_kegiatan }}" readonly>
+                    <input type="hidden" name="id_kegiatan" value="{{ $kegiatan->id_kegiatan }}">
                     <small id="error-id_kegiatan" class="error-text form-text text-danger"></small>
                 </div>
+                
                 <div class="form-group">
-                    <label for="id_agenda">Pilih Agenda</label>
-                    <select name="id_agenda" id="id_agenda" class="form-control" required>
-                        <option value="">Pilih Agenda</option>
-                    </select>
+                    <label for="id_agenda">Agenda</label>
+                    <input type="text" id="id_agenda" class="form-control" value="{{ $agenda->nama_agenda }}" readonly>
+                    <input type="hidden" name="id_agenda" value="{{ $agenda->id_agenda }}">
                     <small id="error-id_agenda" class="error-text form-text text-danger"></small>
-                </div>
+                </div>                               
                 <div class="form-group">
                     <label>Keterangan</label>
                     <input type="text" name="keterangan" id="keterangan" class="form-control" maxlength="100" required>
@@ -52,27 +48,7 @@
 
 <script>
     $(document).ready(function () {
-        const agendaData = @json($agenda);
-
-        $("#id_kegiatan").on("change", function () {
-            let id_kegiatan = $(this).val();
-            let agendaDropdown = $("#id_agenda");
-
-            agendaDropdown.empty().append('<option value="">Pilih Agenda</option>');
-
-            if (id_kegiatan && agendaData[id_kegiatan]) {
-                agendaData[id_kegiatan].forEach(function (agenda) {
-                    agendaDropdown.append(
-                        `<option value="${agenda.id_agenda}">${agenda.nama_agenda}</option>`
-                    );
-                });
-            } else {
-                agendaDropdown.append('<option value="">Tidak ada agenda</option>');
-            }
-        });
-
-        // Validasi Form
-        $("#form-tambah-detail_kegiatan").validate({
+        $("#form-tambah-detail_agenda").validate({
             rules: {
                 id_kegiatan: {
                     required: true
@@ -91,9 +67,9 @@
                     max: 100
                 },
                 berkas: {
-    required: true,
-    accept: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png,text/plain"
-}
+                    required: true,
+                    accept: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png,text/plain"
+                }
             },
             submitHandler: function(form) {
                 $.ajax({
@@ -127,7 +103,7 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'Terjadi Kesalahan',
-                            text: 'Tidak dapat menyimpan data detail kegiatan. Coba lagi.'
+                            text: 'Tidak dapat menyimpan detail agenda. Coba lagi.'
                         });
                     }
                 });

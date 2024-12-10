@@ -390,5 +390,23 @@ public function export_pdf()
     // Return the PDF as a download
     return $pdf->download('agenda_report.pdf');
 }
+public function getAgendaByKegiatan($id)
+{
+    // Ambil agenda berdasarkan id_kegiatan
+    $agendas = AgendaModel::where('id_kegiatan', $id)->get();
+    
+    if ($agendas->isEmpty()) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Tidak ada agenda ditemukan untuk kegiatan ini'
+        ]);
+    }
+
+    return response()->json([
+        'success' => true,
+        'agendas' => $agendas
+    ]);
+}
+
 
 }
