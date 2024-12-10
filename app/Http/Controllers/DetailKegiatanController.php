@@ -142,12 +142,18 @@ class DetailKegiatanController extends Controller
         ]);
 
         $detail_kegiatan = DetailKegiatanModel::findOrFail($id);
-
+        $newProgresKegiatan = $detail_kegiatan->progres_kegiatan + $request->progres_kegiatan;
+        if ($newProgresKegiatan > 100) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Total progres kegiatan tidak boleh lebih dari 100%.',
+            ]);
+        }
         try {
             $detail_kegiatan->update([
                 'id_kegiatan' => $request->id_kegiatan,
                 'keterangan' => $request->keterangan,
-                'progres_kegiatan' => $request->progres_kegiatan,
+                'progres_kegiatan' => $newProgresKegiatan,
                 'beban_kerja' => $request->beban_kerja,
             ]);
 
