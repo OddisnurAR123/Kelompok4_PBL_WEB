@@ -1,51 +1,115 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Statistik Kinerja Pengguna</title>
-    <!-- Tambahkan Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
-</head>
-<body>
-    <h1>Statistik Kinerja Pengguna</h1>
+@extends('layouts.template')
+@section('content')
+<div class="card card-outline card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Statistik Kinerja Dosen</h3>
+    </div>
+    <div class="card-body">
+        <!-- Tambahkan Grafik -->
+        <div class="chart-container" style="position: relative; height:400px;">
+            <canvas id="kinerjaChart"></canvas>
+        </div>
+    </div>
+</div>
+@endsection
 
-    <!-- Grafik -->
-    <canvas id="kinerjaChart" width="800" height="400"></canvas>
-    <script>
+@push('css')
+<style>
+    /* Styling untuk membuat grafik lebih menarik */
+    .chart-container {
+        margin-top: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+</style>
+@endpush
+
+@push('js')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Ambil data dari controller
+        const chartData = @json($chartData);
+
         const ctx = document.getElementById('kinerjaChart').getContext('2d');
         const kinerjaChart = new Chart(ctx, {
-            type: 'bar', // Tipe grafik
+            type: 'bar',
             data: {
-                labels: @json($chartData['labels']), // Nama pengguna
-                datasets: @json($chartData['datasets']), // Data jumlah kegiatan
+                labels: chartData.labels,
+                datasets: chartData.datasets,
             },
             options: {
                 responsive: true,
-                indexAxis: 'y', // Grafik horizontal
+                maintainAspectRatio: false, // Untuk menjaga rasio tampilan grafik responsif
                 plugins: {
                     legend: {
                         display: true,
                         position: 'top',
+                        labels: {
+                            font: {
+                                size: 14,
+                                family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                            },
+                            padding: 15
+                        }
                     },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.dataset.label + ': ' + tooltipItem.raw + ' Kegiatan';
+                            }
+                        },
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff'
+                    }
                 },
                 scales: {
                     x: {
                         title: {
                             display: true,
-                            text: 'Jumlah Kegiatan',
+                            text: 'Nama Dosen',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
                         },
-                        beginAtZero: true,
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                size: 12
+                            },
+                            maxRotation: 45,
+                            minRotation: 45
+                        }
                     },
                     y: {
                         title: {
                             display: true,
-                            text: 'Nama Pengguna',
+                            text: 'Total Kegiatan',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
                         },
+                        beginAtZero: true,
+                        ticks: {
+                            font: {
+                                size: 12
+                            }
+                        }
                     },
+                },
+                animation: {
+                    duration: 1500,  // Durasi animasi untuk tampilan pertama grafik
+                    easing: 'easeOutBounce'
                 },
             },
         });
-    </script>
-</body>
-</html>
+    });
+</script>
+@endpush
