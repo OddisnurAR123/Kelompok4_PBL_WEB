@@ -44,6 +44,12 @@
                     </select>
                     <small id="error-kategori_kegiatan" class="error-text form-text text-danger"></small>
                 </div>
+                <!-- Tombol Tambah Anggota -->
+                <div class="d-flex justify-content-end">
+                    <button type="button" id="addAnggota" class="btn p-0 border-0 bg-transparent mt-3" title="Tambah Anggota">
+                        <i class="fas fa-plus text-primary"></i>
+                    </button>
+                </div>
                 <!-- Anggota Kegiatan -->
                 <div id="anggota-section">
                     <div class="anggota-group d-flex justify-content-between mb-3">
@@ -64,9 +70,6 @@
                                     <option value="{{ $jabatan->id_jabatan_kegiatan }}">{{ $jabatan->nama_jabatan_kegiatan }}</option>
                                 @endforeach
                             </select>
-                            <button type="button" id="addAnggota" class="btn btn-light btn-sm position-absolute" style="top: -5px; right: 0; border: none; background: none;">
-                                <i class="fas fa-plus"></i>
-                            </button>
                         </div>
                         <div class="col-2"></div>
                     </div>
