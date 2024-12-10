@@ -111,9 +111,10 @@
 
                 <h4 class="mt-4 d-flex justify-content-between">
                     Agenda Kegiatan
-                    <a href="{{ route('detail_agenda.index') }}" class="btn btn-primary btn-sm">
-                        <i class="fas fa-tasks"></i>
-                    </a>
+                    <!-- Tautan Tambah Agenda -->
+                    <a href="{{ route('agenda.index') }}" id="addAnggota" class="btn p-0 border-0 bg-transparent mt-3" title="Tambah Agenda">
+                        <i class="fas fa-plus text-primary"></i>
+                    </a>                    
                 </h4>
                 <table class="table table-bordered table-striped table-hover table-sm">
                     <thead>
@@ -122,6 +123,7 @@
                             <th>Tempat Agenda</th>
                             <th>Tanggal Agenda</th>
                             <th>Progres</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -138,7 +140,29 @@
                                     @else
                                         Tidak ada progres.
                                     @endif
-                                </td>                                
+                                </td>
+                                <td>
+                                    <!-- Link Detail -->
+                                    <a 
+                                        href="{{ url('/agenda/' . $agenda->id_agenda . '/show') }}" class="btn btn-info btn-sm">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+
+                                    <!-- Tombol Edit -->
+                                    <a 
+                                        href="{{ url('/agenda/' . $agenda->id_agenda . '/edit') }}" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i> 
+                                    </a>
+                                    <!-- Tombol Hapus -->
+                                    <a 
+                                        href="{{ url('/agenda/' . $agenda->id_agenda . '/delete') }}" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i> 
+                                    </a>
+                                    <!-- Tombol Upgrade -->
+                                    <a href="{{ route('detail_agenda.index') }}" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-tasks"></i>
+                                    </a>
+                                </td>                               
                             </tr>
                         @empty
                             <tr>
