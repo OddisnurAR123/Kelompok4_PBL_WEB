@@ -155,9 +155,10 @@
                                         <i class="fas fa-trash"></i>
                                     </a>
                                     <!-- Tombol Upgrade -->
-                                    <a href="{{ route('detail_agenda.upgrade', ['id_kegiatan' => $kegiatan->id_kegiatan, 'id_agenda' => $agenda->id_agenda]) }}" class="btn btn-primary btn-sm">
+                                    <!-- Tombol Upgrade -->
+                                    <a href="javascript:void(0);" class="btn btn-primary btn-sm" onclick="openModal('{{ url('detail_agenda/upgrade/' . $kegiatan->id_kegiatan . '/' . $agenda->id_agenda) }}')">
                                         <i class="fas fa-tasks"></i>
-                                    </a>                                    
+                                    </a>
                                 </td>                               
                             </tr>
                         @empty
