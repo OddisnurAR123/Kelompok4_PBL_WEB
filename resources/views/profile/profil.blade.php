@@ -42,7 +42,7 @@
                             <i class="fas fa-envelope text-primary"></i> 
                             <strong>Email:</strong> {{ $user->email }}
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <li class="list-group-item">
                             <i class="fas fa-lock text-primary"></i> 
                             <strong>Password:</strong> ****** 
                         </li>
