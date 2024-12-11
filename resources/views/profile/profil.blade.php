@@ -11,8 +11,8 @@
                     <!-- Foto Profil -->
                     <div class="col-md-4 text-center mb-4 mb-md-0">
                         <div class="mb-3 position-relative">
-                            @if ($user->avatar)
-                                <img src="{{ asset('storage/' . $user->avatar) }}" 
+                            @if ($user->foto_profil)
+                                <img src="{{ asset('storage/' . $user->foto_profil) }}" 
                                      alt="Foto Profil" 
                                      class="rounded-circle img-fluid shadow-lg" 
                                      style="width: 180px; height: 180px; object-fit: cover; transition: transform 0.3s;">
@@ -34,8 +34,22 @@
                                 <strong>Nama:</strong> {{ $user->nama_pengguna }}
                             </li>
                             <li class="list-group-item">
-                                <i class="fas fa-id-badge text-primary"></i> 
+                                <i class="fas fa-user-tag text-primary"></i> 
                                 <strong>Username:</strong> {{ $user->username }}
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-id-card text-primary"></i> 
+                                <strong>NIP:</strong> {{ $user->nip }}
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-envelope text-primary"></i> 
+                                <strong>Email:</strong> {{ $user->email }}
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <i class="fas fa-lock text-primary"></i> 
+                                    <strong>Password:</strong> ****** 
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -43,7 +57,7 @@
             </div>
             <div class="card-footer text-center bg-light">
                 <a href="{{ route('profile.edit') }}" class="btn btn-gradient-primary btn-lg px-5 py-2">
-                    <i class="fa fa-edit"></i> Edit Profil
+                    <i class="fas fa-edit"></i> Edit Profil
                 </a>
             </div>
         </div>
@@ -54,18 +68,20 @@
 <style>
     /* Gradasi Warna */
     .bg-gradient-primary {
-        background: linear-gradient(45deg, #007bff, #0056b3);
+        background: linear-gradient(45deg, #11315F, #315F81);
     }
 
     .btn-gradient-primary {
-        background: linear-gradient(45deg, #007bff, #0056b3);
+        background: linear-gradient(45deg, #11315F, #315F81);
         border: none;
         color: #fff;
+        transition: transform 0.2s;
     }
 
     .btn-gradient-primary:hover {
-        background: linear-gradient(45deg, #0056b3, #003f7f);
+        background: linear-gradient(45deg, #315F81, #11315F);
         transform: scale(1.05);
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     }
 
     .card {
