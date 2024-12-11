@@ -1,71 +1,89 @@
 @extends('layouts.template')
 
 @section('content')
-    <div class="container mt-5">
-        <div class="card shadow-lg border-0">
-            <div class="card-header text-center bg-gradient-primary text-white py-4">
-                <h2 class="mb-0">Profil Saya</h2>
-            </div>
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <!-- Foto Profil -->
-                    <div class="col-md-4 text-center mb-4 mb-md-0">
-                        <div class="mb-3 position-relative">
-                            @if ($user->avatar)
-                                <img src="{{ asset('storage/' . $user->avatar) }}" 
-                                     alt="Foto Profil" 
-                                     class="rounded-circle img-fluid shadow-lg" 
-                                     style="width: 180px; height: 180px; object-fit: cover; transition: transform 0.3s;">
-                            @else
-                                <div class="placeholder-profile bg-secondary text-white d-flex align-items-center justify-content-center rounded-circle shadow-lg" 
-                                     style="width: 180px; height: 180px; font-size: 60px; transition: transform 0.3s;">
-                                    ?
-                                </div>
-                                <p class="mt-2 text-muted">Foto belum diupload</p>
-                            @endif
-                        </div>
-                    </div>
-
-                    <!-- Informasi Profil -->
-                    <div class="col-md-8">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <i class="fas fa-user text-primary"></i> 
-                                <strong>Nama:</strong> {{ $user->nama_pengguna }}
-                            </li>
-                            <li class="list-group-item">
-                                <i class="fas fa-id-badge text-primary"></i> 
-                                <strong>Username:</strong> {{ $user->username }}
-                            </li>
-                        </ul>
+<div class="container mt-5">
+    <div class="card shadow border-0 rounded-lg">
+        <div class="card-header text-center text-white py-4" style="background-color: #01274E;">
+            <h2 class="mb-0">Profil Saya</h2>
+        </div>
+        <div class="card-body">
+            <div class="row align-items-center">
+                <!-- Foto Profil -->
+                <div class="col-md-4 d-flex justify-content-center mb-4 mb-md-0">
+                    <div class="mb-3 position-relative">
+                        @if ($user->avatar)
+                            <img src="{{ asset('storage/' . $user->avatar) }}" 
+                                 alt="Foto Profil" 
+                                 class="rounded-circle img-fluid shadow-sm" 
+                                 style="width: 160px; height: 160px; object-fit: cover;">
+                        @else
+                            <div class="placeholder-profile text-white d-flex align-items-center justify-content-center rounded-circle shadow-sm" 
+                                 style="width: 160px; height: 160px; font-size: 50px; background-color: #01274E;">
+                                ?
+                            </div>
+                            <p class="mt-2 text-muted">Foto belum diupload</p>
+                        @endif
                     </div>
                 </div>
+
+                <div class="col-md-8">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <i class="fas fa-user" style="color: #01274E;"></i> 
+                            <strong>Nama:</strong> {{ $user->nama_pengguna }}
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fas fa-id-badge" style="color: #01274E;"></i> 
+                            <strong>Username:</strong> {{ $user->username }}
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fas fa-envelope" style="color: #01274E;"></i> 
+                            <strong>Email:</strong> {{ $user->email }}
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class="card-footer text-center bg-light">
-                <a href="{{ route('profile.edit') }}" class="btn btn-gradient-primary btn-lg px-5 py-2">
+
+            <div class="text-center mt-4">
+                <a href="{{ route('profile.edit') }}" class="btn btn-custom-primary btn-lg px-5 py-3 rounded-pill shadow-sm">
                     <i class="fa fa-edit"></i> Edit Profil
                 </a>
             </div>
         </div>
     </div>
+</div>
 @endsection
 
 @push('css')
 <style>
-    /* Gradasi Warna */
+     .btn-custom-primary {
+        background-color: #01274E;
+        border: none;
+        color: #fff;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+
     .bg-gradient-primary {
-        background: linear-gradient(45deg, #007bff, #0056b3);
+        background: linear-gradient(45deg, #004085, #0056b3);
     }
 
     .btn-gradient-primary {
-        background: linear-gradient(45deg, #007bff, #0056b3);
+        background: linear-gradient(45deg, #004085, #0056b3);
         border: none;
         color: #fff;
+        font-weight: 500;
+        letter-spacing: 0.5px;
     }
 
     .btn-gradient-primary:hover {
         background: linear-gradient(45deg, #0056b3, #003f7f);
         transform: scale(1.05);
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-gradient-primary:active {
+        transform: scale(1.02);
     }
 
     .card {
@@ -73,17 +91,15 @@
         overflow: hidden;
     }
 
-    /* Efek Hover untuk Foto */
     img:hover,
     .placeholder-profile:hover {
         transform: scale(1.1);
-        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
     }
 
-    /* Tata Letak yang Rapi */
     .list-group-item {
-        font-size: 1.2rem;
-        font-weight: 500;
+        font-size: 1.1rem;
+        font-weight: 400;
     }
 
     .list-group-item i {
