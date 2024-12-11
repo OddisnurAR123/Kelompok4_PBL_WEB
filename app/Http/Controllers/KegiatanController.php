@@ -13,6 +13,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+use Illuminate\Support\Facades\Auth;
 
 class KegiatanController extends Controller
 {
@@ -45,23 +46,32 @@ class KegiatanController extends Controller
                 'id_kategori_kegiatan'
             );
 
-        return DataTables::of($kegiatan)
+            return DataTables::of($kegiatan)
             ->addIndexColumn()
             ->addColumn('kategori_kegiatan', function ($kegiatan) {
                 return $kegiatan->kategoriKegiatan ? $kegiatan->kategoriKegiatan->nama_kategori_kegiatan : 'Tidak ada kategori';
             })    
             ->addColumn('aksi', function ($kegiatan) {
                 $btn = '<div class="d-flex justify-content-center">';
+        
+                // Tombol Show ditampilkan untuk semua pengguna
                 $btn .= '<button onclick="modalAction(\''.route('kegiatan.show', $kegiatan->id_kegiatan).'\')" class="btn btn-info btn-sm mr-2">';
                 $btn .= '<i class="fas fa-eye"></i></button>';
-                $btn .= '<button onclick="modalAction(\''.route('kegiatan.edit', $kegiatan->id_kegiatan).'\')" class="btn btn-warning btn-sm mr-2">';
-                $btn .= '<i class="fas fa-edit"></i></button>';
-                $btn .= '<button onclick="modalAction(\''.route('kegiatan.delete', $kegiatan->id_kegiatan).'\')" class="btn btn-danger btn-sm mr-2">';
-                $btn .= '<i class="fas fa-trash"></i></button>';
+        
+                // Tombol Edit dan Delete hanya ditampilkan untuk pengguna dengan id_jenis_pengguna == 1
+                if (Auth::user()->id_jenis_pengguna == 1) {
+                    $btn .= '<button onclick="modalAction(\''.route('kegiatan.edit', $kegiatan->id_kegiatan).'\')" class="btn btn-warning btn-sm mr-2">';
+                    $btn .= '<i class="fas fa-edit"></i></button>';
+        
+                    $btn .= '<button onclick="modalAction(\''.route('kegiatan.delete', $kegiatan->id_kegiatan).'\')" class="btn btn-danger btn-sm mr-2">';
+                    $btn .= '<i class="fas fa-trash"></i></button>';
+                }
+        
+                $btn .= '</div>';
                 return $btn;
             })
             ->rawColumns(['aksi'])
-            ->make(true);
+            ->make(true);        
     }
 
     // Menampilkan form tambah kegiatan via Ajax
