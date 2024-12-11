@@ -117,10 +117,12 @@
 
                 <h4 class="mt-4 d-flex justify-content-between">
                     Agenda Kegiatan
+                    @if(Auth::user()->kegiatan()->wherePivot('id_jabatan_kegiatan', 1)->exists())
                     <!-- Tautan Tambah Agenda -->
                     <a href="{{ route('agenda.create', ['id_kegiatan' => $kegiatan->id_kegiatan]) }}" id="addAgenda" class="btn p-0 border-0 bg-transparent mt-3" title="Tambah Agenda">
                         <i class="fas fa-plus text-primary"></i>
-                    </a>                                   
+                    </a>
+                @endif                                 
                 </h4>
                 <table class="table table-bordered table-striped table-hover table-sm">
                     <thead>
@@ -148,23 +150,26 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <!-- Link Detail -->
-                                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="openModal('{{ url('/agenda/' . $agenda->id_agenda . '/show') }}')">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <!-- Tombol Edit -->
-                                    <a href="javascript:void(0);" class="btn btn-warning btn-sm" onclick="openModal('{{ url('/agenda/' . $agenda->id_agenda . '/edit') }}')">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <!-- Tombol Hapus -->
-                                    <a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="openModal('{{ url('/agenda/' . $agenda->id_agenda . '/delete') }}')">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
+                                    @if(Auth::user()->kegiatan()->wherePivot('id_jabatan_kegiatan', 1)->exists())
+                                        <!-- Link Detail -->
+                                        <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="openModal('{{ url('/agenda/' . $agenda->id_agenda . '/show') }}')">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <!-- Tombol Edit -->
+                                        <a href="javascript:void(0);" class="btn btn-warning btn-sm" onclick="openModal('{{ url('/agenda/' . $agenda->id_agenda . '/edit') }}')">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <!-- Tombol Hapus -->
+                                        <a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="openModal('{{ url('/agenda/' . $agenda->id_agenda . '/delete') }}')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    @endif
                                     <!-- Tombol Upgrade -->
-                                    <!-- Tombol Upgrade -->
-                                    <a href="javascript:void(0);" class="btn btn-primary btn-sm" onclick="openModal('{{ url('detail_agenda/upgrade/' . $kegiatan->id_kegiatan . '/' . $agenda->id_agenda) }}')">
-                                        <i class="fas fa-tasks"></i>
-                                    </a>
+                                    @if(Auth::user()->kegiatan()->wherePivot('id_jabatan_kegiatan', '!=', 1)->exists())
+                                        <a href="javascript:void(0);" class="btn btn-primary btn-sm" onclick="openModal('{{ url('detail_agenda/upgrade/' . $kegiatan->id_kegiatan . '/' . $agenda->id_agenda) }}')">
+                                            <i class="fas fa-tasks"></i>
+                                        </a>
+                                    @endif
                                 </td>                               
                             </tr>
                         @empty
