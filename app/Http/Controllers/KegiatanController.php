@@ -176,7 +176,6 @@ class KegiatanController extends Controller
         $jabatanKegiatan = JabatanKegiatanModel::all();
         
         // Menambahkan data pivot 'id_jabatan_kegiatan' ke pengguna yang terhubung dengan kegiatan
-        // Pastikan Anda sudah menambahkan relasi 'pengguna' di model Kegiatan
         $kegiatan->load('pengguna'); // Menyertakan relasi pengguna dengan pivot data
 
         // Kirim data ke view

@@ -3,18 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\PenggunaModel;  // Pastikan model PenggunaModel sudah benar
+use App\Models\PenggunaModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
     // Menampilkan halaman profil
     public function showProfile()
     {
-        $user = Auth::user();  // Mendapatkan data pengguna yang sedang login
+        $user = Auth::user();
 
-        // Membuat breadcrumb untuk navigasi
         $breadcrumb = (object) [
             'title' => 'Profile',
             'list' => ['Dashboard', 'Profile']
@@ -22,99 +23,58 @@ class ProfileController extends Controller
 
         $activeMenu = 'profile';
 
-        // Mengirim data ke view untuk ditampilkan
-        return view('profile.profil', ['breadcrumb' => $breadcrumb, 'activeMenu' => $activeMenu]);
+        return view('profile.profil', ['breadcrumb' => $breadcrumb, 'activeMenu' => $activeMenu, 'user' => $user]);
     }
 
-    // Menampilkan halaman edit profil
     public function edit()
     {
-        $user = Auth::user();  // Mendapatkan data pengguna yang sedang login
-
-        // Membuat breadcrumb untuk navigasi
-        $breadcrumb = (object) [
-            'title' => 'Edit Profile',
-            'list' => [
-                (object) ['label' => 'Profile', 'url' => route('profile.edit')],
-                'Edit'
-            ]
-        ];
-
-        // Mengirim data ke view untuk halaman edit profil
-        return view('profile.edit', compact('user', 'breadcrumb'));
+        $user = Auth::user();
+        return view('profile.edit', compact('user'));
     }
 
-    // Memperbarui data profil
+    
+
     public function update(Request $request)
     {
-        $user = Auth::user();  // Mendapatkan data pengguna yang sedang login
+        $user = Auth::user();
 
-        // Validasi inputan
-        $request->validate([
-            'nama' => 'required|string|max:255',
-            'username' => 'required|string|max:20|unique:m_user,username,' . $user->user_id . ',user_id', // Sesuaikan dengan tabel dan kolom
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10048', // Pastikan format gambar sesuai
+        // Validasi input
+        $validated = $request->validate([
+            'nama_pengguna' => 'nullable|string|max:255',
+            'username' => 'nullable|string|max:50|unique:m_pengguna,username,',
+            'email' => 'nullable|email|max:255|unique:m_pengguna,email,',
+            'foto_profil' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'password' => 'nullable|confirmed|min:6',
         ]);
 
-        // Update nama dan username pengguna
-        $user->nama = $request->nama;
-        $user->username = $request->username;
-
-        // Handle upload avatar
-        if ($request->hasFile('avatar')) {
-            $avatarPath = $request->file('avatar')->store('uploads/avatars', 'public');
-            $user->avatar = $avatarPath;
-        }
-
-        // Simpan perubahan
-        $user->save();
-
-        // Redirect dengan pesan sukses
-        return redirect()->route('profile.profil')->with('success', 'Profil berhasil diperbarui!');
-    }
-
-    // Menampilkan halaman ganti password
-    public function changePassword()
-    {
-        $breadcrumb = (object) [
-            'title' => 'Ganti Password',
-            'list' => [
-                (object) ['url' => route('profile.profil'), 'label' => 'Profile'],
-                'Ganti Password'
-            ]
+        // Persiapkan data untuk diupdate
+        $dataToUpdate = [
+            'nama_pengguna' => $validated['nama_pengguna'],
+            'username' => $validated['username'],
+            'email' => $validated['email'],
         ];
 
-        return view('profile.password', compact('breadcrumb'));
-    }
+        // Update foto profil jika ada
+        if ($request->hasFile('foto_profil')) {
+            // Hapus foto lama jika ada
+            if ($user->foto_profil) {
+                Storage::delete('public/' . $user->foto_profil);
+            }
 
-    // Memperbarui password
-    public function updatePassword(Request $request)
-    {
-        $request->validate([
-            'current_password' => 'required',
-            'new_password' => 'required|string|min:6|confirmed',
-        ]);
-
-        $user = Auth::user();  // Mendapatkan data pengguna yang sedang login
-
-        // Log untuk debug (hanya untuk tujuan debugging)
-        \Log::info('User ID: ' . $user->id);
-        \Log::info('Current Password: ' . $request->current_password);
-        
-        // Cek apakah password lama benar
-        if (!Hash::check($request->current_password, $user->password)) {
-            \Log::info('Old password does not match');
-            return back()->withErrors(['current_password' => 'Password lama salah']);
+            // Simpan foto baru
+            $path = $request->file('foto_profil')->store('public/profiles');
+            $dataToUpdate['foto_profil'] = basename($path);
         }
 
-        // Update password baru
-        $user->password = Hash::make($request->new_password);
-        $user->save();
+        // Update password jika diisi
+        if ($request->filled('password')) {
+            $dataToUpdate['password'] = Hash::make($validated['password']);
+        }
 
-        // Log untuk debug
-        \Log::info('Password updated successfully for User ID: ' . $user->id);
+        DB::table('m_pengguna')
+            ->where('id_pengguna', $user->id_pengguna)
+            ->update($dataToUpdate);
 
-        // Redirect dengan pesan sukses
-        return redirect()->route('profile.profil')->with('success', 'Password berhasil diubah.');
+        return redirect()->route('profile.edit')->with('success', 'Profil berhasil diperbarui!');
     }
 }

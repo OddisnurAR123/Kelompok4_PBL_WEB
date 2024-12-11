@@ -1,136 +1,108 @@
-@empty($profile)
-<div id="modal-master" class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title">Kesalahan</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="alert alert-danger">
-                <h5><i class="icon fas fa-ban"></i> Kesalahan!!!</h5>
+@extends('layouts.template')
+
+@section('content')
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0 rounded-lg">
+                <div class="card-header text-center text-white py-4" style="background-color: #01274E;">
+                    <h2 class="mb-0">Edit Profil</h2>
+                </div>
+                <div class="card-body">
+                    <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="row align-items-center">
+                            <div class="col-md-4 d-flex justify-content-center mb-4 mb-md-0">
+                                <!-- Foto Profil -->
+                            <div class="col-md-4 d-flex justify-content-center mb-4 mb-md-0">
+                                <div class="text-center">
+                                    <div class="mb-3 position-relative">
+                                        @if ($user->foto_profil)
+                                            <img src="{{ asset('storage/' . $user->foto_profil) }}" 
+                                                alt="Foto Profil" 
+                                                class="rounded-circle img-fluid shadow-sm" 
+                                                style="width: 160px; height: 160px; object-fit: cover;">
+                                        @else
+                                            <div class="placeholder-profile text-white d-flex align-items-center justify-content-center rounded-circle shadow-sm" 
+                                                style="width: 160px; height: 160px; font-size: 50px; background-color: #01274E;">
+                                                ?
+                                            </div>
+                                            <p class="mt-2 text-muted">Foto belum diupload</p>
+                                        @endif
+                                    </div>
+                                    <!-- Input File Diletakkan di Bawah Foto Profil -->
+                                    <div class="mb-3">
+                                        <label for="foto_profil" class="form-label">Upload Foto Profil</label>
+                                        <input type="file" name="foto_profil" id="foto_profil" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="col-md-8">
+                                <!-- Nama Pengguna -->
+                                <div class="mb-3">
+                                    <label for="nama_pengguna" class="form-label">Nama</label>
+                                    <input type="text" name="nama_pengguna" id="nama_pengguna" class="form-control" value="{{ old('nama_pengguna', $user->nama_pengguna) }}" required>
+                                </div>
+
+                                <!-- Username -->
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" name="username" id="username" class="form-control" value="{{ old('username', $user->username) }}" required>
+                                </div>
+
+                                <!-- Email -->
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" name="email" id="email" class="form-control" value="{{ old('email', $user->email) }}" required>
+                                </div>
+
+                                <!-- Password -->
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" name="password" id="password" class="form-control" placeholder="Masukkan password baru" style="opacity: 0.7;">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
+                                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="Konfirmasi password baru" style="opacity: 0.7;">
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <button type="submit" class="btn btn-custom-primary btn-md px-4 py-2 rounded-pill shadow-sm">Simpan Perubahan</button>
+                                    <a href="{{ route('profile.show') }}" class="btn btn-secondary btn-md px-4 py-2 rounded-pill shadow-sm">Batal</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
-@else
-<form action="{{ url('/profile.update/' . $profile->id_pengguna . '/update') }}" method="POST" id="form-edit-profile">
-    @csrf
-    @method('PUT')
-    <div id="modal-master" class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Profil</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- Nama -->
-                <div class="form-group">
-                    <label>Nama</label>
-                    <input value="{{ $user->nama_pengguna }}" type="text" name="nama_pengguna" id="nama_pengguna" class="form-control" required>
-                    <small id="error-nama_pengguna" class="error-text form-text text-danger"></small>
-                </div>
-                <!-- Username -->
-                <div class="form-group">
-                    <label>Username</label>
-                    <input value="{{ $user->username }}" type="text" name="username" id="username" class="form-control" required>
-                    <small id="error-username" class="error-text form-text text-danger"></small>
-                </div>
-                <!-- Avatar -->
-                <div class="form-group">
-                    <label>Foto Profil</label>
-                    <input type="file" name="foto_profil" id="foto_profil" class="form-control">
-                    <small id="error-foto_profil" class="error-text form-text text-danger"></small>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
-                <button type="submit" class="btn btn-primary">Simpan</button>
-            </div>
-        </div>
-    </div>
-</form>
+@endsection
 
-<script>
-$(document).ready(function() {
-    $("#form-edit-profile").validate({
-        rules: {
-            nama_pengguna: { required: true, minlength: 3, maxlength: 50 },
-            username: { required: true, minlength: 3, maxlength: 20 },
-            foto_profil: { extension: "jpg|jpeg|png", filesize: 2 * 1024 * 1024 }, // Maksimal 2MB
-        },
-        messages: {
-            nama_pengguna: {
-                required: "Nama tidak boleh kosong.",
-                minlength: "Nama minimal 3 karakter.",
-                maxlength: "Nama maksimal 50 karakter."
-            },
-            username: {
-                required: "Username tidak boleh kosong.",
-                minlength: "Username minimal 3 karakter.",
-                maxlength: "Username maksimal 20 karakter."
-            },
-            foto_profil: {
-                extension: "Format file harus JPG, JPEG, atau PNG.",
-                filesize: "Ukuran file maksimal 2MB."
-            },
-        },
-        submitHandler: function(form) {
-            let formData = new FormData(form);
+@push('css')
+<style>
+    .btn-custom-primary {
+        background-color: #01274E;
+        border: none;
+        color: #fff;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
 
-            $.ajax({
-                url: form.action,
-                type: form.method,
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    if (response.status) {
-                        $('#myModal').modal('hide');
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil',
-                            text: response.message
-                        }).then(() => {
-                            location.reload(); // Reload halaman untuk memperbarui data
-                        });
-                    } else {
-                        $('.error-text').text('');
-                        $.each(response.errors, function(prefix, val) {
-                            $('#error-' + prefix).text(val[0]);
-                        });
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Kesalahan',
-                            text: 'Terjadi kesalahan saat menyimpan data.'
-                        });
-                    }
-                },
-                error: function(xhr) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Terjadi Kesalahan',
-                        text: 'Silakan coba lagi.'
-                    });
-                }
-            });
-            return false;
-        },
-        errorElement: 'span',
-        errorPlacement: function(error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.form-group').append(error);
-        },
-        highlight: function(element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
-        },
-        unhighlight: function(element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
-        }
-    });
-});
-</script>
-@endempty
+    .btn-secondary {
+        background-color: #ddd;
+        border: none;
+        color: #01274E;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+
+    .placeholder-profile {
+        background-color: #ddd;
+        color: #fff;
+    }
+</style>
+@endpush

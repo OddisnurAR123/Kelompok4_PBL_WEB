@@ -11,7 +11,7 @@
                 <div class="col-md-4 d-flex justify-content-center mb-4 mb-md-0">
                     <div class="mb-3 position-relative">
                         @if ($user->foto_profil)
-                            <img src="{{ asset('storage/' . $user->avatar) }}" 
+                            <img src="{{ asset('storage/' . $user->foto_profil) }}" 
                                  alt="Foto Profil" 
                                  class="rounded-circle img-fluid shadow-sm" 
                                  style="width: 160px; height: 160px; object-fit: cover;">
