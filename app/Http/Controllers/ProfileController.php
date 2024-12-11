@@ -17,15 +17,13 @@ class ProfileController extends Controller
         // Membuat breadcrumb untuk navigasi
         $breadcrumb = (object) [
             'title' => 'Profile',
-            'list' => [
-                'Home',
-                (object) ['url' => route('profile.show'), 'label' => 'Profile'],
-                'Profil'
-            ]
+            'list' => ['Dashboard', 'Profile']
         ];
 
+        $activeMenu = 'profile';
+
         // Mengirim data ke view untuk ditampilkan
-        return view('profile.profil', compact('user', 'breadcrumb'));
+        return view('profile.profil', ['breadcrumb' => $breadcrumb, 'activeMenu' => $activeMenu]);
     }
 
     // Menampilkan halaman edit profil
