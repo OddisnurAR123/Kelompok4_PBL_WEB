@@ -28,6 +28,12 @@
         .card-title {
             color: white;
         }
+        .custom-modal .modal-content {
+            background-color: none;
+            border: none;
+            box-shadow: none;
+        }
+
     </style>
 </head>
 <body>
@@ -177,8 +183,7 @@
 </div>
 <div class="modal fade" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-    
+        <div class="modal-content custom-modal">
             <div class="modal-body" id="modalContent">
                 <div class="text-center">
                     <div class="spinner-border text-primary" role="status">
