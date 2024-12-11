@@ -47,12 +47,6 @@ class UserModel extends Authenticatable implements JWTSubject
         return $this->belongsTo(JenisPenggunaModel::class, 'id_jenis_pengguna', 'id_jenis_pengguna');
     }
 
-    public function kegiatan()
-    {
-        return $this->belongsToMany(KegiatanModel::class, 't_kegiatan_user')
-                    ->withPivot('id_jabatan_kegiatan');
-    }
-
     protected function image(): Attribute{
         return Attribute::make(
             get: fn ($image) => url('/storage/posts/' . $image),

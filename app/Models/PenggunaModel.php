@@ -56,6 +56,12 @@ class PenggunaModel extends Authenticatable implements JWTSubject
         return $this->belongsToMany(KegiatanModel::class, 't_kegiatan_user', 'id_pengguna', 'id_kegiatan');
     }
 
+    // Di dalam model User
+    public function jabatanKegiatans()
+    {
+        return $this->belongsToMany(JabatanKegiatanModel::class, 't_kegiatan_user', 'id_pengguna', 'id_jabatan_kegiatan');
+    }
+
     // Relasi ke model JabatanKegiatanModel
     public function jabatanKegiatan()
     {

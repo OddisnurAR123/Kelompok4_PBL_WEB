@@ -19,10 +19,10 @@
                 </button>
             @endif      
             <!-- Tombol Detail Kegiatan hanya muncul jika pengguna memiliki id_jabatan_kegiatan 1 -->
-            @if(Auth::user()->kegiatan()->wherePivot('id_jabatan_kegiatan', 1)->exists())
-            <button onclick="window.location.href='{{ route('detail_kegiatan.index') }}'" class="btn btn-primary btn-sm ml-0">
-                <i class="fas fa-tasks"></i>
-            </button>
+            @if(Auth::user()->jabatanKegiatans()->where('is_pic', 1)->exists())
+                <button onclick="window.location.href='{{ route('detail_kegiatan.index') }}'" class="btn btn-primary btn-sm ml-0">
+                    <i class="fas fa-tasks"></i>
+                </button>
             @endif
         </div>        
     </div>      
