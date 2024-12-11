@@ -1,5 +1,4 @@
 @extends('layouts.template')
-
 @section('content')
 <div class="container mt-5">
     <div class="card shadow border-0 rounded-lg">
@@ -11,7 +10,7 @@
                 <!-- Foto Profil -->
                 <div class="col-md-4 d-flex justify-content-center mb-4 mb-md-0">
                     <div class="mb-3 position-relative">
-                        @if ($user->avatar)
+                        @if ($user->foto_profil)
                             <img src="{{ asset('storage/' . $user->avatar) }}" 
                                  alt="Foto Profil" 
                                  class="rounded-circle img-fluid shadow-sm" 
@@ -25,25 +24,31 @@
                         @endif
                     </div>
                 </div>
-
                 <div class="col-md-8">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
-                            <i class="fas fa-user" style="color: #01274E;"></i> 
+                            <i class="fas fa-user text-primary"></i> 
                             <strong>Nama:</strong> {{ $user->nama_pengguna }}
                         </li>
                         <li class="list-group-item">
-                            <i class="fas fa-id-badge" style="color: #01274E;"></i> 
+                            <i class="fas fa-user-tag text-primary"></i> 
                             <strong>Username:</strong> {{ $user->username }}
                         </li>
                         <li class="list-group-item">
-                            <i class="fas fa-envelope" style="color: #01274E;"></i> 
+                            <i class="fas fa-id-card text-primary"></i> 
+                            <strong>NIP:</strong> {{ $user->nip }}
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fas fa-envelope text-primary"></i> 
                             <strong>Email:</strong> {{ $user->email }}
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fas fa-lock text-primary"></i> 
+                            <strong>Password:</strong> ****** 
                         </li>
                     </ul>
                 </div>
             </div>
-
             <div class="text-center mt-4">
                 <a href="{{ route('profile.edit') }}" class="btn btn-custom-primary btn-lg px-5 py-3 rounded-pill shadow-sm">
                     <i class="fa fa-edit"></i> Edit Profil
@@ -111,6 +116,7 @@
     }
 
     @media (max-width: 768px) {
+
         .btn-lg {
             font-size: 1rem;
             padding: 8px 16px;
