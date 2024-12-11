@@ -186,7 +186,7 @@ class DetailAgendaController extends Controller
         
         if ($request->hasFile('berkas')) {
             $file = $request->file('berkas');
-            $filePath = $file->store('uploads', 'public');
+            $filePath = $file->store('berkas', 'public');
             $detailAgenda->berkas = $filePath;
         }
 
