@@ -44,6 +44,11 @@
                     </select>
                     <small id="error-kategori_kegiatan" class="error-text form-text text-danger"></small>
                 </div>
+                <div class="form-group">
+                    <label>Tempat Kegiatan</label>
+                    <input type="text" name="tempat_kegiatan" id="tempat_kegiatan" class="form-control" maxlength="100" required>
+                    <small id="error-tempat_kegiatan" class="error-text form-text text-danger"></small>
+                </div>
                 <!-- Tombol Tambah Anggota -->
                 <div class="d-flex justify-content-end">
                     <button type="button" id="addAnggota" class="btn p-0 border-0 bg-transparent mt-3" title="Tambah Anggota">

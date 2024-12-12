@@ -100,6 +100,7 @@
                 <th class="text-center font-12">Tanggal Selesai</th>
                 <th class="font-12">Periode</th>
                 <th class="font-12">Kategori</th>
+                <th class="font-12">Tempat</th>
             </tr>
         </thead>
         <tbody>
@@ -112,6 +113,7 @@
                     <td class="text-center font-10">{{ \Carbon\Carbon::parse($k->tanggal_selesai)->format('d/m/Y') }}</td>
                     <td class="font-10">{{ $k->periode }}</td>
                     <td class="font-10">{{ $k->kategoriKegiatan->nama_kategori_kegiatan }}</td>
+                    <td class="font-10">{{ $k->tempat_kegiatan }}</td>
                 </tr>
             @endforeach
         </tbody>

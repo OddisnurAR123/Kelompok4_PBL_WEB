@@ -80,6 +80,10 @@
                         <td>{{ $kegiatan->kategoriKegiatan->nama_kategori_kegiatan ?? 'Tidak ada kategori' }}</td>
                     </tr>
                     <tr>
+                        <th>Tempat Kegiatan</th>
+                        <td>{{ $kegiatan->tempat_kegiatan }}</td>
+                    </tr>
+                    <tr>
                         <th>Progres Kegiatan</th>
                         <td>
                             @if($kegiatan->detailKegiatan && $kegiatan->detailKegiatan->count())
@@ -131,7 +135,9 @@
                             <th>Tempat Agenda</th>
                             <th>Tanggal Agenda</th>
                             <th>Progres</th>
+                            @if(Auth::user()->jabatanKegiatans()->exists())
                             <th>Aksi</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -150,7 +156,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if(Auth::user()->kegiatan()->wherePivot('id_jabatan_kegiatan', 1)->exists())
+                                    @if(Auth::user()->jabatanKegiatans()->where('is_pic', 1)->exists())
                                         <!-- Link Detail -->
                                         <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="openModal('{{ url('/agenda/' . $agenda->id_agenda . '/show') }}')">
                                             <i class="fas fa-eye"></i>
@@ -165,7 +171,7 @@
                                         </a>
                                     @endif
                                     <!-- Tombol Upgrade -->
-                                    @if(Auth::user()->kegiatan()->wherePivot('id_jabatan_kegiatan', '!=', 1)->exists())
+                                    @if(Auth::user()->jabatanKegiatans()->where('is_pic','!=', 1)->exists())
                                         <a href="javascript:void(0);" class="btn btn-primary btn-sm" onclick="openModal('{{ url('detail_agenda/upgrade/' . $kegiatan->id_kegiatan . '/' . $agenda->id_agenda) }}')">
                                             <i class="fas fa-tasks"></i>
                                         </a>
