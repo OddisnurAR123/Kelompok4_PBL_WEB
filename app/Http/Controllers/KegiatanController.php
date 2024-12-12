@@ -14,6 +14,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Illuminate\Support\Facades\Auth;
+use Dompdf\Dompdf;
 
 class KegiatanController extends Controller
 {
@@ -66,6 +67,13 @@ class KegiatanController extends Controller
         
                     $btn .= '<button onclick="modalAction(\''.route('kegiatan.delete', $kegiatan->id_kegiatan).'\')" class="btn btn-danger btn-sm mr-2">';
                     $btn .= '<i class="fas fa-trash"></i></button>';
+
+                       // Tombol Unduh Surat Tugas
+                $btn .= '<a href="'.route('kegiatan.download', $kegiatan->id_kegiatan).'" target="_blank" class="btn btn-primary btn-sm ml-2">';
+                $btn .= '<i class="fas fa-download"></i></a>';
+            
+                return $btn . '</div>';
+
                 }
         
                 $btn .= '</div>';
@@ -456,4 +464,26 @@ class KegiatanController extends Controller
         // Stream untuk mendownload file PDF
         return $pdf->stream('Data Kegiatan ' . date('Y-m-d H:i:s') . '.pdf');
     }
+    public function unduhSuratTugas($id_kegiatan)
+    {
+        try {
+            // Ambil data kegiatan beserta panitia dari database menggunakan relasi Eloquent
+            $kegiatan = KegiatanModel::with('pengguna')->findOrFail($id_kegiatan);
+    
+            // Buat instance Dompdf
+            $dompdf = new Dompdf();
+    
+            // Load view untuk membuat PDF
+            $pdfView = view('kegiatan.surat_tugas', compact('kegiatan'))->render();
+            $dompdf->loadHtml($pdfView);
+    
+            $dompdf->setPaper('A4', 'P');
+            $dompdf->render();
+            $dompdf->stream("surat_tugas_{$kegiatan->nama_kegiatan}.pdf", ["Attachment" => true]);
+    
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
+      }
+}
+
 }
