@@ -93,7 +93,7 @@
     <table class="border-bottom-header">
         <tr>
             <td width="15%" class="text-center">
-                <img src="{{ asset('polinema-bw.png') }}" alt="Logo Polinema">
+                <td width="15%" class="text-center"><img src="{{ asset('polinema-bw.jpg') }}" class="image"></td>
             </td>
             <td width="85%">
                 <span class="text-center d-block font-11 font-bold mb-1">KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI</span>
@@ -115,7 +115,7 @@
         <p>Kepada Yth.</p>
         <p>Wakil Direktur I Politeknik Negeri Malang<br>di Tempat</p>
 
-        <p>Sehubungan dengan Kegiatan <strong>{{ $kegiatan->nama_kegiatan }}</strong> yang diselenggarakan oleh di Politeknik Negeri Malang pada tanggal {{ $kegiatan->tanggal_mulai }} - {{ $kegiatan->tanggal_selesai }}, maka dengan ini kami mohon dapat diperkenankan Surat Tugas kepada yang mengikuti kegiatan:</p>
+        <p>Sehubungan dengan Kegiatan <strong>{{ $kegiatan->nama_kegiatan }}</strong> yang diselenggarakan di {{ $kegiatan->tempat_kegiatan }} pada tanggal {{ $kegiatan->tanggal_mulai }} - {{ $kegiatan->tanggal_selesai }}, maka dengan ini kami mohon dapat diperkenankan Surat Tugas kepada yang mengikuti kegiatan:</p>
         
         <table class="table-container">
             <thead>
