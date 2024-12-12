@@ -42,15 +42,24 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 //route yang memerlukan autentikasi
 // Route::middleware(['auth'])->group(function(){
     Route::get('/dashboard', [WelcomeController::class, 'index']);
-            
-    // Routes untuk halaman profil
-    Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show');
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+        
+    // // Routes untuk halaman profil
+    // Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show'); // Menampilkan profil pengguna
+    // Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit'); // Halaman form edit profil
+    // Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update'); // Proses pembaruan profil
 
-    // Routes untuk ganti password
-    Route::get('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.changePassword');
-    Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
+    // // Routes untuk ganti password
+    // Route::get('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.changePassword'); // Halaman form ganti password
+    // Route::put('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword'); // Proses pembaruan password
+
+    // Route untuk menampilkan halaman profil
+    Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show');
+
+    // Route untuk menampilkan halaman edit profil
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+
+    // Route untuk mengupdate profil (foto profil dan password)
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     //route kegiatan
     Route::get('/kegiatan', [KegiatanController::class, 'index'])->name('kegiatan.index');
