@@ -7,6 +7,7 @@ use App\Models\AgendaModel;
 use App\Models\KegiatanModel;
 use App\Models\KegiatanUser;
 use App\Models\PenggunaModel;
+use App\Models\DetailAgendaModel;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -191,8 +192,14 @@ public function show(string $id)
         ], 404);
     }
 
-    // Jika data ditemukan, tampilkan view
-    return view('agenda.show', ['agenda' => $agenda]);
+    // Ambil detail agenda terkait
+    $detailAgenda = DetailAgendaModel::with(['kegiatan', 'agenda'])->where('id_agenda', $id)->first();
+
+    // Tampilkan view dengan data agenda dan detail agenda
+    return view('agenda.show', [
+        'agenda' => $agenda,
+        'detailAgenda' => $detailAgenda
+    ]);
 }
 
 public function delete(Request $request, $id)
