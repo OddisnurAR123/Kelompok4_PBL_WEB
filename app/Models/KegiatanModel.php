@@ -28,6 +28,7 @@ class KegiatanModel extends Model
         'tanggal_selesai',
         'periode',
         'id_kategori_kegiatan',
+        'tempat_kegiatan',
     ];    
 
     public function kategoriKegiatan()

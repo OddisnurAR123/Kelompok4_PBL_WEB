@@ -80,6 +80,10 @@
                         <td>{{ $kegiatan->kategoriKegiatan->nama_kategori_kegiatan ?? 'Tidak ada kategori' }}</td>
                     </tr>
                     <tr>
+                        <th>Tempat Kegiatan</th>
+                        <td>{{ $kegiatan->tempat_kegiatan }}</td>
+                    </tr>
+                    <tr>
                         <th>Progres Kegiatan</th>
                         <td>
                             @if($kegiatan->detailKegiatan && $kegiatan->detailKegiatan->count())

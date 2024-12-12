@@ -57,6 +57,7 @@
                             <th>Tanggal Selesai</th>
                             <th>Periode</th>
                             <th>Kategori Kegiatan</th>
+                            <th>Tempat Kegiatan</th>
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -132,6 +133,12 @@
                 },
                 {
                     data: "kategori_kegiatan",
+                    className: "",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "tempat_kegiatan",
                     className: "",
                     orderable: true,
                     searchable: true

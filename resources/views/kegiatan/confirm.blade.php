@@ -61,7 +61,11 @@
                                     Tidak Ditemukan
                                 @endisset
                             </td>
-                        </tr>                        
+                        </tr> 
+                        <tr>
+                            <th class="text-right col-3">Tempat Kegiatan :</th>
+                            <td class="col-9">{{ $kegiatan->tempat_kegiatan }}</td>
+                        </tr>                      
                     </table>
                 </div>
                 <div class="modal-footer">

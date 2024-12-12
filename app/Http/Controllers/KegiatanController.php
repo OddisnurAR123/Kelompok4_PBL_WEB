@@ -43,7 +43,8 @@ class KegiatanController extends Controller
                 'tanggal_mulai',
                 'tanggal_selesai',
                 'periode',
-                'id_kategori_kegiatan'
+                'id_kategori_kegiatan',
+                'tempat_kegiatan'
             );
 
             return DataTables::of($kegiatan)
@@ -103,6 +104,7 @@ class KegiatanController extends Controller
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date',
             'periode' => 'required|string|max:50',
+            'tempat_kegiatan' => 'required|string|max:255',
             'id_kategori_kegiatan' => 'required|exists:m_kategori_kegiatan,id_kategori_kegiatan',
             'anggota.*.id_pengguna' => 'required|exists:m_pengguna,id_pengguna',
             'anggota.*.id_jabatan_kegiatan' => 'required|exists:m_jabatan_kegiatan,id_jabatan_kegiatan',
@@ -123,7 +125,8 @@ class KegiatanController extends Controller
             'tanggal_mulai',
             'tanggal_selesai',
             'periode',
-            'id_kategori_kegiatan'
+            'id_kategori_kegiatan',
+            'tempat_kegiatan'
         ));
 
         // Menyimpan anggota ke tabel pivot t_kegiatan_user
@@ -197,6 +200,7 @@ class KegiatanController extends Controller
             'tanggal_mulai' => 'nullable|date',
             'tanggal_selesai' => 'nullable|date',
             'periode' => 'nullable|string|max:50',
+            'tempat_kegiatan' => 'required|string|max:255',
             'id_kategori_kegiatan' => 'nullable|exists:m_kategori_kegiatan,id_kategori_kegiatan',
             'anggota.*.id_pengguna' => 'nullable|exists:m_pengguna,id_pengguna',
             'anggota.*.id_jabatan_kegiatan' => 'nullable|exists:m_jabatan_kegiatan,id_jabatan_kegiatan',
@@ -219,6 +223,7 @@ class KegiatanController extends Controller
         $kegiatan->tanggal_selesai = $request->tanggal_selesai ?? $kegiatan->tanggal_selesai;
         $kegiatan->periode = $request->periode ?? $kegiatan->periode;
         $kegiatan->id_kategori_kegiatan = $request->id_kategori_kegiatan ?? $kegiatan->id_kategori_kegiatan;
+        $kegiatan->tempat_kegiatan = $request->tempat_kegiatan ?? $kegiatan->tempat_kegiatan;
     
         // Simpan perubahan
         $kegiatan->save();
@@ -334,6 +339,7 @@ class KegiatanController extends Controller
                             'tanggal_selesai' => $tanggal_selesai, 
                             'periode' => $value['E'], 
                             'id_kategori_kegiatan' => $value['F'], 
+                            'tempat_kegiatan' => $value['G'], 
                         ]; 
                     } 
                 } 
@@ -366,7 +372,8 @@ class KegiatanController extends Controller
             'tanggal_mulai',
             'tanggal_selesai',
             'periode', 
-            'id_kategori_kegiatan'
+            'id_kategori_kegiatan',
+            'tempat_kegiatan'
         )
         ->with('kategoriKegiatan') // Relasi dengan kategori
         ->get();
@@ -383,6 +390,7 @@ class KegiatanController extends Controller
         $sheet->setCellValue('E1', 'Tanggal Selesai');
         $sheet->setCellValue('F1', 'Periode');
         $sheet->setCellValue('G1', 'Kategori Kegiatan');
+        $sheet->setCellValue('H1', 'Kategori Kegiatan');
 
         // Buat header bold
         $sheet->getStyle('A1:F1')->getFont()->setBold(true);
@@ -398,6 +406,7 @@ class KegiatanController extends Controller
             $sheet->setCellValue('E' . $baris, $value->tanggal_selesai);
             $sheet->setCellValue('F' . $baris, $value->periode);
             $sheet->setCellValue('G' . $baris, $value->kategoriKegiatan->nama_kategori_kegiatan ?? 'Tidak Ada Kategori'); // Ambil nama kategori
+            $sheet->setCellValue('H' . $baris, $value->tempat_kegiatan);
             $baris++;
             $no++;
         }
@@ -432,7 +441,7 @@ class KegiatanController extends Controller
     public function export_pdf()
     {
         // Mengambil data kegiatan beserta kategori_kegiatan
-        $kegiatan = KegiatanModel::select('kode_kegiatan', 'nama_kegiatan', 'tanggal_mulai', 'tanggal_selesai', 'periode', 'id_kategori_kegiatan')
+        $kegiatan = KegiatanModel::select('kode_kegiatan', 'nama_kegiatan', 'tanggal_mulai', 'tanggal_selesai', 'periode', 'id_kategori_kegiatan', 'tempat_kegiatan')
             ->with('kategoriKegiatan')
             ->orderBy('kode_kegiatan')
             ->get();

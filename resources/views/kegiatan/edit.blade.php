@@ -57,6 +57,13 @@
                     <small id="error-kategori_kegiatan" class="error-text form-text text-danger"></small>
                 </div>
 
+                <!-- Tempat Kegiatan -->
+                <div class="form-group">
+                    <label>Tempat Kegiatan</label>
+                    <input type="text" name="tempat_kegiatan" id="tempat_kegiatan" class="form-control" maxlength="100" value="{{ old('tempat_kegiatan', $kegiatan->tempat_kegiatan) }}" required>
+                    <small id="error-tempat_kegiatan" class="error-text form-text text-danger"></small>
+                </div>
+
                 <!-- Tombol Tambah Anggota -->
                 <button type="button" id="addAnggota" class="btn p-0 border-0 bg-transparent mt-3" title="Tambah Anggota">
                     <i class="fas fa-plus text-primary"></i>
