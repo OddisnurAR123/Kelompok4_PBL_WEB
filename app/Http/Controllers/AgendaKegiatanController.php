@@ -17,6 +17,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 
+
+
 class AgendaKegiatanController extends Controller
 {
     public function index()
@@ -127,6 +129,9 @@ public function getPengguna(Request $request)
 // Method untuk menyimpan data agenda ke database
 public function store(Request $request)
 {
+    \Log::info('Data masuk ke store:', $request->all());
+    
+    // Validasi data
     $rules = [
         'nama_agenda' => 'required|string|max:255',
         'id_kegiatan' => 'required|exists:t_kegiatan,id_kegiatan',
@@ -140,9 +145,18 @@ public function store(Request $request)
     $validated = $request->validate($rules);
 
     try {
+        \Log::info('Data tervalidasi:', $validated);
+        
+        // Menyimpan data ke database
         AgendaModel::create($validated);
-        return response()->json(['status' => true, 'message' => 'Data agenda berhasil disimpan.']);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Data agenda berhasil disimpan.',
+        ]);
     } catch (\Exception $e) {
+        \Log::error('Kesalahan saat menyimpan:', ['error' => $e->getMessage()]);
+        
         return response()->json([
             'status' => false,
             'message' => 'Terjadi kesalahan saat menyimpan data.',
@@ -150,6 +164,7 @@ public function store(Request $request)
         ], 500);
     }
 }
+
         public function edit(string $id_agenda)
 {
     $agenda = AgendaModel::findOrFail($id_agenda);
