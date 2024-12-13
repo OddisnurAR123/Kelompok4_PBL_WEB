@@ -57,9 +57,9 @@ class KegiatanEksternalController extends Controller
                 'waktu_kegiatan' => 'required|date',
                 'periode' => 'required|string|max:4',
             ];
-
+    
             $validator = Validator::make($request->all(), $rules);
-
+    
             if ($validator->fails()) {
                 return response()->json([
                     'status' => false,
@@ -67,18 +67,21 @@ class KegiatanEksternalController extends Controller
                     'msgField' => $validator->errors(),
                 ]);
             }
-
+    
             $namaPic = auth()->user()->nama_pengguna ?? 'Unknown';
-
+            $idPengguna = auth()->user()->id_pengguna ?? null;  // Menyimpan id_pengguna yang diambil dari pengguna yang sedang login
+    
             try {
+                // Menyimpan data dengan menambahkan id_pengguna
                 KegiatanEksternalModel::create([
                     'nama_kegiatan' => $request->nama_kegiatan,
                     'waktu_kegiatan' => $request->waktu_kegiatan,
                     'pic' => $namaPic,
                     'periode' => $request->periode,
+                    'id_pengguna' => $idPengguna, // Menyimpan id_pengguna
                     'id_kategori_kegiatan' => 3,
                 ]);
-
+    
                 return response()->json([
                     'status' => true,
                     'message' => 'Data kategori kegiatan berhasil disimpan',
@@ -90,7 +93,7 @@ class KegiatanEksternalController extends Controller
                 ]);
             }
         }
-
+    
         return redirect('/');
-    }
+    }    
 }

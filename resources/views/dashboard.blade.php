@@ -35,7 +35,7 @@
                 <div class="col-md-6 mb-3">
                     <div class="card border-success shadow-sm">
                         <div class="card-header" style="background-color: #FFB800; color: white;">
-                            <h5 class="mb-0">🗓️ Agenda Terdekat</h5>
+                            <h5 class="mb-0">🗓 Agenda Terdekat</h5>
                         </div>
                         <div class="card-body text-center">
                             @if(isset($newAgenda) && $newAgenda->isNotEmpty())

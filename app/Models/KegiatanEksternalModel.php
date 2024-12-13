@@ -9,8 +9,8 @@ class KegiatanEksternalModel extends Model
 {
     use HasFactory;
 
-    protected $table= 't_kegiatan_eksternal'; //mendefinisikan nama tabel yang akan digunakan. :o
+    protected $table = 't_kegiatan_eksternal'; // Mendefinisikan nama tabel yang akan digunakan
     protected $primaryKey = 'id_kegiatan_eksternal';
     public $timestamps = true;
-    protected $fillable = ['nama_kegiatan','waktu_kegiatan','pic', 'periode'];
+    protected $fillable = ['nama_kegiatan', 'waktu_kegiatan', 'pic', 'periode', 'id_pengguna']; // Menambahkan id_pengguna
 }
