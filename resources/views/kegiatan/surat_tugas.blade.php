@@ -74,11 +74,12 @@
             text-align: center;
         }
         .footer {
-            margin-top: 30px;
-            text-align: right;
-        }
-        .footer .sign {
             margin-top: 20px;
+            float: right;
+            text-align: left;
+        }
+            .footer .sign {
+            margin-top: 80px;
         }
         .header-info {
             margin-top: 10px;
@@ -90,20 +91,24 @@
     </style>
 </head>
 <body>
-    <table class="border-bottom-header">
-        <tr>
-            <td width="15%" class="text-center">
-                <td width="15%" class="text-center"><img src="{{ asset('polinema-bw.jpg') }}" class="image"></td>
-            </td>
-            <td width="85%">
-                <span class="text-center d-block font-11 font-bold mb-1">KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI</span>
-                <span class="text-center d-block font-13 font-bold mb-1">POLITEKNIK NEGERI MALANG</span>
-                <span class="text-center d-block font-10">Jl. Soekarno-Hatta No. 9 Malang 65141</span>
-                <span class="text-center d-block font-10">Telepon (0341) 404424 Pes. 101-105, 0341-404420, Fax. (0341) 404420</span>
-                <span class="text-center d-block font-10">Laman: www.polinema.ac.id</span>
-            </td>
-        </tr>
-    </table>
+    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+        <table style="text-align: center; border-bottom: 2px solid #000; width: 100%;">
+            <tr>
+                <td width="15%" style="vertical-align: middle;">
+                    <img src="{{ asset('polinema-bw.jpg') }}" style="width: 80px; height: auto;">
+                </td>
+                <td width="85%" style="font-family: 'Times New Roman', Times, serif;">
+                    <span style="font-size: 15px;">KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET DAN</span><br>
+                    <span style="font-size: 15px;">TEKNOLOGI</span><br>
+                    <span style="font-size: 17px; font-weight: bold;">POLITEKNIK NEGERI MALANG</span><br>
+                    <span style="font-size: 15px; font-weight: bold;">JURUSAN TEKNOLOGI INFORMASI</span><br>
+                    <span style="font-size: 12px;">Jl. Soekarno Hatta No.9 Malang 65141</span><br>
+                    <span style="font-size: 12px;">Telp (0341) 404424 – 404425 Fax (0341) 404420</span><br>
+                    <span style="font-size: 12px;">Laman: <a href="https://www.polinema.ac.id" style="text-decoration: none; color: #0000EE;">www.polinema.ac.id</a></span>
+                </td>
+            </tr>
+        </table>
+    </div>
 
     <div class="header-info">
         <p>Nomor: </p>
@@ -111,11 +116,16 @@
         <p>Perihal: Permohonan Surat Tugas</p>
     </div>
 
-    <div class="content">
-        <p>Kepada Yth.</p>
-        <p>Wakil Direktur I Politeknik Negeri Malang<br>di Tempat</p>
+    <div class="content" style="font-family: 'Times New Roman', Times, serif; font-size: 15px; line-height: 15px; text-align: left; margin-top: 20px;">
+        <p style="display: inline-block; margin-right: 20px; font-weight: bold;">Kepada Yth.</p>
+        <p style="display: inline-block; line-height: 1.5; font-weight: bold; margin-left: 10px;">Pembantu Direktur I Politeknik Negeri Malang</p>
+        <br>
+        <p style="font-weight: bold;">di Tempat</p>
+    </div>
+    
+    
 
-        <p>Sehubungan dengan Kegiatan <strong>{{ $kegiatan->nama_kegiatan }}</strong> yang diselenggarakan di {{ $kegiatan->tempat_kegiatan }} pada tanggal {{ $kegiatan->tanggal_mulai }} - {{ $kegiatan->tanggal_selesai }}, maka dengan ini kami mohon dapat diperkenankan Surat Tugas kepada yang mengikuti kegiatan:</p>
+        <p>Sehubungan dengan Kegiatan "<strong>{{ $kegiatan->nama_kegiatan }}</strong>" yang diselenggarakan di {{ $kegiatan->tempat_kegiatan }} pada tanggal {{ $kegiatan->tanggal_mulai }} - {{ $kegiatan->tanggal_selesai }}, maka dengan ini kami mohon dapat diperkenankan Surat Tugas kepada yang mengikuti kegiatan:</p>
         
         <table class="table-container">
             <thead>
@@ -141,10 +151,17 @@
         <p>Demikian permohonan ini atas perhatian kami sampaikan terima kasih.</p>
     </div>
 
-    <div class="footer">
-        <p>Ketua Jurusan</p>
-
-        <p class="sign">Dr.Eng. Rosa Andrie Asmara<br>NIP: 198010102005011001</p>
+    <<div class="footer">
+        <p style="margin-bottom: 2px;">Ketua Jurusan</p>
+        
+        <p class="sign" style="margin-bottom: 2px;">
+            Dr.Eng. Rosa Andrie Asmara
+        </p>
+        <hr style="border: 0.3px solid black; width: 200px; margin: 2px 0;">
+        <p style="margin-top: 2px;">
+            NIP: 198010102005011001
+        </p>
     </div>
+    
 </body>
 </html>

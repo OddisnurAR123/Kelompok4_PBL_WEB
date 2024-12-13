@@ -61,75 +61,94 @@ class AgendaKegiatanController extends Controller
             ->rawColumns(['aksi']) // Menandai kolom aksi sebagai HTML
             ->make(true); // Menghasilkan output JSON untuk DataTables
     }
-    public function create($id_kegiatan)
-    {
-        return view('agenda.create', ['id_kegiatan' => $id_kegiatan]);
-    }    
-        // Mengambil pengguna berdasarkan kegiatan yang dipilih
-        public function getPengguna(Request $request)
-        {
-            $id_kegiatan = $request->input('id_kegiatan');
-        
-            if ($id_kegiatan) {
-                try {
-                    $kegiatan = KegiatanModel::find($id_kegiatan);
-        
-                    if ($kegiatan && $kegiatan->id_jabatan_kegiatan == 1) {
-                        // Jika id_jabatan_kegiatan adalah 1, tidak mengembalikan pengguna
-                        return response()->json([]);
-                    }
-        
-                    // Mengambil pengguna yang terkait dengan kegiatan, tetapi mengecualikan PIC kegiatan (id_jabatan_kegiatan = 1)
-                    $pengguna = KegiatanUser::with('pengguna:id_pengguna,nama_pengguna')
-                        ->where('id_kegiatan', $id_kegiatan)
-                        ->whereHas('pengguna', function ($query) use ($kegiatan) {
-                            $query->where('id_jabatan_kegiatan', '!=', 1);
-                        })
-                        ->get()
-                        ->map(function ($item) {
-                            return [
-                                'id_pengguna' => $item->id_pengguna,
-                                'nama_pengguna' => $item->pengguna ? $item->pengguna->nama_pengguna : 'N/A',
-                            ];
-                        });
-        
-                    return response()->json($pengguna);
-        
-                } catch (\Exception $e) {
-                    return response()->json(['message' => 'Data pengguna tidak ditemukan.', 'error' => $e->getMessage()], 500);
-                }
+    public function create(Request $request)
+{
+    try {
+        $id_kegiatan = $request->input('id_kegiatan', 1);  
+
+        // Mengambil data kegiatan berdasarkan ID
+        $kegiatan = KegiatanModel::findOrFail($id_kegiatan);
+
+        // Mengambil semua pengguna yang terkait dengan kegiatan ini
+        $pengguna = KegiatanUser::with('pengguna:id_pengguna,nama_pengguna')
+                            ->where('id_kegiatan', $id_kegiatan)
+                            ->whereHas('pengguna', function ($query) {
+                                $query->where('id_jabatan_kegiatan', '!=', 1);
+                            })
+                            ->get()
+                            ->map(function ($item) {
+                                return [
+                                    'id_pengguna' => $item->id_pengguna,
+                                    'nama_pengguna' => $item->pengguna ? $item->pengguna->nama_pengguna : 'N/A',
+                                ];
+                            });
+
+        return view('agenda.create', compact('kegiatan', 'pengguna'));
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'Kegiatan tidak ditemukan.', 'error' => $e->getMessage()], 500);
+    }
+}
+public function getPengguna(Request $request)
+{
+    $id_kegiatan = $request->input('id_kegiatan');
+
+    if ($id_kegiatan) {
+        try {
+            $kegiatan = KegiatanModel::findOrFail($id_kegiatan);
+
+            if ($kegiatan->id_jabatan_kegiatan == 1) {
+                return response()->json([]);  // Mengembalikan array kosong jika ID jabatan adalah 1
             }
-        
-            return response()->json([]);
-        }    
-        // Method untuk menyimpan data agenda ke database
-        public function store(Request $request)
-        {
-            $rules = [
-                'nama_agenda' => 'required|string|max:255',
-                'id_kegiatan' => 'required|exists:t_kegiatan,id_kegiatan',
-                'tempat_agenda' => 'required|string|max:255',
-                'id_pengguna' => 'nullable|exists:t_kegiatan_user,id_pengguna',
-                'bobot_anggota' => 'required|numeric|min:0',
-                'deskripsi' => 'nullable|string',
-                'tanggal_agenda' => 'required|date|date_format:Y-m-d\TH:i',
-            ];
-            
-            $validated = $request->validate($rules);
-            try {
-                AgendaModel::create($validated);
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Data agenda berhasil disimpan.',
-                ]);
-            } catch (\Exception $e) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Terjadi kesalahan saat menyimpan data.',
-                    'error' => $e->getMessage(),
-                ], 500);
-            }
+
+            $pengguna = KegiatanUser::with('pengguna:id_pengguna,nama_pengguna')
+                            ->where('id_kegiatan', $id_kegiatan)
+                            ->whereHas('pengguna', function ($query) {
+                                $query->where('id_jabatan_kegiatan', '!=', 1);
+                            })
+                            ->get()
+                            ->map(function ($item) {
+                                return [
+                                    'id_pengguna' => $item->id_pengguna,
+                                    'nama_pengguna' => $item->pengguna ? $item->pengguna->nama_pengguna : 'N/A',
+                                ];
+                            });
+
+            return response()->json($pengguna);
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Data pengguna tidak ditemukan.', 'error' => $e->getMessage()], 500);
         }
+    }
+
+    return response()->json([]);
+}
+
+// Method untuk menyimpan data agenda ke database
+public function store(Request $request)
+{
+    $rules = [
+        'nama_agenda' => 'required|string|max:255',
+        'id_kegiatan' => 'required|exists:t_kegiatan,id_kegiatan',
+        'tempat_agenda' => 'required|string|max:255',
+        'id_pengguna' => 'nullable|exists:t_kegiatan_user,id_pengguna',
+        'bobot_anggota' => 'required|numeric|min:0',
+        'deskripsi' => 'nullable|string',
+        'tanggal_agenda' => 'required|date|date_format:Y-m-d\TH:i',
+    ];
+
+    $validated = $request->validate($rules);
+
+    try {
+        AgendaModel::create($validated);
+        return response()->json(['status' => true, 'message' => 'Data agenda berhasil disimpan.']);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Terjadi kesalahan saat menyimpan data.',
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+}
         public function edit(string $id_agenda)
 {
     $agenda = AgendaModel::findOrFail($id_agenda);
@@ -171,7 +190,7 @@ public function update(Request $request, $id_agenda)
             'msgField' => $validator->errors(),
         ]);
     }    
-    $agenda->update($request->all()); // `bobot_anggota` secara otomatis akan diperbarui jika ada di request.
+    $agenda->update($request->all()); // bobot_anggota secara otomatis akan diperbarui jika ada di request.
 
     return response()->json([
         'status' => true,
@@ -402,6 +421,4 @@ public function getAgendaByKegiatan($id)
         'agendas' => $agendas
     ]);
 }
-
-
 }
