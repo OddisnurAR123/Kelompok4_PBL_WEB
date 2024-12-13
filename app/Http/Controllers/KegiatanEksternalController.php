@@ -25,13 +25,26 @@ class KegiatanEksternalController extends Controller
     }
 
     public function list(Request $request) {
-        // Mengambil data kegiatan eksternal dengan nama kolom yang benar
-        $kegiatanEksternal = KegiatanEksternalModel::select('id_kegiatan_eksternal', 'nama_kegiatan', 'waktu_kegiatan', 'periode');
-
+        // Ambil nama pengguna yang sedang login
+        $pic = auth()->user()->nama_pengguna ?? null;
+    
+        // Validasi jika nama pengguna tidak ditemukan
+        if (!$pic) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Pengguna tidak terautentikasi.'
+            ], 401);
+        }
+    
+        // Mengambil data kegiatan eksternal yang sesuai dengan pengguna login
+        $kegiatanEksternal = KegiatanEksternalModel::select('id_kegiatan_eksternal', 'nama_kegiatan', 'waktu_kegiatan', 'periode')
+            ->where('pic', $pic); // Filter berdasarkan kolom pic
+    
         // Menampilkan data dalam bentuk DataTables tanpa kolom aksi
         return DataTables::of($kegiatanEksternal)
             ->make(true); // Mengaktifkan DataTables
-    }     
+    }
+        
 
     // Menampilkan form tambah kegiatan eksternal
     public function create() {
