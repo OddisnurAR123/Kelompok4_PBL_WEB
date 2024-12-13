@@ -123,9 +123,12 @@
                     Agenda Kegiatan
                     @if(Auth::user()->kegiatan()->wherePivot('id_jabatan_kegiatan', 1)->exists())
                     <!-- Tautan Tambah Agenda -->
-                    <a href="{{ route('agenda.create', ['id_kegiatan' => $kegiatan->id_kegiatan]) }}" id="addAgenda" class="btn p-0 border-0 bg-transparent mt-3" title="Tambah Agenda">
-                        <i class="fas fa-plus text-primary"></i>
-                    </a>
+                    <a href="javascript:void(0);" id="addAgenda" class="btn p-0 border-0 bg-transparent mt-3" 
+                    title="Tambah Agenda" 
+                    onclick="openModal('{{ route('agenda.create', ['id_kegiatan' => $kegiatan->id_kegiatan]) }}')">
+                    <i class="fas fa-plus text-primary"></i>
+                </a>
+                                    </a>
                 @endif                                 
                 </h4>
                 <table class="table table-bordered table-striped table-hover table-sm">
@@ -194,11 +197,17 @@
 </div>
 <div class="modal fade" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content custom-modal">
+        <div class="modal-content">
             <div class="modal-body" id="modalContent">
                 <div class="text-center">
                     <div class="spinner-border text-primary" role="status">
                         <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -210,7 +219,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
 <script>
-    function openModal(url) {
+     function openModal(url) {
         $('#modalContent').html('<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div></div>');
         $('#crudModal').modal('show');
         $.ajax({
