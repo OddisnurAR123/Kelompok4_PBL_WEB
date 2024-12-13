@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\DetailKegiatanModel;
+use App\Models\DetailAgendaModel;
 use App\Models\KegiatanModel;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 
 class DetailKegiatanController extends Controller
 {
@@ -53,7 +55,7 @@ class DetailKegiatanController extends Controller
             ->make(true);
     }
     
-    public function create()
+    public function create(Request $request)
     {
         $breadcrumb = (object) [
             'title' => 'Tambah Progres Kegiatan',
@@ -63,7 +65,14 @@ class DetailKegiatanController extends Controller
         // Ambil data kegiatan untuk ditampilkan di dropdown
         $kegiatan = KegiatanModel::select('id_kegiatan', 'nama_kegiatan')->get();
 
-        return view('detail_kegiatan.create', compact('kegiatan'));
+        $averageProgress = 0;
+        if ($request->has('id_kegiatan')) {
+            $averageProgress = DB::table('t_detail_agenda')
+                                ->where('id_kegiatan', $request->id_kegiatan)
+                                ->avg('progres_agenda');
+        }
+
+        return view('detail_kegiatan.create', compact('kegiatan', 'averageProgress'));
     }
 
     public function store(Request $request)
@@ -128,7 +137,13 @@ class DetailKegiatanController extends Controller
     {
         $detailKegiatan = DetailKegiatanModel::findOrFail($id);
         $kegiatanList = KegiatanModel::all();
-        return view('detail_kegiatan.edit', compact('detailKegiatan', 'kegiatanList'));
+        $averageProgress = 0;
+    if ($detailKegiatan->id_kegiatan) {
+        $averageProgress = DB::table('t_detail_agenda')
+                            ->where('id_kegiatan', $detailKegiatan->id_kegiatan)
+                            ->avg('progres_agenda');
+    }
+        return view('detail_kegiatan.edit', compact('detailKegiatan', 'kegiatanList', 'averageProgress'));
     }
 
     // Menyimpan perubahan data detail kegiatan
