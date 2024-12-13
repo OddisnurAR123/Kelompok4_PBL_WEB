@@ -48,11 +48,30 @@ class KegiatanController extends Controller
                 'tempat_kegiatan'
             );
 
+            if ($request->has('periode_filter') && $request->periode_filter != '') {
+                $kegiatan->where('periode', $request->periode_filter);
+            }
+
             return DataTables::of($kegiatan)
             ->addIndexColumn()
             ->addColumn('kategori_kegiatan', function ($kegiatan) {
                 return $kegiatan->kategoriKegiatan ? $kegiatan->kategoriKegiatan->nama_kategori_kegiatan : 'Tidak ada kategori';
-            })    
+            })   
+            ->addColumn('status', function ($kegiatan) {
+                $status = 'Belum selesai';
+                $statusClass = 'badge-warning';
+    
+                if ($kegiatan->progres_kegiatan == 100) {
+                    $status = 'Selesai';
+                    $statusClass = 'badge-success';
+                } elseif ($kegiatan->progres_kegiatan < 100 && $kegiatan->tanggal_selesai < now()) {
+                    $status = 'Tidak selesai';
+                    $statusClass = 'badge-danger';
+                }
+    
+                return '<span class="badge ' . $statusClass . '">' . $status . '</span>';
+            })
+
             ->addColumn('aksi', function ($kegiatan) {
                 $btn = '<div class="d-flex justify-content-center">';
         
@@ -79,7 +98,7 @@ class KegiatanController extends Controller
                 $btn .= '</div>';
                 return $btn;
             })
-            ->rawColumns(['aksi'])
+            ->rawColumns(['status', 'aksi'])
             ->make(true);        
     }
 

@@ -33,6 +33,17 @@
         @if(session('error'))
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
+
+        <!-- Filter berdasarkan periode -->
+        <div class="d-flex justify-content-between">
+            <div class="form-group">
+                <label for="periode_filter">Periode</label>
+                <select class="form-control" id="periode_filter">
+                    <!-- Pilihan periode akan diisi oleh JavaScript -->
+                </select>
+            </div>
+        </div>
+
         <!-- Tab Nav -->
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
@@ -58,6 +69,7 @@
                             <th>Periode</th>
                             <th>Kategori Kegiatan</th>
                             <th>Tempat Kegiatan</th>
+                            <th>Status</th>
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -87,12 +99,31 @@
     var dataKegiatan;
 
     $(document).ready(function() {
-        dataKegiatan = $('#table_kegiatan').DataTable({
+        // Menghitung 5 tahun terakhir
+        var currentYear = new Date().getFullYear();
+        var years = [];
+        for (var i = currentYear; i > currentYear - 5; i--) {
+            years.push(i);
+        }
+
+        // Menambahkan opsi tahun ke dalam dropdown
+        var periodeFilter = $('#periode_filter');
+        periodeFilter.empty(); // Menghapus opsi yang ada sebelumnya
+        periodeFilter.append('<option value="">Semua Periode</option>'); // Opsi untuk semua periode
+        years.forEach(function(year) {
+            periodeFilter.append('<option value="' + year + '">' + year + '</option>');
+        });
+
+        var dataKegiatan = $('#table_kegiatan').DataTable({
             serverSide: true,
             ajax: {
                 "url": "{{ url('kegiatan/list') }}",
                 "dataType": "json",
                 "type": "POST",
+                "data": function(d) {
+                // Menambahkan parameter periode_filter ke request
+                d.periode_filter = $('#periode_filter').val();
+            }
             },
             columns: [
                 {
@@ -144,12 +175,22 @@
                     searchable: true
                 },
                 {
+                    data: "status",
+                    className: "",
+                    orderable: true,
+                    searchable: true
+                 },
+                {
                     data: "aksi",
                     className: "",
                     orderable: false,
                     searchable: false
                 }
             ]
+        });
+        // Event listener untuk filter periode
+        $('#periode_filter').change(function() {
+            dataKegiatan.draw(); // Reload table dengan filter yang baru
         });
     });
 </script>
