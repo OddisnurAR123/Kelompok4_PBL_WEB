@@ -4,11 +4,13 @@
 <div class="card card-outline card-primary">
     <div class="card-header">
         <h3 class="card-title">Daftar Kegiatan Eksternal Non-JTI</h3>
-        <div class="card-tools ml-auto d-flex">
-            <button onclick="modalAction('{{ route('kegiatan_eksternal.create') }}')" class="btn btn-success btn-sm mr-2">
-                <i class="fa fa-plus"></i> Tambah Kegiatan
-            </button>                    
-        </div>   
+        @if(in_array(Auth::user()->id_jenis_pengguna, [3]))
+            <div class="card-tools ml-auto d-flex">
+                <button onclick="modalAction('{{ route('kegiatan_eksternal.create') }}')" class="btn btn-success btn-sm mr-2">
+                    <i class="fa fa-plus"></i> Tambah Kegiatan
+                </button>                    
+            </div>   
+        @endif
     </div>
     <div class="card-body">
         @if(session('success'))
@@ -18,16 +20,6 @@
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
 
-        <!-- Tab Nav -->
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="daftar-tab" data-bs-toggle="tab" href="{{ route('kegiatan.index')}}" role="tab" aria-controls="daftar" aria-selected="true">Daftar Kegiatan</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="eksternal-tab" data-bs-toggle="tab" href="#daftar" role="tab" aria-controls="eksternal" aria-selected="false">Kegiatan Eksternal</a>
-            </li>            
-        </ul>
-            
         <table class="table table-bordered table-striped table-hover table-sm" id="table_kegiatan_eksternal">
             <thead>
                 <tr>
@@ -35,24 +27,23 @@
                     <th>Nama Kegiatan Eksternal</th>
                     <th>Waktu Kegiatan</th>
                     <th>Periode</th>
+                    @if(in_array(Auth::user()->id_jenis_pengguna, [1, 2]))
+                        <th>PIC</th>
+                    @endif
                 </tr>
             </thead>
+            <tbody>
+                <!-- Data akan dimuat melalui Ajax -->
+            </tbody>
         </table>        
     </div>
 </div>
 
-<!-- Modal -->
 <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" data-width="75%" aria-hidden="true"></div>
-
 @endsection
-
-@push('css')
-<!-- Add custom styles if needed -->
-@endpush
 
 @push('js')
 <script>
-    // Fungsi untuk memuat konten modal
     function modalAction(url = '') {
         $('#myModal').load(url, function() {
             $('#myModal').modal('show');
@@ -60,34 +51,38 @@
     }
 
     $(document).ready(function() {
+        // Inisialisasi DataTable dengan search
         $('#table_kegiatan_eksternal').DataTable({
-            serverSide: true, // Menggunakan data dari server
-            processing: true, // Menampilkan indikator loading
+            serverSide: true,
+            processing: true,
             ajax: {
-                url: "{{ url('kegiatan_eksternal/list') }}", // Endpoint untuk mendapatkan data
-                type: "POST", // Metode pengambilan data
+                url: "{{ url('kegiatan_eksternal/list') }}",
+                type: "POST",
                 headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}' // Sertakan CSRF token
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 error: function(xhr, error, code) {
-                    alert("Terjadi kesalahan: " + code); // Notifikasi error
+                    alert("Terjadi kesalahan: " + code);
                 }
             },
             columns: [
-                { data: "id_kegiatan_eksternal", title: "ID" }, // Kolom ID Kegiatan Eksternal
-                { data: "nama_kegiatan", title: "Nama Kegiatan Eksternal" }, // Kolom Nama
+                { data: "id_kegiatan_eksternal", title: "ID" },
+                { data: "nama_kegiatan", title: "Nama Kegiatan Eksternal" },
                 { data: "waktu_kegiatan", title: "Waktu Kegiatan" },
-                { data: "periode", title: "Periode"},
+                { data: "periode", title: "Periode" },
+                @if(in_array(Auth::user()->id_jenis_pengguna, [1, 2]))
+                { data: "pic", title: "PIC" },
+                @endif
             ],
-            order: [[0, 'asc']], // Urutkan berdasarkan kolom pertama (ID)
-            responsive: true, // Tambahkan responsivitas untuk tampilan mobile
+            order: [[0, 'asc']],
+            responsive: true,
+            dom: 'lfrtip', // Menambahkan fitur search di bagian atas tabel
             language: {
-                url: "//cdn.datatables.net/plug-ins/1.11.5/i18n/Indonesian.json" // Bahasa Indonesia (opsional)
+                url: "//cdn.datatables.net/plug-ins/1.11.5/i18n/Indonesian.json"
             }
         });
     });
 </script>
-
 <style>
     /* Mengubah tampilan tabel */
     #table_kegiatan_eksternal {
@@ -168,5 +163,4 @@
         opacity: 0.7;
     }
 </style>
-
 @endpush

@@ -31,7 +31,7 @@
         <!-- Dashboard -->
         @if(in_array(Auth::user()->id_jenis_pengguna, [2]))
             <li class="nav-item">
-                <a href="{{ url('//kegiatan') }}" class="nav-link {{ ($activeMenu == 'dashboard') ? 'active' : '' }}" style="color: {{ ($activeMenu == 'dashboard') ? '#3b82f6' : '#ffffff' }};">
+                <a href="{{ url('/kegiatan') }}" class="nav-link {{ ($activeMenu == 'dashboard') ? 'active' : '' }}" style="color: {{ ($activeMenu == 'dashboard') ? '#3b82f6' : '#ffffff' }};">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>Dashboard</p>
                 </a>

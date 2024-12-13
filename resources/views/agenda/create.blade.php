@@ -16,7 +16,11 @@
     <label>Pilih Pengguna</label>
     <select name="id_pengguna" id="id_pengguna" class="form-control" required></select>
 </div>
-
+<!-- Tempat Agenda -->
+<div class="form-group">
+    <label>Bobot Anggota</label>
+    <input type="text" name="bobot_anggota" id="bobot_anggota" class="form-control" required>
+</div>
 
     <!-- Tempat Agenda -->
     <div class="form-group">
@@ -72,22 +76,23 @@ $("#form-create-agenda").submit(function(e) {
 
     let formData = new FormData(this);
 
+    for (let [key, value] of formData.entries()) {
+        console.log(key, value); // Debugging form data
+    }
+
     $.ajax({
         url: "{{ route('agenda.store') }}",
         type: "POST",
         data: formData,
         processData: false,
         contentType: false,
-
         success: function(response) {
             Swal.fire('Sukses', response.message, 'success')
                 .then(() => location.reload());
         },
-
         error: function(xhr) {
             if (xhr.status === 422) {
                 let errors = xhr.responseJSON?.errors;
-
                 if (errors) {
                     $.each(errors, function(key, error) {
                         $(`#error-${key}`).text(error[0]);
@@ -101,4 +106,5 @@ $("#form-create-agenda").submit(function(e) {
         }
     });
 });
+
 </script>
