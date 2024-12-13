@@ -37,44 +37,37 @@ class ProfileController extends Controller
         $user = Auth::user();
     
         // Validasi input
-        $validated = $request->validate([
-            'nama_pengguna' => 'nullable|string|max:100',
-            'username' => 'nullable|string|max:100|unique:m_pengguna,username,' . $user->id_pengguna . ',id_pengguna',
-            'email' => 'nullable|email|max:50|unique:m_pengguna,email,' . $user->id_pengguna . ',id_pengguna',
+        $request->validate([
             'foto_profil' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
-            'password' => 'nullable|confirmed|min:6',
+            'current_password' => 'required',
+            'new_password' => 'required|string|min:6|confirmed',
         ]);
     
-        // Persiapkan data untuk diupdate
-        $dataToUpdate = [
-            'nama_pengguna' => $validated['nama_pengguna'] ?? $user->nama_pengguna,
-            'username' => $validated['username'] ?? $user->username,
-            'email' => $validated['email'] ?? $user->email,
-        ];
-    
-        // Update password jika diisi
-        if (!empty($validated['password'])) {
-            $dataToUpdate['password'] = Hash::make($validated['password']);
+        // Cek apakah password lama benar
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Password lama salah']);
         }
     
-        // Update foto profil jika ada
+        // Handle upload foto profil jika ada
         if ($request->hasFile('foto_profil')) {
             // Hapus foto lama jika ada
-            if (!empty($user->foto_profil)) {
-                Storage::delete('public/profiles/' . $user->foto_profil);
+            if ($user->foto_profil) {
+                Storage::delete('public/' . $user->foto_profil);
             }
     
-            // Simpan foto baru
-            $path = $request->file('foto_profil')->store('public/profiles');
-            $dataToUpdate['foto_profil'] = basename($path);
+            // Simpan foto profil yang baru
+            $fotoProfilPath = $request->file('foto_profil')->store('foto_profil', 'public');
+            // Update foto profil di database menggunakan Query Builder
+            DB::table('m_pengguna')
+                ->where('id_pengguna', $user->id_pengguna)
+                ->update(['foto_profil' => $fotoProfilPath]);
         }
     
-        // Update data pengguna di database
+        // Update password baru jika diperlukan
         DB::table('m_pengguna')
             ->where('id_pengguna', $user->id_pengguna)
-            ->update($dataToUpdate);
+            ->update(['password' => Hash::make($request->new_password)]);
     
         return redirect()->route('profile.edit')->with('success', 'Profil berhasil diperbarui!');
     }
-    
 }

@@ -15,12 +15,12 @@
                 {{ Auth::user()->nama_pengguna }} | {{ Auth::user()->jenisPengguna->nama_jenis_pengguna }}
             </span>
             <!-- Profile Picture -->
-            <img 
+            {{-- <img 
                 src="{{ Auth::user()->foto_profil ? asset('storage/' . Auth::user()->foto_profil) : asset('images/default-profile.png') }}" 
                 alt="Profile" 
                 class="rounded-circle" 
                 style="width: 30px; height: 30px; object-fit: cover; margin-right: 8px;">
-            <!-- User Name and Role -->
+            <!-- User Name and Role --> --}}
         </a>
     </li>
   </ul>

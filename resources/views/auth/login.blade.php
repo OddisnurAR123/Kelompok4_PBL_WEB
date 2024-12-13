@@ -14,6 +14,22 @@
   <link rel="stylesheet" href="{{ asset('adminlte/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
+
+  <style>
+    /* Background image for the login page */
+    body {
+      background-image: url('../public/login.jpg'); /* Ganti dengan path gambar Anda */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    /* .login-box {
+      background: rgba(255, 255, 255, 0.8); /* Menambahkan sedikit transparansi agar konten tetap terlihat jelas */
+      border-radius: 10px;
+      padding: 20px;
+    } */
+  </style>
 </head>
 <body class="hold-transition login-page">
   <div class="login-box">

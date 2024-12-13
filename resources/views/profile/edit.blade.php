@@ -11,9 +11,9 @@
                 <div class="card-body">
                     <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
                         @csrf
+                        @method('POST')
+                        
                         <div class="row align-items-center">
-                            <div class="col-md-4 d-flex justify-content-center mb-4 mb-md-0">
-                                <!-- Foto Profil -->
                             <div class="col-md-4 d-flex justify-content-center mb-4 mb-md-0">
                                 <div class="text-center">
                                     <div class="mb-3 position-relative">
@@ -30,42 +30,45 @@
                                             <p class="mt-2 text-muted">Foto belum diupload</p>
                                         @endif
                                     </div>
-                                    <!-- Input File Diletakkan di Bawah Foto Profil -->
                                     <div class="mb-3">
                                         <label for="foto_profil" class="form-label">Upload Foto Profil</label>
                                         <input type="file" name="foto_profil" id="foto_profil" class="form-control">
                                     </div>
                                 </div>
                             </div>
-                            </div>
                             <div class="col-md-8">
                                 <!-- Nama Pengguna -->
                                 <div class="mb-3">
                                     <label for="nama_pengguna" class="form-label">Nama</label>
-                                    <input type="text" name="nama_pengguna" id="nama_pengguna" class="form-control" value="{{ old('nama_pengguna', $user->nama_pengguna) }}" required>
+                                    <input type="text" name="nama_pengguna" id="nama_pengguna" class="form-control" value="{{ $user->nama_pengguna }}">
                                 </div>
 
                                 <!-- Username -->
                                 <div class="mb-3">
                                     <label for="username" class="form-label">Username</label>
-                                    <input type="text" name="username" id="username" class="form-control" value="{{ old('username', $user->username) }}" required>
+                                    <input type="text" name="username" id="username" class="form-control" value="{{ $user->username }}">
                                 </div>
 
                                 <!-- Email -->
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="email" name="email" id="email" class="form-control" value="{{ old('email', $user->email) }}" required>
+                                    <input type="email" name="email" id="email" class="form-control" value="{{ $user->email }}">
                                 </div>
 
                                 <!-- Password -->
                                 <div class="mb-3">
-                                    <label for="password" class="form-label">Password</label>
-                                    <input type="password" name="password" id="password" class="form-control" placeholder="Masukkan password baru" style="opacity: 0.7;">
+                                    <label for="current_password" class="form-label">Password Lama</label>
+                                    <input type="password" name="current_password" id="current_password" class="form-control" placeholder="Masukkan password lama">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="new_password" class="form-label">Password Baru</label>
+                                    <input type="password" name="new_password" id="new_password" class="form-control" placeholder="Masukkan password baru">
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
-                                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="Konfirmasi password baru" style="opacity: 0.7;">
+                                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="Konfirmasi password baru">
                                 </div>
 
                                 <div class="d-flex justify-content-between">

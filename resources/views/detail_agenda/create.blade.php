@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.0/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.0/dist/sweetalert2.all.min.js"></script>
+
 <form action="{{ url('/detail_agenda/store') }}" method="POST" id="form-tambah-detail_agenda" enctype="multipart/form-data">
     @csrf
     <div class="modal-dialog modal-lg" role="document">
@@ -48,72 +51,47 @@
 
 <script>
     $(document).ready(function () {
-        $("#form-tambah-detail_agenda").validate({
-            rules: {
-                id_kegiatan: {
-                    required: true
-                },
-                id_agenda: {
-                    required: true
-                },
-                keterangan: {
-                    required: true,
-                    minlength: 3
-                },
-                progres_agenda: {
-                    required: true,
-                    number: true,
-                    min: 0,
-                    max: 100
-                },
-                berkas: {
-                    required: true,
-                    accept: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png,text/plain"
+    $("#form-tambah-detail_agenda").on("submit", function (e) {
+        e.preventDefault();
+        let form = $(this);
+        let actionUrl = form.attr("action");
+        let formData = new FormData(this);
+
+        $.ajax({
+            url: actionUrl,
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                console.log(response);
+                if (response.status) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: response.message
+                    });
+                    $('#modal-master').modal('hide');
+                    if (typeof dataDetailAgenda !== 'undefined') {
+                        dataDetailAgenda.ajax.reload();
+                    }
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Kesalahan',
+                        text: response.message
+                    });
                 }
             },
-            submitHandler: function(form) {
-                $.ajax({
-                    url: form.action,
-                    type: form.method,
-                    data: new FormData(form),
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.status) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Berhasil',
-                                text: response.message
-                            }).then(() => {
-                                location.reload();
-                            });
-                        } else {
-                            $('.error-text').text('');
-                            $.each(response.msgField, function(prefix, val) {
-                                $('#error-' + prefix).text(val[0]);
-                            });
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Terjadi Kesalahan',
-                                text: response.message
-                            });
-                        }
-                    },
-                    error: function() {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Terjadi Kesalahan',
-                            text: 'Tidak dapat menyimpan detail agenda. Coba lagi.'
-                        });
-                    }
+            error: function(xhr) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Kesalahan',
+                    text: 'Terjadi kesalahan pada server, silakan coba lagi.'
                 });
-                return false;
-            },
-            errorElement: 'span',
-            errorPlacement: function(error, element) {
-                error.addClass('invalid-feedback');
-                element.closest('.form-group').append(error);
             }
         });
     });
+});
+
 </script>

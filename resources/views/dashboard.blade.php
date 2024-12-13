@@ -1,7 +1,6 @@
 @extends('layouts.template')
 
 @section('content')
-
 <div class="container mt-5">
     <div class="card shadow-lg border-0 rounded-lg">
         <div class="card-body">
@@ -18,11 +17,13 @@
                             <h5 class="mb-0">📅 Kegiatan Terdekat</h5>
                         </div>
                         <div class="card-body text-center">
-                            @if($kegiatan)
-                                <p class="font-weight-bold text-dark">Nama Kegiatan:</p>
-                                <p>{{ $kegiatan->nama_kegiatan }}</p>
-                                <p class="font-weight-bold text-dark">Tanggal:</p>
-                                <p>{{ \Carbon\Carbon::parse($kegiatan->tanggal_mulai)->format('d M Y') }}</p>
+                            @if(isset($newKegiatan) && $newKegiatan->isNotEmpty())
+                                @foreach($newKegiatan as $kegiatan)
+                                    <p class="font-weight-bold text-dark">Nama Kegiatan:</p>
+                                    <p>{{ $kegiatan->nama_kegiatan }}</p>
+                                    <p class="font-weight-bold text-dark">Tanggal:</p>
+                                    <p>{{ \Carbon\Carbon::parse($kegiatan->tanggal_mulai)->format('d M Y') }}</p>
+                                @endforeach
                             @else
                                 <p class="text-muted">Anda belum memiliki kegiatan terdekat.</p>
                             @endif
@@ -37,11 +38,13 @@
                             <h5 class="mb-0">🗓️ Agenda Terdekat</h5>
                         </div>
                         <div class="card-body text-center">
-                            @if($agenda)
-                                <p class="font-weight-bold text-dark">Nama Agenda:</p>
-                                <p>{{ $agenda->nama_agenda }}</p>
-                                <p class="font-weight-bold text-dark">Tanggal:</p>
-                                <p>{{ \Carbon\Carbon::parse($agenda->tanggal_agenda)->format('d M Y') }}</p>
+                            @if(isset($newAgenda) && $newAgenda->isNotEmpty())
+                                @foreach($newAgenda as $agenda)
+                                    <p class="font-weight-bold text-dark">Nama Agenda:</p>
+                                    <p>{{ $agenda->nama_agenda }}</p>
+                                    <p class="font-weight-bold text-dark">Tanggal:</p>
+                                    <p>{{ \Carbon\Carbon::parse($agenda->tanggal_agenda)->format('d M Y') }}</p>
+                                @endforeach
                             @else
                                 <p class="text-muted">Anda belum memiliki agenda terdekat.</p>
                             @endif
@@ -64,5 +67,4 @@
         </div>
     </div>
 </div>
-
 @endsection
