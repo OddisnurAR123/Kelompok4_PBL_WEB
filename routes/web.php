@@ -52,14 +52,20 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
     // Route::get('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.changePassword'); // Halaman form ganti password
     // Route::put('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword'); // Proses pembaruan password
 
-    // Route untuk menampilkan halaman profil
-    Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show');
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+        Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show'); // Tambahan jika ada halaman profil
+    });
 
-    // Route untuk menampilkan halaman edit profil
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    // // Route untuk menampilkan halaman profil
+    // Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show');
 
-    // Route untuk mengupdate profil (foto profil dan password)
-    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    // // Route untuk menampilkan halaman edit profil
+    // Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+
+    // // Route untuk mengupdate profil (foto profil dan password)
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 
     //route kegiatan
     Route::get('/kegiatan', [KegiatanController::class, 'index'])->name('kegiatan.index');
