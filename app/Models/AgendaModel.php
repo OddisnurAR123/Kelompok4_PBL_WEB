@@ -17,12 +17,10 @@ class AgendaModel extends Model
         'nama_agenda',
         'id_kegiatan',
         'tempat_agenda',
-        'id_pengguna',  // Relasi id_pengguna
+        'id_pengguna',
         'bobot_anggota',
         'deskripsi',
-        'tanggal_agenda',
-        'created_at',
-        'updated_at',
+        'tanggal_agenda'
     ];
 
     // Relasi ke KegiatanUser
