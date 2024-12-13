@@ -6,7 +6,7 @@ use App\Models\KegiatanModel;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
-class WelcomeController extends Controller
+class NotifikasiController extends Controller
 {
     public function index()
     {
