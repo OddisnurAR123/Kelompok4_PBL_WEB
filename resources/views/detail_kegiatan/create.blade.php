@@ -26,9 +26,10 @@
                 </div>
                 <div class="form-group">
                     <label>Progres Kegiatan</label>
-                    <input type="number" name="progres_kegiatan" id="progres_kegiatan" class="form-control" step="0.01" min="0" max="100" required>
+                    <input type="number" name="progres_kegiatan" id="progres_kegiatan" class="form-control" step="0.01" min="0" max="100" 
+                           value="{{ $averageProgress }}" readonly required>
                     <small id="error-progres_kegiatan" class="error-text form-text text-danger"></small>
-                </div>
+                </div>                
                 <div class="form-group">
                     <label>Beban Kerja</label>
                     <select name="beban_kerja" id="beban_kerja" class="form-control" required>

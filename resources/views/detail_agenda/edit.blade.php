@@ -67,6 +67,8 @@
                         icon: 'success',
                         title: 'Berhasil',
                         text: response.message
+                    }).then(() => {
+                        location.reload();
                     });
                     $('#modal-master').modal('hide');
                     if (typeof dataDetailAgenda !== 'undefined') {
