@@ -10,6 +10,7 @@ use App\Models\PenggunaModel;
 use App\Models\AgendaModel;
 use App\Models\JabatanKegiatanModel;
 use App\Models\DetailKegiatanModel;
+use App\Models\KegiatanUser;
 
 class KegiatanModel extends Model
 {
@@ -73,6 +74,11 @@ class KegiatanModel extends Model
                 'm_jabatan_kegiatan.nama_jabatan_kegiatan',
                 't_kegiatan_user.*'
             );
+    }
+
+    public function tKegiatanUsers()
+    {
+        return $this->hasMany(KegiatanUser::class, 'id_kegiatan', 'id_kegiatan');
     }
 
     public function agenda()
