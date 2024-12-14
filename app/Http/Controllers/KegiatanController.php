@@ -102,10 +102,12 @@ class KegiatanController extends Controller
                     $btn .= '<i class="fas fa-trash"></i></button>';
 
                        // Tombol Unduh Surat Tugas
-                $btn .= '<a href="'.route('kegiatan.download', $kegiatan->id_kegiatan).'" target="_blank" class="btn btn-primary btn-sm ml-2">';
-                $btn .= '<i class="fas fa-download"></i></a>';
-            
-                return $btn . '</div>';
+                       $btn .= '<a href="'.route('kegiatan.downloadDraft', $kegiatan->id_kegiatan).'" target="_blank" class="btn btn-primary btn-sm ml-2">';
+                       $btn .= '<i class="fas fa-download"></i></a>';                
+
+                        $btn .= '<button onclick="modalAction(\''.route('kegiatan.uploadForm', $kegiatan->id_kegiatan).'\')" class="btn btn-success btn-sm ml-2">';
+                        $btn .= '<i class="fas fa-upload"></i></button>';
+                        return $btn . '</div>';
 
                 }
         
