@@ -1,29 +1,59 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\DB;
-use App\Models\KegiatanModel;
+
 use Illuminate\Support\Facades\Auth;
+use App\Models\AgendaModel;
+use App\Models\KegiatanModel;
+use App\Models\KegiatanEksternalModel;
+use App\Notifications\KegiatanAgendaNotification;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Notification;
+
 
 class NotifikasiController extends Controller
 {
     public function index()
     {
-        $userId = Auth::user()->id_pengguna; // Mendapatkan id_pengguna dari pengguna yang login
-
-        // Ambil data kegiatan terbaru untuk pengguna yang login
-        $newKegiatan = KegiatanModel::where('id_pengguna', $userId)
-            ->orderBy('tanggal_mulai', 'desc')
+        $user = auth()->user();
+    
+        // Ambil agenda terdekat
+        $agenda = AgendaModel::where('id_pengguna', $user->id_pengguna)
+            ->whereDate('tanggal_agenda', '>=', Carbon::now())
+            ->orderBy('tanggal_agenda', 'asc')
+            ->first();
+    
+        // Ambil kegiatan terdekat
+        $kegiatan = KegiatanModel::whereDate('tanggal_mulai', '>=', Carbon::now())
+            ->orderBy('tanggal_mulai', 'asc')
+            ->first();
+    
+        // Ambil kegiatan eksternal terdekat
+        $kegiatanEksternal = KegiatanEksternalModel::where('id_pengguna', $user->id_pengguna)
+            ->whereDate('waktu_kegiatan', '>=', Carbon::now())
+            ->orderBy('waktu_kegiatan', 'asc')
+            ->first();
+    
+        // Kirimkan notifikasi jika ada data
+        if ($agenda || $kegiatan || $kegiatanEksternal) {
+            $user->notify(new KegiatanAgendaNotification($agenda, $kegiatan, $kegiatanEksternal));
+        }
+    
+        // Reminder kegiatan dalam 1 minggu ke depan
+        $reminderKegiatan = KegiatanModel::whereDate('tanggal_mulai', '>=', Carbon::now())
+            ->whereDate('tanggal_mulai', '<=', Carbon::now()->addWeek())
+            ->orderBy('tanggal_mulai', 'asc')
             ->get();
-
-        // Ambil data agenda terbaru untuk pengguna yang login
-        $newAgenda = DB::table('t_agenda')
-            ->where('id_pengguna', $userId)
-            ->orderBy('tanggal_agenda', 'desc')
+    
+        // Reminder agenda dalam 1 minggu ke depan
+        $reminderAgenda = AgendaModel::where('id_pengguna', $user->id_pengguna)
+            ->whereDate('tanggal_agenda', '>=', Carbon::now())
+            ->whereDate('tanggal_agenda', '<=', Carbon::now()->addWeek())
+            ->orderBy('tanggal_agenda', 'asc')
             ->get();
-
-        // Kirim data ke view dashboard
-        return view('dashboard', compact('newKegiatan', 'newAgenda'));
+    
+        // Pastikan variabel dikirim ke view
+        return view('dashboard', compact('reminderAgenda', 'reminderKegiatan'));
     }
+    
 }

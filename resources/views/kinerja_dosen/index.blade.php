@@ -2,8 +2,15 @@
 
 @section('content')
 <div class="card card-outline card-primary">
-    <div class="card-header">
+    <div class="card-header d-flex justify-content-between align-items-center">
         <h3 class="card-title">Statistik Kinerja Dosen</h3>
+        <!-- Dropdown untuk memilih periode -->
+        <select id="periodeDropdown" class="form-control w-auto">
+            <option value="all">Semua Periode</option>
+            @foreach($availablePeriods as $period)
+                <option value="{{ $period }}">{{ $period }}</option>
+            @endforeach
+        </select>
     </div>
     <div class="card-body">
         <!-- Grafik Gabungan -->
@@ -17,7 +24,7 @@
 @push('css')
 <style>
     .chart-container {
-        background-color: linear-gradient(135deg, #e3f2fd, #e1bee7);
+        background: linear-gradient(135deg, #e3f2fd, #e1bee7);
         border-radius: 12px;
         box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15);
         padding: 25px;
@@ -44,46 +51,75 @@
         // Data dari controller
         const chartDataInternal = @json($chartDataInternal);
         const chartDataEksternal = @json($chartDataEksternal);
+        const allPeriods = @json($availablePeriods);
 
-        // Gabungkan data dari kedua dataset
-        const combinedLabels = [...new Set([...chartDataInternal.labels, ...chartDataEksternal.labels])];
-        
-        const internalData = combinedLabels.map(label => {
-            const index = chartDataInternal.labels.indexOf(label);
-            return index >= 0 ? chartDataInternal.datasets[0].data[index] : 0;
-        });
-        
-        const externalData = combinedLabels.map(label => {
-            const index = chartDataEksternal.labels.indexOf(label);
-            return index >= 0 ? chartDataEksternal.datasets[0].data[index] : 0;
-        });
+        let filteredInternalData = chartDataInternal;
+        let filteredEksternalData = chartDataEksternal;
 
-        // Debugging untuk memastikan data
-        console.log('Combined Labels:', combinedLabels);
-        console.log('Internal Data:', internalData);
-        console.log('External Data:', externalData);
+        // Fungsi untuk memfilter data berdasarkan periode
+        function filterDataByPeriod(period) {
+            if (period === 'all') {
+                filteredInternalData = chartDataInternal;
+                filteredEksternalData = chartDataEksternal;
+            } else {
+                filteredInternalData = {
+                    labels: chartDataInternal.labels.filter((_, index) => chartDataInternal.periode[index] === period),
+                    datasets: [{
+                        data: chartDataInternal.datasets[0].data.filter((_, index) => chartDataInternal.periode[index] === period),
+                    }],
+                };
 
-        // Buat grafik gabungan dengan animasi dan gaya tambahan
+                filteredEksternalData = {
+                    labels: chartDataEksternal.labels.filter((_, index) => chartDataEksternal.periode[index] === period),
+                    datasets: [{
+                        data: chartDataEksternal.datasets[0].data.filter((_, index) => chartDataEksternal.periode[index] === period),
+                    }],
+                };
+            }
+            updateChart();
+        }
+
+        // Fungsi untuk memperbarui grafik
+        function updateChart() {
+            const combinedLabels = [...new Set([...filteredInternalData.labels, ...filteredEksternalData.labels])];
+
+            const internalData = combinedLabels.map(label => {
+                const index = filteredInternalData.labels.indexOf(label);
+                return index >= 0 ? filteredInternalData.datasets[0].data[index] : 0;
+            });
+
+            const externalData = combinedLabels.map(label => {
+                const index = filteredEksternalData.labels.indexOf(label);
+                return index >= 0 ? filteredEksternalData.datasets[0].data[index] : 0;
+            });
+
+            chart.data.labels = combinedLabels;
+            chart.data.datasets[0].data = internalData;
+            chart.data.datasets[1].data = externalData;
+            chart.update();
+        }
+
+        // Inisialisasi grafik
         const ctx = document.getElementById('kinerjaChart').getContext('2d');
-        new Chart(ctx, {
+        const chart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: combinedLabels,
+                labels: [],
                 datasets: [
                     {
                         label: 'Kegiatan Internal',
-                        data: internalData,
-                        backgroundColor: 'rgba(75, 192, 192, 0.6)', // Ganti warna menjadi lebih segar
-                        hoverBackgroundColor: 'rgba(75, 192, 192, 1)', // Hover effect yang lebih kuat
-                        borderColor: 'rgba(75, 192, 192, 1)', // Border yang konsisten dengan background
+                        data: [],
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        hoverBackgroundColor: 'rgba(75, 192, 192, 1)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
                         borderWidth: 1,
                     },
                     {
                         label: 'Kegiatan Eksternal',
-                        data: externalData,
-                        backgroundColor: 'rgba(255, 159, 64, 0.6)', // Ganti warna menjadi oranye cerah
-                        hoverBackgroundColor: 'rgba(255, 159, 64, 1)', // Hover effect lebih intens
-                        borderColor: 'rgba(255, 159, 64, 1)', // Border yang sesuai dengan background
+                        data: [],
+                        backgroundColor: 'rgba(255, 159, 64, 0.6)',
+                        hoverBackgroundColor: 'rgba(255, 159, 64, 1)',
+                        borderColor: 'rgba(255, 159, 64, 1)',
                         borderWidth: 1,
                     },
                 ],
@@ -97,33 +133,32 @@
                         position: 'top',
                     },
                     tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
                         callbacks: {
                             label: function (tooltipItem) {
-                                return tooltipItem.dataset.label + ': ' + tooltipItem.raw + ' Kegiatan';
-                            },
-                        },
-                    },
+                                return tooltipItem.dataset.label + ': ' + tooltipItem.raw;
+                            }
+                        }
+                    }
                 },
                 scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Nama Dosen',
-                        },
-                    },
                     y: {
-                        title: {
-                            display: true,
-                            text: 'Jumlah Kegiatan',
-                        },
+                        beginAtZero: true,
                         ticks: {
-                            beginAtZero: true,
-                        },
-                    },
-                },
-            },
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
         });
+
+        // Event listener untuk dropdown periode
+        document.getElementById('periodeDropdown').addEventListener('change', function (event) {
+            const selectedPeriod = event.target.value;
+            filterDataByPeriod(selectedPeriod);
+        });
+
+        // Inisialisasi grafik dengan data default (periode pertama)
+        filterDataByPeriod('all');
     });
 </script>
 @endpush
