@@ -78,7 +78,10 @@ class PenggunaModel extends Authenticatable implements JWTSubject
                     ->join('m_jabatan_kegiatan', 't_kegiatan_user.id_jabatan_kegiatan', '=', 'm_jabatan_kegiatan.id_jabatan_kegiatan')
                     ->where('m_jabatan_kegiatan.is_pic', 1);
     }
-
+    public function agendas()
+    {
+        return $this->hasMany(AgendaModel::class, 'id_pengguna'); // or the appropriate foreign key
+    }
     /**
      * Mendapatkan nama role
      */
