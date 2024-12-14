@@ -82,6 +82,14 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
     Route::get('/kegiatan/export_excel', [KegiatanController::class, 'export_excel'])->name('kegiatan.export.excel');
     Route::get('/kegiatan/export_pdf', [KegiatanController::class, 'export_pdf'])->name('kegiatan.export.pdf');
     Route::get('kegiatan/{id_kegiatan}/unduh_surat', [KegiatanController::class, 'unduhSuratTugas'])->name('kegiatan.download');
+// Route untuk menampilkan form upload
+Route::get('/kegiatan/{id}/upload_surat_tugas', [KegiatanController::class, 'showUploadForm'])->name('kegiatan.uploadForm');
+// Route untuk menangani upload file surat tugas
+Route::post('/kegiatan/{id}/upload_surat_tugas', [KegiatanController::class, 'upload'])->name('kegiatan.upload');
+// Route untuk mengunduh file surat tugas
+Route::get('kegiatan/data', [KegiatanController::class, 'getData'])->name('kegiatan.data');
+Route::get('kegiatan/download/{id_kegiatan}', [KegiatanController::class, 'downloadSuratTugas'])->name('kegiatan.download');
+
 
 
     // Detail Kegiatan Routes

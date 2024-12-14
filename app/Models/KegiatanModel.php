@@ -29,13 +29,13 @@ class KegiatanModel extends Model
         'periode',
         'id_kategori_kegiatan',
         'tempat_kegiatan',
+        'file_surat_tugas'
     ];    
 
     public function kategoriKegiatan()
     {
         return $this->belongsTo(KategoriKegiatanModel::class, 'id_kategori_kegiatan');
     }
-
     // Scope untuk mengambil kegiatan baru
     public function scopeBaru($query)
     {
