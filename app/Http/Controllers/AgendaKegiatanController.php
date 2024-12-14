@@ -17,8 +17,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 
-
-
 class AgendaKegiatanController extends Controller
 {
     public function index()
@@ -102,7 +100,6 @@ public function getPengguna(Request $request)
             if ($kegiatan->id_jabatan_kegiatan == 1) {
                 return response()->json([]);  // Mengembalikan array kosong jika ID jabatan adalah 1
             }
-
             $pengguna = KegiatanUser::with('pengguna:id_pengguna,nama_pengguna')
                             ->where('id_kegiatan', $id_kegiatan)
                             ->whereHas('pengguna', function ($query) {
@@ -115,7 +112,6 @@ public function getPengguna(Request $request)
                                     'nama_pengguna' => $item->pengguna ? $item->pengguna->nama_pengguna : 'N/A',
                                 ];
                             });
-
             return response()->json($pengguna);
 
         } catch (\Exception $e) {
@@ -125,7 +121,6 @@ public function getPengguna(Request $request)
 
     return response()->json([]);
 }
-
 // Method untuk menyimpan data agenda ke database
 public function store(Request $request)
 {

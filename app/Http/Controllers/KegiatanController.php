@@ -112,7 +112,6 @@ class KegiatanController extends Controller
                         $btn .= '<button onclick="modalAction(\''.route('kegiatan.uploadForm', $kegiatan->id_kegiatan).'\')" class="btn btn-success btn-sm ml-2">';
                         $btn .= '<i class="fas fa-upload"></i></button></a>';
                     }
-
                     if ($kegiatan->file_surat_tugas) {
                         $btn .= '<button onclick="window.open(\''.route('kegiatan.surat_tugas', $kegiatan->id_kegiatan).'\')" class="btn btn-primary btn-sm ml-2">';
                         $btn .= '<i class="fas fa-file-pdf"></i></button>';
@@ -487,7 +486,6 @@ class KegiatanController extends Controller
         $writer->save('php://output');
         exit;
     }
-
 
     public function export_pdf()
     {
