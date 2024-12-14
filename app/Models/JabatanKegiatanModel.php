@@ -26,4 +26,9 @@ class JabatanKegiatanModel extends Model
                     ->withPivot('id_kegiatan', 'is_pic');
     }
 
+    public function penggunaa()
+    {
+        return $this->belongsTo(PenggunaModel::class, 'id_pengguna', 'id_pengguna');
+    }
+
 }

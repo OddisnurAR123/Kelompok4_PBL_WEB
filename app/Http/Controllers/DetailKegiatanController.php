@@ -12,6 +12,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class DetailKegiatanController extends Controller
 {
@@ -62,8 +63,14 @@ class DetailKegiatanController extends Controller
             'list' => ['Home', 'Progres Kegiatan', 'Tambah Progres Kegiatan']
         ];
 
-        // Ambil data kegiatan untuk ditampilkan di dropdown
-        $kegiatan = KegiatanModel::select('id_kegiatan', 'nama_kegiatan')->get();
+        $user = Auth::user();
+
+        $kegiatan = KegiatanModel::whereHas('tKegiatanUsers', function ($query) use ($user) {
+            $query->whereHas('jabatanKegiatan', function ($subQuery) use ($user) {
+                $subQuery->where('id_pengguna', $user->id_pengguna)
+                        ->where('is_pic', true);
+            });
+        })->select('id_kegiatan', 'nama_kegiatan')->get();
 
         $averageProgress = 0;
         if ($request->has('id_kegiatan')) {

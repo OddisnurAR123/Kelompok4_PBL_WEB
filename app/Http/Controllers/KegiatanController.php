@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Illuminate\Support\Facades\Auth;
 use Dompdf\Dompdf;
+use Illuminate\Support\Facades\Log;
 
 class KegiatanController extends Controller
 {
@@ -101,16 +102,23 @@ class KegiatanController extends Controller
                     $btn .= '<button onclick="modalAction(\''.route('kegiatan.delete', $kegiatan->id_kegiatan).'\')" class="btn btn-danger btn-sm mr-2">';
                     $btn .= '<i class="fas fa-trash"></i></button>';
 
-                       // Tombol Unduh Surat Tugas
+                    if(Auth::user()->id_jenis_pengguna == 1 || Auth::user()->id_jenis_pengguna == 2) {
+                       // Tombol Unduh Draft Surat Tugas
                        $btn .= '<a href="'.route('kegiatan.downloadDraft', $kegiatan->id_kegiatan).'" target="_blank" class="btn btn-primary btn-sm ml-2">';
                        $btn .= '<i class="fas fa-download"></i></a>';                
-
+                    }
+                    if (Auth::user()->id_jenis_pengguna == 1) {
+                       //
                         $btn .= '<button onclick="modalAction(\''.route('kegiatan.uploadForm', $kegiatan->id_kegiatan).'\')" class="btn btn-success btn-sm ml-2">';
-                        $btn .= '<i class="fas fa-upload"></i></button>';
-                        return $btn . '</div>';
+                        $btn .= '<i class="fas fa-upload"></i></button></a>';
+                    }
 
+                    if ($kegiatan->file_surat_tugas) {
+                        $btn .= '<button onclick="window.open(\''.route('kegiatan.surat_tugas', $kegiatan->id_kegiatan).'\')" class="btn btn-primary btn-sm ml-2">';
+                        $btn .= '<i class="fas fa-file-pdf"></i></button>';
+                    }
+                        return $btn . '</div>';
                 }
-        
                 $btn .= '</div>';
                 return $btn;
             })
@@ -532,19 +540,21 @@ public function showUploadForm($id_kegiatan)
 public function upload(Request $request, $id_kegiatan)
 {
     $request->validate([
-        'file_surat_tugas' => 'required|mimes:pdf,doc,docx|max:2048', // Validasi file
+        'file_surat_tugas' => 'required|mimes:pdf,doc,docx|max:2048',
     ]);
 
     $kegiatan = KegiatanModel::findOrFail($id_kegiatan);
 
     try {
-        // Simpan file ke folder 'uploads/surat_tugas'
         $file = $request->file('file_surat_tugas');
         $filename = time() . '_' . $file->getClientOriginalName();
-        $file->move(public_path('uploads/surat_tugas'), $filename);
 
-        // Simpan nama file ke database
-        $kegiatan->file_surat_tugas = 'uploads/surat_tugas/' . $filename;
+        // Simpan file ke folder 'uploads/surat_tugas' di public path
+        $filePath = 'uploads/surat_tugas/' . $filename;
+        $file->move(public_path($filename));
+
+        // Simpan path file ke database
+        $kegiatan->file_surat_tugas = $filePath;
         $kegiatan->save();
 
         return response()->json([
@@ -559,18 +569,14 @@ public function upload(Request $request, $id_kegiatan)
         ]);
     }
 }
-public function downloadSuratTugas($id_kegiatan)
+public function suratTugas($id)
 {
-    $kegiatan = KegiatanModel::findOrFail($id_kegiatan);
+    $kegiatan = KegiatanModel::findOrFail($id);
 
-    if ($kegiatan && $kegiatan->file_surat_tugas) {
-        $filePath = storage_path('app/public/' . $kegiatan->file_surat_tugas);
-
-        if (file_exists($filePath)) {
-            return response()->download($filePath);
-        }
-    }
-
-    return redirect()->back()->with('error', 'File tidak ditemukan.');
+    return response()->download(storage_path('app/public/' . $kegiatan->file_surat_tugas));
 }
+
 }
+
+
+
