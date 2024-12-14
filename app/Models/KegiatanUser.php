@@ -30,4 +30,8 @@ class KegiatanUser extends Model
     {
         return $this->belongsTo(JabatanKegiatanModel::class, 'id_jabatan_kegiatan', 'id_jabatan_kegiatan');
     }
+    public function kegiatan()
+    {
+        return $this->belongsTo(KegiatanModel::class, 'id_kegiatan');
+    }
 }
