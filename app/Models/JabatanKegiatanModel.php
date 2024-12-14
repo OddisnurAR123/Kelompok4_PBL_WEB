@@ -18,4 +18,12 @@ class JabatanKegiatanModel extends Model
     {
         return $this->belongsToMany(KegiatanModel::class, 't_kegiatan_user', 'id_jabatan_kegiatan', 'id_jabatan_kegiatan');
     }
+
+
+    public function pengguna()
+    {
+        return $this->belongsToMany(User::class, 't_kegiatan_user', 'id_jabatan_kegiatan', 'id_pengguna')
+                    ->withPivot('id_kegiatan', 'is_pic');
+    }
+
 }
