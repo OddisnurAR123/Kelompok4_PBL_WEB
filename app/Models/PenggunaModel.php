@@ -58,11 +58,18 @@ class PenggunaModel extends Authenticatable implements JWTSubject
         return $this->belongsToMany(KegiatanModel::class, 't_kegiatan_user', 'id_pengguna', 'id_kegiatan');
     }
 
+    // Di dalam model User
+    public function jabatanKegiatans()
+    {
+        return $this->belongsToMany(JabatanKegiatanModel::class, 't_kegiatan_user', 'id_pengguna', 'id_jabatan_kegiatan');
+    }
+
     // Relasi ke model JabatanKegiatanModel
     public function jabatanKegiatan()
     {
         return $this->belongsTo(JabatanKegiatanModel::class, 'id_jabatan_kegiatan', 'id_jabatan_kegiatan');
     }
+
     // Pada model User
     public function jabatanKegiatanss()
     {
@@ -71,7 +78,6 @@ class PenggunaModel extends Authenticatable implements JWTSubject
                     ->join('m_jabatan_kegiatan', 't_kegiatan_user.id_jabatan_kegiatan', '=', 'm_jabatan_kegiatan.id_jabatan_kegiatan')
                     ->where('m_jabatan_kegiatan.is_pic', 1);
     }
-   
     public function agendas()
     {
         return $this->hasMany(AgendaModel::class, 'id_pengguna'); // or the appropriate foreign key
@@ -99,9 +105,5 @@ class PenggunaModel extends Authenticatable implements JWTSubject
     public function getRole()
     {
         return $this->jenisPengguna->kode_jenis_pengguna ?? null;
-    }
-    public function jabatanKegiatans()
-    {
-        return $this->hasMany(JabatanKegiatanModel::class, 'id_pengguna', 'id_pengguna');
     }
 }

@@ -112,8 +112,9 @@ class KegiatanController extends Controller
                         $btn .= '<button onclick="modalAction(\''.route('kegiatan.uploadForm', $kegiatan->id_kegiatan).'\')" class="btn btn-success btn-sm ml-2">';
                         $btn .= '<i class="fas fa-upload"></i></button></a>';
                     }
+                    
                     $btn .= '<button onclick="bukaModalUnduhSurat('.$kegiatan->id_kegiatan.')" class="btn btn-info btn-sm ml-2">';
-                        $btn .= '<i class="fas fa-download"></i> Unduh Surat Tugas</button>';
+                    $btn .= '<i class="fas fa-download"></i> Unduh Surat Tugas</button>';
 
                         return $btn . '</div>';
                 }
