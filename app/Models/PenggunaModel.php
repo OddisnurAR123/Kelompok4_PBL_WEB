@@ -70,6 +70,15 @@ class PenggunaModel extends Authenticatable implements JWTSubject
         return $this->belongsTo(JabatanKegiatanModel::class, 'id_jabatan_kegiatan', 'id_jabatan_kegiatan');
     }
 
+    // Pada model User
+    public function jabatanKegiatanss()
+    {
+        return $this->belongsToMany(KegiatanModel::class, 't_kegiatan_user', 'id_pengguna', 'id_kegiatan')
+                    ->withPivot('id_jabatan_kegiatan')
+                    ->join('m_jabatan_kegiatan', 't_kegiatan_user.id_jabatan_kegiatan', '=', 'm_jabatan_kegiatan.id_jabatan_kegiatan')
+                    ->where('m_jabatan_kegiatan.is_pic', 1);
+    }
+
     /**
      * Mendapatkan nama role
      */

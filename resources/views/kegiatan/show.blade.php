@@ -121,7 +121,7 @@
 
                 <h4 class="mt-4 d-flex justify-content-between">
                     Agenda Kegiatan
-                    @if(Auth::user()->kegiatan()->wherePivot('id_jabatan_kegiatan', 1)->exists())
+                    @if(Auth::user()->jabatanKegiatanss()->wherePivot('id_kegiatan', $kegiatan->id_kegiatan)->exists())
                     <!-- Tautan Tambah Agenda -->
                     <a href="javascript:void(0);" id="addAgenda" class="btn p-0 border-0 bg-transparent mt-3" 
                     title="Tambah Agenda" 
@@ -159,7 +159,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if(Auth::user()->jabatanKegiatans()->where('is_pic', 1)->exists())
+                                    @if(Auth::user()->jabatanKegiatanss()->wherePivot('id_kegiatan', $kegiatan->id_kegiatan)->exists())
                                         <!-- Link Detail -->
                                         <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="openModal('{{ url('/agenda/' . $agenda->id_agenda . '/show') }}')">
                                             <i class="fas fa-eye"></i>
