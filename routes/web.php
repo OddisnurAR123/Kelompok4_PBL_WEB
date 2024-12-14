@@ -62,9 +62,6 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
     // Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show');
 
     // // Route untuk menampilkan halaman edit profil
-    // Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-
-    // // Route untuk mengupdate profil (foto profil dan password)
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 
     //route kegiatan
