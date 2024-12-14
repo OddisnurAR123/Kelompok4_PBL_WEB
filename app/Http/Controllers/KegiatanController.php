@@ -88,24 +88,27 @@ class KegiatanController extends Controller
             })
             ->addColumn('aksi', function ($kegiatan) {
                 $btn = '<div class="d-flex justify-content-center">';
-
-                // Tombol Show
+        
+                // Tombol Show ditampilkan untuk semua pengguna
                 $btn .= '<button onclick="modalAction(\''.route('kegiatan.show', $kegiatan->id_kegiatan).'\')" class="btn btn-info btn-sm mr-2">';
                 $btn .= '<i class="fas fa-eye"></i></button>';
-
-                // Tombol Edit dan Delete untuk admin
+        
+                // Tombol Edit dan Delete hanya ditampilkan untuk pengguna dengan id_jenis_pengguna == 1
                 if (Auth::user()->id_jenis_pengguna == 1) {
                     $btn .= '<button onclick="modalAction(\''.route('kegiatan.edit', $kegiatan->id_kegiatan).'\')" class="btn btn-warning btn-sm mr-2">';
                     $btn .= '<i class="fas fa-edit"></i></button>';
-
+        
                     $btn .= '<button onclick="modalAction(\''.route('kegiatan.delete', $kegiatan->id_kegiatan).'\')" class="btn btn-danger btn-sm mr-2">';
                     $btn .= '<i class="fas fa-trash"></i></button>';
 
-                    // Tombol Unduh Surat Tugas
-                    $btn .= '<a href="'.route('kegiatan.download', $kegiatan->id_kegiatan).'" target="_blank" class="btn btn-primary btn-sm ml-2">';
-                    $btn .= '<i class="fas fa-download"></i></a>';
-                }
+                       // Tombol Unduh Surat Tugas
+                $btn .= '<a href="'.route('kegiatan.download', $kegiatan->id_kegiatan).'" target="_blank" class="btn btn-primary btn-sm ml-2">';
+                $btn .= '<i class="fas fa-download"></i></a>';
+            
+                return $btn . '</div>';
 
+                }
+        
                 $btn .= '</div>';
                 return $btn;
             })
@@ -515,5 +518,57 @@ class KegiatanController extends Controller
             return response()->json(['error' => $e->getMessage()]);
       }
 }
+public function showUploadForm($id_kegiatan)
+{
+    $kegiatan = KegiatanModel::findOrFail($id_kegiatan);
 
+    return view('kegiatan.upload', [
+        'id_kegiatan' => $id_kegiatan,
+        'kegiatan' => $kegiatan,
+    ]);
+}
+public function upload(Request $request, $id_kegiatan)
+{
+    $request->validate([
+        'file_surat_tugas' => 'required|mimes:pdf,doc,docx|max:2048', // Validasi file
+    ]);
+
+    $kegiatan = KegiatanModel::findOrFail($id_kegiatan);
+
+    try {
+        // Simpan file ke folder 'uploads/surat_tugas'
+        $file = $request->file('file_surat_tugas');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('uploads/surat_tugas'), $filename);
+
+        // Simpan nama file ke database
+        $kegiatan->file_surat_tugas = 'uploads/surat_tugas/' . $filename;
+        $kegiatan->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Surat tugas berhasil diunggah.',
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Terjadi kesalahan saat mengunggah file.',
+            'error' => $e->getMessage(),
+        ]);
+    }
+}
+public function downloadSuratTugas($id_kegiatan)
+{
+    $kegiatan = KegiatanModel::findOrFail($id_kegiatan);
+
+    if ($kegiatan && $kegiatan->file_surat_tugas) {
+        $filePath = storage_path('app/public/' . $kegiatan->file_surat_tugas);
+
+        if (file_exists($filePath)) {
+            return response()->download($filePath);
+        }
+    }
+
+    return redirect()->back()->with('error', 'File tidak ditemukan.');
+}
 }
