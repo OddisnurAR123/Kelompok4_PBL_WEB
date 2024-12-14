@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Notifications\Notifiable;
 
 class PenggunaModel extends Authenticatable implements JWTSubject
 {
     use HasFactory;
+    use Notifiable;
 
     protected $table = 'm_pengguna';
     protected $primaryKey = 'id_pengguna';

@@ -35,8 +35,22 @@ class KegiatanController extends Controller
     }
 
     // Menampilkan data kegiatan dalam bentuk json untuk datatables
-    public function list(Request $request) {
-        $kegiatan = KegiatanModel::with('kategoriKegiatan') // Relasi kategori kegiatan
+    public function list(Request $request)
+    {
+        $user = Auth::user();
+
+        $kegiatan = KegiatanModel::query();
+
+        // Jika pengguna bukan admin (id_jenis_pengguna = 1) atau manager (id_jenis_pengguna = 2)
+        if (!in_array($user->id_jenis_pengguna, [1, 2])) {
+            // Batasi data kegiatan berdasarkan id_pengguna di tabel kegiatan_user
+            $kegiatan->whereHas('kegiatanUsers', function ($query) use ($user) {
+                $query->where('t_kegiatan_user.id_pengguna', $user->id_pengguna);
+            });
+        }
+
+        // Tambahkan relasi dan select field
+        $kegiatan->with('kategoriKegiatan') // Relasi kategori kegiatan
             ->select(
                 'id_kegiatan',
                 'kode_kegiatan',
@@ -48,19 +62,20 @@ class KegiatanController extends Controller
                 'tempat_kegiatan'
             );
 
-            if ($request->has('periode_filter') && $request->periode_filter != '') {
-                $kegiatan->where('periode', $request->periode_filter);
-            }
+        // Filter berdasarkan periode jika ada
+        if ($request->has('periode_filter') && $request->periode_filter != '') {
+            $kegiatan->where('periode', $request->periode_filter);
+        }
 
-            return DataTables::of($kegiatan)
+        return DataTables::of($kegiatan)
             ->addIndexColumn()
             ->addColumn('kategori_kegiatan', function ($kegiatan) {
                 return $kegiatan->kategoriKegiatan ? $kegiatan->kategoriKegiatan->nama_kategori_kegiatan : 'Tidak ada kategori';
-            })   
+            })
             ->addColumn('status', function ($kegiatan) {
                 $status = 'Belum selesai';
                 $statusClass = 'badge-warning';
-    
+
                 if ($kegiatan->progres_kegiatan == 100) {
                     $status = 'Selesai';
                     $statusClass = 'badge-success';
@@ -68,49 +83,37 @@ class KegiatanController extends Controller
                     $status = 'Tidak selesai';
                     $statusClass = 'badge-danger';
                 }
-    
+
                 return '<span class="badge ' . $statusClass . '">' . $status . '</span>';
             })
-
             ->addColumn('aksi', function ($kegiatan) {
                 $btn = '<div class="d-flex justify-content-center">';
-                
+        
                 // Tombol Show ditampilkan untuk semua pengguna
                 $btn .= '<button onclick="modalAction(\''.route('kegiatan.show', $kegiatan->id_kegiatan).'\')" class="btn btn-info btn-sm mr-2">';
                 $btn .= '<i class="fas fa-eye"></i></button>';
-                
+        
                 // Tombol Edit dan Delete hanya ditampilkan untuk pengguna dengan id_jenis_pengguna == 1
                 if (Auth::user()->id_jenis_pengguna == 1) {
                     $btn .= '<button onclick="modalAction(\''.route('kegiatan.edit', $kegiatan->id_kegiatan).'\')" class="btn btn-warning btn-sm mr-2">';
                     $btn .= '<i class="fas fa-edit"></i></button>';
-            
+        
                     $btn .= '<button onclick="modalAction(\''.route('kegiatan.delete', $kegiatan->id_kegiatan).'\')" class="btn btn-danger btn-sm mr-2">';
                     $btn .= '<i class="fas fa-trash"></i></button>';
-                }
-            
-                // Tombol Unduh Surat Tugas
+
+                       // Tombol Unduh Surat Tugas
                 $btn .= '<a href="'.route('kegiatan.download', $kegiatan->id_kegiatan).'" target="_blank" class="btn btn-primary btn-sm ml-2">';
                 $btn .= '<i class="fas fa-download"></i></a>';
-                
-                // Tombol Unggah
-                $btn .= '<button onclick="modalAction(\''.route('kegiatan.uploadForm', $kegiatan->id_kegiatan).'\')" class="btn btn-success btn-sm ml-2">';
-                $btn .= '<i class="fas fa-upload"></i></button>';
+            
+                return $btn . '</div>';
 
-                //Tombol Download Surat
-                if ($kegiatan->file_surat_tugas) {
-                    $btn .= '<a href="'.route('kegiatan.download', $kegiatan->id_kegiatan).'" target="_blank" class="btn btn-success btn-sm ml-2">';
-                    $btn .= '<i class="fas fa-download"></i></a>';
-                } else {
-                    // Jika belum ada file
-                    $btn .= '<span class="btn btn-danger btn-sm ml-2">Belum Ada Surat Tugas</span>';
                 }
-                
-                            
+        
                 $btn .= '</div>';
                 return $btn;
             })
             ->rawColumns(['status', 'aksi'])
-            ->make(true);        
+            ->make(true);
     }
 
     // Menampilkan form tambah kegiatan via Ajax

@@ -179,7 +179,7 @@ Route::get('kegiatan/download/{id_kegiatan}', [KegiatanController::class, 'downl
 
 
     //route statistik kinerja
-    Route::get('/kinerja-dosen', [KinerjaDosenController::class, 'index'])->name('kinerja.dosen');
+    Route::get('/kinerja-dosen', [KinerjaDosenController::class, 'index'])->name('kinerja_dosen.index');
 
         //route data master jenis pengguna
         Route::get('/jenis_pengguna', [JenisPenggunaController::class, 'index']);

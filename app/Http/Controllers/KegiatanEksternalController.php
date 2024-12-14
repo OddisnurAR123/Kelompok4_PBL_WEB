@@ -25,37 +25,33 @@ class KegiatanEksternalController extends Controller
     }
 
     public function list(Request $request) {
-        // Ambil nama pengguna yang sedang login
-        $pic = auth()->user()->nama_pengguna ?? null;
-    
-        // Validasi jika nama pengguna tidak ditemukan
-        if (!$pic) {
+        $user = auth()->user();
+        $idJenisPengguna = $user->id_jenis_pengguna;
+        
+        // Ambil data sesuai hak akses pengguna
+        if (in_array($idJenisPengguna, [1, 2])) {
+            $kegiatanEksternal = KegiatanEksternalModel::select('id_kegiatan_eksternal', 'nama_kegiatan', 'waktu_kegiatan', 'periode', 'pic');
+        } elseif ($idJenisPengguna == 3) {
+            $kegiatanEksternal = KegiatanEksternalModel::select('id_kegiatan_eksternal', 'nama_kegiatan', 'waktu_kegiatan', 'periode')
+                ->where('pic', $user->nama_pengguna);
+        } else {
             return response()->json([
                 'status' => false,
-                'message' => 'Pengguna tidak terautentikasi.'
-            ], 401);
+                'message' => 'Hak akses tidak valid.'
+            ], 403);
         }
-    
-        // Mengambil data kegiatan eksternal yang sesuai dengan pengguna login
-        $kegiatanEksternal = KegiatanEksternalModel::select('id_kegiatan_eksternal', 'nama_kegiatan', 'waktu_kegiatan', 'periode')
-            ->where('pic', $pic); // Filter berdasarkan kolom pic
-    
-        // Menampilkan data dalam bentuk DataTables tanpa kolom aksi
-        return DataTables::of($kegiatanEksternal)
-            ->make(true); // Mengaktifkan DataTables
-    }
-        
 
-    // Menampilkan form tambah kegiatan eksternal
+        // Tampilkan data dengan konfigurasi kolom sesuai hak akses
+        return DataTables::of($kegiatanEksternal)
+            ->make(true);
+    }
+
     public function create() {
         return view('kegiatan_eksternal.create');
     }
 
-    // Menyimpan data kegiatan eksternal ke dalam tabel t_kegiatan_eksternal
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         if ($request->ajax() || $request->wantsJson()) {
-            // Validasi input
             $rules = [
                 'nama_kegiatan' => 'required|string|max:255',
                 'waktu_kegiatan' => 'required|date',
@@ -72,17 +68,18 @@ class KegiatanEksternalController extends Controller
                 ]);
             }
     
-            // Nama pengguna yang sedang login
-            $nama_pic = auth()->user()->nama_pengguna ?? 'Unknown';
+            $namaPic = auth()->user()->nama_pengguna ?? 'Unknown';
+            $idPengguna = auth()->user()->id_pengguna ?? null;  // Menyimpan id_pengguna yang diambil dari pengguna yang sedang login
     
             try {
-                // Simpan data ke database
+                // Menyimpan data dengan menambahkan id_pengguna
                 KegiatanEksternalModel::create([
                     'nama_kegiatan' => $request->nama_kegiatan,
                     'waktu_kegiatan' => $request->waktu_kegiatan,
-                    'pic' => $nama_pic,
+                    'pic' => $namaPic,
                     'periode' => $request->periode,
-                    'id_kategori_kegiatan' => 3, // Asumsi ID kategori kegiatan
+                    'id_pengguna' => $idPengguna, // Menyimpan id_pengguna
+                    'id_kategori_kegiatan' => 3,
                 ]);
     
                 return response()->json([
@@ -98,6 +95,5 @@ class KegiatanEksternalController extends Controller
         }
     
         return redirect('/');
-    }
-        
+    }    
 }
