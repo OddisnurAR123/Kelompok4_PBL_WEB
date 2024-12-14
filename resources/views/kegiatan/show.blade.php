@@ -128,7 +128,7 @@
                     onclick="openModal('{{ route('agenda.create', ['id_kegiatan' => $kegiatan->id_kegiatan]) }}')">
                     <i class="fas fa-plus text-primary"></i>
                 </a>
-                                    </a>
+            </a>
                 @endif                                 
                 </h4>
                 <table class="table table-bordered table-striped table-hover table-sm">
