@@ -112,10 +112,11 @@ class KegiatanController extends Controller
                         $btn .= '<button onclick="modalAction(\''.route('kegiatan.uploadForm', $kegiatan->id_kegiatan).'\')" class="btn btn-success btn-sm ml-2">';
                         $btn .= '<i class="fas fa-upload"></i></button></a>';
                     }
-                    
-                    $btn .= '<button onclick="bukaModalUnduhSurat('.$kegiatan->id_kegiatan.')" class="btn btn-info btn-sm ml-2">';
-                    $btn .= '<i class="fas fa-download"></i> Unduh Surat Tugas</button>';
 
+                    if ($kegiatan->file_surat_tugas) {
+                        $btn .= '<button onclick="window.open(\''.route('kegiatan.surat_tugas', $kegiatan->id_kegiatan).'\')" class="btn btn-primary btn-sm ml-2">';
+                        $btn .= '<i class="fas fa-file-pdf"></i></button>';
+                    }
                         return $btn . '</div>';
                 }
                 $btn .= '</div>';
@@ -568,16 +569,13 @@ public function upload(Request $request, $id_kegiatan)
         ]);
     }
 }
-public function suratTugas($id_kegiatan)
-    {
-        $kegiatan = KegiatanModel::findOrFail($id_kegiatan);
+public function suratTugas($id)
+{
+    $kegiatan = KegiatanModel::findOrFail($id);
 
-        if (file_exists(public_path('uploads/' . $kegiatan->file_surat_tugas))) {
-            return response()->download(public_path('uploads/' . $kegiatan->file_surat_tugas));
-        } else {
-            return redirect()->back()->with('error', 'File tidak ditemukan.');
-        }
-    }
+    return response()->download(storage_path('app/public/' . $kegiatan->file_surat_tugas));
+}
+
 }
 
 

@@ -89,7 +89,10 @@ Route::post('/kegiatan/{id}/upload_surat_tugas', [KegiatanController::class, 'up
 // Route untuk mengunduh file surat tugas
 //Route::get('kegiatan/data', [KegiatanController::class, 'getData'])->name('kegiatan.data');
 // Route untuk mengunduh surat tugas
-Route::get('kegiatan/{id}/unduh', [KegiatanController::class, 'suratTugas'])->name('kegiatan.unduh');
+//Route::get('kegiatan/{id}/unduh', [KegiatanController::class, 'suratTugas'])->name('kegiatan.unduh');
+// Route untuk menampilkan surat tugas
+Route::get('kegiatan/{id}/surat-tugas', [KegiatanController::class, 'suratTugas'])->name('kegiatan.surat_tugas');
+
 
     // Detail Kegiatan Routes
     Route::get('/detail_kegiatan', [DetailKegiatanController::class, 'index'])->name('detail_kegiatan.index');
