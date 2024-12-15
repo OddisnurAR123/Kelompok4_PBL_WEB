@@ -278,62 +278,6 @@ class PenggunaController extends Controller
     }
     return redirect('/');
 }
-            
-            public function export_excel() {
-                $pengguna = PenggunaModel::select(
-                    'id_jenis_pengguna',
-                    'nama_pengguna',
-                    'username',
-                    'password',
-                    'nip',
-                    'email'
-                )->get();
-            
-                $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
-                $sheet = $spreadsheet->getActiveSheet();
-            
-                // Header kolom
-                $sheet->setCellValue('A1', 'No');
-                $sheet->setCellValue('B1', 'ID Jenis Pengguna');
-                $sheet->setCellValue('C1', 'Nama Pengguna');
-                $sheet->setCellValue('D1', 'Username');
-                $sheet->setCellValue('E1', 'Password');
-                $sheet->setCellValue('F1', 'NIP');
-                $sheet->setCellValue('G1', 'Email');
-            
-                $sheet->getStyle('A1:F1')->getFont()->setBold(true);
-            
-                // Isi data pengguna
-                $no = 1;
-                $baris = 2;
-                foreach ($pengguna as $value) {
-                    $sheet->setCellValue('A' . $baris, $no);
-                    $sheet->setCellValue('B' . $baris, $value->id_jenis_pengguna);
-                    $sheet->setCellValue('C' . $baris, $value->nama_pengguna);
-                    $sheet->setCellValue('D' . $baris, $value->username);
-                    $sheet->setCellValue('E' . $baris, $value->password);
-                    $sheet->setCellValue('F' . $baris, $value->nip);
-                    $sheet->setCellValue('G' . $baris, $value->email);
-                    $baris++;
-                    $no++;
-                }
-            
-                foreach (range('A', 'G') as $columnID) {
-                    $sheet->getColumnDimension($columnID)->setAutoSize(true);
-                }
-            
-                $sheet->setTitle('Data Pengguna');
-            
-                $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-                $filename = 'Data Pengguna ' . date('Y-m-d H:i:s') . '.xlsx';
-            
-                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="' . $filename . '"');
-                header('Cache-Control: max-age=0');
-            
-                $writer->save('php://output');
-                exit;
-            }
             public function export_pdf()
             {
                 // Mengambil data pengguna beserta jenis_pengguna
