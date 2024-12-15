@@ -298,7 +298,7 @@ class KegiatanController extends Controller
     
         return response()->json([
             'status' => true,
-            'message' => 'Data berhasil diupdate',
+            'message' => 'Data berhasil diperbarui',
         ]);
     }    
 
