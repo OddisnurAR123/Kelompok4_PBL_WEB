@@ -5,14 +5,8 @@
         <h3 class="card-title mb-0">Daftar Kegiatan</h3>
         <div class="card-tools ml-auto d-flex">
             @if(Auth::user()->id_jenis_pengguna == 1)
-                <button onclick="modalAction('{{ url('/kegiatan/import') }}')" class="btn btn-info btn-sm mr-2">
-                    <i class="fa fa-file-import"></i> Import Kegiatan
-                </button>
-                <a href="{{ url('/kegiatan/export_excel') }}" class="btn btn-primary btn-sm mr-2">
-                    <i class="fa fa-file-excel"></i> Export XLSX
-                </a>
                 <a href="{{ url('/kegiatan/export_pdf') }}" class="btn btn-warning btn-sm mr-2">
-                    <i class="fa fa-file-pdf"></i> Export PDF
+                    <i class="fa fa-file-pdf"></i> Export
                 </a>
                 <button onclick="modalAction('{{ url('/kegiatan/create') }}')" class="btn btn-success btn-sm mr-2">
                     <i class="fa fa-plus"></i> Tambah Kegiatan

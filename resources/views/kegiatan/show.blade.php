@@ -41,7 +41,7 @@
 <div class="container mt-4">
     <div class="card card-outline card-primary">
         <div class="card-header">
-            <h3 class="card-title">Detail Kegiatan</h3>
+            <h3 class="card-title">Rincian Kegiatan</h3>
         </div>
         <div class="card-body animated-detail">
             @if(!$kegiatan)

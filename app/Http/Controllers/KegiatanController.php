@@ -342,151 +342,6 @@ class KegiatanController extends Controller
         return view('kegiatan.confirm', ['kegiatan' => $kegiatan]);
     }
 
-    public function import() 
-    { 
-        return view('kegiatan.import'); 
-    }
-
-    // Proses import excel kegiatan dengan AJAX
-    public function import_ajax(Request $request) {
-        if($request->ajax() || $request->wantsJson()){ 
-            $rules = [ 
-                // Validasi file harus xls atau xlsx, max 1MB 
-                'file_kegiatan' => ['required', 'mimes:xlsx', 'max:1024'] 
-            ]; 
-    
-            $validator = Validator::make($request->all(), $rules); 
-            if($validator->fails()){ 
-                return response()->json([ 
-                    'status' => false, 
-                    'message' => 'Validasi Gagal', 
-                    'msgField' => $validator->errors() 
-                ]); 
-            } 
-    
-            $file = $request->file('file_kegiatan');  // Ambil file dari request 
-    
-            $reader = IOFactory::createReader('Xlsx');  // Load reader file excel 
-            $reader->setReadDataOnly(true);             // Hanya membaca data 
-            $spreadsheet = $reader->load($file->getRealPath()); // Load file excel 
-            $sheet = $spreadsheet->getActiveSheet();    // Ambil sheet yang aktif 
-    
-            $data = $sheet->toArray(null, false, true, true);   // Ambil data excel 
-    
-            $insert = []; 
-            if(count($data) > 1){ // Jika data lebih dari 1 baris 
-                foreach ($data as $baris => $value) { 
-                    if($baris > 1){ // Baris ke 1 adalah header, maka lewati 
-                        // Konversi tanggal mulai dan selesai dari format Excel ke format MySQL
-                        $tanggal_mulai = Date::excelToDateTimeObject($value['C'])->format('Y-m-d H:i:s');
-                        $tanggal_selesai = Date::excelToDateTimeObject($value['D'])->format('Y-m-d H:i:s');
-    
-                        $insert[] = [ 
-                            'kode_kegiatan' => $value['A'], 
-                            'nama_kegiatan' => $value['B'], 
-                            'tanggal_mulai' => $tanggal_mulai, 
-                            'tanggal_selesai' => $tanggal_selesai, 
-                            'periode' => $value['E'], 
-                            'id_kategori_kegiatan' => $value['F'], 
-                            'tempat_kegiatan' => $value['G'], 
-                        ]; 
-                    } 
-                } 
-    
-                if(count($insert) > 0){ 
-                    // Insert data ke database
-                    KegiatanModel::insert($insert);    
-                } 
-    
-                return response()->json([ 
-                    'status' => true, 
-                    'message' => 'Data berhasil diimport' 
-                ]); 
-            } else { 
-                return response()->json([ 
-                    'status' => false, 
-                    'message' => 'Tidak ada data yang diimport' 
-                ]); 
-            } 
-        } 
-        return redirect('/');
-    }
-
-    public function export_excel()
-    {
-        // Ambil data kegiatan yang akan diexport
-        $kegiatan = KegiatanModel::select(
-            'kode_kegiatan',
-            'nama_kegiatan',
-            'tanggal_mulai',
-            'tanggal_selesai',
-            'periode', 
-            'id_kategori_kegiatan',
-            'tempat_kegiatan'
-        )
-        ->with('kategoriKegiatan') // Relasi dengan kategori
-        ->get();
-
-        // Load library PhpSpreadsheet
-        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet(); // Ambil sheet yang aktif
-
-        // Header kolom
-        $sheet->setCellValue('A1', 'No');
-        $sheet->setCellValue('B1', 'Kode Kegiatan');
-        $sheet->setCellValue('C1', 'Nama Kegiatan');
-        $sheet->setCellValue('D1', 'Tanggal Mulai');
-        $sheet->setCellValue('E1', 'Tanggal Selesai');
-        $sheet->setCellValue('F1', 'Periode');
-        $sheet->setCellValue('G1', 'Kategori Kegiatan');
-        $sheet->setCellValue('H1', 'Kategori Kegiatan');
-
-        // Buat header bold
-        $sheet->getStyle('A1:F1')->getFont()->setBold(true);
-
-        // Isi data kegiatan
-        $no = 1; // Nomor urut
-        $baris = 2; // Baris dimulai dari baris ke-2
-        foreach ($kegiatan as $value) {
-            $sheet->setCellValue('A' . $baris, $no);
-            $sheet->setCellValue('B' . $baris, $value->kode_kegiatan);
-            $sheet->setCellValue('C' . $baris, $value->nama_kegiatan);
-            $sheet->setCellValue('D' . $baris, $value->tanggal_mulai);
-            $sheet->setCellValue('E' . $baris, $value->tanggal_selesai);
-            $sheet->setCellValue('F' . $baris, $value->periode);
-            $sheet->setCellValue('G' . $baris, $value->kategoriKegiatan->nama_kategori_kegiatan ?? 'Tidak Ada Kategori'); // Ambil nama kategori
-            $sheet->setCellValue('H' . $baris, $value->tempat_kegiatan);
-            $baris++;
-            $no++;
-        }
-
-        // Set auto width untuk kolom
-        foreach (range('A', 'F') as $columnID) {
-            $sheet->getColumnDimension($columnID)->setAutoSize(true);
-        }
-
-        // Set judul sheet
-        $sheet->setTitle('Data Kegiatan');
-
-        // Buat file Excel
-        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-        $filename = 'Data Kegiatan ' . date('Y-m-d H:i:s') . '.xlsx';
-
-        // Set header untuk download file
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="' . $filename . '"');
-        header('Cache-Control: max-age=0');
-        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-        header('Last-Modified:' . gmdate('D, d M Y H:i:s') . ' GMT');
-        header('Cache-Control: cache, must-revalidate');
-        header('Pragma: public');
-
-        // Simpan output ke browser
-        $writer->save('php://output');
-        exit;
-    }
-
-
     public function export_pdf()
     {
         // Mengambil data kegiatan beserta kategori_kegiatan
@@ -525,58 +380,59 @@ class KegiatanController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);
       }
-}
-public function showUploadForm($id_kegiatan)
-{
-    $kegiatan = KegiatanModel::findOrFail($id_kegiatan);
+    }
 
-    return view('kegiatan.upload', [
-        'id_kegiatan' => $id_kegiatan,
-        'kegiatan' => $kegiatan,
-    ]);
-}
-public function upload(Request $request, $id_kegiatan)
-{
-    $request->validate([
-        'file_surat_tugas' => 'required|mimes:pdf,doc,docx|max:2048', // Validasi file
-    ]);
+    public function showUploadForm($id_kegiatan)
+    {
+        $kegiatan = KegiatanModel::findOrFail($id_kegiatan);
 
-    $kegiatan = KegiatanModel::findOrFail($id_kegiatan);
-
-    try {
-        // Simpan file ke folder 'uploads/surat_tugas'
-        $file = $request->file('file_surat_tugas');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $file->move(public_path('uploads/surat_tugas'), $filename);
-
-        // Simpan nama file ke database
-        $kegiatan->file_surat_tugas = 'uploads/surat_tugas/' . $filename;
-        $kegiatan->save();
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Surat tugas berhasil diunggah.',
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'status' => false,
-            'message' => 'Terjadi kesalahan saat mengunggah file.',
-            'error' => $e->getMessage(),
+        return view('kegiatan.upload', [
+            'id_kegiatan' => $id_kegiatan,
+            'kegiatan' => $kegiatan,
         ]);
     }
-}
-public function downloadSuratTugas($id_kegiatan)
-{
-    $kegiatan = KegiatanModel::findOrFail($id_kegiatan);
+    public function upload(Request $request, $id_kegiatan)
+    {
+        $request->validate([
+            'file_surat_tugas' => 'required|mimes:pdf,doc,docx|max:2048', // Validasi file
+        ]);
 
-    if ($kegiatan && $kegiatan->file_surat_tugas) {
-        $filePath = storage_path('app/public/' . $kegiatan->file_surat_tugas);
+        $kegiatan = KegiatanModel::findOrFail($id_kegiatan);
 
-        if (file_exists($filePath)) {
-            return response()->download($filePath);
+        try {
+            // Simpan file ke folder 'uploads/surat_tugas'
+            $file = $request->file('file_surat_tugas');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/surat_tugas'), $filename);
+
+            // Simpan nama file ke database
+            $kegiatan->file_surat_tugas = 'uploads/surat_tugas/' . $filename;
+            $kegiatan->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Surat tugas berhasil diunggah.',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Terjadi kesalahan saat mengunggah file.',
+                'error' => $e->getMessage(),
+            ]);
         }
     }
+    public function downloadSuratTugas($id_kegiatan)
+    {
+        $kegiatan = KegiatanModel::findOrFail($id_kegiatan);
 
-    return redirect()->back()->with('error', 'File tidak ditemukan.');
-}
+        if ($kegiatan && $kegiatan->file_surat_tugas) {
+            $filePath = storage_path('app/public/' . $kegiatan->file_surat_tugas);
+
+            if (file_exists($filePath)) {
+                return response()->download($filePath);
+            }
+        }
+
+        return redirect()->back()->with('error', 'File tidak ditemukan.');
+    }
 }
