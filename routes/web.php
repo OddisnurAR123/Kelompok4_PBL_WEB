@@ -102,6 +102,8 @@ Route::get('kegiatan/download/{id_kegiatan}', [KegiatanController::class, 'downl
     Route::put('/detail_kegiatan/update/{id_detail_kegiatan}', [DetailKegiatanController::class, 'update'])->name('detail_kegiatan.update');
     Route::get('/detail_kegiatan/export_excel', [DetailKegiatanController::class, 'export_excel'])->name('detail_kegiatan.export_excel');
     Route::get('/detail_kegiatan/export_pdf', [DetailKegiatanController::class, 'export_pdf'])->name('detail_kegiatan.export_pdf');
+    Route::get('/get-average-progress', [DetailKegiatanController::class, 'getAverageProgress'])->name('get.averageProgress');
+
 
     // Detail Agenda Routes
     Route::get('/detail_agenda', [DetailAgendaController::class, 'index'])->name('detail_agenda.index');

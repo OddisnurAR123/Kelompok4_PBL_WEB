@@ -55,7 +55,24 @@ class DetailKegiatanController extends Controller
             ->rawColumns(['aksi'])
             ->make(true);
     }
-    
+
+    public function getAverageProgress(Request $request)
+    {
+        $averageProgress = 0;
+
+        if ($request->has('id_kegiatan') && $request->id_kegiatan) {
+            // Mengambil rata-rata progres dari t_detail_agenda berdasarkan id_kegiatan
+            $averageProgress = DB::table('t_detail_agenda')
+                ->where('id_kegiatan', $request->id_kegiatan)
+                ->avg('progres_agenda');
+        }
+
+        return response()->json([
+            'success' => true,
+            'averageProgress' => $averageProgress
+        ]);
+    }
+
     public function create(Request $request)
     {
         $breadcrumb = (object) [
@@ -72,14 +89,7 @@ class DetailKegiatanController extends Controller
             });
         })->select('id_kegiatan', 'nama_kegiatan')->get();
 
-        $averageProgress = 0;
-        if ($request->has('id_kegiatan')) {
-            $averageProgress = DB::table('t_detail_agenda')
-                                ->where('id_kegiatan', $request->id_kegiatan)
-                                ->avg('progres_agenda');
-        }
-
-        return view('detail_kegiatan.create', compact('kegiatan', 'averageProgress'));
+        return view('detail_kegiatan.create', compact('kegiatan'));
     }
 
     public function store(Request $request)
@@ -164,18 +174,11 @@ class DetailKegiatanController extends Controller
         ]);
 
         $detail_kegiatan = DetailKegiatanModel::findOrFail($id);
-        $newProgresKegiatan = $detail_kegiatan->progres_kegiatan + $request->progres_kegiatan;
-        if ($newProgresKegiatan > 100) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Total progres kegiatan tidak boleh lebih dari 100%.',
-            ]);
-        }
         try {
             $detail_kegiatan->update([
                 'id_kegiatan' => $request->id_kegiatan,
                 'keterangan' => $request->keterangan,
-                'progres_kegiatan' => $newProgresKegiatan,
+                'progres_kegiatan' => $request->progres_kegiatan,
                 'beban_kerja' => $request->beban_kerja,
             ]);
 
