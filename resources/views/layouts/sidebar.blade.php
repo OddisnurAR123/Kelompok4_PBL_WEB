@@ -23,7 +23,7 @@
             <li class="nav-item">
                 <a href="{{ url('/dashboard_admin') }}" class="nav-link {{ ($activeMenu == 'dashboard_admin') ? 'active' : '' }}" style="color: {{ ($activeMenu == 'dashboard_admin') ? '#3b82f6' : '#ffffff' }};">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
-                    <p>Dashboard Admin</p>
+                    <p>Dashboard</p>
                 </a>
             </li>
         @endif
@@ -32,7 +32,7 @@
             <li class="nav-item">
                 <a href="{{ url('/kegiatan_pimpinan') }}" class="nav-link {{ ($activeMenu == 'kegiatan_pimpinan') ? 'active' : '' }}" style="color: {{ ($activeMenu == 'kegiatan_pimpinan') ? '#3b82f6' : '#ffffff' }};">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
-                    <p>Dashboard Pimpinan</p>
+                    <p>Dashboard</p>
                 </a>
             </li>
         @endif
@@ -42,7 +42,7 @@
             <li class="nav-item">
                 <a href="{{ url('/') }}" class="nav-link {{ ($activeMenu == 'dashboard') ? 'active' : '' }}" style="color: {{ ($activeMenu == 'dashboard') ? '#3b82f6' : '#ffffff' }};">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
-                    <p>Dashboard User</p>
+                    <p>Dashboard</p>
                 </a>
             </li>
         @endif
