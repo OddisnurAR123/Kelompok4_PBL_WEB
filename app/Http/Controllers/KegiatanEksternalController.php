@@ -84,7 +84,7 @@ class KegiatanEksternalController extends Controller
     
                 return response()->json([
                     'status' => true,
-                    'message' => 'Data kategori kegiatan berhasil disimpan',
+                    'message' => 'Data kegiatan eksternal berhasil disimpan',
                 ]);
             } catch (\Exception $e) {
                 return response()->json([

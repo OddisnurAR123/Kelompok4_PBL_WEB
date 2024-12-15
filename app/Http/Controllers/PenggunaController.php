@@ -104,7 +104,7 @@ class PenggunaController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Pengguna berhasil ditambahkan.',
+            'message' => 'Data pengguna berhasil disimpan.',
         ]);
     }
 
@@ -154,7 +154,7 @@ class PenggunaController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Data berhasil diupdate.',
+            'message' => 'Data berhasil diperbarui.',
         ]);
     }
 

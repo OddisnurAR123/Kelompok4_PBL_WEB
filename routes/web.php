@@ -169,9 +169,6 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
     Route::put('/agenda/{id}/update', [AgendaKegiatanController::class, 'update'])->name('agenda.update');
     Route::get('/agenda/{id}/delete', [AgendaKegiatanController::class, 'confirm'])->name('agenda.confirm');
     Route::delete('/agenda/{id}/delete', [AgendaKegiatanController::class, 'delete'])->name('agenda.delete');
-    Route::post('/agenda/import', [KegiatanController::class, 'import'])->name('agenda.import');
-    Route::get('/agenda/export_excel', [KegiatanController::class, 'export_excel'])->name('agenda.export_excel');
-    Route::get('/agenda/export_pdf', [KegiatanController::class, 'export_pdf'])->name('agenda.export_pdf');
     Route::get('/get-agenda-by-kegiatan/{id}', [AgendaKegiatanController::class, 'getAgendaByKegiatan']);
 
 

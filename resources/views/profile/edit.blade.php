@@ -6,7 +6,7 @@
         <div class="col-md-8">
             <div class="card shadow border-0 rounded-lg">
                 <div class="card-header text-center text-white py-4" style="background-color: #01274E;">
-                    <h2 class="mb-0">Edit Profil</h2>
+                    <h2 class="mb-0">Sunting Profil</h2>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
