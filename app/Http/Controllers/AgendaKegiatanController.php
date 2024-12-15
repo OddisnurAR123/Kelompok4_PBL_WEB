@@ -227,40 +227,40 @@ public function show(string $id)
 
 public function delete(Request $request, $id)
 {
-    if ($request->ajax() || $request->wantsJson()) {
-        $agenda = AgendaModel::find($id);
+    Log::info("Delete Request ID: {$id}, Method: {$request->method()}");
 
-        if ($agenda) {
-            $agenda->delete();
-            return response()->json([
-                'status' => true,
-                'message' => 'Data berhasil dihapus',
-            ]);
-        }
+    // Cari agenda berdasarkan ID
+    $agenda = AgendaModel::find($id);
 
+    if (!$agenda) {
         return response()->json([
             'status' => false,
             'message' => 'Data tidak ditemukan',
         ]);
     }
 
-    return redirect('/agenda');
+    // Pastikan hanya request AJAX yang memproses penghapusan
+    if ($request->ajax() || $request->wantsJson()) {
+        $agenda->delete();
+        return response()->json([
+            'status' => true,
+            'message' => 'Data berhasil dihapus',
+        ]);
+    }
+
+    return redirect()->back()->with('error', 'Permintaan penghapusan hanya melalui AJAX.');
 }
 
 public function confirm(string $id)
 {
-    $agenda = AgendaModel::with(['kegiatan', 'kegiatanUser'])->find($id);
+    $agenda = AgendaModel::with(['pengguna'])->find($id);
 
     if (!$agenda) {
-        return response()->json([
-            'status' => false,
-            'message' => 'Agenda tidak ditemukan.'
-        ]);
+        return redirect()->back()->with('error', 'Agenda tidak ditemukan.');
     }
 
     return view('agenda.confirm', compact('agenda'));
 }
-
 
 public function import(Request $request) {
     if($request->ajax() || $request->wantsJson()) {

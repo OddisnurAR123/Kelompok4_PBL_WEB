@@ -87,15 +87,16 @@
             data: form.serialize(),
             success: function (response) {
                 if (response.status) {
+                    // Tampilkan notifikasi sukses dan reload halaman setelah klik OK
                     Swal.fire({
                         icon: 'success',
                         title: 'Berhasil',
                         text: response.message
+                    }).then(() => {
+                        location.reload(); // Reload halaman setelah klik OK
                     });
+
                     $('#modal-master').modal('hide');
-                    if (typeof dataAgenda !== 'undefined') {
-                        dataAgenda.ajax.reload();
-                    }
                 } else {
                     Swal.fire({
                         icon: 'error',
