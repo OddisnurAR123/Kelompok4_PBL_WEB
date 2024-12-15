@@ -46,6 +46,12 @@
 @endsection
 
 @push('css')
+<style>
+    .table th {
+        background-color: #01274E;
+        color: #f8f9fa;
+    }
+</style>
 @endpush
 
 @push('js')
