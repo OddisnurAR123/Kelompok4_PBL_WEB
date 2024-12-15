@@ -14,55 +14,129 @@ class ProfileController extends Controller
     // Menampilkan halaman profil
     public function showProfile()
     {
-        $user = Auth::user();
-        $breadcrumb = (object) [
-            'title' => 'Profile',
-            'list' => ['Dashboard', 'Profile']
-        ];
-
-        $activeMenu = 'profile';
-
-        return view('profile.profil', ['breadcrumb' => $breadcrumb, 'activeMenu' => $activeMenu, 'user' => $user]);
+        $user = auth()->user();
+    
+        return view('profile.show', compact('user'));
     }
-    public function edit()
+    public function editPassword()
     {
-        $user = Auth::user();
-        return view('profile.edit', compact('user'));
+        $user = auth()->user();
+        return view('profile.edit-password');
     }
-    public function update(Request $request, $id)
+
+    public function updatePassword(Request $request)
 {
+    // Validasi input password
     $request->validate([
-        'nama_pengguna' => 'required|string|max:255',
-        'username' => 'required|string|max:255',
-        'email' => 'nullable|email',
-        'nip' => 'nullable|string|max:20',
-        'foto_profil' => 'nullable|image|max:2048',
-        'new_password' => 'nullable|string|min:6|confirmed',
+        'current_password' => 'required',
+        'new_password' => 'required|min:6|confirmed',
     ]);
 
-    $pengguna = PenggunaModel::findOrFail($id);
+    $user = Auth::user();
 
-    // Mengupdate atribut pengguna
-    $pengguna->nama_pengguna = $request->input('nama_pengguna');
-    $pengguna->username = $request->input('username');
-    $pengguna->email = $request->input('email');
-    $pengguna->nip = $request->input('nip');
-
-    // Mengubah password jika ada input password baru
-    if ($request->filled('new_password')) {
-        $pengguna->password = bcrypt($request->input('new_password'));
+    if (!Hash::check($request->current_password, $user->password)) {
+        return back()->withErrors(['current_password' => 'Password lama tidak sesuai']);
     }
 
-    // Mengupdate foto profil jika diupload
-    if ($request->hasFile('foto_profil')) {
-        $pengguna->foto_profil = $request->file('foto_profil')->store('profile_pictures', 'public');
-    }
+    $user->password = Hash::make($request->new_password);
+    $user->save();
 
-    $pengguna->save();
-
-    return response()->json([
-        'message' => 'Profil pengguna berhasil diperbarui',
-        'data' => $pengguna
-    ]);
+    return redirect()->route('profile.show')->with('success', 'Password berhasil diperbarui');
 }
+
+    
+    public function editPhoto()
+{
+    // Ambil data pengguna yang sedang login
+    $user = auth()->user();
+
+    return view('profile.edit_photo', compact('user'));
+}
+
+    public function updatePhoto(Request $request)
+    {
+        // Validasi input foto
+        $request->validate([
+            'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+    
+        $user = auth()->user();
+    
+        // Periksa apakah file diunggah
+        if ($request->hasFile('foto_profil')) {
+            // Hapus foto lama jika ada
+            if ($user->foto_profil && Storage::exists('public/profile/' . $user->foto_profil)) {
+                Storage::delete('public/profile/' . $user->foto_profil);
+            }
+    
+            // Simpan foto baru
+            $fileName = time() . '.' . $request->foto_profil->extension();
+            $path = $request->foto_profil->storeAs('public/profile', $fileName);
+    
+            // Perbarui atribut foto profil di database
+            $user->foto_profil = $fileName;
+            $user->save();
+    
+            return redirect()->route('profile.show')->with('success', 'Foto profil berhasil diperbarui.');
+        }
+    
+        return redirect()->route('profile.show')->with('info', 'Tidak ada foto yang diunggah.');
+    }
+    
+    public function update(Request $request)
+    {
+        $request->validate([
+            'nama_pengguna' => 'required|string|max:255',
+            'email' => 'required|email',
+        ]);
+    
+        $user = Auth::user();
+        $user->nama_pengguna = $request->nama;
+        $user->email = $request->email;
+        $user->save();
+    
+        return redirect()->route('profile.show')->with('success', 'Profil berhasil diperbarui');
+    }
 }    
+    // public function update(Request $request)
+    // {
+    //     $user = Auth::user();
+    
+    //     // Validasi input
+    //     $request->validate([
+    //         'foto_profil' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+    //         'current_password' => 'nullable',
+    //         'new_password' => 'nullable|string|min:6|confirmed',
+    //     ]);
+    
+    //     // Cek apakah password lama benar
+    //     if (!Hash::check($request->current_password, $user->password)) {
+    //         return back()->withErrors(['current_password' => 'Password lama salah']);
+    //     }
+    //     // Handle upload foto profil jika ada
+    //     if ($request->hasFile('foto_profil')) {
+    //         // Hapus foto lama jika ada
+    //         if ($user->foto_profil) {
+    //             Storage::delete('public/' . $user->foto_profil);
+    //         }
+    
+    //         // Simpan foto profil yang baru
+    //         $fotoProfilPath = $request->file('foto_profil')->store('foto_profil', 'public');
+    
+    //         // Update foto profil di database
+    //         DB::table('m_pengguna')
+    //             ->where('id_pengguna', $user->id_pengguna)
+    //             ->update(['foto_profil' => $fotoProfilPath]);
+    //     }
+    
+    //     // Update password baru jika diperlukan
+    //     if ($request->new_password) {
+    //         DB::table('m_pengguna')
+    //             ->where('id_pengguna', $user->id_pengguna)
+    //             ->update(['password' => Hash::make($request->new_password)]);
+    //     }
+    
+    //     return redirect()->route('profile.edit')->with('success', 'Profil berhasil diperbarui!');
+    // }
+    
+
