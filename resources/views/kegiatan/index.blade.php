@@ -55,16 +55,22 @@
                 <table class="table table-bordered table-striped table-hover table-sm" id="table_kegiatan">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Kode Kegiatan</th>
-                            <th>Nama Kegiatan</th>
-                            <th>Tanggal Mulai</th>
-                            <th>Tanggal Selesai</th>
-                            <th>Periode</th>
-                            <th>Kategori Kegiatan</th>
-                            <th>Tempat Kegiatan</th>
-                            <th>Status</th>
-                            <th class="text-center">Aksi</th>
+                            @if(Auth::user()->id_jenis_pengguna == 2)
+                                <th>Nama Kegiatan</th>
+                                <th>Status</th>
+                                <th class="text-center">Aksi</th>
+                            @else
+                                <th>ID</th>
+                                <th>Kode Kegiatan</th>
+                                <th>Nama Kegiatan</th>
+                                <th>Tanggal Mulai</th>
+                                <th>Tanggal Selesai</th>
+                                <th>Periode</th>
+                                <th>Kategori Kegiatan</th>
+                                <th>Tempat Kegiatan</th>
+                                <th>Status</th>
+                                <th class="text-center">Aksi</th>
+                            @endif
                         </tr>
                     </thead>
                 </table>
