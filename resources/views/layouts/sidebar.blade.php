@@ -27,7 +27,6 @@
                 </a>
             </li>
         @endif
-
         <!-- Dashboard untuk Pimpinan -->
         @if(Auth::user()->id_jenis_pengguna == 2)
             <li class="nav-item">
