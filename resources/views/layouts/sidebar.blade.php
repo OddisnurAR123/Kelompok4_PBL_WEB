@@ -46,7 +46,7 @@
                     <p>Dashboard</p>
                 </a>
             </li>
-        @endif`
+        @endif
 
         <!-- Data Master -->
         @if(in_array(Auth::user()->id_jenis_pengguna, [1]))
