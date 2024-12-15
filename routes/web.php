@@ -19,6 +19,7 @@ use App\Http\Controllers\TampilKegiatanController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\KinerjaDosenController;
+use App\Http\Controllers\AdminDashboardController;
 
 
 /*
@@ -42,6 +43,8 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 //route yang memerlukan autentikasi
 // Route::middleware(['auth'])->group(function(){
     Route::get('/dashboard', [WelcomeController::class, 'index']);
+    Route::get('/dashboard_admin', [AdminDashboardController::class, 'index'])->name('admin.index');
+    Route::get('/kegiatan_admin/{id_pengguna}', [AdminDashboardController::class, 'show'])->name('admin.show');
         
     // // Routes untuk halaman profil
     // Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show'); // Menampilkan profil pengguna
