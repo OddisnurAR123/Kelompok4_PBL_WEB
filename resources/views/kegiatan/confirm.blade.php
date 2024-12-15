@@ -92,6 +92,10 @@
             background-color: #01274E;
             color: white;
         }
+        .table th, .table td {
+            background-color: white;
+            color: black;
+        }
     </style>
 
     <script>

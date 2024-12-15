@@ -104,7 +104,7 @@ class KegiatanController extends Controller
                     $btn .= '<button onclick="modalAction(\''.route('kegiatan.edit', $kegiatan->id_kegiatan).'\')" class="btn btn-warning btn-sm mr-2">';
                     $btn .= '<i class="fas fa-edit"></i></button>';
         
-                    $btn .= '<button onclick="modalAction(\''.route('kegiatan.delete', $kegiatan->id_kegiatan).'\')" class="btn btn-danger btn-sm mr-2">';
+                    $btn .= '<button onclick="modalAction(\''.route('kegiatan.confirm', $kegiatan->id_kegiatan).'\')" class="btn btn-danger btn-sm mr-2">';
                     $btn .= '<i class="fas fa-trash"></i></button>';
 
                        // Tombol Unduh Surat Tugas

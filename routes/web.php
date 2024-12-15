@@ -72,7 +72,7 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
     Route::post('/kegiatan/store', [KegiatanController::class, 'store'])->name('kegiatan.store');
     Route::get('/kegiatan/{id}/edit', [KegiatanController::class, 'edit'])->name('kegiatan.edit');
     Route::put('/kegiatan/update/{id_kegiatan}', [KegiatanController::class, 'update'])->name('kegiatan.update');
-    Route::get('/kegiatan/{id}/delete', [KegiatanController::class, 'confirm']);
+    Route::get('/kegiatan/{id}/delete', [KegiatanController::class, 'confirm'])->name('kegiatan.confirm');
     Route::delete('/kegiatan/{id}/delete', [KegiatanController::class, 'delete'])->name('kegiatan.delete');
     Route::get('/kegiatan/import', [KegiatanController::class, 'import'])->name('kegiatan.import');
     Route::post('/kegiatan/import_ajax', [KegiatanController::class, 'import_ajax'])->name('kegiatan.import.ajax');
