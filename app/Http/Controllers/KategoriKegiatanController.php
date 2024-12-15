@@ -126,7 +126,7 @@ class KategoriKegiatanController extends Controller
                 $kategoriKegiatan->update($request->all());
                 return response()->json([
                     'status' => true,
-                    'message' => 'Data berhasil diupdate',
+                    'message' => 'Data berhasil diperbarui',
                 ]);
             } else {
                 return response()->json([
