@@ -74,9 +74,6 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
     Route::put('/kegiatan/update/{id_kegiatan}', [KegiatanController::class, 'update'])->name('kegiatan.update');
     Route::get('/kegiatan/{id}/delete', [KegiatanController::class, 'confirm'])->name('kegiatan.confirm');
     Route::delete('/kegiatan/{id}/delete', [KegiatanController::class, 'delete'])->name('kegiatan.delete');
-    Route::get('/kegiatan/import', [KegiatanController::class, 'import'])->name('kegiatan.import');
-    Route::post('/kegiatan/import_ajax', [KegiatanController::class, 'import_ajax'])->name('kegiatan.import.ajax');
-    Route::get('/kegiatan/export_excel', [KegiatanController::class, 'export_excel'])->name('kegiatan.export.excel');
     Route::get('/kegiatan/export_pdf', [KegiatanController::class, 'export_pdf'])->name('kegiatan.export.pdf');
     Route::get('kegiatan/{id_kegiatan}/unduh_surat', [KegiatanController::class, 'unduhSuratTugas'])->name('kegiatan.downloadDraft');
     // Route untuk menampilkan form upload
