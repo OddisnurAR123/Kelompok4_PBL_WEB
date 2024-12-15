@@ -12,15 +12,8 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Kegiatan</label>
-                    <select name="id_kegiatan" id="id_kegiatan" class="form-control" required>
-                        <option value="">Pilih Kegiatan</option>
-                        @foreach($kegiatanList as $kegiatan)
-                            <option value="{{ $kegiatan->id_kegiatan }}" {{ $detailKegiatan->id_kegiatan == $kegiatan->id_kegiatan ? 'selected' : '' }}>
-                                {{ $kegiatan->nama_kegiatan }}
-                            </option>
-                        @endforeach
-                    </select>
-                    <small id="error-id_kegiatan" class="error-text form-text text-danger"></small>
+                    <input type="text" class="form-control" value="{{ $detailKegiatan->kegiatan->nama_kegiatan }}" readonly>
+                    <input type="hidden" name="id_kegiatan" id="id_kegiatan" value="{{ $detailKegiatan->id_kegiatan }}">
                 </div>
                 <div class="form-group">
                     <label>Keterangan</label>
@@ -29,11 +22,9 @@
                 </div>
                 <div class="form-group">
                     <label>Progres Kegiatan</label>
-                    <input type="number" name="progres_kegiatan" id="progres_kegiatan" class="form-control"
-                           step="0.01" min="0" max="100"
-                           value="{{ old('progres_kegiatan', $averageProgress) }}" required readonly>
+                    <input type="number" name="progres_kegiatan" id="progres_kegiatan" class="form-control" step="0.01" min="0" max="100" value="{{ old('progres_kegiatan', 0) }}" readonly required>
                     <small id="error-progres_kegiatan" class="error-text form-text text-danger"></small>
-                </div>                
+                </div>
                 <div class="form-group">
                     <label>Beban Kerja</label>
                     <select name="beban_kerja" id="beban_kerja" class="form-control" required>
@@ -53,8 +44,41 @@
     </div>
 </form>
 
+<style>
+    @keyframes shake {
+        0% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        50% { transform: translateX(10px); }
+        75% { transform: translateX(-10px); }
+        100% { transform: translateX(0); }
+    }
+
+    .shake {
+        animation: shake 0.5s ease;
+    }
+    .modal-header {
+        background-color: #01274E;
+        color: white;
+    }
+</style>
+
 <script>
     $(document).ready(function() {
+        const idKegiatan = $('#id_kegiatan').val();
+        $.ajax({
+            url: '{{ url("/get-average-progress") }}',
+            type: 'GET',
+            data: { id_kegiatan: idKegiatan },
+            success: function(response) {
+                if (response.success) {
+                    $('#progres_kegiatan').val(response.averageProgress.toFixed()); // Isi dengan rata-rata
+                }
+            },
+            error: function(xhr) {
+                console.error('Gagal mengambil rata-rata progres:', xhr.responseText);
+            }
+        });
+
         $("#form-edit-detail_kegiatan").validate({
             rules: {
                 id_kegiatan: {

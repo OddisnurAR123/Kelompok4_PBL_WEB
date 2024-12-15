@@ -75,6 +75,25 @@
             </div>
         </div>
     </form>
+    
+    <style>
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+    
+        .shake {
+            animation: shake 0.5s ease;
+        }
+        .modal-header {
+            background-color: #01274E;
+            color: white;
+        }
+    </style>
+
     <script>
         $(document).ready(function() {
             $("#form-delete").validate({
