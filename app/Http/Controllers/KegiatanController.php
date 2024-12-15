@@ -302,7 +302,7 @@ class KegiatanController extends Controller
             $kegiatan = KegiatanModel::with('kategoriKegiatan', 'users')->find($id); // Pastikan relasi 'users' sudah didefinisikan
             
             if ($kegiatan) {
-                $kegiatan->users()->detach(); // Menghapus data di tabel pivot jika relasi menggunakan `belongsToMany`
+                $kegiatan->users()->detach(); // Menghapus data di tabel pivot jika relasi menggunakan belongsToMany
                 $kegiatan->delete(); // Hapus data utama
                 
                 return response()->json([

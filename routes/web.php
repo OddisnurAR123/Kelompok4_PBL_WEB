@@ -62,9 +62,6 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
     // Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show');
 
     // // Route untuk menampilkan halaman edit profil
-    // Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-
-    // // Route untuk mengupdate profil (foto profil dan password)
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 
     //route kegiatan
@@ -87,9 +84,11 @@ Route::get('/kegiatan/{id}/upload_surat_tugas', [KegiatanController::class, 'sho
 // Route untuk menangani upload file surat tugas
 Route::post('/kegiatan/{id}/upload_surat_tugas', [KegiatanController::class, 'upload'])->name('kegiatan.upload');
 // Route untuk mengunduh file surat tugas
-Route::get('kegiatan/data', [KegiatanController::class, 'getData'])->name('kegiatan.data');
-Route::get('kegiatan/download/{id_kegiatan}', [KegiatanController::class, 'downloadSuratTugas'])->name('kegiatan.download');
-
+//Route::get('kegiatan/data', [KegiatanController::class, 'getData'])->name('kegiatan.data');
+// Route untuk mengunduh surat tugas
+//Route::get('kegiatan/{id}/unduh', [KegiatanController::class, 'suratTugas'])->name('kegiatan.unduh');
+// Route untuk menampilkan surat tugas
+Route::get('kegiatan/{id}/surat-tugas', [KegiatanController::class, 'suratTugas'])->name('kegiatan.surat_tugas');
 
 
     // Detail Kegiatan Routes
