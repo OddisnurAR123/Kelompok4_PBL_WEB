@@ -12,6 +12,7 @@
             </div>   
         @endif
     </div>
+    
     <div class="card-body">
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -19,6 +20,15 @@
         @if(session('error'))
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
+            <!-- Tab Nav -->
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="kegiatan-tab" data-bs-toggle="tab" href="{{ route('kegiatan.index') }}" role="tab" aria-controls="kegiatan" aria-selected="false">Daftar Kegiatan</a>
+                    </li>
+                    <a class="nav-link active" id="eksternal-tab" data-bs-toggle="tab" href="#eksternal" role="tab" aria-controls="eksternal" aria-selected="true">Kegiatan Eksternal</a>                    </li>
+                                
+                </ul>
 
         <table class="table table-bordered table-striped table-hover table-sm" id="table_kegiatan_eksternal">
             <thead>

@@ -79,16 +79,20 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
     Route::get('/kegiatan/export_excel', [KegiatanController::class, 'export_excel'])->name('kegiatan.export.excel');
     Route::get('/kegiatan/export_pdf', [KegiatanController::class, 'export_pdf'])->name('kegiatan.export.pdf');
     Route::get('kegiatan/{id_kegiatan}/unduh_surat', [KegiatanController::class, 'unduhSuratTugas'])->name('kegiatan.downloadDraft');
-// Route untuk menampilkan form upload
-Route::get('/kegiatan/{id}/upload_surat_tugas', [KegiatanController::class, 'showUploadForm'])->name('kegiatan.uploadForm');
-// Route untuk menangani upload file surat tugas
-Route::post('/kegiatan/{id}/upload_surat_tugas', [KegiatanController::class, 'upload'])->name('kegiatan.upload');
-// Route untuk mengunduh file surat tugas
-//Route::get('kegiatan/data', [KegiatanController::class, 'getData'])->name('kegiatan.data');
-// Route untuk mengunduh surat tugas
-//Route::get('kegiatan/{id}/unduh', [KegiatanController::class, 'suratTugas'])->name('kegiatan.unduh');
-// Route untuk menampilkan surat tugas
-Route::get('kegiatan/{id}/surat-tugas', [KegiatanController::class, 'suratTugas'])->name('kegiatan.surat_tugas');
+    // Route untuk menampilkan form upload
+    Route::get('/kegiatan/{id}/upload_surat_tugas', [KegiatanController::class, 'showUploadForm'])->name('kegiatan.uploadForm');
+    // Route untuk menangani upload file surat tugas
+    Route::post('/kegiatan/{id}/upload_surat_tugas', [KegiatanController::class, 'upload'])->name('kegiatan.upload');
+    // Route untuk mengunduh file surat tugas
+    //Route::get('kegiatan/data', [KegiatanController::class, 'getData'])->name('kegiatan.data');
+    // Route untuk mengunduh surat tugas
+    //Route::get('kegiatan/{id}/unduh', [KegiatanController::class, 'suratTugas'])->name('kegiatan.unduh');
+    // Route untuk menampilkan surat tugas
+    Route::get('kegiatan/{id}/surat-tugas', [KegiatanController::class, 'suratTugas'])->name('kegiatan.surat_tugas');
+    // web.php
+    Route::get('kegiatan_pimpinan', [KegiatanController::class, 'indexPimpinan'])->name('kegiatan_pimpinan');
+    Route::get('progress_chart/{id}', [KegiatanController::class, 'getProgressKegiatan'])->name('progress_chart');
+
 
 
     // Detail Kegiatan Routes
