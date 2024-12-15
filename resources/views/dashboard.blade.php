@@ -5,8 +5,8 @@
     <div class="card shadow-lg border-0 rounded-lg">
         <div class="card-body">
             <div class="text-center mb-4">
-                <h4 class="font-weight-bold text-danger">Selamat datang, {{ Auth::user()->nama_pengguna }}!</h4>
-                <p class="text-muted">Berikut informasi kegiatan dan agenda Anda:</p>
+                <h4 class="font-weight-bold" style="color: #8B1A1A;">Selamat datang, {{ Auth::user()->nama_pengguna }}!</h4>
+                <p class="text-muted">Berikut informasi notifikasi Anda:</p>
             </div>
 
             <!-- Bagian Notifikasi -->

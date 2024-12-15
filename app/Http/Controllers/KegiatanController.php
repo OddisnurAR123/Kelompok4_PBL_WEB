@@ -75,13 +75,19 @@ class KegiatanController extends Controller
             ->addColumn('status', function ($kegiatan) {
                 $status = 'Belum selesai';
                 $statusClass = 'badge-warning';
+                $progres = DB::table('t_detail_kegiatan')
+                ->where('id_kegiatan', $kegiatan->id_kegiatan)
+                ->orderByDesc('updated_at')
+                ->value('progres_kegiatan');
 
-                if ($kegiatan->progres_kegiatan == 100) {
-                    $status = 'Selesai';
-                    $statusClass = 'badge-success';
-                } elseif ($kegiatan->progres_kegiatan < 100 && $kegiatan->tanggal_selesai < now()) {
-                    $status = 'Tidak selesai';
-                    $statusClass = 'badge-danger';
+                if ($progres !== null) {
+                    if ($progres == 100) {
+                        $status = 'Selesai';
+                        $statusClass = 'badge-success';
+                    } elseif ($progres < 100 && $kegiatan->tanggal_selesai < now()) {
+                        $status = 'Tidak selesai';
+                        $statusClass = 'badge-danger';
+                    }
                 }
 
                 return '<span class="badge ' . $statusClass . '">' . $status . '</span>';
