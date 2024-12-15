@@ -8,11 +8,8 @@
                 </a>
                 <h3 class="card-title mb-0 flex-grow-1">Daftar Progres Kegiatan</h3>
                 <div class="card-tools ml-auto">
-                    <a href="{{ url('/detail_kegiatan/export_excel') }}" class="btn btn-primary btn-sm">
-                        <i class="fa fa-file-excel"></i> Export XLSX
-                    </a>
                     <a href="{{ url('/detail_kegiatan/export_pdf') }}" class="btn btn-warning btn-sm">
-                        <i class="fa fa-file-pdf"></i> Export PDF
+                        <i class="fa fa-file-pdf"></i> Export
                     </a>
                     <button onclick="modalAction('{{ url('/detail_kegiatan/create') }}')" class="btn btn-success btn-sm">
                         <i class="fa fa-plus"></i> Tambah Progres

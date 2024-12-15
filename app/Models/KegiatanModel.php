@@ -76,7 +76,7 @@ class KegiatanModel extends Model
             );
     }
 
-    public function KegiatanUsers()
+    public function tKegiatanUsers()
     {
         return $this->hasMany(KegiatanUser::class, 'id_kegiatan', 'id_kegiatan');
     }
@@ -98,8 +98,8 @@ class KegiatanModel extends Model
         return $this->belongsToMany(User::class, 't_kegiatan_user', 'id_kegiatan', 'id_kegiatan_user');
     }
 
-    // public function kegiatanUsers()
-    // {
-    //     return $this->belongsToMany(PenggunaModel::class, 't_kegiatan_user', 'id_kegiatan', 'id_pengguna');
-    // }
+    public function kegiatanUsers()
+    {
+        return $this->belongsToMany(PenggunaModel::class, 't_kegiatan_user', 'id_kegiatan', 'id_pengguna');
+    }
 }
