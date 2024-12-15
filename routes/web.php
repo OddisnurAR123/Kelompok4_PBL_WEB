@@ -90,8 +90,9 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
     // Route untuk menampilkan surat tugas
     Route::get('kegiatan/{id}/surat-tugas', [KegiatanController::class, 'suratTugas'])->name('kegiatan.surat_tugas');
     // web.php
-    Route::get('kegiatan_pimpinan', [KegiatanController::class, 'indexPimpinan'])->name('kegiatan_pimpinan');
-    Route::get('progress_chart/{id}', [KegiatanController::class, 'getProgressKegiatan'])->name('progress_chart');
+    Route::get('kegiatan_pimpinan', [KegiatanController::class, 'index'])->name('index');
+    Route::post('/kegiatan_pimpinan/list', [KegiatanController::class, 'list']);
+    // Route::get('progress_chart/{id}', [KegiatanController::class, 'getProgressKegiatan'])->name('progress_chart');
 
 
 
