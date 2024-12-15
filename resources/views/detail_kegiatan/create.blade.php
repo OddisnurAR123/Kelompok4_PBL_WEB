@@ -26,10 +26,9 @@
                 </div>
                 <div class="form-group">
                     <label>Progres Kegiatan</label>
-                    <input type="number" name="progres_kegiatan" id="progres_kegiatan" class="form-control" step="0.01" min="0" max="100" 
-                           value="{{ $averageProgress }}" readonly required>
+                    <input type="number" name="progres_kegiatan" id="progres_kegiatan" class="form-control" step="0.01" min="0" max="100" value="0" readonly required>
                     <small id="error-progres_kegiatan" class="error-text form-text text-danger"></small>
-                </div>                
+                </div>            
                 <div class="form-group">
                     <label>Beban Kerja</label>
                     <select name="beban_kerja" id="beban_kerja" class="form-control" required>
@@ -49,8 +48,54 @@
     </div>
 </form>
 
+<style>
+    @keyframes shake {
+        0% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        50% { transform: translateX(10px); }
+        75% { transform: translateX(-10px); }
+        100% { transform: translateX(0); }
+    }
+
+    .shake {
+        animation: shake 0.5s ease;
+    }
+    .modal-header {
+        background-color: #01274E;
+        color: white;
+    }
+</style>
+
 <script>
     $(document).ready(function() {
+        $('#id_kegiatan').change(function() {
+        var idKegiatan = $(this).val();
+
+        if (idKegiatan) {
+            $.ajax({
+                url: '{{ route("get.averageProgress") }}',
+                type: 'GET',
+                data: { id_kegiatan: idKegiatan },
+                success: function(response) {
+                    if (response.success) {
+                        $('#progres_kegiatan').val(response.averageProgress);
+                    } else {
+                        $('#progres_kegiatan').val(0);
+                    }
+                },
+                error: function() {
+                    $('#progres_kegiatan').val(0);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Terjadi Kesalahan',
+                        text: 'Tidak dapat mengambil data rata-rata progres.'
+                    });
+                }
+            });
+        } else {
+            $('#progres_kegiatan').val(0);
+        }
+    });
         $("#form-tambah-detail_kegiatan").validate({
             rules: {
                 id_kegiatan: {

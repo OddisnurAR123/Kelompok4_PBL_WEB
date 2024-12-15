@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Illuminate\Support\Facades\Auth;
 use Dompdf\Dompdf;
-use Illuminate\Support\Facades\Log;
 
 class KegiatanController extends Controller
 {
@@ -76,13 +75,19 @@ class KegiatanController extends Controller
             ->addColumn('status', function ($kegiatan) {
                 $status = 'Belum selesai';
                 $statusClass = 'badge-warning';
+                $progres = DB::table('t_detail_kegiatan')
+                ->where('id_kegiatan', $kegiatan->id_kegiatan)
+                ->orderByDesc('updated_at')
+                ->value('progres_kegiatan');
 
-                if ($kegiatan->progres_kegiatan == 100) {
-                    $status = 'Selesai';
-                    $statusClass = 'badge-success';
-                } elseif ($kegiatan->progres_kegiatan < 100 && $kegiatan->tanggal_selesai < now()) {
-                    $status = 'Tidak selesai';
-                    $statusClass = 'badge-danger';
+                if ($progres !== null) {
+                    if ($progres == 100) {
+                        $status = 'Selesai';
+                        $statusClass = 'badge-success';
+                    } elseif ($progres < 100 && $kegiatan->tanggal_selesai < now()) {
+                        $status = 'Tidak selesai';
+                        $statusClass = 'badge-danger';
+                    }
                 }
 
                 return '<span class="badge ' . $statusClass . '">' . $status . '</span>';
@@ -102,22 +107,16 @@ class KegiatanController extends Controller
                     $btn .= '<button onclick="modalAction(\''.route('kegiatan.delete', $kegiatan->id_kegiatan).'\')" class="btn btn-danger btn-sm mr-2">';
                     $btn .= '<i class="fas fa-trash"></i></button>';
 
-                    if(Auth::user()->id_jenis_pengguna == 1 || Auth::user()->id_jenis_pengguna == 2) {
-                       // Tombol Unduh Draft Surat Tugas
+                       // Tombol Unduh Surat Tugas
                        $btn .= '<a href="'.route('kegiatan.downloadDraft', $kegiatan->id_kegiatan).'" target="_blank" class="btn btn-primary btn-sm ml-2">';
                        $btn .= '<i class="fas fa-download"></i></a>';                
-                    }
-                    if (Auth::user()->id_jenis_pengguna == 1) {
-                       //
+
                         $btn .= '<button onclick="modalAction(\''.route('kegiatan.uploadForm', $kegiatan->id_kegiatan).'\')" class="btn btn-success btn-sm ml-2">';
-                        $btn .= '<i class="fas fa-upload"></i></button></a>';
-                    }
-                    if ($kegiatan->file_surat_tugas) {
-                        $btn .= '<button onclick="window.open(\''.route('kegiatan.surat_tugas', $kegiatan->id_kegiatan).'\')" class="btn btn-primary btn-sm ml-2">';
-                        $btn .= '<i class="fas fa-file-pdf"></i></button>';
-                    }
+                        $btn .= '<i class="fas fa-upload"></i></button>';
                         return $btn . '</div>';
+
                 }
+        
                 $btn .= '</div>';
                 return $btn;
             })
@@ -309,7 +308,7 @@ class KegiatanController extends Controller
             $kegiatan = KegiatanModel::with('kategoriKegiatan', 'users')->find($id); // Pastikan relasi 'users' sudah didefinisikan
             
             if ($kegiatan) {
-                $kegiatan->users()->detach(); // Menghapus data di tabel pivot jika relasi menggunakan `belongsToMany`
+                $kegiatan->users()->detach(); // Menghapus data di tabel pivot jika relasi menggunakan belongsToMany
                 $kegiatan->delete(); // Hapus data utama
                 
                 return response()->json([
@@ -487,6 +486,7 @@ class KegiatanController extends Controller
         exit;
     }
 
+
     public function export_pdf()
     {
         // Mengambil data kegiatan beserta kategori_kegiatan
@@ -538,21 +538,19 @@ public function showUploadForm($id_kegiatan)
 public function upload(Request $request, $id_kegiatan)
 {
     $request->validate([
-        'file_surat_tugas' => 'required|mimes:pdf,doc,docx|max:2048',
+        'file_surat_tugas' => 'required|mimes:pdf,doc,docx|max:2048', // Validasi file
     ]);
 
     $kegiatan = KegiatanModel::findOrFail($id_kegiatan);
 
     try {
+        // Simpan file ke folder 'uploads/surat_tugas'
         $file = $request->file('file_surat_tugas');
         $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('uploads/surat_tugas'), $filename);
 
-        // Simpan file ke folder 'uploads/surat_tugas' di public path
-        $filePath = 'uploads/surat_tugas/' . $filename;
-        $file->move(public_path($filename));
-
-        // Simpan path file ke database
-        $kegiatan->file_surat_tugas = $filePath;
+        // Simpan nama file ke database
+        $kegiatan->file_surat_tugas = 'uploads/surat_tugas/' . $filename;
         $kegiatan->save();
 
         return response()->json([
@@ -567,14 +565,18 @@ public function upload(Request $request, $id_kegiatan)
         ]);
     }
 }
-public function suratTugas($id)
+public function downloadSuratTugas($id_kegiatan)
 {
-    $kegiatan = KegiatanModel::findOrFail($id);
+    $kegiatan = KegiatanModel::findOrFail($id_kegiatan);
 
-    return response()->download(storage_path('app/public/' . $kegiatan->file_surat_tugas));
+    if ($kegiatan && $kegiatan->file_surat_tugas) {
+        $filePath = storage_path('app/public/' . $kegiatan->file_surat_tugas);
+
+        if (file_exists($filePath)) {
+            return response()->download($filePath);
+        }
+    }
+
+    return redirect()->back()->with('error', 'File tidak ditemukan.');
 }
-
 }
-
-
-

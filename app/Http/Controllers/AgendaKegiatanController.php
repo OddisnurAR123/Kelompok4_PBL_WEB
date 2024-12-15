@@ -17,6 +17,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 
+
+
 class AgendaKegiatanController extends Controller
 {
     public function index()
@@ -100,6 +102,7 @@ public function getPengguna(Request $request)
             if ($kegiatan->id_jabatan_kegiatan == 1) {
                 return response()->json([]);  // Mengembalikan array kosong jika ID jabatan adalah 1
             }
+
             $pengguna = KegiatanUser::with('pengguna:id_pengguna,nama_pengguna')
                             ->where('id_kegiatan', $id_kegiatan)
                             ->whereHas('pengguna', function ($query) {
@@ -112,6 +115,7 @@ public function getPengguna(Request $request)
                                     'nama_pengguna' => $item->pengguna ? $item->pengguna->nama_pengguna : 'N/A',
                                 ];
                             });
+
             return response()->json($pengguna);
 
         } catch (\Exception $e) {
@@ -121,38 +125,34 @@ public function getPengguna(Request $request)
 
     return response()->json([]);
 }
+
 // Method untuk menyimpan data agenda ke database
 public function store(Request $request)
 {
+    $request->validate([
+        'nama_agenda' => 'required|string|max:255',
+        'id_pengguna' => 'required|integer',
+        'bobot_anggota' => 'required|numeric',
+        'tempat_agenda' => 'required|string|max:255',
+        'tanggal_agenda' => 'required|date',
+        'deskripsi' => 'nullable|string',
+    ]);
+
     try {
-        // Validasi input form
-        $request->validate([
-            'id_kegiatan' => 'required|exists:kegiatans,id_kegiatan',
-            'nama_agenda' => 'required|string|max:255',
-            'id_pengguna' => 'required|exists:pengguna,id_pengguna',
-            'tempat_agenda' => 'required|string|max:255',
-            'tanggal_agenda' => 'required|date_format:Y-m-d\TH:i',
-            'deskripsi' => 'nullable|string',
-        ]);
+        // Simpan data ke database
+        AgendaModel::create($request->all());
 
-        // Simpan data agenda ke database
-        $agenda = new AgendaModel();
-        $agenda->id_kegiatan = $request->input('id_kegiatan');
-        $agenda->nama_agenda = $request->input('nama_agenda');
-        $agenda->id_pengguna = $request->input('id_pengguna');
-        $agenda->tempat_agenda = $request->input('tempat_agenda');
-        $agenda->tanggal_agenda = $request->input('tanggal_agenda');
-        $agenda->deskripsi = $request->input('deskripsi');
-
-        $agenda->save();
-
-        return response()->json(['message' => 'Agenda berhasil disimpan']);
-    } catch (\Illuminate\Validation\ValidationException $e) {
-        return response()->json(['errors' => $e->errors()], 422);
+        return response()->json([
+            'message' => 'Agenda berhasil dibuat.',
+        ], 200);
     } catch (\Exception $e) {
-        return response()->json(['message' => 'Terjadi kesalahan.', 'error' => $e->getMessage()], 500);
+        return response()->json([
+            'message' => 'Terjadi kesalahan saat menyimpan data.',
+            'error' => $e->getMessage(),
+        ], 500);
     }
 }
+
 
         public function edit(string $id_agenda)
 {
@@ -227,40 +227,40 @@ public function show(string $id)
 
 public function delete(Request $request, $id)
 {
-    if ($request->ajax() || $request->wantsJson()) {
-        $agenda = AgendaModel::find($id);
+    Log::info("Delete Request ID: {$id}, Method: {$request->method()}");
 
-        if ($agenda) {
-            $agenda->delete();
-            return response()->json([
-                'status' => true,
-                'message' => 'Data berhasil dihapus',
-            ]);
-        }
+    // Cari agenda berdasarkan ID
+    $agenda = AgendaModel::find($id);
 
+    if (!$agenda) {
         return response()->json([
             'status' => false,
             'message' => 'Data tidak ditemukan',
         ]);
     }
 
-    return redirect('/agenda');
+    // Pastikan hanya request AJAX yang memproses penghapusan
+    if ($request->ajax() || $request->wantsJson()) {
+        $agenda->delete();
+        return response()->json([
+            'status' => true,
+            'message' => 'Data berhasil dihapus',
+        ]);
+    }
+
+    return redirect()->back()->with('error', 'Permintaan penghapusan hanya melalui AJAX.');
 }
 
 public function confirm(string $id)
 {
-    $agenda = AgendaModel::with(['kegiatan', 'kegiatanUser'])->find($id);
+    $agenda = AgendaModel::with(['pengguna'])->find($id);
 
     if (!$agenda) {
-        return response()->json([
-            'status' => false,
-            'message' => 'Agenda tidak ditemukan.'
-        ]);
+        return redirect()->back()->with('error', 'Agenda tidak ditemukan.');
     }
 
     return view('agenda.confirm', compact('agenda'));
 }
-
 
 public function import(Request $request) {
     if($request->ajax() || $request->wantsJson()) {
