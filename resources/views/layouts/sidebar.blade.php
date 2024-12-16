@@ -18,18 +18,17 @@
 
     <!-- Sidebar Menu -->
     <ul class="nav nav-pills nav-sidebar flex-column mt-3" data-widget="treeview" role="menu" data-accordion="false">
-        <!-- Dashboard -->
-        @if(in_array(Auth::user()->id_jenis_pengguna, [1, 3]))
+        <!-- Dashboard untuk Admin -->
+        @if(Auth::user()->id_jenis_pengguna == 1)
             <li class="nav-item">
-                <a href="{{ url('/') }}" class="nav-link {{ ($activeMenu == 'dashboard') ? 'active' : '' }}" style="color: {{ ($activeMenu == 'dashboard') ? '#3b82f6' : '#ffffff' }};">
+                <a href="{{ url('/dashboard_admin') }}" class="nav-link {{ ($activeMenu == 'dashboard_admin') ? 'active' : '' }}" style="color: {{ ($activeMenu == 'dashboard_admin') ? '#3b82f6' : '#ffffff' }};">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>Dashboard</p>
                 </a>
             </li>
         @endif
-
-        <!-- Dashboard -->
-        @if(in_array(Auth::user()->id_jenis_pengguna, [2]))
+        <!-- Dashboard untuk Pimpinan -->
+        @if(Auth::user()->id_jenis_pengguna == 2)
             <li class="nav-item">
                 <a href="{{ url('/kegiatan_pimpinan') }}" class="nav-link {{ ($activeMenu == 'kegiatan_pimpinan') ? 'active' : '' }}" style="color: {{ ($activeMenu == 'kegiatan_pimpinan') ? '#3b82f6' : '#ffffff' }};">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -38,8 +37,18 @@
             </li>
         @endif
 
+        <!-- Dashboard untuk User -->
+        @if(Auth::user()->id_jenis_pengguna == 3)
+            <li class="nav-item">
+                <a href="{{ url('/') }}" class="nav-link {{ ($activeMenu == 'dashboard') ? 'active' : '' }}" style="color: {{ ($activeMenu == 'dashboard') ? '#3b82f6' : '#ffffff' }};">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>Dashboard</p>
+                </a>
+            </li>
+        @endif
+
         <!-- Data Master -->
-        @if(in_array(Auth::user()->id_jenis_pengguna, [1]))
+        @if(Auth::user()->id_jenis_pengguna == 1)
             <li class="nav-item {{ str_contains($activeMenu, 'data-master') ? 'menu-open' : '' }}">
                 <a href="#" class="nav-link {{ str_contains($activeMenu, 'data-master') ? 'active' : '' }}" style="color: {{ str_contains($activeMenu, 'data-master') ? '#3b82f6' : '#ffffff' }};">
                     <i class="nav-icon fas fa-database"></i>

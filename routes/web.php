@@ -19,6 +19,7 @@ use App\Http\Controllers\TampilKegiatanController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\KinerjaDosenController;
+use App\Http\Controllers\AdminDashboardController;
 
 
 /*
@@ -42,6 +43,8 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 //route yang memerlukan autentikasi
 // Route::middleware(['auth'])->group(function(){
     Route::get('/dashboard', [WelcomeController::class, 'index']);
+    Route::get('/dashboard_admin', [AdminDashboardController::class, 'index'])->name('admin.index');
+    Route::get('/kegiatan_admin/{id_pengguna}', [AdminDashboardController::class, 'show'])->name('admin.show');
         
     // // Routes untuk halaman profil
     // Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile.show'); // Menampilkan profil pengguna
@@ -71,26 +74,16 @@ Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile
     Route::post('/kegiatan/store', [KegiatanController::class, 'store'])->name('kegiatan.store');
     Route::get('/kegiatan/{id}/edit', [KegiatanController::class, 'edit'])->name('kegiatan.edit');
     Route::put('/kegiatan/update/{id_kegiatan}', [KegiatanController::class, 'update'])->name('kegiatan.update');
-    Route::get('/kegiatan/{id}/delete', [KegiatanController::class, 'confirm']);
+    Route::get('/kegiatan/{id}/delete', [KegiatanController::class, 'confirm'])->name('kegiatan.confirm');
     Route::delete('/kegiatan/{id}/delete', [KegiatanController::class, 'delete'])->name('kegiatan.delete');
-    Route::get('/kegiatan/import', [KegiatanController::class, 'import'])->name('kegiatan.import');
-    Route::post('/kegiatan/import_ajax', [KegiatanController::class, 'import_ajax'])->name('kegiatan.import.ajax');
-    Route::get('/kegiatan/export_excel', [KegiatanController::class, 'export_excel'])->name('kegiatan.export.excel');
     Route::get('/kegiatan/export_pdf', [KegiatanController::class, 'export_pdf'])->name('kegiatan.export.pdf');
     Route::get('kegiatan/{id_kegiatan}/unduh_surat', [KegiatanController::class, 'unduhSuratTugas'])->name('kegiatan.downloadDraft');
-    // Route untuk menampilkan form upload
     Route::get('/kegiatan/{id}/upload_surat_tugas', [KegiatanController::class, 'showUploadForm'])->name('kegiatan.uploadForm');
-    // Route untuk menangani upload file surat tugas
     Route::post('/kegiatan/{id}/upload_surat_tugas', [KegiatanController::class, 'upload'])->name('kegiatan.upload');
-    // Route untuk mengunduh file surat tugas
-    //Route::get('kegiatan/data', [KegiatanController::class, 'getData'])->name('kegiatan.data');
-    // Route untuk mengunduh surat tugas
-    //Route::get('kegiatan/{id}/unduh', [KegiatanController::class, 'suratTugas'])->name('kegiatan.unduh');
-    // Route untuk menampilkan surat tugas
-    Route::get('kegiatan/{id}/surat-tugas', [KegiatanController::class, 'suratTugas'])->name('kegiatan.surat_tugas');
     // web.php
-    Route::get('kegiatan_pimpinan', [KegiatanController::class, 'indexPimpinan'])->name('kegiatan_pimpinan');
-    Route::get('progress_chart/{id}', [KegiatanController::class, 'getProgressKegiatan'])->name('progress_chart');
+    Route::get('kegiatan_pimpinan', [KegiatanController::class, 'index'])->name('index');
+    Route::post('/kegiatan_pimpinan/list', [KegiatanController::class, 'list']);
+    // Route::get('progress_chart/{id}', [KegiatanController::class, 'getProgressKegiatan'])->name('progress_chart');
 
 
 
@@ -102,7 +95,6 @@ Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile
     Route::get('/detail_kegiatan/{id}/show', [DetailKegiatanController::class, 'show'])->name('detail_kegiatan.show');
     Route::get('/detail_kegiatan/{id}/edit', [DetailKegiatanController::class, 'edit'])->name('detail_kegiatan.edit');
     Route::put('/detail_kegiatan/update/{id_detail_kegiatan}', [DetailKegiatanController::class, 'update'])->name('detail_kegiatan.update');
-    Route::get('/detail_kegiatan/export_excel', [DetailKegiatanController::class, 'export_excel'])->name('detail_kegiatan.export_excel');
     Route::get('/detail_kegiatan/export_pdf', [DetailKegiatanController::class, 'export_pdf'])->name('detail_kegiatan.export_pdf');
     Route::get('/get-average-progress', [DetailKegiatanController::class, 'getAverageProgress'])->name('get.averageProgress');
 
@@ -176,9 +168,6 @@ Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile
     Route::put('/agenda/{id}/update', [AgendaKegiatanController::class, 'update'])->name('agenda.update');
     Route::get('/agenda/{id}/delete', [AgendaKegiatanController::class, 'confirm'])->name('agenda.confirm');
     Route::delete('/agenda/{id}/delete', [AgendaKegiatanController::class, 'delete'])->name('agenda.delete');
-    Route::post('/agenda/import', [KegiatanController::class, 'import'])->name('agenda.import');
-    Route::get('/agenda/export_excel', [KegiatanController::class, 'export_excel'])->name('agenda.export_excel');
-    Route::get('/agenda/export_pdf', [KegiatanController::class, 'export_pdf'])->name('agenda.export_pdf');
     Route::get('/get-agenda-by-kegiatan/{id}', [AgendaKegiatanController::class, 'getAgendaByKegiatan']);
 
 

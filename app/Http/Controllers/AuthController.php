@@ -12,10 +12,21 @@ class AuthController extends Controller
     public function login()
     {
         if (Auth::check()) {
-            return redirect('/dashboard'); // Jika sudah login, redirect ke halaman utama
+            // Ambil jenis pengguna dari pengguna yang login
+            $userType = Auth::user()->id_jenis_pengguna;
+    
+            // Redirect berdasarkan jenis pengguna
+            if (in_array($userType, [1, 2])) {
+                return redirect('/kegiatan_pimpinan/kegiatan_pimpinan');
+            }
+    
+            // Default redirect untuk pengguna lainnya
+            return redirect('/dashboard');
         }
+    
+        // Jika belum login, tampilkan halaman login
         return view('auth.login');
-    }
+    }    
 
     public function postlogin(Request $request)
     {

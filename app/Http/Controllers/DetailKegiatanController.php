@@ -124,7 +124,7 @@ class DetailKegiatanController extends Controller
 
             return response()->json([
                 'status' => true,
-                'message' => 'Detail kegiatan berhasil ditambahkan.'
+                'message' => 'Progres berhasil disimpan.'
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -184,7 +184,7 @@ class DetailKegiatanController extends Controller
 
             return response()->json([
                 'status' => true,
-                'message' => 'Detail kegiatan berhasil diperbarui.'
+                'message' => 'Progres berhasil diperbarui.'
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -192,66 +192,6 @@ class DetailKegiatanController extends Controller
                 'message' => 'Gagal memperbarui detail kegiatan. ' . $e->getMessage(),
             ]);
         }
-    }
-
-    public function export_excel()
-    {
-        // Ambil data detail kegiatan
-        $detail_kegiatan = DetailKegiatanModel::with('kegiatan:id_kegiatan,nama_kegiatan')
-            ->select('id_detail_kegiatan', 'id_kegiatan', 'keterangan', 'progres_kegiatan', 'beban_kerja')
-            ->get();
-
-        // Load library PhpSpreadsheet
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet(); // Ambil sheet yang aktif
-
-        // Header kolom
-        $sheet->setCellValue('A1', 'No');
-        $sheet->setCellValue('B1', 'Nama Kegiatan');
-        $sheet->setCellValue('C1', 'Keterangan');
-        $sheet->setCellValue('D1', 'Progres Kegiatan');
-        $sheet->setCellValue('E1', 'Beban Kerja');
-
-        // Buat header bold
-        $sheet->getStyle('A1:F1')->getFont()->setBold(true);
-
-        // Isi data detail kegiatan
-        $no = 1; // Nomor urut
-        $baris = 2; // Baris dimulai dari baris ke-2
-        foreach ($detail_kegiatan as $value) {
-            $sheet->setCellValue('A' . $baris, $no);
-            $sheet->setCellValue('B' . $baris, $value->kegiatan->nama_kegiatan);
-            $sheet->setCellValue('C' . $baris, $value->keterangan);
-            $sheet->setCellValue('D' . $baris, $value->progres_kegiatan . '%');
-            $sheet->setCellValue('E' . $baris, $value->beban_kerja);
-            $baris++;
-            $no++;
-        }
-
-        // Set auto width untuk kolom
-        foreach (range('A', 'E') as $columnID) {
-            $sheet->getColumnDimension($columnID)->setAutoSize(true);
-        }
-
-        // Set judul sheet
-        $sheet->setTitle('Data Detail Kegiatan');
-
-        // Buat file Excel
-        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-        $filename = 'Data Detail Kegiatan ' . date('Y-m-d H:i:s') . '.xlsx';
-
-        // Set header untuk download file
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="' . $filename . '"');
-        header('Cache-Control: max-age=0');
-        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-        header('Last-Modified:' . gmdate('D, d M Y H:i:s') . ' GMT');
-        header('Cache-Control: cache, must-revalidate');
-        header('Pragma: public');
-
-        // Simpan output ke browser
-        $writer->save('php://output');
-        exit;
     }
 
     // Eksport data ke PDF

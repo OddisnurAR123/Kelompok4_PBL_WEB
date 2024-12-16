@@ -33,7 +33,6 @@
             border: none;
             box-shadow: none;
         }
-
     </style>
 </head>
 <body>
@@ -41,7 +40,7 @@
 <div class="container mt-4">
     <div class="card card-outline card-primary">
         <div class="card-header">
-            <h3 class="card-title">Detail Kegiatan</h3>
+            <h3 class="card-title">Rincian Kegiatan</h3>
         </div>
         <div class="card-body animated-detail">
             @if(!$kegiatan)
@@ -195,7 +194,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
+<div class="modal fade custom-modal" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-body" id="modalContent">
@@ -208,12 +207,7 @@
         </div>
     </div>
 </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>

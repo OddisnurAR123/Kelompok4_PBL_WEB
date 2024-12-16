@@ -14,47 +14,6 @@ use Illuminate\Support\Facades\Log;
 
 class DetailAgendaController extends Controller
 {
-    public function index() {
-        $breadcrumb = (object) [
-            'title' => 'Detail Agenda',
-            'list' => ['Home', 'Detail Agenda']
-        ];
-
-        $page = (object) [
-            'title' => 'Daftar Progres Agenda yang ada'
-        ];
-
-        $activeMenu = 'detail_agenda';
-
-        return view('detail_agenda.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu]);
-    }
-
-    public function list(Request $request)
-    {
-        $detail_agenda = DetailAgendaModel::with(['kegiatan', 'agenda'])
-            ->select('id_detail_agenda', 'id_kegiatan', 'id_agenda', 'progres_agenda', 'keterangan', 'berkas')
-            ->get();
-
-        return DataTables::of($detail_agenda)
-            ->addIndexColumn()
-            ->addColumn('nama_kegiatan', function ($detail_agenda) {
-                return $detail_agenda->kegiatan ? $detail_agenda->kegiatan->nama_kegiatan : 'Tidak ada';
-            })
-            ->addColumn('nama_agenda', function ($detail_agenda) {
-                return $detail_agenda->agenda ? $detail_agenda->agenda->nama_agenda : 'Tidak ada';
-            })
-            ->addColumn('aksi', function ($detail_agenda) {
-                $btn = '<div class="d-flex justify-content-center">';
-                $btn .= '<button onclick="modalAction(\''.route('detail_agenda.show', ['id' => $detail_agenda->id_detail_agenda]).'\')" class="btn btn-info btn-sm" style="margin-right: 5px;">';
-                $btn .= '<i class="fas fa-eye"></i></button>';
-                $btn .= '<button onclick="modalAction(\''.route('detail_agenda.edit', ['id' => $detail_agenda->id_detail_agenda]).'\')" class="btn btn-warning btn-sm">';
-                $btn .= '<i class="fas fa-edit"></i></button>';
-                $btn .= '</div>';
-                return $btn;
-            })
-            ->rawColumns(['aksi'])
-            ->make(true);
-    }
 
     public function create($id_kegiatan, $id_agenda)
     {
@@ -129,7 +88,7 @@ class DetailAgendaController extends Controller
     
         return response()->json([
             'status' => true,
-            'message' => 'Detail Agenda berhasil disimpan.'
+            'message' => 'Progres Agenda berhasil disimpan.'
         ]);
     }
 
@@ -194,7 +153,7 @@ class DetailAgendaController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Detail agenda berhasil diperbarui'
+            'message' => 'Progres agenda berhasil diperbarui'
         ]);
     }
     public function upgrade($id_kegiatan, $id_agenda)
