@@ -106,4 +106,22 @@ class PenggunaModel extends Authenticatable implements JWTSubject
     {
         return $this->jenisPengguna->kode_jenis_pengguna ?? null;
     }
+
+    // Relasi dengan KegiatanUser
+    public function kegiatanUser()
+    {
+        return $this->hasMany(KegiatanUser::class, 'id_pengguna');
+    }
+    
+    // Relasi dengan AgendaModel
+    public function agenda()
+    {
+        return $this->hasMany(AgendaModel::class, 'id_pengguna');
+    }
+
+    // Relasi polymorphic untuk notifikasi
+    public function notifications()
+    {
+        return $this->morphMany(Notification::class, 'notifiable');
+    }
 }

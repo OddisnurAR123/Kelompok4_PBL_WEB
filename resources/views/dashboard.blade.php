@@ -1,76 +1,67 @@
 @extends('layouts.template')
 
 @section('content')
-<div class="container mt-5">
+
+<div class="container mt-2">
     <div class="card shadow-lg border-0 rounded-lg">
         <div class="card-body">
-            <div class="text-center mb-4">
+            <div class="text-center mb-3">
                 <h4 class="font-weight-bold" style="color: #8B1A1A;">Selamat datang, {{ Auth::user()->nama_pengguna }}!</h4>
-                <p class="text-muted">Berikut informasi notifikasi Anda:</p>
             </div>
 
-            <!-- Bagian Notifikasi -->
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white d-flex align-items-center">
-                    <i class="fas fa-bell mr-2"></i>
-                    <h5 class="mb-0">Notifikasi</h5>
-                </div>
-                <div class="card-body">
-                    @if(isset($notifications) && $notifications->isNotEmpty())
-                        <ul class="list-group">
-                            @foreach($notifications as $notification)
-                                <li class="list-group-item">
-                                    <p>{{ $notification->data['message'] }}</p>
-                                    <small class="text-muted">Tanggal: {{ \Carbon\Carbon::parse($notification->created_at)->format('d M Y H:i') }}</small>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @else
-                        <div class="text-center text-muted">
-                            <i class="fas fa-info-circle fa-2x mb-2"></i>
-                            <p>Tidak ada notifikasi baru.</p>
+            <div class="row">
+                <!-- Kegiatan Terdekat -->
+                <div class="col-md-6 mb-3">
+                    <div class="card border-info shadow-sm">
+                        <div class="card-header" style="background-color: #F97300; color: white;">
+                            <h5 class="mb-0">📅 Kegiatan Terdekat</h5>
                         </div>
-                    @endif
+                        <div class="card-body">
+                            @if($kegiatan)
+                                <p class="font-weight-bold text-dark">Nama Kegiatan:</p>
+                                <p>{{ $kegiatan->nama_kegiatan }}</p>
+                                <p class="font-weight-bold text-dark">Tanggal Mulai:</p>
+                                <p>{{ \Carbon\Carbon::parse($kegiatan->tanggal_mulai)->format('d M Y') }}</p>
+                                <p class="font-weight-bold text-dark">Tanggal Selesai:</p>
+                                <p>{{ \Carbon\Carbon::parse($kegiatan->tanggal_selesai)->format('d M Y') }}</p>
+                            @else
+                                <p class="text-muted">Tidak ada kegiatan terdekat.</p>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Agenda Terdekat -->
+                <div class="col-md-6 mb-3">
+                    <div class="card border-success shadow-sm">
+                        <div class="card-header" style="background-color: #FFB800; color: white;">
+                            <h5 class="mb-0">🗓️ Agenda Terdekat</h5>
+                        </div>
+                        <div class="card-body">
+                            @if($agenda)
+                                <p class="font-weight-bold text-dark">Nama Agenda:</p>
+                                <p>{{ $agenda->nama_agenda }}</p>
+                                <p class="font-weight-bold text-dark">Tanggal Agenda:</p>
+                                <p>{{ \Carbon\Carbon::parse($agenda->tanggal_agenda)->format('d M Y') }}</p>
+                                <p class="font-weight-bold text-dark">Tempat:</p>
+                                <p>{{ $agenda->tempat_agenda }}</p>
+                            @else
+                                <p class="text-muted">Tidak ada agenda terdekat.</p>
+                            @endif
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Bagian Reminder -->
-            <div class="card">
-                <div class="card-header bg-warning text-white d-flex align-items-center">
-                    <i class="fas fa-calendar-alt mr-2"></i>
-                    <h5 class="mb-0">Reminder Kegiatan dan Agenda (1 Minggu ke Depan)</h5>
-                </div>
-                <div class="card-body">
-                    <h6 class="font-weight-bold text-dark">Kegiatan Terdekat:</h6>
-                    @if(isset($reminderKegiatan) && $reminderKegiatan->isNotEmpty())
-                        <ul class="list-unstyled">
-                            @foreach($reminderKegiatan as $kegiatan)
-                                <li class="mb-3">
-                                    <strong>{{ $kegiatan->nama_kegiatan }}</strong>
-                                    <p class="mb-0">Tanggal: {{ \Carbon\Carbon::parse($kegiatan->tanggal_mulai)->format('d M Y') }}</p>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @else
-                        <p class="text-muted">Tidak ada kegiatan dalam 1 minggu ke depan.</p>
-                    @endif
-
-                    <h6 class="font-weight-bold text-dark mt-4">Agenda Terdekat:</h6>
-                    @if(isset($reminderAgenda) && $reminderAgenda->isNotEmpty())
-                        <ul class="list-unstyled">
-                            @foreach($reminderAgenda as $agenda)
-                                <li class="mb-3">
-                                    <strong>{{ $agenda->nama_agenda }}</strong>
-                                    <p class="mb-0">Tanggal: {{ \Carbon\Carbon::parse($agenda->tanggal_agenda)->format('d M Y') }}</p>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @else
-                        <p class="text-muted">Tidak ada agenda dalam 1 minggu ke depan.</p>
-                    @endif
-                </div>
+            <div class="d-flex justify-content-center mt-4">
+                <!-- Tombol Lihat Semua Kegiatan -->
+                <a href="{{ url('/kegiatan') }}" class="btn btn-lg btn-block text-white" style="background-color: #8B1A1A; max-width: 300px; border-radius: 30px;">
+                    <i class="fas fa-list"></i> Lihat Semua Kegiatan
+                </a>
             </div>
+
         </div>
     </div>
 </div>
+
 @endsection

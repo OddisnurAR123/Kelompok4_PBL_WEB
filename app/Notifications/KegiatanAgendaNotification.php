@@ -3,60 +3,58 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Messages\DatabaseMessage;
-use App\Models\AgendaModel;
-use App\Models\KegiatanModel;
-use App\Models\KegiatanEksternalModel;
-use Carbon\Carbon;
+use Illuminate\Notifications\Notification;
 
 class KegiatanAgendaNotification extends Notification
 {
     use Queueable;
 
-    protected $agenda;
-    protected $kegiatan;
-    protected $kegiatanEksternal;
+    /**
+     * Instance dari kegiatan
+     */
+    private $kegiatan;
 
-    // Constructor untuk menerima agenda, kegiatan, dan kegiatan eksternal yang relevan
-    public function __construct($agenda, $kegiatan, $kegiatanEksternal)
+    public function __construct($kegiatan)
     {
-        $this->agenda = $agenda;
         $this->kegiatan = $kegiatan;
-        $this->kegiatanEksternal = $kegiatanEksternal;
     }
 
-    // Channel notifikasi
-    public function via($notifiable)
+    /**
+     * Tentukan saluran notifikasi (akan digunakan database).
+     *
+     * @return array<int, string>
+     */
+    public function via(object $notifiable): array
     {
-        return ['database', 'mail']; // Menyertakan database dan email
+        return ['database'];
     }
 
-    // Konten untuk notifikasi melalui database
-    public function toDatabase($notifiable)
-    {
-        return new DatabaseMessage([
-            'agenda_id' => $this->agenda->id_agenda,
-            'agenda_name' => $this->agenda->nama_agenda,
-            'agenda_date' => $this->agenda->tanggal_agenda,
-            'kegiatan_name' => $this->kegiatan->nama_kegiatan,
-            'kegiatan_date' => $this->kegiatan->tanggal_mulai,
-            'kegiatan_eksternal_name' => $this->kegiatanEksternal->nama_kegiatan,
-            'kegiatan_eksternal_date' => $this->kegiatanEksternal->waktu_kegiatan,
-        ]);
-    }
+    /**
+     * Mendapatkan representasi notifikasi dalam bentuk email.
+     */
+    // public function toMail(object $notifiable): MailMessage
+    // {
+    //     return (new MailMessage)
+    //                 ->line('Ada notifikasi baru terkait kegiatan Anda.')
+    //                 ->action('Lihat Kegiatan', url("/kegiatan/{$this->kegiatan->id_kegiatan}"))
+    //                 ->line('Terima kasih telah menggunakan aplikasi kami!');
+    // }
 
-    // Konten notifikasi via email
-    public function toMail($notifiable)
+    /**
+     * Mendapatkan representasi array dari notifikasi.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(object $notifiable): array
     {
-        return (new MailMessage)
-                    ->subject('Notifikasi Kegiatan dan Agenda Terdekat')
-                    ->line('Anda memiliki kegiatan dan agenda terdekat yang perlu dihadiri.')
-                    ->line('Agenda: ' . $this->agenda->nama_agenda . ' pada ' . Carbon::parse($this->agenda->tanggal_agenda)->format('d-m-Y'))
-                    ->line('Kegiatan: ' . $this->kegiatan->nama_kegiatan . ' pada ' . Carbon::parse($this->kegiatan->tanggal_mulai)->format('d-m-Y'))
-                    ->line('Kegiatan Eksternal: ' . $this->kegiatanEksternal->nama_kegiatan . ' pada ' . Carbon::parse($this->kegiatanEksternal->waktu_kegiatan)->format('d-m-Y'))
-                    ->action('Lihat Detail', url('/kegiatan/' . $this->kegiatan->id_kegiatan))
-                    ->line('Terima kasih telah menggunakan aplikasi kami!');
+        return [
+            'id_kegiatan' => $this->kegiatan->id_kegiatan,
+            'nama_kegiatan' => $this->kegiatan->nama_kegiatan,
+            'tanggal_mulai' => $this->kegiatan->tanggal_mulai,
+            'tanggal_selesai' => $this->kegiatan->tanggal_selesai,
+            'message' => "Kegiatan '{$this->kegiatan->nama_kegiatan}' akan dimulai pada {$this->kegiatan->tanggal_mulai->format('d M Y H:i')}.",
+        ];
     }
 }

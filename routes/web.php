@@ -6,7 +6,7 @@ use App\Http\Controllers\JenisPenggunaController;
 use App\Http\Controllers\KategoriKegiatanController;
 use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\KegiatanEksternalController;
-use App\Http\Controllers\NotifikasiController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\JabatanKegiatanController;
 use App\Http\Controllers\AgendaKegiatanController;
 use App\Http\Controllers\DetailKegiatanController;
@@ -203,7 +203,7 @@ Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile
     
         //route notifikasi
         Route::get('/', [WelcomeController::class, 'index'])->name('dashboard');
-        Route::get('/notifikasi', [NotifikasiController::class, 'getNotifications']);
+        Route::get('/dashboard', [NotificationController::class, 'index'])->name('dashboard');
 
 
         //route kegiatan non jti

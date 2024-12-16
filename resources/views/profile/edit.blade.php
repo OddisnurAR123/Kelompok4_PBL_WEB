@@ -31,7 +31,7 @@
                                         @endif
                                     </div>
                                     <div class="mb-3">
-                                        <label for="foto_profil" class="form-label">Upload Foto Profil</label>
+                                        <label for="foto_profil" class="form-label">Unggah Foto Profil</label>
                                         <input type="file" name="foto_profil" id="foto_profil" class="form-control">
                                     </div>
                                 </div>

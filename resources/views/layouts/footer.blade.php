@@ -16,27 +16,43 @@
 
 <!-- CSS untuk Footer -->
 <style>
-  .main-footer {
-      background-color: #11315F; 
-      color: #ffffff;
-      border-top: 4px solid #F28C28; 
-      font-size: 0.875rem;
-  }
-  .main-footer a {
-      color: #F9A826; 
-      text-decoration: none;
-  }
-  .main-footer a:hover {
-      color: #ffffff;
-      text-decoration: underline;
-  }
-  .main-footer .fab {
-      font-size: 1.2rem;
-      transition: color 0.3s ease;
-  }
-  .main-footer .fab:hover {
-      color: #F28C28; 
-  }
+    .main-footer {
+        position: fixed; /* Tetap di posisi tetap */
+        bottom: 0; /* Menempel di bagian bawah layar */
+        left: 0;
+        width: 85%; /* Lebar footer */
+        height: 3.5%; /* Tinggi footer */
+        background-color: #11315F; /* Warna latar */
+        color: #ffffff; /* Warna teks */
+        border-top: 4px solid #F28C28; /* Garis atas */
+        font-size: 0.875rem;
+        z-index: 1000; /* Pastikan footer berada di atas elemen lain */
+        display: flex; /* Gunakan Flexbox */
+        align-items: center; /* Rata tengah secara vertikal */
+        justify-content: center; /* Rata tengah secara horizontal */
+        text-align: center; /* Rata tengah teks jika ada beberapa baris */
+        padding: 0 10px; /* Opsional: Tambahkan padding untuk jarak horizontal */
+    }
+
+    .main-footer a {
+        color: #F9A826; 
+        text-decoration: none;
+    }
+
+    .main-footer a:hover {
+        color: #ffffff;
+        text-decoration: underline;
+    }
+
+    .main-footer .fab {
+        font-size: 1.2rem;
+        transition: color 0.3s ease;
+    }
+
+    .main-footer .fab:hover {
+        color: #F28C28; 
+    }
+
 </style>
 
 <!-- FontAwesome Link -->

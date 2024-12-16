@@ -20,7 +20,7 @@
                         <div class="placeholder-profile text-white d-flex align-items-center justify-content-center rounded-circle shadow-sm mb-3" 
                              style="width: 160px; height: 160px; font-size: 50px; background-color: #01274E;">
                         </div>
-                        <p class="text-muted">Foto belum diupload</p>
+                        <p class="text-muted">Foto belum diunggah</p>
                     @endif
 
                     </div>
@@ -54,14 +54,14 @@
                     <!-- Button Edit Foto Profil -->
                     <div class="mt-3">
                         <a href="{{ route('profile.edit-photo') }}" class="btn btn-primary btn-block mt-2">
-                            Edit Foto Profil
+                            Sunting Foto Profil
                         </a>
                     </div>
 
                     <!-- Button Edit Password -->
                     <div class="mt-3">
                         <a href="{{ route('profile.edit-password') }}" class="btn btn-secondary btn-block mt-2">
-                            Edit Password
+                            Sunting Password
                         </a>
                     </div>
                 </div>
