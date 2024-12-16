@@ -174,6 +174,9 @@
                                     @endif
                                     <!-- Tombol Upgrade -->
                                     @if(Auth::user()->agendas()->where('id_agenda', $agenda->id_agenda)->exists())
+                                        <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="openModal('{{ url('/agenda/' . $agenda->id_agenda . '/show') }}')">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
                                         <a href="javascript:void(0);" class="btn btn-primary btn-sm" onclick="openModal('{{ url('detail_agenda/upgrade/' . $kegiatan->id_kegiatan . '/' . $agenda->id_agenda) }}')">
                                             <i class="fas fa-tasks"></i>
                                         </a>
