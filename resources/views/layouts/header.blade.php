@@ -15,12 +15,19 @@
                 {{ Auth::user()->nama_pengguna }} | {{ Auth::user()->jenisPengguna->nama_jenis_pengguna }}
             </span>
             <!-- Profile Picture -->
-            {{-- <img 
-                src="{{ Auth::user()->foto_profil ? asset('storage/' . Auth::user()->foto_profil) : asset('images/default-profile.png') }}" 
-                alt="Profile" 
-                class="rounded-circle" 
-                style="width: 30px; height: 30px; object-fit: cover; margin-right: 8px;">
-            <!-- User Name and Role --> --}}
+            <img 
+                @if (auth()->user()->foto_profil)
+                    src="{{ asset('storage/profile/' . auth()->user()->foto_profil) }}" 
+                    alt="Foto Profil" 
+                    class="rounded-circle" 
+                    style="width: 30px; height: 30px; object-fit: cover; margin-right: 8px;">
+            @else
+                <div class="placeholder-profile text-white d-flex align-items-center justify-content-center rounded-circle shadow-sm mb-3" 
+                     style="width: 30px; height: 30px; background-color: #01274E;">
+                </div>
+                <p class="text-muted">Foto belum diupload</p>
+            @endif
+            <!-- User Name and Role --> 
         </a>
     </li>
   </ul>
