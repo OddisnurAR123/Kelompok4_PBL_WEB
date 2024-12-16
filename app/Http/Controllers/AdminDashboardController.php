@@ -9,15 +9,21 @@ class AdminDashboardController extends Controller
 {
     public function index()
     {
-        // Ambil data dosen yang memiliki kegiatan di internal maupun eksternal
+        // Ambil data dosen yang terdaftar di kegiatan (baik internal maupun eksternal)
         $dosen = DB::table('m_pengguna')
             ->leftJoin('t_kegiatan_user', 'm_pengguna.id_pengguna', '=', 't_kegiatan_user.id_pengguna')
             ->leftJoin('t_kegiatan_eksternal', 'm_pengguna.id_pengguna', '=', 't_kegiatan_eksternal.id_pengguna')
-            ->select('m_pengguna.id_pengguna', 'm_pengguna.nama_pengguna')
-            ->groupBy('m_pengguna.id_pengguna', 'm_pengguna.nama_pengguna')
+            ->leftJoin('t_kegiatan', 't_kegiatan_user.id_kegiatan', '=', 't_kegiatan.id_kegiatan')
+            ->select('m_pengguna.id_pengguna', 'm_pengguna.nama_pengguna', 't_kegiatan.nama_kegiatan')
+            ->whereNotNull('t_kegiatan_user.id_kegiatan') // Hanya dosen yang terdaftar di kegiatan internal
+            ->orWhereNotNull('t_kegiatan_eksternal.id_pengguna') // Atau dosen yang terdaftar di kegiatan eksternal
+            ->groupBy('m_pengguna.id_pengguna', 'm_pengguna.nama_pengguna', 't_kegiatan.nama_kegiatan')
             ->get();
 
-        return view('admin.index', compact('dosen'));
+        // Mengelompokkan data berdasarkan dosen
+        $groupedDosen = $dosen->groupBy('id_pengguna');
+
+        return view('admin.index', compact('groupedDosen'));
     }
 
     public function listKegiatan($idPengguna)
@@ -39,3 +45,4 @@ class AdminDashboardController extends Controller
         return view('admin.kegiatan-list', compact('kegiatan'));
     }
 }
+    
