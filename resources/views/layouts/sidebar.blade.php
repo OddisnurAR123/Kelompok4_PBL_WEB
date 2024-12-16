@@ -119,3 +119,28 @@
         @endif    
     </ul>
 </div> 
+<style>
+    .sidebar {
+        position: fixed;
+        /* top: 0;
+        left: 0; */
+        /* height: 100%; Pastikan sidebar penuh dari atas ke bawah */
+        /* overflow-y: auto; Agar konten dalam sidebar dapat di-scroll jika panjang */
+        width: 250px; /*Sesuaikan dengan lebar sidebar Anda */
+        background-color: #1e293b; /* Warna latar sidebar */
+        color: white;
+        /* z-index: 1000; Pastikan sidebar berada di atas elemen lain */
+    } 
+    .content-wrapper {
+        margin-left: 250px; /* Sesuaikan dengan lebar sidebar */
+        padding: 20px; /* Opsional: Tambahkan padding untuk estetika */
+    }
+
+    #searchInput {
+        margin-bottom: 10px; /* Beri jarak di bawah */
+        width: 100%;         /* Sesuaikan lebar */
+        max-width: 300px;    /* Jika ingin batas maksimal */
+        box-sizing: border-box;
+    }
+
+</style>

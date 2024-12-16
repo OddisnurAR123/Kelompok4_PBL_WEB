@@ -1,35 +1,38 @@
 @extends('layouts.template')
 
 @section('content')
-<div class="card">
-    <div class="card-header">
-        <h3 class="card-title">Dashboard Admin - Daftar Dosen dan Kegiatan</h3>
-    </div>
+<div class="card shadow">
     <div class="card-body">
-        <!-- Search Bar -->
-        <div class="mb-3">
-            <input type="text" class="form-control" id="searchInput" placeholder="Cari Dosen..." onkeyup="searchTable()">
-        </div>
 
         <!-- Table for Dosen and Kegiatan -->
-        <table class="table table-striped table-bordered" id="dosenTable">
-            <thead>
+        <table class="table table-hover table-striped table-bordered" id="dosenTable">
+            <thead class="thead-dark">
                 <tr>
-                    <th>No</th>
+                    <th class="text-center">No</th>
                     <th>Nama Dosen</th>
                     <th>Kegiatan yang Diikuti</th>
+                    <th>Jabatan di Kegiatan</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($groupedDosen as $key => $users)
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $users->first()->nama_pengguna }}</td>
+                        <td class="text-center align-middle">{{ $loop->iteration }}</td>
+                        <td class="align-middle">{{ $users->first()->nama_pengguna }}</td>
                         <td>
                             <ul class="list-group">
                                 @foreach ($users as $user)
-                                    <li class="list-group-item">
-                                        <i class="fas fa-calendar-alt"></i> {{ $user->nama_kegiatan }}
+                                    <li class="list-group-item d-flex align-items-center">
+                                        <i class="fas fa-calendar-alt text-primary mr-2"></i> {{ $user->nama_kegiatan }}
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="list-group">
+                                @foreach ($users as $user)
+                                    <li class="list-group-item d-flex align-items-center">
+                                        <i class="fas fa-user-tag text-success mr-2"></i> {{ $user->nama_jabatan_kegiatan ?? '-' }}
                                     </li>
                                 @endforeach
                             </ul>
@@ -38,7 +41,7 @@
                 @endforeach
                 @if($groupedDosen->isEmpty())
                     <tr>
-                        <td colspan="3" class="text-center">Data dosen dan kegiatan tidak ditemukan</td>
+                        <td colspan="4" class="text-center">Data dosen dan kegiatan tidak ditemukan</td>
                     </tr>
                 @endif
             </tbody>
