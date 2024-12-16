@@ -4,8 +4,7 @@
     <div class="card-header">
         <h3 class="card-title">Daftar Pengguna</h3>
         <div class="card-tools">
-            <button onclick="modalAction('{{ url('/pengguna/import') }}')" class="btn btn-info">Import Pengguna</button>
-            <a href="{{ url('/pengguna/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Export PDF</a>
+            <a href="{{ url('/pengguna/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Ekspor</a>
             <button onclick="modalAction('{{ url('/pengguna/create') }}')" class="btn btn-success"><i class="fa fa-plus"></i> Tambah Pengguna</button>
         </div>
     </div>

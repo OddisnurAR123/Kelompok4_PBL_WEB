@@ -6,7 +6,7 @@
         <div class="card-tools ml-auto d-flex">
             @if(Auth::user()->id_jenis_pengguna == 1)
                 <a href="{{ url('/kegiatan/export_pdf') }}" class="btn btn-warning btn-sm mr-2">
-                    <i class="fa fa-file-pdf"></i> Export
+                    <i class="fa fa-file-pdf"></i> Ekspor
                 </a>
                 <button onclick="modalAction('{{ url('/kegiatan/create') }}')" class="btn btn-success btn-sm mr-2">
                     <i class="fa fa-plus"></i> Tambah Kegiatan

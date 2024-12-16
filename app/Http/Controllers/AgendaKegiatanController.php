@@ -21,49 +21,6 @@ use Illuminate\Support\Facades\Log;
 
 class AgendaKegiatanController extends Controller
 {
-    public function index()
-    {
-        $breadcrumb = (object) [
-            'title' => 'Daftar Agenda',
-            'list' => ['Home', 'Agenda']
-        ];
-
-        $page = (object) [
-            'title' => 'Daftar agenda yang ada'
-        ];
-
-        $activeMenu = 'agenda';
-
-        return view('agenda.index', compact('breadcrumb', 'page', 'activeMenu'));
-    }
-    public function list(Request $request)
-    {
-        // Mengambil data agenda dengan relasi kegiatan dan kegiatanUser
-        $agenda = AgendaModel::with(['kegiatan', 'kegiatanUser', 'pengguna'])
-            ->select(
-                'id_agenda',
-                'nama_agenda',
-                'id_kegiatan',
-                'tempat_agenda',
-                'id_pengguna',
-                'bobot_anggota',
-                'deskripsi',
-                'tanggal_agenda'
-            );
-
-        // Mengembalikan data untuk DataTables
-        return DataTables::of($agenda)
-            ->addIndexColumn() // Menambahkan kolom index
-            ->addColumn('aksi', function ($agenda) {
-                // Menambahkan tombol aksi untuk setiap baris
-                $btn = '<button onclick="modalAction(\''.url('/agenda/' . $agenda->id_agenda . '/show').'\')" class="btn btn-info btn-sm">Detail</button> ';
-                $btn .= '<button onclick="modalAction(\''.url('/agenda/' . $agenda->id_agenda . '/edit').'\')" class="btn btn-warning btn-sm">Edit</button> ';
-                $btn .= '<button onclick="modalAction(\''.url('/agenda/' . $agenda->id_agenda . '/delete').'\')" class="btn btn-danger btn-sm">Hapus</button>';
-                return $btn;
-            })
-            ->rawColumns(['aksi']) // Menandai kolom aksi sebagai HTML
-            ->make(true); // Menghasilkan output JSON untuk DataTables
-    }
     public function create(Request $request)
 {
     try {
