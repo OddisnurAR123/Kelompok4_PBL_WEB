@@ -102,4 +102,9 @@ class KegiatanModel extends Model
     {
         return $this->belongsToMany(PenggunaModel::class, 't_kegiatan_user', 'id_kegiatan', 'id_pengguna');
     }
+    public function kegiatanUser()
+    {
+        return $this->hasMany(KegiatanUser::class, 'id_kegiatan', 'id_kegiatan');
+    }
+
 }

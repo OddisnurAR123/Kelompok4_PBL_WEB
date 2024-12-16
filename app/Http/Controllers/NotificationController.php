@@ -6,45 +6,33 @@ use App\Models\KegiatanModel;
 use App\Models\AgendaModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class NotificationController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
+        // Dapatkan pengguna yang sedang login
+        $pengguna = auth()->user();
 
-        // Ambil kegiatan yang terjadi dalam 7 hari ke depan dan diikuti oleh pengguna
-        $kegiatan = KegiatanModel::query();
+        // Query untuk mendapatkan kegiatan
+        $kegiatan = DB::table('t_kegiatan')
+            ->join('t_kegiatan_user', 't_kegiatan.id_kegiatan', '=', 't_kegiatan_user.id_kegiatan')
+            ->where('t_kegiatan_user.id_pengguna', $pengguna->id_pengguna)
+            ->where('t_kegiatan.tanggal_mulai', '>=', Carbon::now())
+            ->where('t_kegiatan.tanggal_mulai', '<=', Carbon::now()->addDays(7))
+            ->orderBy('t_kegiatan.tanggal_mulai', 'asc')
+            ->first();
 
-        // Batasi kegiatan untuk pengguna yang bukan admin atau manager
-        if (!in_array($user->id_jenis_pengguna, [1, 2])) {
-            $kegiatan->whereHas('kegiatanUsers', function ($query) use ($user) {
-                $query->where('t_kegiatan_user.id_pengguna', $user->id_pengguna);
-            });
-        }
-
-        // Ambil kegiatan yang terjadi dalam 7 hari ke depan
-        $kegiatan = $kegiatan->where('tanggal_mulai', '>=', Carbon::now())
-            ->where('tanggal_mulai', '<=', Carbon::now()->addDays(7))
-            ->first(); // Mengambil kegiatan pertama dalam rentang waktu 7 hari
-
-        // Ambil agenda yang terjadi dalam 7 hari ke depan dan diikuti oleh pengguna
-        $agenda = AgendaModel::query();
-
-        // Batasi agenda untuk pengguna yang bukan admin atau manager
-        if (!in_array($user->id_jenis_pengguna, [1, 2])) {
-            $agenda->whereHas('agendaUsers', function ($query) use ($user) {
-                $query->where('id_pengguna', $user->id_pengguna);
-            });
-        }
-
-        // Ambil agenda yang terjadi dalam 7 hari ke depan
-        $agenda = $agenda->where('tanggal_agenda', '>=', Carbon::now())
+        // Ambil agenda (sesuaikan jika langsung terhubung ke pengguna)
+        $agenda = DB::table('t_agenda')
+            ->where('id_pengguna', $pengguna->id_pengguna)
+            ->where('tanggal_agenda', '>=', Carbon::now())
             ->where('tanggal_agenda', '<=', Carbon::now()->addDays(7))
-            ->first(); // Mengambil agenda pertama dalam rentang waktu 7 hari
+            ->orderBy('tanggal_agenda', 'asc')
+            ->first();
 
-        // Mengirim data kegiatan dan agenda ke view dashboard
+        // Kirim data ke view dashboard
         return view('dashboard', compact('kegiatan', 'agenda'));
     }
 }

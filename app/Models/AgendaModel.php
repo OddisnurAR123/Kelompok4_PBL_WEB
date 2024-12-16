@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\PenggunaModel;
 
 class AgendaModel extends Model
 {
@@ -46,5 +47,15 @@ class AgendaModel extends Model
     {
         return $this->hasMany(AgendaModel::class, 'id_kegiatan', 'id_kegiatan');
     }
-    
+
+    // Definisikan relasi dengan pengguna melalui tabel pivot 'agenda_user'
+    public function agendaUsers()
+    {
+        return $this->belongsToMany(
+            PenggunaModel::class, // Model pengguna
+            't_agenda_user', // Nama tabel pivot
+            'id_agenda', // Foreign key di tabel pivot untuk agenda
+            'id_pengguna' // Foreign key di tabel pivot untuk pengguna
+        );
+    }
 }
