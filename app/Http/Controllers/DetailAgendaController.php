@@ -11,6 +11,8 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+
 
 class DetailAgendaController extends Controller
 {
@@ -145,8 +147,8 @@ class DetailAgendaController extends Controller
         
         if ($request->hasFile('berkas')) {
             $file = $request->file('berkas');
-            $filePath = $file->store('berkas', 'public');
-            $detailAgenda->berkas = $filePath;
+            $path = $file->storeAs('uploads/berkas', $file->getClientOriginalName(), 'public');
+            $detailAgenda->berkas = $path;
         }
 
         $detailAgenda->save();
@@ -156,6 +158,7 @@ class DetailAgendaController extends Controller
             'message' => 'Progres agenda berhasil diperbarui'
         ]);
     }
+    
     public function upgrade($id_kegiatan, $id_agenda)
     {
         // Cek apakah sudah ada detail untuk agenda tersebut

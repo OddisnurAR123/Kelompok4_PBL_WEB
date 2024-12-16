@@ -54,14 +54,19 @@
     $(document).ready(function () {
     $("#form-edit-detail_agenda").on("submit", function (e) {
         e.preventDefault();
+        
         let form = $(this);
-        let actionUrl = form.attr("action");
-
+        let actionUrl = form.attr("action"); 
+        let formData = new FormData(this);
+        
         $.ajax({
             url: actionUrl,
             type: "POST",
-            data: form.serialize(),
+            data: formData,
+            processData: false,
+            contentType: false,
             success: function (response) {
+                console.log(response);
                 if (response.status) {
                     Swal.fire({
                         icon: 'success',
@@ -92,4 +97,5 @@
         });
     });
 });
+
 </script>
