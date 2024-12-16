@@ -81,7 +81,7 @@ Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile
     Route::get('/kegiatan/{id}/upload_surat_tugas', [KegiatanController::class, 'showUploadForm'])->name('kegiatan.uploadForm');
     Route::post('/kegiatan/{id}/upload_surat_tugas', [KegiatanController::class, 'upload'])->name('kegiatan.upload');
     // web.php
-    Route::get('kegiatan_pimpinan', [KegiatanController::class, 'index'])->name('index');
+    Route::get('kegiatan_pimpinan', [KegiatanController::class, 'index'])->name('kegiatan.index');
     Route::post('/kegiatan_pimpinan/list', [KegiatanController::class, 'list']);
     // Route::get('progress_chart/{id}', [KegiatanController::class, 'getProgressKegiatan'])->name('progress_chart');
 

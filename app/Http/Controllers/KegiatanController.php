@@ -435,4 +435,53 @@ class KegiatanController extends Controller
 
         return redirect()->back()->with('error', 'File tidak ditemukan.');
     }
+
+    public function listDosen(Request $request)
+{
+    $kegiatan = KegiatanModel::query()
+        ->with('kategoriKegiatan') // Relasi kategori kegiatan
+        ->select(
+            'id_kegiatan',
+            'kode_kegiatan',
+            'nama_kegiatan',
+            'tanggal_mulai',
+            'tanggal_selesai',
+            'periode',
+            'id_kategori_kegiatan',
+            'tempat_kegiatan'
+        );
+
+    // Filter berdasarkan periode jika ada
+    if ($request->has('periode_filter') && $request->periode_filter != '') {
+        $kegiatan->where('periode', $request->periode_filter);
+    }
+
+    return DataTables::of($kegiatan)
+        ->addIndexColumn()
+        ->addColumn('kategori_kegiatan', function ($kegiatan) {
+            return $kegiatan->kategoriKegiatan ? $kegiatan->kategoriKegiatan->nama_kategori_kegiatan : 'Tidak ada kategori';
+        })
+        ->addColumn('status', function ($kegiatan) {
+            $status = 'Belum selesai';
+            $statusClass = 'badge-warning';
+            $progres = DB::table('t_detail_kegiatan')
+                ->where('id_kegiatan', $kegiatan->id_kegiatan)
+                ->orderByDesc('updated_at')
+                ->value('progres_kegiatan');
+
+            if ($progres !== null) {
+                if ($progres == 100) {
+                    $status = 'Selesai';
+                    $statusClass = 'badge-success';
+                } elseif ($progres < 100 && $kegiatan->tanggal_selesai < now()) {
+                    $status = 'Tidak selesai';
+                    $statusClass = 'badge-danger';
+                }
+            }
+
+            return '<span class="badge ' . $statusClass . '">' . $status . '</span>';
+        })
+        ->make(true);
+}
+
 }
