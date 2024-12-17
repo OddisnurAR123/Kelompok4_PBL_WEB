@@ -93,7 +93,21 @@
                                 Tidak ada progres.
                             @endif
                         </td>
-                    </tr>                    
+                    </tr> 
+                    <tr>
+                        <th>Surat Tugas</th>
+                        <td>
+                            @if($kegiatan->file_surat_tugas)
+                                <a href="{{ $kegiatan->file_surat_tugas }}" 
+                                   target="_blank" 
+                                   class="btn btn-primary">
+                                    <i class="fas fa-download"></i> Unduh Surat Tugas
+                                </a>
+                            @else
+                                Tidak ada file surat tugas.
+                            @endif
+                        </td>
+                    </tr>                                                         
                 </table>
 
                 <h4 class="mt-4">Anggota Kegiatan</h4>

@@ -116,15 +116,12 @@
         <p>Perihal: Permohonan Surat Tugas</p>
     </div>
 
-    <div class="content" style="font-family: 'Times New Roman', Times, serif; font-size: 15px; line-height: 15px; text-align: left; margin-top: 20px;">
-        <p style="display: inline-block; margin-right: 20px; font-weight: bold;">Kepada Yth.</p>
-        <p style="display: inline-block; line-height: 1.5; font-weight: bold; margin-left: 10px;">Pembantu Direktur I Politeknik Negeri Malang</p>
-        <br>
-        <p style="font-weight: bold;">di Tempat</p>
+    <div class="content" style="font-family: 'Times New Roman', Times, serif; font-size: 15px; line-height: 1.2; text-align: left; margin-top: 10px;">
+        <p style="margin: 0; font-weight: bold;">Kepada Yth.</p>
+        <p style="margin: 0; font-weight: bold;">Pembantu Direktur I Politeknik Negeri Malang</p>
+        <p style="margin: 5px 0 0; font-weight: bold;">di Tempat</p>
     </div>
     
-    
-
         <p>Sehubungan dengan Kegiatan "<strong>{{ $kegiatan->nama_kegiatan }}</strong>" yang diselenggarakan di {{ $kegiatan->tempat_kegiatan }} pada tanggal {{ $kegiatan->tanggal_mulai }} - {{ $kegiatan->tanggal_selesai }}, maka dengan ini kami mohon dapat diperkenankan Surat Tugas kepada yang mengikuti kegiatan:</p>
         
         <table class="table-container">
