@@ -123,7 +123,6 @@ class KegiatanController extends Controller
                         $btn .= '<i class="fas fa-upload"></i></button>';
                         return $btn . '</div>';
                     }
-        
                 $btn .= '</div>';
                 return $btn;
             })
@@ -164,7 +163,6 @@ class KegiatanController extends Controller
             'id_kategori_kegiatan' => 'required|exists:m_kategori_kegiatan,id_kategori_kegiatan',
             'anggota.*.id_pengguna' => 'required|exists:m_pengguna,id_pengguna',
             'anggota.*.id_jabatan_kegiatan' => 'required|exists:m_jabatan_kegiatan,id_jabatan_kegiatan',
-            'file_surat_tugas' => ''
         ]);
 
         if ($validator->fails()) {
