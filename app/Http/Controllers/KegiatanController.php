@@ -94,6 +94,11 @@ class KegiatanController extends Controller
                         $status = 'Tidak selesai';
                         $statusClass = 'badge-danger';
                     }
+                } else {
+                    if ($kegiatan->tanggal_selesai < now()) {
+                        $status = 'Tidak selesai';
+                        $statusClass = 'badge-danger';
+                    }
                 }
 
                 return '<span class="badge ' . $statusClass . '">' . $status . '</span>';
