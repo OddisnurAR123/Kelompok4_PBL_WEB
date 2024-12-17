@@ -55,7 +55,7 @@
                 <table class="table table-bordered table-striped table-hover table-sm" id="table_kegiatan">
                     <thead>
                         <tr>
-                            @if(Auth::user()->id_jenis_pengguna == [1, 3])
+                            @if(Auth::user()->id_jenis_pengguna == 1 || Auth::user()->id_jenis_pengguna == 3)
                                 <th>ID</th>
                                 <th>Kode Kegiatan</th>
                                 <th>Nama Kegiatan</th>
@@ -126,7 +126,7 @@
                 }
             },
             columns: [
-                @if(Auth::user()->id_jenis_pengguna == 3)
+                @if(Auth::user()->id_jenis_pengguna == 1 || Auth::user()->id_jenis_pengguna == 3)
                     { data: "id_kegiatan", orderable: true, searchable: true },
                     { data: "kode_kegiatan", orderable: true, searchable: true },
                     { data: "nama_kegiatan", orderable: true, searchable: true },

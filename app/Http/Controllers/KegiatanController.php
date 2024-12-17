@@ -49,9 +49,8 @@ class KegiatanController extends Controller
             });
         }
 
-        // Tambahkan relasi dan select field
-        $kegiatan->with('kategoriKegiatan') // Relasi kategori kegiatan
-            ->select(
+        if ($user->id_jenis_pengguna == 1 || $user->id_jenis_pengguna == 3) {
+            $kegiatan->select(
                 'id_kegiatan',
                 'kode_kegiatan',
                 'nama_kegiatan',
@@ -61,6 +60,13 @@ class KegiatanController extends Controller
                 'id_kategori_kegiatan',
                 'tempat_kegiatan'
             );
+        } elseif ($user->id_jenis_pengguna == 2) {
+            $kegiatan->select(
+                'id_kegiatan',
+                'nama_kegiatan'
+            );
+        }
+
 
         // Filter berdasarkan periode jika ada
         if ($request->has('periode_filter') && $request->periode_filter != '') {
