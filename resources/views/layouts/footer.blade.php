@@ -2,14 +2,14 @@
   <div class="container">
       <div class="row">
           <!-- Informasi Hak Cipta -->
-          <div class="col-md-6">
-              <strong>&copy; 2024 <a href="https://adminlte.io" class="text-warning">Kelompok 4</a></strong> 
-              - All rights reserved.
-          </div>
-          <!-- Versi dan Media Sosial -->
-          <div class="col-md-6 text-md-right text-center">
-              <b>SIM SDM | Versi:</b> 1.0
-          </div>
+            <div class="col-md-6 text-left">
+                <strong>&copy; 2024 <a href="https://adminlte.io" class="text-warning">Kelompok 4</a></strong> 
+                - All rights reserved.
+            </div>
+            <!-- Versi dan Media Sosial -->
+            <div class="col-md-6 text-right">
+                <b>SIM SDM | Versi:</b> 1.0
+            </div>
       </div>
   </div>
 </footer>
@@ -17,10 +17,9 @@
 <!-- CSS untuk Footer -->
 <style>
     .main-footer {
-        position: fixed; /* Tetap di posisi tetap */
         bottom: 0; /* Menempel di bagian bawah layar */
         left: 0;
-        width: 85%; /* Lebar footer */
+        width: 83%; /* Lebar footer */
         height: 3.5%; /* Tinggi footer */
         background-color: #11315F; /* Warna latar */
         color: #ffffff; /* Warna teks */
