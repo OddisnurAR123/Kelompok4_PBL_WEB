@@ -112,16 +112,17 @@ class KegiatanController extends Controller
         
                     $btn .= '<button onclick="modalAction(\''.route('kegiatan.confirm', $kegiatan->id_kegiatan).'\')" class="btn btn-danger btn-sm mr-2">';
                     $btn .= '<i class="fas fa-trash"></i></button>';
-
+                }
+                    if (Auth::user()->id_jenis_pengguna == 1 || Auth::user()->id_jenis_pengguna == 2) {
                        // Tombol Unduh Surat Tugas
                        $btn .= '<a href="'.route('kegiatan.downloadDraft', $kegiatan->id_kegiatan).'" target="_blank" class="btn btn-primary btn-sm ml-2">';
                        $btn .= '<i class="fas fa-download"></i></a>';                
-
+                    }
+                    if (Auth::user()->id_jenis_pengguna == 1) {
                         $btn .= '<button onclick="modalAction(\''.route('kegiatan.uploadForm', $kegiatan->id_kegiatan).'\')" class="btn btn-success btn-sm ml-2">';
                         $btn .= '<i class="fas fa-upload"></i></button>';
                         return $btn . '</div>';
-
-                }
+                    }
         
                 $btn .= '</div>';
                 return $btn;
@@ -163,6 +164,7 @@ class KegiatanController extends Controller
             'id_kategori_kegiatan' => 'required|exists:m_kategori_kegiatan,id_kategori_kegiatan',
             'anggota.*.id_pengguna' => 'required|exists:m_pengguna,id_pengguna',
             'anggota.*.id_jabatan_kegiatan' => 'required|exists:m_jabatan_kegiatan,id_jabatan_kegiatan',
+            'file_surat_tugas' => ''
         ]);
 
         if ($validator->fails()) {
